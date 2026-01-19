@@ -1,0 +1,827 @@
+---
+title: "Clustering Methods"
+subtitle: "IN2004B: Generation of Value with Data Analytics"
+author: 
+  - name: Alan R. Vazquez
+    affiliations:
+      - name: Department of Industrial Engineering
+format: 
+  revealjs:
+    chalkboard: false
+    multiplex: false
+    footer: "Tecnologico de Monterrey"
+    logo: IN2004B_logo.png
+    css: style.css
+    slide-number: True
+    html-math-method: mathjax
+editor: visual
+jupyter: python3
+---
+
+## Agenda
+
+</br>
+
+1.  Unsupervised Learning
+
+2.  Clustering Methods
+
+3.  K-Means Method
+
+4.  Hierarchical Clustering
+
+# Unsupervised Learning
+
+## Load the libraries
+
+Before we start, let's import the data science libraries into Python.
+
+```{python}
+#| echo: true
+#| output: false
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans, AgglomerativeClustering
+from scipy.cluster.hierarchy import dendrogram, linkage
+```
+
+Here, we use specific functions from the **pandas**, **matplotlib**, **seaborn**, **sklearn**, and **scipy** libraries in Python.
+
+## Types of learning
+
+</br></br>
+
+In data science, there are two main types of learning:
+
+-   [Supervised learning]{style="color:blue;"}. In which we have multiple predictors and one response. The goal is to predict the response using the predictor values.
+
+-   [Unsupervised learning]{style="color:green;"}. In which we have only multiple predictors. The goal is to discover patterns in your data.
+
+## Types of learning
+
+</br></br>
+
+In data science, there are two main types of learning:
+
+-   [Supervised learning. In which we have multiple predictors and one response. The goal is to predict the response using the predictor values.]{style="color:gray;"}
+
+-   [Unsupervised learning]{style="color:green;"}. In which we have only multiple predictors. The goal is to discover patterns in your data.
+
+## Unsupervised learning
+
+**Goal**: organize or *group* data to gain insights. It answers questions like these
+
+-   Is there an informative way to visualize the data?
+-   Can we discover subgroups among variables or observations?
+
+. . .
+
+Unsupervised learning is more challenging than supervised learning because it is [**subjective**]{style="color:darkgreen;"} and there is no simple objective for the analysis, such as predicting a response.
+
+. . .
+
+It is also known as *exploratory data analysis*.
+
+## Examples of Unsupervised Learning
+
+</br>
+
+-   *Marketing.* Identify a segment of customers with a high tendency to purchase a specific product.
+
+-   *Retail.* Group customers based on their preferences, style, clothing choices, and store preferences.
+
+-   *Medical Science.* Facilitate the efficient diagnosis and treatment of patients, as well as the discovery of new drugs.
+
+-   *Sociology.* Classify people based on their demographics, lifestyle, socioeconomic status, etc.
+
+## Unsupervised learning methods
+
+</br></br>
+
+-   [**Clustering Methods**]{style="color:#8B004F;"} aim to find subgroups with similar data in the database.
+
+-   [**Principal Component Analysis**]{style="color:#017373;"} seeks an alternative representation of the data to make it easier to understand when there are many predictors in the database.
+
+Here we will use these methods on predictors $X_1, X_2, \ldots, X_p,$ which are *numerical*.
+
+## Unsupervised learning methods
+
+</br></br>
+
+-   [**Clustering Methods**]{style="color:#8B004F;"} aim to find subgroups with similar data in the database.
+
+-   [**Principal Component Analysis** seeks an alternative representation of the data to make it easier to understand when there are many predictors in the database.]{style="color:gray;"}
+
+Here we will use these methods on predictors $X_1, X_2, \ldots, X_p,$ which are *numerical*.
+
+# Clustering Methods
+
+## Clustering methods
+
+They group data in different ways to discover groups with common traits.
+
+![](images/clipboard-4025099075.png){fig-align="center"}
+
+## Clustering methods
+
+</br></br>
+
+Two classic clustering methods are:
+
+-   [**K-Means Method**]{style="color:pink;"}. We seek to divide the observations into *K* groups.
+
+-   [**Hierarchical Clustering**]{style="color:darkpink;"}. We divide the *n* observations into 1 group, 2 groups, 3 groups, ..., up to *n* groups. We visualize the divisions using a graph called a **dendrogram**.
+
+## Example 1
+
+The “penguins.xlsx” database contains data on 342 penguins in Antarctica. The data includes:
+
+:::::: center
+::::: columns
+::: {.column width="50%"}
+-   Bill length in millimeters.
+-   Bill depth in millimeters.
+-   Flipper length in millimeters.
+-   Body mass in grams.
+:::
+
+::: {.column width="50%"}
+![](images/clipboard-2240851715.png){fig-align="center" width="163" height="372"}
+:::
+:::::
+::::::
+
+## Data
+
+```{python}
+#| output: true
+#| echo: true
+
+penguins_data = pd.read_excel("penguins.xlsx")
+penguins_data.head()
+```
+
+## Data visualization
+
+Can we group penguins based on their characteristics?
+
+```{python}
+#| output: true
+#| echo: true
+#| fig-align: center
+#| code-fold: true 
+
+plt.figure(figsize=(8, 5)) # Set figure size.
+sns.scatterplot(data=penguins_data, x="bill_depth_mm", y="bill_length_mm") # Define type of plot.
+plt.show() # Display the plot.
+```
+
+# K-Means Method
+
+## The K-Means method
+
+</br>
+
+**Goal**: Find *K* groups of observations such that each observation is in a different group.
+
+![](images/clipboard-3145794211.png)
+
+## 
+
+</br></br>
+
+For this, the method requires two elements:
+
+::: incremental
+1.  A measure of "closeness" between observations.
+
+2.  An algorithm that groups observations that are close to each other.
+:::
+
+. . .
+
+Good clustering is one in which observations within a group are close together and observations in different groups are far apart.
+
+## How do we measure the distance between observations?
+
+For quantitative predictors, we use the **Euclidean distance**.
+
+For example, if we have two predictors $X_1$ and $X_2$ with observations given in the table:
+
+| Observation | $X_1$     | $X_2$     |
+|-------------|-----------|-----------|
+| 1           | $X_{1,1}$ | $X_{1,2}$ |
+| 2           | $X_{2,1}$ | $X_{2,2}$ |
+
+## Euclidean distance
+
+</br>
+
+![](images/distancia_euclideana.png){fig-align="center"}
+
+::: center
+$$d = \sqrt{(X_{1,1} - X_{2,1})^2 + (X_{1,2} - X_{2,2})^2 }$$
+:::
+
+## 
+
+We can extend the Euclidean distance to measure the distance between observations when we have more predictors. For example, with 3 predictors we have
+
+| Observation | $X_1$     | $X_2$     | $X_3$     |
+|-------------|-----------|-----------|-----------|
+| 1           | $X_{1,1}$ | $X_{1,2}$ | $X_{1,3}$ |
+| 2           | $X_{2,1}$ | $X_{2,2}$ | $X_{2,3}$ |
+
+</br>
+
+Where the Euclidean distance is
+
+$$d = \sqrt{(X_{1,1} - X_{2,1})^2 + (X_{1,2} - X_{2,2})^2 + (X_{1,3} - X_{2,3})^2 }$$
+
+## Problem with Euclidean distance
+
+</br>
+
+-   The Euclidean distance depends on the units of measurement of the predictors!
+
+-   Predictors with certain units have greater importance in calculating the distance.
+
+-   This is not good since we want all predictors to have equal importance when calculating the Euclidean distance between two observations.
+
+-   The solution is to **standardize** the units of the predictors.
+
+## K-Means Algorithm
+
+::::::: center
+:::::: columns
+:::: {.column width="50%"}
+::: {style="font-size: 90%;"}
+Choose a value for *K*, the number of groups.
+
+1.  Randomly assign observations to one of the *K* groups.
+2.  Find the *centroids* (average points) of each group.
+3.  Reassign observations to the group with the closest centroid.
+4.  Repeat steps 3 and 4 until there are no more changes.
+:::
+::::
+
+::: {.column width="50%"}
+![](images/clipboard-1847659123.png){fig-align="center"}
+:::
+::::::
+:::::::
+
+## Example 1 (cont.)
+
+Let's apply the algorithm to the predictors `bill_depth_mm` and `bill_length_mm` of the penguins dataset.
+
+```{python}
+#| output: true
+#| echo: true
+#| fig-align: center
+#| code-fold: true 
+
+X_penguins = penguins_data.filter(['bill_depth_mm', 'bill_length_mm'])
+X_penguins.head()
+```
+
+## Standarization
+
+Since the K-means algorithm works with Euclidean distance, we must standardize the predictors before we start. In this way, all of them will be equally informative in the process.
+
+```{python}
+#| output: true
+#| echo: true
+#| fig-align: center
+#| code-fold: true 
+
+## Standardize
+scaler = StandardScaler()
+Xs_penguins = scaler.fit_transform(X_penguins)
+```
+
+## 
+
+</br></br>
+
+In Python, we use the `KMeans()` function of **sklearn** to apply K-means clustering. `KMeans()` tells Python we want to train a K-means clustering algorithm and `.fit_predict()` actually trains it using the data.
+
+```{python}
+#| output: true
+#| echo: true
+#| fig-align: center
+#| code-fold: false 
+
+# Fit KMeans with 3 clusters
+kmeans = KMeans(n_clusters = 3, random_state = 301655)
+clusters = kmeans.fit_predict(Xs_penguins)
+```
+
+The argument `n_clusters` sets the desired number of clusters and `random_state` allows us to reproduce the analysis.
+
+## 
+
+The clusters created are contained in the `clusters` object.
+
+```{python}
+#| output: true
+#| echo: true
+#| fig-align: center
+#| code-fold: true 
+
+clusters
+```
+
+## 
+
+To visualize the clusters, we augment the original dataset `X_penguins` (without standarization) with the `clusters` object. usign the code below.
+
+```{python}
+#| output: true
+#| echo: true
+#| fig-align: center
+#| code-fold: false 
+
+clustered_penguins = (X_penguins
+              .assign(Cluster = clusters)
+              )
+
+clustered_penguins.head()
+```
+
+## 
+
+```{python}
+#| output: true
+#| echo: true
+#| fig-align: center
+#| code-fold: true 
+
+plt.figure(figsize=(9, 6))
+sns.scatterplot(data = clustered_penguins, x = 'bill_length_mm', y = 'bill_depth_mm', 
+                hue = 'Cluster', palette = 'Set1')
+plt.title('K-means Clustering of Penguins')
+plt.xlabel('Bill Length (mm)')
+plt.ylabel('Bill Depth (mm)')
+plt.tight_layout()
+plt.show()
+```
+
+## The truth: 3 groups of penguins
+
+```{python}
+#| output: true
+#| echo: true
+#| fig-align: center
+#| code-fold: true 
+
+plt.figure(figsize=(9, 6))
+sns.scatterplot(data=penguins_data, x="bill_depth_mm", y="bill_length_mm",
+                hue="species", palette = 'Set1') # Define type of plot.
+plt.show() # Display the plot.
+```
+
+## 
+
+</br>
+
+:::::: center
+::::: columns
+::: {.column width="50%"}
+```{python}
+#| output: true
+#| echo: false
+#| fig-align: center
+#| code-fold: false 
+
+plt.figure(figsize=(5, 5))
+sns.scatterplot(data = clustered_penguins, x = 'bill_length_mm', y = 'bill_depth_mm', 
+                hue = 'Cluster', palette = 'Set1')
+plt.title('K-means Clustering of Penguins')
+plt.xlabel('Bill Length (mm)')
+plt.ylabel('Bill Depth (mm)')
+plt.tight_layout()
+plt.show()
+```
+:::
+
+::: {.column width="50%"}
+```{python}
+#| output: true
+#| echo: false
+#| fig-align: center
+#| code-fold: false 
+
+plt.figure(figsize=(6, 6))
+sns.scatterplot(data=penguins_data, x="bill_depth_mm", y="bill_length_mm",
+                hue="species", palette = 'Set1') # Define type of plot.
+plt.show() # Display the plot.
+```
+:::
+:::::
+::::::
+
+## Let's try using more predictors
+
+</br>
+
+```{python}
+#| output: true
+#| echo: true
+#| fig-align: center
+#| code-fold: false 
+
+X_penguins = penguins_data.filter(['bill_depth_mm', 'bill_length_mm', 
+                          'flipper_length_mm', 'body_mass_g'])
+
+## Standardize
+scaler = StandardScaler()
+Xs_penguins = scaler.fit_transform(X_penguins)
+
+# Fit KMeans with 3 clusters
+kmeans = KMeans(n_clusters = 3, random_state = 301655)
+clusters = kmeans.fit_predict(Xs_penguins)
+
+# Save new clusters into the original data
+clustered_X = (X_penguins
+              .assign(Cluster = clusters)
+              )
+```
+
+## 
+
+:::::: center
+::::: columns
+::: {.column width="50%"}
+```{python}
+#| output: true
+#| echo: false
+#| fig-align: center
+#| code-fold: false 
+
+plt.figure(figsize=(5, 5))
+sns.scatterplot(data = clustered_X, x = 'bill_length_mm', y = 'bill_depth_mm', hue = 'Cluster', palette = 'Set1')
+plt.title('K-means Clustering of Penguins')
+plt.xlabel('Bill Length (mm)')
+plt.ylabel('Bill Depth (mm)')
+plt.tight_layout()
+plt.show()
+```
+:::
+
+::: {.column width="50%"}
+```{python}
+#| output: true
+#| echo: false
+#| fig-align: center
+#| code-fold: false 
+
+plt.figure(figsize=(6, 6))
+sns.scatterplot(data=penguins_data, x="bill_depth_mm", y="bill_length_mm",
+                hue="species", palette = 'Set1') # Define type of plot.
+plt.show() # Display the plot.
+```
+:::
+:::::
+::::::
+
+## These are the three species
+
+::::::: center
+:::::: columns
+::: {.column width="33%"}
+Adelie
+
+![](images/clipboard-1367554877.png)
+:::
+
+::: {.column width="33%"}
+Gentoo
+
+![](images/clipboard-3518959291.png)
+:::
+
+::: {.column width="33%"}
+Chinstrap
+
+![](images/clipboard-2663292782.png)
+:::
+::::::
+:::::::
+
+## Determining the number of clusters
+
+</br>
+
+A simple way to determine the number of clusters is recording the quality of clustering for different numbers of clusters.
+
+In **sklearn**, we can record the [***inertia***]{style="color:#8B004F;"} of a partition into clusters. Technically, the inertia is the sum of squared distances of observations to their closest cluster center.
+
+The lower the intertia the better because this means that all observations are close to their cluster centers *overall*.
+
+## 
+
+</br></br>
+
+To record the intertias for different numbers of clusters, we use the code below.
+
+```{python}
+#| output: false
+#| echo: true
+#| fig-align: center
+#| code-fold: false 
+
+inertias = []
+
+for i in range(1,11):
+    kmeans = KMeans(n_clusters=i)
+    kmeans.fit(Xs_penguins)
+    inertias.append(kmeans.inertia_)
+```
+
+## 
+
+:::::: center
+::::: columns
+::: {.column width="50%"}
+Next, we plot the intertias and look for the *elbow* in the plot.
+
+The *elbow* represents a number of clusters for which there is no significant improvement in the quality of the clustering.
+
+In this case, the number of clusters recommended by this *elbow* method is 3.
+:::
+
+::: {.column width="50%"}
+```{python}
+#| output: true
+#| echo: true
+#| fig-align: center
+#| code-fold: true 
+
+plt.figure(figsize=(6, 6))
+plt.plot(range(1,11), inertias, marker='o')
+plt.title('Elbow method')
+plt.xlabel('Number of clusters')
+plt.ylabel('Inertia')
+plt.show()
+```
+:::
+:::::
+::::::
+
+## Comments
+
+-   Selecting the number of clusters *K* is more of an art than a science. You'd better get *K* right, or you'll be detecting patterns where none really exist.
+
+-   We need to standardize all predictors.
+
+-   The performance of *K*-means clustering is affected by the presence of outliers.
+
+-   The algorithm's solution is sensitive to the starting point. Because of this, it is typically run multiple times, and the best clustering among all runs is reported.
+
+# Hierarchical Clustering
+
+## Hierarchical clustering
+
+</br>
+
+::::::: center
+:::::: columns
+:::: {.column width="50%"}
+::: {style="font-size: 90%;"}
+-   Start with each observation standing alone in its own group.
+
+-   Then, gradually merge the groups that are close together.
+
+-   Continue this process until all the observations are in one large group.
+
+-   Finally, step back and see which grouping works best.
+:::
+::::
+
+::: {.column width="50%"}
+</br>
+
+![](images/clipboard-2325345248.png)
+:::
+::::::
+:::::::
+
+## Essential elements
+
+</br>
+
+::: incremental
+1.  Distance between two observations.
+
+    -   We use Euclidean distance.
+
+    -   We must standardize the predictors!
+
+2.  Distance between [**two groups**]{style="color:darkgreen;"}.
+:::
+
+## Distance between two groups
+
+</br></br>
+
+:::::: center
+::::: columns
+::: {.column width="60%"}
+The distance between two groups of observations is called [***linkage***]{style="color:pink;"}.
+
+There are several types of linking. The most commonly used are:
+
+-   Complete linkage
+-   Average linkage
+:::
+
+::: {.column width="40%"}
+![](images/vinculacion.png)
+:::
+:::::
+::::::
+
+## Complete linkage
+
+The distance between groups is measured using the largest distance between observations.
+
+![](images/completa.png){fig-align="center"}
+
+## Average linkage
+
+The distance between groups is the average of all the distances between observations.
+
+![](images/promedio.png){fig-align="center"}
+
+## Hierarchical clustering algorithm
+
+</br></br>
+
+The steps of the algorithm are as follows:
+
+::: incremental
+1.  Assign each observation to a cluster.
+2.  Measure the linkage between all clusters.
+3.  Merge the two most similar clusters.
+4.  Then, merge the next two most similar clusters.
+5.  Continue until all clusters have been merged.
+:::
+
+## Example 2
+
+</br></br>
+
+Let's consider a dataset called "Cereals.xlsx." The data includes nutritional information for 77 cereals, among other data.
+
+```{python}
+#| output: true
+#| echo: true
+
+cereal_data = pd.read_excel("cereals.xlsx")
+```
+
+## 
+
+Here, we will restrict to 7 numeric predictors.
+
+```{python}
+#| output: true
+#| echo: true
+
+X_cereal = cereal_data.filter(['calories', 'protein', 'fat', 'sodium', 'fiber',
+                              'carbo', 'sugars', 'potass', 'vitamins'])
+X_cereal.head()
+```
+
+## Do not forget to standardize
+
+</br></br></br>
+
+Since the hierarchical clustering algorithm also works with distances, we must standardize the predictors to have an accurate analysis.
+
+```{python}
+#| output: true
+#| echo: true
+
+scaler = StandardScaler()
+Xs_cereal = scaler.fit_transform(X_cereal)
+```
+
+## 
+
+</br></br>
+
+Unfortunately, the `Agglomerative()` function in **sklearn** is not as user friendly compared to other available functions in Python. In particular, the **scipy** library has a function called `linkage()` for hierarchical clustering that works as follows.
+
+```{python}
+#| output: true
+#| echo: true
+
+Clust_Cereal = linkage(Xs_cereal, method = 'complete')
+```
+
+The argument `method` sets the type of linkage to be used.
+
+## Results: Dendrogram
+
+</br>
+
+::::::: center
+:::::: columns
+:::: {.column width="40%"}
+::: {style="font-size: 80%;"}
+-   A dendrogram is a tree diagram that summarizes and visualizes the clustering process.
+-   Observations are on the horizontal axis and at the bottom of the diagram.
+-   The vertical axis shows the distance between groups.
+-   It is read from top to bottom.
+:::
+::::
+
+::: {.column width="60%"}
+![](images/clipboard-2041051251.png)
+:::
+::::::
+:::::::
+
+## What to do with a dendrogram?
+
+</br>
+
+:::::: center
+::::: columns
+::: {.column width="40%"}
+We draw a horizontal line at a specific height to define the groups.
+
+This line defines three groups.
+:::
+
+::: {.column width="60%"}
+![](images/dendrograma1.png)
+:::
+:::::
+::::::
+
+## 
+
+</br></br>
+
+:::::: center
+::::: columns
+::: {.column width="40%"}
+This line defines 5 groups.
+:::
+
+::: {.column width="60%"}
+![](images/dendrograma2.png)
+:::
+:::::
+::::::
+
+## Dendrogram in Python
+
+To produce a nice dendrogram in Python, we use the function `dendrogram` from **scipy**.
+
+```{python}
+#| output: true
+#| echo: true
+#| fig-align: center
+#| code-fold: true
+
+plt.figure(figsize=(8, 4))
+dendrogram(Clust_Cereal, color_threshold=None)
+plt.title('Hierarchical Clustering Dendrogram (Complete Linkage)')
+plt.xlabel('Sample Index')
+plt.ylabel('Distance')
+plt.tight_layout()
+plt.show()
+```
+
+## Comments
+
+</br>
+
+-   Remember to standardize the predictors!
+
+-   It's not easy to choose the correct number of clusters using the dendrogram.
+
+-   The results depend on the linkage measure used.
+
+    -   Complete linkage results in narrower clusters.
+    -   Average linkage strikes a balance between narrow and thinner clusters.
+
+-   Hierarchical clustering is useful for detecting outliers.
+
+## 
+
+</br></br></br>
+
+> *With these methods, there is no single correct answer; any solution that exposes some interesting aspect of the data should be considered.*
+
+James et al. (2017)
+
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN2004B/)

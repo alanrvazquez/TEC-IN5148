@@ -1,0 +1,308 @@
+---
+title: "Introduction to Data Science"
+subtitle: "IN1002B: Introduction to Data Science Projects"
+author: 
+  - name: Alan R. Vazquez
+    affiliations:
+      - name: Department of Industrial Engineering
+format: 
+  revealjs:
+    chalkboard: false
+    multiplex: true
+    footer: "Tecnologico de Monterrey"
+    logo: IN1002b_logo.png
+    css: style.css
+    slide-number: True
+    html-math-method: mathjax
+editor: visual
+jupyter: python3
+---
+
+## Agenda
+
+</br>
+
+1.  Introduction to data science
+2.  Basic notation and terminology
+
+# Introduction to data science
+
+## Data science is ...
+
+a multidisciplinary field that uses scientific methods, processes, algorithms and systems to extract knowledge and insights from vast amounts of structured and unstructured data.
+
+. . .
+
+:::::: center
+::::: columns
+::: {.column width="40%"}
+![](images/clipboard-2707460623.png){fig-align="center" width="377"}
+:::
+
+::: {.column width="50%"}
+![](images/clipboard-3242954590.png){fig-align="center" width="485"}
+:::
+:::::
+::::::
+
+## In 2004 ...
+
+Hurricane Frances was sweeping through the Caribbean and threatening to make a direct hit on Florida's Atlantic coast.
+
+. . .
+
+::::::: center
+:::::: columns
+::: {.column width="30%"}
+![](images/clipboard-123225538.png){width="194"}
+:::
+
+::: {.column width="30%"}
+![](https://c8.alamy.com/compes/ccn9gk/ft-pierce-9-6-04-un-clubouse-danados-por-el-huracan-frances-en-ocean-village-en-hutchinson-island-el-lunes-el-complejo-tambien-recibio-algunos-danos-a-techos-pisos-de-tierra-y-algunas-unidades-fueron-danadas-por-las-tormentas-foto-por-aguas-lannis-el-palm-beach-post-no-para-su-distribucion-fuera-de-cox-ccn9gk.jpg){width="268"}
+:::
+
+::: {.column width="30%"}
+![](images/clipboard-679480994.png){width="280"}
+:::
+::::::
+:::::::
+
+. . .
+
+Residents headed for higher ground, but in Arkansas, Wal-Mart executives saw a big opportunity for one of their newest data-driven weapons: ***predictive technology***.
+
+## 
+
+::::::: center
+:::::: columns
+:::: {.column width="70%"}
+::: {style="font-size: 90%;"}
+A week before the storm made landfall, Linda M. Dillman, Wal-Mart's chief information officer, pressed her staff to create forecasts based on what had happened when Hurricane Charley hit several weeks earlier.
+
+<br/>
+
+Backed by trillions of bytes of shopper history stored in Wal-Mart’s data warehouse, she said, the company could “start predicting what’s going to happen, rather than waiting for it to happen,” as she put it.
+:::
+::::
+
+::: {.column width="30%"}
+![](images/clipboard-3960378011.png){width="224"}
+
+<br/>
+
+![](images/clipboard-4213549697.png){width="516"}
+:::
+::::::
+:::::::
+
+## The result
+
+::::::: columns
+:::: {.column width="50%"}
+The New York Times reported
+
+::: {style="font-size: 80%;"}
+> *“… Experts analyzed the data and found that stores would indeed need certain products, and not just the usual flashlights.*"
+:::
+::::
+
+:::: {.column width="50%"}
+Dillman said
+
+::: {style="font-size: 80%;"}
+> *"We didn't know in the past that strawberry Pop-Tarts increase their sales, like seven times their normal sales rate, before a hurricane."*
+:::
+::::
+:::::::
+
+[![](images/clipboard-3670330051.png){fig-align="center" width="529"}](https://www.nytimes.com/2004/11/14/business/yourmoney/what-walmart-knows-about-customers-habits.html)
+
+## The scheme of data science
+
+![](images/clipboard-4096324521.png){fig-align="center"}
+
+## Business understanding
+
+</br>
+
+-   Business understanding refers to defining the business problem to be solved.
+
+-   The goal is to reframe the business problem as a data science problem.
+
+-   Often, reframing the problem and designing a solution is an iterative process.
+
+## Common data science problems
+
+</br>
+
+[**Regression**]{style="color:blue;"} attempts to estimate or predict, for each individual, the numerical value of some variable for that individual. For example, “How much will a given customer use the service?”
+
+. . .
+
+[**Classification**]{style="color:green;"} (or class probability estimation) attempts to predict, for each individual in a population, which of a (small) set of classes this individual belongs to. For example, “Among all customers of T-Mobile, which are likely to respond to a given offer?”
+
+## Other problems
+
+</br></br>
+
+**Clustering** attempts to group individuals in a population together by their similarity, but not driven by any specific purpose. For example, “Do our customers form natural groups or segments?”
+
+## Discussion
+
+</br>
+
+-   Often, recasting the problem and designing a solution is an iterative process.
+
+-   The initial formulation may not be complete or optimal, so multiple iterations may be necessary for an acceptable solution formulation.
+
+-   They key to a great success is a creative problem formulation by some analyst regarding how to cast the business problem as one or more data science problems.
+
+## Data understanding I
+
+</br>
+
+::: incremental
+-   If the goal is to solve a business problem, the data that makes up the raw material available from which the solution will be built.
+
+-   The available data rarely matches the problem.
+
+-   For example, historical data is often collected for purposes unrelated to the current business problem or for no explicit purpose at all.
+:::
+
+## Data understanding II
+
+</br>
+
+-   The costs of data vary. Some data will be available for free while others will require effort to obtain.
+
+::: incremental
+-   A critical part of the data understanding phase is estimating the costs and benefits of each data source and deciding wether further investment is merited.
+
+-   Even after all datasets are acquired, collating them may require additional effort.
+:::
+
+## Our goal
+
+</br></br></br>
+
+> Our goal is to turn data into information that answers useful questions.
+
+## Data classes
+
+::::::: center
+:::::: columns
+::: {.column width="30%"}
+[**Text**]{style="color:green;"}
+
+![](images/clipboard-4167942809.png){width="511"}
+:::
+
+::: {.column width="30%"}
+[**Images**]{style="color:orange;"}
+
+![](images/clipboard-3296722573.png){width="527"}
+
+[**Video**]{style="color:lightblue;"}
+
+![](images/clipboard-2123600827.png){width="401"}
+:::
+
+::: {.column width="30%"}
+[**Audio**]{style="color:green;"}
+
+![](images/clipboard-2206237365.png)
+:::
+::::::
+:::::::
+
+## Numerical data
+
+</br>
+
+Data science methodology is based on numerical data given in tables.
+
+![](images/9a292b70-64d7-475e-9ffa-22c019609752_lossy.png){fig-align="center"}
+
+> In fact, texts, images, videos or audios are transformed into this format to process them.
+
+. . .
+
+[***In this course, we will assume that the data is in a table.***]{style="color:#023562;"}
+
+# Basic notation and terminology
+
+## Notation and terminology
+
+</br>
+
+Explanatory variables or predictors:
+
+-   $X$ represents an explanatory variable or predictor.
+-   $\boldsymbol{X} = (X_1, X_2, \ldots, X_p)$ represents a whole collection of $p$ predictors.
+
+Outcome or response:
+
+-   $Y$ represents the response variable, which we’ll try to predict.
+
+## Two main problems
+
+</br>
+
+[**Regression problems**]{style="color:blue;"}. The response $Y$ is quantitative. For example, a person’s income, the value of a house, the blood pressure of a patient.
+
+[**Classification problems**]{style="color:green;"}. The response $Y$ is qualitative and has $K$ different categories. For example, the brand of a product purchased (A, B, C), or whether a person defaults on a debt (yes or no).
+
+The predictors ($\boldsymbol{X}$) can be qualitative or quantitative.
+
+## Example
+
+</br></br>
+
+What factors explain the presence of Type II diabetes on a person?
+
+-   $Y$ is a 1 if a person has Type II diabetes, a 0 if not.
+
+-   The predictors ($\boldsymbol{X}$) might include: income, zip code, age, weight, height, gender and race.
+
+## A statistical model
+
+</br>
+
+A **statistical model** is a mathematical equation that embodies statistical assumptions concerning the generation of *data*.
+
+Technically, it has the following form:
+
+$$Y = f(\boldsymbol{X}) + \epsilon $$
+
+where $Y$ is a quantitative response, $f(\boldsymbol{X})$ is the function that relates the predictors, $\boldsymbol{X}$, to the $Y$, and $\epsilon$ is the (random) error term.
+
+## True and estimated models
+
+</br>
+
+$f(\boldsymbol{X})$ represents the TRUTH. The true relationship between $\boldsymbol{X}$ and $Y$.
+
+-   Unknown
+-   Very complex
+
+. . .
+
+$\hat{f}(\boldsymbol{X})$ represents an approximation or estimate of the true model constructed using data.
+
+-   Ideally, interpretable (but not necessarily)
+
+## Two datasets
+
+-   “Training” data are data used to construct $\hat{f}(\boldsymbol{X})$.
+
+-   “Testing” data are data that were NOT used in the fitting process, but are used to test how well your model performs on unseen data.
+
+![](images/training_test.jpeg/training_test.jpeg.001.jpeg){fig-align="center"}
+
+## Yogi Berra
+
+</br></br></br>
+
+> It’s though to make predictions, especially about the future.
+
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN1002B-Website/)

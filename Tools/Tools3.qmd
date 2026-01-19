@@ -1,0 +1,642 @@
+---
+title: "Data Types and Visualization"
+subtitle: "IN1002B: Introduction to Data Science Projects"
+author: 
+  - name: Alan R. Vazquez
+    affiliations:
+      - name: Department of Industrial Engineering
+format: 
+  revealjs:
+    chalkboard: false
+    multiplex: true
+    footer: "Tecnologico de Monterrey"
+    logo: IN1002b_logo.png
+    css: style.css
+    slide-number: True
+    html-math-method: mathjax
+editor: visual
+jupyter: python3
+---
+
+## Agenda
+
+</br>
+
+1.  Review of data types and summary statistics
+2.  Data visualizations
+
+# Review of data types and summary statistics
+
+## Types of data I
+
+</br>
+
+When a numerical quantity designating how much or how many is assigned to each item in the sample, the resulting set of values is [**numerical**]{style="color:lightblue;"} or [**quantitative**]{style="color:lightblue;"}.
+
+-   Height (in ft).
+-   Weight (in lbs).
+-   Age (in years).
+
+## Types of data II
+
+</br>
+
+When sample items are placed into categories and category names are assigned to the sample items, the data are [**categorical**]{style="color:pink;"} or [**qualitative**]{style="color:pink;"}.
+
+-   Hair color.
+-   Country of origin.
+-   ZIP code.
+
+## Data types
+
+![](images/Images.002.jpeg){fig-align="center"}
+
+## Example 1
+
+Let's load the data in "penguins.xlsx".
+
+```{python}
+#| echo: true
+
+# Load pandas.
+import pandas as pd
+
+# Load the Excel file into a pandas DataFrame.
+penguins_data = pd.read_excel("penguins.xlsx")
+
+# Print the first 4 rows of the dataset.
+penguins_data.head(4)
+```
+
+## 
+
+</br>
+
+In Python, we check the type of each variable in a dataset using the function `info()`.
+
+```{python}
+#| echo: true
+
+penguins_data.info()
+```
+
+## General Python formats
+
+</br>
+
+-   `float64` format for numerical variables with decimals.
+-   `int64` format for numerical variables with integers.
+-   `object` format for general variables with characters.
+
+## Define categorical variables
+
+Technically, the variable `sex` in `penguins_data` is [**categorical**]{style="color:pink;"}. To explicitly tell this to Python, we use the following code.
+
+```{python}
+#| echo: true
+
+penguins_data['sex'] = pd.Categorical(penguins_data['sex'])
+```
+
+Setting `sex` to categorical allows us to use effective visualization for this data.
+
+We do the same for the other categorical variables `species` and `island`.
+
+```{python}
+#| echo: true
+
+penguins_data['species'] = pd.Categorical(penguins_data['species'])
+penguins_data['island'] = pd.Categorical(penguins_data['island'])
+```
+
+## 
+
+</br>
+
+Let's check the type of variables again.
+
+```{python}
+#| echo: true
+
+penguins_data.info()
+```
+
+## Summary statistics
+
+</br>
+
+A sample is often a long list of numbers. To help make the important features of a sample stand out, we compute summary statistics.
+
+For **numerical** data, the most popular summary statistics are:
+
+::: incremental
+-   [Sample mean]{style="color:darkblue;"}
+-   [Sample variance]{style="color:darkblue;"} and [sample standard deviation]{style="color:darkblue;"}
+-   [Sample quartiles]{style="color:darkgreen;"}
+-   Sample maximum and minimum
+:::
+
+## Sample mean
+
+</br>
+
+Let $y_1, y_2, \ldots, y_n$ be an observed sample of size $n$.
+
+The sample mean is
+
+$$\bar{y} = \frac{1}{n}\sum_{i=1}^{n} y_i = \frac{y_1 + y_2 + \cdots + y_n}{n}.$$
+
+The sample mean gives an indication of the center of the data.
+
+## In Python
+
+</br>
+
+The sample mean is calculated using the function `.agg()` with "mean".
+
+```{python}
+#| echo: true
+#| output: true
+
+bill_length_mean = (penguins_data
+                    .filter(['bill_length_mm'], axis = 1)
+                    .agg("mean")
+                    )
+print(bill_length_mean)
+```
+
+We use the function print to show the number. Otherwise, Python will show the computer type of value stored in `bill_length_mean`.
+
+## 
+
+</br></br>
+
+You can also round the result to, say, three decimals.
+
+```{python}
+#| echo: true
+#| output: true
+
+print( round(bill_length_mean, 3) )
+```
+
+## Sample variance
+
+</br>
+
+Let $y_1, y_2, \ldots, y_n$ be an observed sample of size $n$. The sample mean is
+
+$$
+s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (y_i - \bar{y})^2 = \frac{(y_1 - \bar{y})^2  + \cdots + (y_n - \bar{y})^2}{n-1}
+$$
+
+. . .
+
+*The sample variance is like an average of the squared differences between each observation and the sample mean.*
+
+It gives an indication of how spread out the data are.
+
+## 
+
+</br></br>
+
+In Python, the sample variance is calculated using the function `agg()` with "var".
+
+```{python}
+#| echo: true
+#| output: true
+
+bill_length_var = (penguins_data
+                    .filter(['bill_length_mm'], axis = 1)
+                    .agg("var")
+                    )
+print( round(bill_length_var, 3) )
+```
+
+## Sample standard deviation
+
+A drawback of the sample variance is that it is not on the same scale as the actual observations.
+
+To obtain a measure of spread whose units are the same as those of the sample, we simply take the squared root of the sample variance
+
+$$
+s = \left(\frac{1}{n-1} \sum_{i=1}^{n} (y_i - \bar{y})^2 \right)^{1/2}
+$$
+
+This quantity is known as the sample standard deviation. [*It is in the same units as the observations*]{style="color:purple;"}.
+
+## 
+
+</br></br>
+
+In Python, the sample variance is calculated using the function `agg()` with "std".
+
+```{python}
+#| echo: true
+#| output: true
+
+bill_length_std = (penguins_data
+                    .filter(['bill_length_mm'], axis = 1)
+                    .agg("std")
+                    )
+print( round(bill_length_std, 3) )
+```
+
+## Sample quartiles
+
+</br>
+
+The [**sample median**]{style="color:darkgreen;"} is the middle number of the ordered data values.
+
+. . .
+
+[**Sample quartiles**]{style="color:darkgreen;"} divide the data as nearly as possible into quarters:
+
+::: incremental
+-   First quartile ($Q_1$) is the median of the lower half of the data.
+
+-   Second quartile ($Q_2$) is the median of the data.
+
+-   Third quartile ($Q_3$) is the median of the upper half of the data.
+:::
+
+## 
+
+</br></br>
+
+![](images/clipboard-838628209.png)
+
+## 
+
+</br>
+
+In Python, the quartiles are calculated using the function `quantile()`.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Set the quantiles.
+set_quantiles = [0.25, 0.5, 0.75]
+# Compute the quantiles.
+(penguins_data
+ .filter(['bill_length_mm'], axis = 1)
+ .agg("quantile", q = set_quantiles)
+)
+```
+
+## Sample maximum and minimum
+
+Other relevant summary statistics are the **maximum** and **minimum**, which are calculated using the functions `max()` and `min()`, respectively.
+
+```{python}
+#| echo: true
+#| output: true
+
+bill_length_max = (penguins_data
+                   .filter(['bill_length_mm'], axis = 1)
+                   .agg("max")
+                  )
+print(bill_length_max)
+```
+
+```{python}
+#| echo: true
+#| output: true
+
+bill_length_min = (penguins_data
+                   .filter(['bill_length_mm'], axis = 1)
+                   .agg("min")
+                  )
+print(bill_length_min)
+```
+
+## Summary statistics for categorical data
+
+</br>
+
+The most commonly used statistical summaries for categorical data are:
+
+-   The [**frequency**]{style="color:darkblue;"} of a category is the number of observations that belong to that category.
+
+-   The [**relative frequency**]{style="color:darkblue;"} is the frequency divided by the total number of observations.
+
+## Frequency table
+
+Summarizes a categorical variable by counting the values per category.
+
+::::: columns
+::: {.column width="50%"}
+```{python}
+#| echo: true
+#| output: true
+#| code-overflow: wrap
+
+(penguins_data
+  .filter(['species'], axis = 1)
+  .value_counts()
+)  
+```
+:::
+
+::: {.column width="50%"}
+| **Specie** | **Frequency** |
+|------------|---------------|
+| Adelie     | 152           |
+| Chinstrap  | 68            |
+| Gentoo     | 124           |
+| **Total**  | **344**       |
+:::
+:::::
+
+-   **Frequency**: Number of observations in each category.
+
+-   **Total**: Total sum of observations.
+
+::: notes
+1.  Ventajas de las frequencias.
+
+2.  Resumen claro y conciso de los datos categóricos.
+
+3.  Facilita la identificación de patrones y tendencias.
+
+4.  Ayuda en la toma de decisiones informadas.
+:::
+
+## Relative Frequency Table
+
+Summarizes a categorical variable by calculating the *proportion of values* per category.
+
+::::: columns
+::: {.column width="55%"}
+```{python}
+#| echo: true
+#| output: true
+#| code-overflow: wrap
+
+(penguins_data
+ .filter(['species'], axis = 1)
+ .value_counts(normalize = True)
+)
+```
+:::
+
+::: {.column width="45%"}
+| **Specie** | **Relative Frequency** |
+|------------|------------------------|
+| Adelie     | 0.4418605              |
+| Chinstrap  | 0.1976744              |
+| Gentoo     | 0.3604651              |
+| **Sum**    | **1**                  |
+:::
+:::::
+
+-   **Relative frequency**: Number of observations in each category divided by the total.
+
+::: notes
+La ventaja de la frequencia relativa es que se puede interpretar como una probabilidad. Lo que da mas información.
+:::
+
+# Data visualizations
+
+## Example 2
+
+</br>
+
+A criminologist is developing a rule-based system to classify the types of glasses encountered in criminal investigations.
+
+The data consist of 214 glass samples labeled as one of seven class categories.
+
+There are nine predictors, including refractive index and percentages of eight elements: Na, Mg, AL, Is, K, Ca, Ba, and Fe. The response is the type of glass.
+
+## 
+
+</br>
+
+The dataset is in the file "glass.xlsx". Let's load it using **pandas**.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Load the Excel file into a pandas DataFrame.
+glass_data = pd.read_excel("glass.xlsx")
+```
+
+</br>
+
+The variable `Type` is categorical. So, let's ensure Python knows this using the code below.
+
+```{python}
+#| echo: true
+#| output: true
+
+glass_data['Type'] = pd.Categorical(glass_data['Type'])
+```
+
+## matplotlib library
+
+-   **matplotlib** is a comprehensive library for creating static, animated, and interactive visualizations in Python
+-   It is widely used in the data science community for plotting data in various formats
+-   Ideal for creating simple visualizations like line plots, bar charts, scatter plots, and more
+-   <https://matplotlib.org/>
+
+![](images/matplotlib.png){fig-align="center"}
+
+## seaborn library
+
+-   **seaborn** is a Python library built on top of Matplotlib
+-   Designed to make statistical data visualization easy and beautiful
+-   Ideal for creating informative and attractive visualizations with minimal code
+-   <https://seaborn.pydata.org/index.html>
+
+![](images/seaborn.png){fig-align="center"}
+
+## Importing the libraries
+
+</br>
+
+The **matplotlib** and **seaborn** libraries are pre-installed in Google Colab. However, we need to inform Google Colab that we want to use them and its functions using the following command:
+
+```{python}
+#| echo: true
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+Similar to **pandas**, the command `as sns` allows us to have a short name for **seaborn**. Similarly, we rename **matplotlib** as **plt**.
+
+## Histogram
+
+</br></br>
+
+Graphical display that gives an idea of the “shape” of the sample, indicating regions where sample points are concentrated and regions where they are sparse.
+
+</br>
+
+The bars of the histogram touch each other. A space indicates that there are no observations in that interval.
+
+## Histogram of Na
+
+To create a histogram, we use the function `histplot()` from **seabron**.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: true
+
+plt.figure(figsize=(7,4)) # Create space for figure.
+sns.histplot(data = glass_data, x = 'Na') # Create the histogram.
+plt.title("Histogram of Na") # Plot title.
+plt.xlabel("Na") # X label
+plt.show() # Display the plot
+```
+
+## Box plot
+
+</br>
+
+A box plot is a graphic that presents the median, the first and third quartiles, and any “outliers” present in the sample.
+
+</br>
+
+The interquartile range (IQR) is the difference between the third quartile and the first quartile ($Q_3 - Q_1$). This is the distance needed to span the middle half of the data.
+
+## Anatomy of a box plot
+
+![](images/anatomy.png){fig-align="center"}
+
+See also [**https://towardsdatascience.com/why-1-5-in-iqr-method-of-outlier-detection-5d07fdc82097**](#0){.uri}
+
+## Box plot of Na
+
+To create a boxplot, we use the function `boxplot()` from **seabron**.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: true
+
+plt.figure(figsize=(7,4)) # Create space for the figure.
+sns.boxplot(data = glass_data, y = 'Na') # Create boxplot.
+plt.title("Box plot of Na") # Add title.
+plt.show() # Show the plot.
+```
+
+## Outliers
+
+</br>
+
+Outliers are points that are much larger or smaller than the rest of the sample points.
+
+Outliers may be data entry errors or they may be points that really are different from the rest.
+
+Outliers should not be deleted without considerable thought—sometimes calculations and analyses will be done with and without outliers and then compared.
+
+## Scatter plot
+
+</br>
+
+Data for which items consists of a pair of numeric values is called bivariate. The graphical summary for bivariate data is a *scatterplot*.
+
+The variables $X$ and $Y$ are placed on the horizontal and vertical axes, respectively. Each point on the graph marks the position of a pair of values of $X$ and $Y$.
+
+A scatterplot allows us to explore lineal and nonlinear relationships between two variables.
+
+## Scatter plot of Na versus RI
+
+To create a scatter plot, we use the function `scatter()` from **seabron**. In this function, you must state the
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: true
+
+plt.figure(figsize=(7,4)) # Create space for the plot.
+sns.scatterplot(data = glass_data, x = 'Na', y = 'RI') # Show the plot.
+plt.title("Scatter plot of Na vs RI") # Set plot title.
+plt.xlabel("Na") # Set label for X axis.
+plt.ylabel("RI") # Set label for Y axis.
+plt.show() # Show plot.
+```
+
+## Bar charts
+
+Bar charts are commonly used to describe [**qualitative**]{style="color:pink;"} data classified into various categories based on sector, region, different time periods, or other such factors.
+
+Different sectors, different regions, or different time periods are then labeled as specific categories.
+
+A bar chart is constructed by creating categories that are represented by labeling each category and which are represented by intervals of equal length on a horizontal axis.
+
+The count or frequency within the corresponding category is represented by a bar of height proportional to the frequency.
+
+## 
+
+We create the bar chart using the function `countplot()` from **seaborn**.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: true
+
+# Create plot.
+plt.figure(figsize=(7,4)) # Create space for the plot.
+sns.countplot(data = glass_data, x = 'Type') # Show the plot.
+plt.title("Bar chart of Type of Glasses") # Set plot title.
+plt.ylabel("Frequency") # Set label for Y axis.
+plt.show() # Show plot.
+```
+
+## Saving plots
+
+</br>
+
+We save a figure using the `save.fig` function from **matplotlib**. The `dpi` argument of this function sets the resolution of the image. The higher the `dpi`, the better the resolution.
+
+```{python}
+#| echo: true
+#| output: false
+
+plt.figure(figsize=(5, 7))
+sns.countplot(data = glass_data, x = 'Type')
+plt.title('Frequency of Each Category')
+plt.ylabel('Frequency')
+plt.xlabel('Category')
+plt.savefig('bar_chart.png',dpi=300)
+```
+
+## Improving the figure
+
+</br>
+
+We can also use other functions to improve the aspect of the figure:
+
+-   `plt.title(fontsize)`: Font size of the title.
+-   `plt.ylabel(fontsize)`: Font size of y axis title.
+-   `plt.xlabel(fontsize)`: Font size of x axis title.
+-   `plt.yticks(fontsize)`: Font size of the y axis labels.
+-   `plt.xticks(fontsize)`: Font size of the x axis labels.
+
+## 
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+
+plt.figure(figsize=(5, 5))
+sns.countplot(data = glass_data, x = 'Type')
+plt.title('Relative Frequency of Each Category', fontsize = 12)
+plt.ylabel('Relative Frequency', fontsize = 12)
+plt.xlabel('Category', fontsize = 15)
+plt.xticks(fontsize = 12)
+plt.yticks(fontsize = 12)
+plt.savefig('bar_chart.png',dpi=300)
+```
+
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN1002B-Website/)

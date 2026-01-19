@@ -1,0 +1,562 @@
+---
+title: "*K* nearest neighbors"
+subtitle: "IN2004B: Generation of Value with Data Analytics"
+author: 
+  - name: Alan R. Vazquez
+    affiliations:
+      - name: Department of Industrial Engineering
+format: 
+  revealjs:
+    chalkboard: false
+    multiplex: false
+    footer: "Tecnologico de Monterrey"
+    logo: IN2004B_logo.png
+    css: style.css
+    slide-number: True
+    html-math-method: mathjax
+editor: visual
+jupyter: python3
+---
+
+## Load the libraries
+
+Before we start, let's import the data science libraries into Python.
+
+```{python}
+#| echo: true
+#| output: false
+
+# Importing necessary libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay 
+from sklearn.metrics import accuracy_score
+```
+
+Here, we use specific functions from the **pandas**, **matplotlib**, **seaborn** and **sklearn** libraries in Python.
+
+## *K*-nearest neighbors (KNN)
+
+</br>
+
+KNN a supervised learning algorithm that uses proximity to make classifications or predictions about the clustering of a single data point.
+
+-   **Basic idea**: Predict a new observation using the *K* closest observations in the training dataset.
+
+To predict the response for a new observation, KNN uses the *K* nearest neighbors (observations) in [***terms of the predictors!***]{style="color:brown;"}
+
+The predicted response for the new observation is the most common response among the *K* nearest neighbors.
+
+## The algorithm has 3 steps:
+
+</br></br>
+
+::: incremental
+1.  Choose the number of nearest neighbors (*K*).
+
+2.  For a new observation, find the *K* closest observations in the training data (ignoring the response).
+
+3.  For the new observation, the algorithm predicts the value of the most common response among the *K* nearest observations.
+:::
+
+## Nearest neighbour
+
+Suppose we have two groups: red and green group. The number line shows the value of a predictor for our training data.
+
+![](images/KNNsequence1.png){fig-align="center"}
+
+[A new observation arrives, and we don't know which group it belongs to. If we had chosen $K=3$, then the three nearest neighbors would vote on which group the new observation belongs to.]{style="color:white;"}
+
+## Nearest neighbour
+
+Suppose we have two groups: red and green group. The number line shows the value of a predictor for our training data.
+
+![](images/KNNsequence2.png){fig-align="center"}
+
+A new observation arrives, and we don't know which group it belongs to. [If we had chosen $K=3$, then the three nearest neighbors would vote on which group the new observation belongs to.]{style="color:white;"}
+
+## Nearest neighbour
+
+Suppose we have two groups: red and green group. The number line shows the value of a predictor for our training data.
+
+![](images/KNNsequence3.png){fig-align="center"}
+
+A new observation arrives, and we don't know which group it belongs to. If we had chosen $K=3$, then the three nearest neighbors would vote on which group the new observation belongs to.
+
+## Nearest neighbour
+
+Suppose we have two groups: red and green group. The number line shows the value of a predictor for our training data.
+
+![](images/KNNsequence4.png){fig-align="center"}
+
+A new observation arrives, and we don't know which group it belongs to. If we had chosen $K=3$, then the three nearest neighbors would vote on which group the new observation belongs to.
+
+## Banknote data
+
+::::: columns
+::: {.column width="70%"}
+```{python}
+#| fig-align: center
+#| echo: false
+#| output: true
+
+from matplotlib.patches import Circle
+
+bank_data = pd.read_excel("banknotes.xlsx")
+# Set response variable as categorical.
+bank_data['Status'] = pd.Categorical(bank_data['Status'])
+# Set plot style
+sns.set(style="whitegrid")
+
+# Create the scatter plot using seaborn for discrete color mapping
+plt.figure(figsize=(6.3, 6.3))
+sns.scatterplot(
+    data=bank_data,
+    x='Top',
+    y='Bottom',
+    hue='Status',
+    palette={'genuine': 'blue', 'counterfeit': 'orange'},
+    s=15,
+    edgecolor=None,
+    legend='full'
+)
+
+# Axis labels
+plt.xlabel("Top")
+plt.ylabel("Bottom")
+
+# Clean layout
+plt.tight_layout()
+plt.show()
+```
+:::
+
+::: {.column width="30%"}
+:::
+:::::
+
+Using $K = 3$, that's 2 votes for "genuine" and 2 for "fake." So we classify it as "genius."
+
+## Banknote data
+
+::::: columns
+::: {.column width="70%"}
+```{python}
+#| fig-align: center
+#| echo: false
+#| output: true
+
+from matplotlib.patches import Circle
+
+bank_data = pd.read_excel("banknotes.xlsx")
+# Set response variable as categorical.
+bank_data['Status'] = pd.Categorical(bank_data['Status'])
+# Set plot style
+sns.set(style="whitegrid")
+
+# Create the scatter plot using seaborn for discrete color mapping
+plt.figure(figsize=(6.3, 6.3))
+sns.scatterplot(
+    data=bank_data,
+    x='Top',
+    y='Bottom',
+    hue='Status',
+    palette={'genuine': 'blue', 'counterfeit': 'orange'},
+    s=15,
+    edgecolor=None,
+    legend='full'
+)
+
+# Add star point at (10, 10)
+plt.plot(10, 10, marker='*', markersize=15, color='red', label='Special Point')
+
+# Axis labels
+plt.xlabel("Top")
+plt.ylabel("Bottom")
+
+# Clean layout
+plt.tight_layout()
+plt.show()
+```
+:::
+
+::: {.column width="30%"}
+:::
+:::::
+
+Using $K = 3$, that's 2 votes for "genuine" and 2 for "fake." So we classify it as "genius."
+
+## Banknote data
+
+::::: columns
+::: {.column width="70%"}
+```{python}
+#| fig-align: center
+#| echo: false
+#| output: true
+
+from matplotlib.patches import Circle
+
+bank_data = pd.read_excel("banknotes.xlsx")
+# Set response variable as categorical.
+bank_data['Status'] = pd.Categorical(bank_data['Status'])
+# Set plot style
+sns.set(style="whitegrid")
+
+# Create the scatter plot using seaborn for discrete color mapping
+plt.figure(figsize=(6.3, 6.3))
+sns.scatterplot(
+    data=bank_data,
+    x='Top',
+    y='Bottom',
+    hue='Status',
+    palette={'genuine': 'blue', 'counterfeit': 'orange'},
+    s=15,
+    edgecolor=None,
+    legend='full'
+)
+
+# Add star point at (10, 10)
+plt.plot(10, 10, marker='*', markersize=15, color='red', label='Special Point')
+
+# Add circle around the point with diameter = 1 unit (radius = 0.5)
+circle = Circle((10, 10), 0.5, edgecolor='black', facecolor='none', linewidth=2)
+plt.gca().add_patch(circle)
+
+# Axis labels
+plt.xlabel("Top")
+plt.ylabel("Bottom")
+
+# Clean layout
+plt.tight_layout()
+plt.show()
+```
+:::
+
+::: {.column width="30%"}
+</br>
+
+Using $K = 3$, that's 3 votes for "counterfeit" and 0 for "genuine." So we classify it as "counterfeit."
+:::
+:::::
+
+## Banknote data
+
+::::: columns
+::: {.column width="70%"}
+```{python}
+#| fig-align: center
+#| echo: false
+#| output: true
+
+from matplotlib.patches import Circle
+
+bank_data = pd.read_excel("banknotes.xlsx")
+# Set response variable as categorical.
+bank_data['Status'] = pd.Categorical(bank_data['Status'])
+# Set plot style
+sns.set(style="whitegrid")
+
+# Create the scatter plot using seaborn for discrete color mapping
+plt.figure(figsize=(6.3, 6.3))
+sns.scatterplot(
+    data=bank_data,
+    x='Top',
+    y='Bottom',
+    hue='Status',
+    palette={'genuine': 'blue', 'counterfeit': 'orange'},
+    s=15,
+    edgecolor=None,
+    legend='full'
+)
+
+# Add star point at (10, 10)
+plt.plot(10, 10, marker='*', markersize=15, color='red', label='Special Point')
+
+# Add circle around the point with diameter = 1 unit (radius = 0.5)
+circle = Circle((10, 10), 0.5, edgecolor='black', facecolor='none', linewidth=2)
+plt.gca().add_patch(circle)
+
+# Axis labels
+plt.xlabel("Top")
+plt.ylabel("Bottom")
+
+# Clean layout
+plt.tight_layout()
+plt.show()
+```
+:::
+
+::: {.column width="30%"}
+</br>
+
+Using $K = 3$, that's 3 votes for "counterfeit" and 0 for "genuine." So we classify it as "counterfeit."
+
+[Closeness is based on Euclidean distance.]{style="color:darkblue;"}
+:::
+:::::
+
+## Implementation Details
+
+</br></br></br>
+
+**Ties**
+
+-   If there are more than *K* nearest neighbors, include them all.
+
+-   If there is a tie in the vote, set a rule to break the tie. For example, randomly select the class.
+
+## 
+
+[KNN uses the Euclidean distance between points]{style="color:darkblue;"}. So it ignores units.
+
+-   Example: two predictors: height in cm and arm span in feet. Compare two people: (152.4, 1.52) and (182.88, 1.85).
+
+-   These people are separated by 30.48 units of distance in the first variable, but only by 0.33 units in the second.
+
+-   Therefore, the first predictor plays a much more important role in classification and can bias the results to the point where the second variable becomes useless.
+
+. . .
+
+**Therefore, as a first step, we must transform the predictors so that they have the same units!**
+
+## Standardization
+
+</br>
+
+Standardization refers to *centering* and *scaling* each numerical predictor individually. This places all predictors on the same scale.
+
+In mathematical terms, we standardize a predictor $\mathbf{X}$ as:
+
+$${\color{blue} \tilde{X}_{i}} = \frac{{ X_{i} - \bar{X}}}{ \sqrt{\frac{1}{n -1} \sum_{i=1}^{n} (X_{i} - \bar{X})^2}},$$
+
+with $\bar{X} = \sum_{i=1}^n \frac{x_i}{n}$.
+
+## Example
+
+The data is located in the file "banknotes.xlsx".
+
+```{python}
+#| echo: true
+#| output: true
+
+bank_data = pd.read_excel("banknotes.xlsx")
+# Set response variable as categorical.
+bank_data['Status'] = pd.Categorical(bank_data['Status'])
+bank_data.head()
+```
+
+## Create the predictor matrix and response column
+
+Let's create the predictor matrix or response column
+
+```{python}
+#| echo: true
+#| output: true
+
+# Set full matrix of predictors.
+X_full = bank_data.drop(columns = ['Status']) 
+
+# Vector with responses
+Y_full = bank_data.filter(['Status'])
+```
+
+To set the target category in the response we use the `get_dummies()` function.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Create dummy variables.
+Y_dummies = pd.get_dummies(Y_full, dtype = 'int')
+
+# Select target variable.
+Y_target_full = Y_dummies['Status_counterfeit']
+```
+
+## Let's partition the dataset
+
+</br>
+
+We use 70% for training and the rest for validation.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Split the dataset into training and validation.
+X_train, X_valid, Y_train, Y_valid = train_test_split(X_full, Y_target_full, 
+                                                      test_size = 0.3)
+```
+
+## Standardization in Python
+
+</br>
+
+To standardize **numeric** predictors, we use the `StandardScaler()` function. We also apply the function to variables using the `fit_transform()` function.
+
+</br>
+
+```{python}
+#| echo: true
+
+scaler = StandardScaler()
+Xs_train = scaler.fit_transform(X_train)
+```
+
+## KNN in Python
+
+</br>
+
+In Python, we can use the `KNeighborsClassifier()` and `fit()` from **scikit-learn** to train a KNN.
+
+In the `KNeighborsClassifier` function, we can define the number of nearest neighbors using the `n_neighbors` parameter.
+
+```{python}
+#| echo: true
+#| output: false
+
+# For example, let's use KNN with three neighbours
+knn = KNeighborsClassifier(n_neighbors=3)
+
+# Now, we train the algorithm.
+knn.fit(Xs_train, Y_train)
+```
+
+## Evaluation
+
+</br>
+
+To evaluate KNN, we make predictions on the validation data (not used to train the KNN). To do this, we must first perform standardization operations on the predictors in the validation dataset.
+
+```{python}
+#| echo: true
+
+Xs_valid = scaler.fit_transform(X_valid)
+```
+
+</br>
+
+Next, we make predictions.
+
+```{python}
+#| echo: true
+
+Y_pred_knn = knn.predict(Xs_valid)
+```
+
+## Confusion matrix
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+
+# Calcular matriz de confusión.
+cm = confusion_matrix(Y_valid, Y_pred_knn)
+
+# Mostrar matriz de confusión.
+ConfusionMatrixDisplay(cm).plot()
+```
+
+## Finding the best value of *K*
+
+We can determine the best value of *K* for the KNN algorithm. To this end, we evaluate the performance of the KNN for different values of $K$ in terms of accuracy on the validation dataset.
+
+```{python}
+#| echo: true
+#| output: false
+
+best_k = 1
+best_accuracy = 0
+k_values = range(1, 50)  # Test k values from 1 to 50
+validation_accuracies = []
+
+for k in k_values:
+    model = KNeighborsClassifier(n_neighbors=k)
+    model.fit(Xs_train, Y_train)
+    val_accuracy = accuracy_score(Y_valid, model.predict(Xs_valid))
+    validation_accuracies.append(val_accuracy)
+
+    if val_accuracy > best_accuracy:
+        best_accuracy = val_accuracy
+        best_k = k
+```
+
+## Visualize
+
+We can then visualize the accuracy for different values of $K$ using the following graph and code.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: true
+
+plt.figure(figsize=(6.3, 4.3))
+plt.plot(k_values, validation_accuracies, marker="o", linestyle="-")
+plt.xlabel("Number of Neighbors (k)")
+plt.ylabel("Validation Accuracy")
+plt.title("Choosing the Best k for KNN")
+plt.show()
+```
+
+## 
+
+</br>
+
+Finally, we select the best number of nearest neighbors contained in the `best_k` object.
+
+```{python}
+#| echo: true
+#| output: false
+
+KNN_final = KNeighborsClassifier(n_neighbors = best_k)
+KNN_final.fit(Xs_train, Y_train)
+```
+
+</br>
+
+The accuracy of the best KNN is
+
+```{python}
+#| echo: true
+#| output: true
+
+Y_pred_KNNfinal = KNN_final.predict(Xs_valid)
+valid_accuracy = accuracy_score(Y_valid, Y_pred_KNNfinal)
+print(valid_accuracy)
+```
+
+## Discussion
+
+</br>
+
+KNN is intuitive and simple and can produce decent predictions. However, KNN has some disadvantages:
+
+-   When the training dataset is very large, KNN is computationally expensive. This is because, to predict an observation, we need to calculate the distance between that observation and all the others in the dataset. ("*Lazy learner*").
+
+-   In this case, a decision tree is more advantageous because it is easy to build, store, and make predictions with.
+
+## 
+
+::: {style="font-size: 90%;"}
+-   The predictive performance of KNN deteriorates as the number of predictors increases.
+
+-   This is because the expected distance to the nearest neighbor increases dramatically with the number of predictors, unless the size of the dataset increases exponentially with this number.
+
+-   This is known as the ***curse of dimensionality***.
+:::
+
+![](images/clipboard-72810347.png){fig-align="center"}
+
+::: {style="font-size: 50%;"}
+<https://aiaspirant.com/curse-of-dimensionality/>
+:::
+
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN2004B/)

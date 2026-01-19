@@ -1,0 +1,655 @@
+---
+title: "Introduction to Python and Pandas"
+subtitle: "IN1002B: Introduction to Data Science Projects"
+author: 
+  - name: Alan R. Vazquez
+    affiliations:
+      - name: Department of Industrial Engineering
+format: 
+  revealjs:
+    chalkboard: false
+    multiplex: true
+    footer: "Tecnologico de Monterrey"
+    logo: IN1002b_logo.png
+    css: style.css
+    slide-number: True
+    html-math-method: mathjax
+editor: visual
+jupyter: python3
+---
+
+## Agenda
+
+</br>
+
+1.  Introduction to Python
+2.  Reading data with Python
+
+# Introduction to Python
+
+## Python
+
+::::: columns
+::: {.column width="70%"}
+-   A versatile programming language.
+
+-   It is free!
+
+-   It is widely used for data cleaning, data visualization, and data modelling.
+
+-   It can be extended with packages (libraries) developed by other users.
+:::
+
+::: {.column width="30%"}
+![](images/python.png){fig-align="center" width="324"}
+:::
+:::::
+
+## Google Colab
+
+*Google's free cloud collaboration platform for creating Python documents.*
+
+-   Run Python and collaborate on Jupyter notebooks for free.
+
+-   Harness the power of GPUs for free to accelerate your data science projects.
+
+-   Easily save and upload your notebooks to Google Drive.
+
+![](images/Google_Colaboratory_SVG_Logo.svg.png){fig-align="right" width="2560"}
+
+## Let's try a command in Python
+
+What do you think will happen if we run this command?
+
+```{python}
+#| echo: true
+#| output: false
+
+print("Hello world!")
+```
+
+. . .
+
+```{python}
+#| echo: false
+#| output: true
+
+print("Hello world!")
+```
+
+## Let's try another command
+
+What do you think will happen if we run this command?
+
+```{python}
+#| echo: true
+#| output: false
+
+sum([1, 5, 10])
+```
+
+. . .
+
+```{python}
+#| echo: false
+#| output: true
+
+sum([1, 5, 10])
+```
+
+## Use Python as a basic calculator
+
+```{python}
+#| echo: true
+#| output: true
+
+5 + 1
+```
+
+```{python}
+#| echo: true
+#| output: true
+
+10 - 3
+```
+
+```{python}
+#| echo: true
+#| output: true
+
+2 * 4
+```
+
+```{python}
+#| echo: true
+#| output: true
+
+9 / 3
+```
+
+## Comments
+
+</br>
+
+Sometimes we write things in the coding window that we want Python to ignore. These are called comments and start with `#`.
+
+</br>
+
+Python will ignore the comments and just execute the code.
+
+```{python}
+#| echo: true
+#| output: true
+
+# you can put whatever after #
+# for example... blah blah blah
+```
+
+::: notes
+Si desea escribir un comentario que ocupe más de una línea, es una buena idea poner un \# al principio de cada línea.
+:::
+
+## Introduction to functions in Python
+
+</br>
+
+One of the best things about Python is that there are many built-in commands you can use. These are called *functions*.
+
+. . .
+
+Functions have two basic parts:
+
+::: incremental
+-   The first part is the name of the function (for example, `sum`).
+
+-   The second part is the input to the function, which goes inside the parentheses (`sum([1, 5, 15])`).
+:::
+
+## Python is strict
+
+Python, like all programming languages, is very strict. For example, if you write
+
+```{python}
+#| echo: true
+sum([1, 100])
+```
+
+it will tell you the answer, 101.
+
+. . .
+
+But if you write
+
+```{python}
+#| echo: true
+#| error: true
+Sum([1, 100])
+```
+
+with the “s” capitalized, he will act like he has no idea what we are talking about!
+
+::: notes
+lo mismo si olvidas incluir un parentesis
+:::
+
+## Save your work in Python objects
+
+</br>
+
+Virtually anything, including the results of any Python function, can be saved in an *object*.
+
+This is accomplished by using an assignment operator, which can be an equals symbol (`=`).
+
+. . .
+
+You can make up any name you want for a Python object. However, there are two basic rules for this:
+
+::: incremental
+1.  It has to be different from a function name in Python.
+2.  It has to be as specific as possible.
+:::
+
+## For example
+
+</br>
+
+```{python}
+#| echo: true
+
+# This code will assign the number 18
+# to the object called my_favorite_number
+
+my_favorite_number = 18
+```
+
+After running this code, nothing happens. But if we run the object on its own, we can see what's inside it.
+
+```{python}
+#| echo: true
+
+my_favorite_number
+```
+
+You can also use `print(my_favorite_number)`.
+
+## Lists
+
+</br>
+
+So far we have used Python objects to store a single number. But in statistics we are dealing with variation, which by definition needs more than one number.
+
+. . .
+
+A Python object can also store a complete set of numbers, called a *list*.
+
+You can think of a list as a vector of numbers (or values).
+
+. . .
+
+The `[]` command can be used to combine several individual values into a list.
+
+::: notes
+puedes pensar que el c es por combinar
+:::
+
+## For example
+
+</br>
+
+This code creates two vectors
+
+```{python}
+#| echo: true
+
+my_list = [1, 2, 3, 4, 5]
+my_list_2 = [10, 10, 10, 10, 10]
+```
+
+Let's see its content
+
+```{python}
+#| echo: true
+my_list
+```
+
+```{python}
+#| echo: true
+my_list_2
+```
+
+## Operations
+
+</br>
+
+We can do simple operations with vectors. For example, we can sum all the elements of a list.
+
+```{python}
+#| echo: true
+
+my_list = [1, 2, 3, 4, 5]
+sum(my_list)
+```
+
+## Indexing
+
+</br>
+
+We can index a position in the vector using square brackets with a number like this: `[1]`.
+
+So, if we wanted to print the contents of the first position in `my_list`, we could write
+
+```{python}
+#| echo: true
+
+my_list[1]
+```
+
+[**An feature of Python is that the first element of a list or vector is indexed using the number 0.**]{style="color:red;"}
+
+```{python}
+#| echo: true
+
+my_list[0]
+```
+
+## A little more about objects in Python
+
+</br>
+
+You can think of Python objects as containers that hold values.
+
+A Python object can hold a single value, or it can hold a group of values (as in a vector).
+
+So far, we've only put numbers into Python objects.
+
+. . .
+
+<br/>
+
+***Python objects can actually contain three types of values: numbers, characters, and booleans.***
+
+## Character values
+
+</br>
+
+Characters are made up of text, such as words or sentences. An example of a list with characters as elements is:
+
+. . .
+
+```{python}
+#| echo: true
+
+many_greetings = ["hi", "hello", "hola", "bonjour", "ni hao", "merhaba"]
+many_greetings
+```
+
+. . .
+
+It is important to know that numbers can also be treated as characters, depending on the context.
+
+For example, when 20 is enclosed in quotes (`"20"`) it will be treated as a character value, even though it encloses a number in quotes.
+
+## Boolean values
+
+</br>
+
+Boolean values are `True` or `False`.
+
+We may have a question like:
+
+-   Is the first element of the vector `many_greetings` `"hola"`?
+
+. . .
+
+We can ask Python to find out and return the answer `True` or `False`.
+
+```{python}
+#| echo: true
+
+many_greetings[1] == "hola"
+```
+
+## Logical operators
+
+</br>
+
+Most of the questions we ask Python to answer with `True` or `False` involve comparison operators like `>`, `<`, `>=`, `<=`, and `==`.
+
+The double `==` sign checks whether two values are equal. There is even a comparison operator to check whether values are *not* equal: `!=`.
+
+For example, `5 != 3` is a `True` statement.
+
+## Common logical operators
+
+</br>
+
+-   `>` (*larger than*)
+
+-   `>=` (*larger than or equal to*)
+
+-   `<` (*smaller than*)
+
+-   `<=` (*smaller than or equal to*)
+
+-   `==` (*equal to*)
+
+-   `!=` (*not equal to*)
+
+## Question
+
+</br>
+
+Read this code and predict its response. Then, run the code in Google Colab and validate if you were correct.
+
+```{python}
+#| echo: true
+#| output: false
+
+A = 1
+B = 5
+compare = A > B
+compare
+```
+
+## Programming culture: Trial and error
+
+</br>
+
+The best way to learn programming is to try things out and see what happens. Write some code, run it, and think about why it didn't work.
+
+There are many ways to make small mistakes in programming (for example, typing a capital letter when a lowercase letter is needed).
+
+We often have to find these mistakes through trial and error.
+
+## Python libraries
+
+</br>
+
+Libraries are the fundamental units of reproducible Python code. They include reusable Python functions, documentation describing how to use them, and sample data.
+
+In this course, we will be working mostly with the following libraries:
+
+-   `pandas` for data manipulation
+-   `matplotlib` and `seaborn` for data visualization
+-   `statsmodels` and `scikit-learn` for data modelling
+
+# Reading data with Python
+
+## Data organization
+
+In data science, we organize data into rows and columns.
+
+::: center
+```         
+    Condition  Age   Wt    Wt2
+1  Uninformed   35  136  135.8
+2  Uninformed   45  162  161.8
+3    Informed   52  117  116.8
+4    Informed   29  184  182.8
+5  Uninformed   38  134  136.6
+6    Informed   39  189  183.2
+```
+:::
+
+. . .
+
+The rows are the sampled cases. In this example, the rows are housekeepers from different hotels. There are six rows, so there are six housekeepers in this data set.
+
+. . .
+
+Depending on the study, the rows could be people, states, couples, mice—any case you're taking a sample from to study.
+
+## 
+
+::::: columns
+::: {.column width="50%"}
+The columns represent variables or attributes of each case that were measured.
+:::
+
+::: {.column width="50%"}
+```         
+    Condition  Age   Wt    Wt2
+1  Uninformed   35  136  135.8
+2  Uninformed   45  162  161.8
+3    Informed   52  117  116.8
+4    Informed   29  184  182.8
+5  Uninformed   38  134  136.6
+6    Informed   39  189  183.2
+```
+:::
+:::::
+
+. . .
+
+<br/>
+
+In this study, housekeepers were either informed or not that their daily work of cleaning hotel rooms was equivalent to getting adequate exercise for good health.
+
+. . .
+
+<br/>
+
+So one of the variables, `Condition`, indicates whether they were informed of this fact or not.
+
+## 
+
+Other variables include the age of the housekeeper (`Age`), her weight before starting the study (`Wt`), and her weight at the end of the study (`Wt2`), measured four weeks later.
+
+<br/>
+
+Therefore, the values in each row represent the values of that particular case in each of the variables measured.
+
+```         
+    Condition  Age   Wt    Wt2
+1  Uninformed   35  136  135.8
+2  Uninformed   45  162  161.8
+3    Informed   52  117  116.8
+4    Informed   29  184  182.8
+5  Uninformed   38  134  136.6
+6    Informed   39  189  183.2
+```
+
+::: notes
+¿Cuántas variables hay en este conjunto de datos?
+:::
+
+## Loading data in Python
+
+In this course, we will assume that data is stored in an Excel file with the above organization. As an example, let's use the file `penguins.xlsx`.
+
+::::: columns
+::: {.column width="50%"}
+![](images/print_excel.png){width="418"}
+:::
+
+::: {.column width="50%"}
+![](images/clipboard-1776523589.png){width="396"}
+:::
+:::::
+
+::: {style="font-size: 85%;"}
+[***The file must be previously uploaded to Google Colab.***]{style="color:red;"}
+:::
+
+## 
+
+The dataset `penguins.xlsx` contains data from penguins living in three islands.
+
+![](images/penguins_bill.png){fig-align="center"}
+
+## pandas library
+
+</br>
+
+::::: columns
+::: {.column width="30%"}
+![](images/pandas-logo-300.png){fig-align="left"}
+:::
+
+::: {.column width="70%"}
+-   **pandas** is an open-source Python library for data manipulation and analysis.
+-   It is built on top of **numpy** for high-performance data operations..
+-   It allows the user to import, clean, transform, and analyze data efficiently
+-   <https://pandas.pydata.org/>
+:::
+:::::
+
+## Importing pandas
+
+Fortunately, the **pandas** library is already pre-installed in Google Colab.
+
+</br>
+
+However, we need to inform Google Colab that we want to use **pandas** and its functions using the following command:
+
+```{python}
+#| echo: true
+
+import pandas as pd
+```
+
+</br>
+
+The command `as pd` allows us to have a short name for **pandas**. To use a function of **pandas**, we use the command `pd.function()`.
+
+## Loading data using pandas
+
+</br>
+
+The following code shows how to read the data in the file "penguins.xlsx" into Python.
+
+```{python}
+#| echo: true
+
+# Load the Excel file into a pandas DataFrame.
+penguins_data = pd.read_excel("penguins.xlsx")
+```
+
+## The function head()
+
+The function `head()` allows you to print the first rows of a pandas data frame.
+
+```{python}
+#| echo: true
+# Print the first 4 rows of the dataset.
+penguins_data.head(4)
+```
+
+## Indexing variables a dataset
+
+We can select a specific variables of a data frame using the syntaxis below.
+
+```{python}
+#| echo: true
+
+penguins_data['bill_length_mm']
+```
+
+Here, we selected the variable `bill_length_mm` in the `penguins_data` dataset.
+
+## 
+
+To index multiple variables of a data frame, we put the names of the variables in a list object. For example, we select `bill_length_mm`, `species`, and `island` as follows:
+
+```{python}
+#| echo: true
+
+sub_penguins_data = penguins_data[ ['bill_length_mm',  'species', 'island'] ]
+sub_penguins_data.head()
+```
+
+## Indexing rows
+
+To index rows in a dataset, we use the argument `loc` from **pandas**. For example, we select the rows 3 to 6 of the `penguins_dataset` dataset:
+
+```{python}
+#| echo: true
+
+rows_penguins_data = penguins_data.loc[2:5]
+rows_penguins_data
+```
+
+## 
+
+</br>
+
+```{python}
+#| echo: true
+
+rows_penguins_data
+```
+
+Note that the index 2 and 5 refer to observations 3 and 7, respectively, in the dataset. This is because the first index in Python is 0.
+
+## Indexing rows and columns
+
+Using `loc`, we can also retrieve a subset from the dataset by selecting specific columns and rows.
+
+```{python}
+#| echo: true
+
+sub_rows_pdata = penguins_data.loc[2:5, ['bill_length_mm',  'species', 'island'] ]
+sub_rows_pdata
+```
+
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN1002B-Website/)

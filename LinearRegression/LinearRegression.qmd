@@ -1,0 +1,539 @@
+---
+title: "Multiple Linear Regression"
+subtitle: "IN1002B: Introduction to Data Science Projects"
+author: 
+  - name: Alan R. Vazquez
+    affiliations:
+      - name: Department of Industrial Engineering
+format: 
+  revealjs:
+    chalkboard: false
+    multiplex: true
+    footer: "Tecnologico de Monterrey"
+    logo: IN1002b_logo.png
+    css: style.css
+    slide-number: True
+    html-math-method: mathjax
+editor: visual
+jupyter: python3
+---
+
+## Agenda
+
+</br>
+
+1.  Introduction
+2.  Multiple linear regression model
+3.  Parameter estimation
+
+## statsmodels library
+
+-   **statsmodels** is a powerful Python library for statistical modeling, data analysis, and hypothesis testing.
+-   It provides classes and functions for estimating statistical models.
+-   It is built on top of libraries such as **NumPy**, **SciPy**, and **pandas**
+-   <https://www.statsmodels.org/stable/index.html>
+
+![](images/statsmodels-logo-v2-horizontal-dark.svg){fig-align="center"}
+
+## Load the libraries
+
+</br></br>
+
+Let's import **statsmodels** into Python together with the other relevant libraries.
+
+```{python}
+#| echo: true
+#| output: false
+
+# Importing necessary libraries
+import pandas as pd
+import statsmodels.api as sm
+```
+
+# Multiple linear regression model
+
+## Example
+
+</br>
+
+A group of engineers conducted an experiment to determine the influence of five factors on an appropriate measure of the whiteness of rayon ($Y$). The factors (predictors) are
+
+-   $X_1$: acid bath temperature.
+-   $X_2$: cascade acid concentration.
+-   $X_3$: water temperature.
+-   $X_4$: sulfide concentration.
+-   $X_5$: amount of chlorine bleach.
+
+## The dataset
+
+The dataset for the file is in "rayon.xlsx". It has 26 observations.
+
+```{python}
+#| echo: true
+#| output: true
+
+rayon_data = pd.read_excel("rayon.xlsx")
+rayon_data.head()
+```
+
+Here, we will consider it as the [training]{style="color:blue;"} dataset.
+
+## Multiple linear regression model
+
+$$Y = f(\boldsymbol{X}) + \epsilon$$
+
+::: incremental
+-   $f(\boldsymbol{X}) = \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p$ (constant).
+-   $p$ is the number of predictors.
+-   $\epsilon$ is a random variable describing everything that is not captured by our model.
+:::
+
+. . .
+
+Assumptions:
+
+1.  The expected or average value of $\epsilon$ is zero.
+2.  The dispersion or variance of $\epsilon$ is $\sigma^2$ (unknown constant).
+
+## In our example
+
+$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \beta_4 X_4 + \beta_5 X_5 + \epsilon$$
+
+::: {style="font-size: 90%;"}
+-   $X_1$: acid bath temperature.
+
+-   $X_2$: cascade acid concentration.
+
+-   $X_3$: water temperature.
+
+-   $X_4$: sulfide concentration.
+
+-   $X_5$: amount of chlorine bleach.
+
+-   $Y$: whiteness of rayon.
+
+-   $p = 5$ and $\epsilon$ is the error of the model assumed to be 0 and of constant dispersion $\sigma^2$.
+:::
+
+::: notes
+That is, the dispersion does not change in terms of the predictors or other variables not in the model.
+:::
+
+## Interpretation of coefficients
+
+</br>
+
+$$f(\boldsymbol{X}) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p,$$
+
+where the unknown parameter $\beta_0$ is called the “intercept,” and $\beta_j$ is the “coefficient” of the j-th predictor.
+
+. . .
+
+For the j-th predictor, we have that:
+
+::: incremental
+-   $\beta_j = 0$ implies no dependence.
+-   $\beta_j > 0$ implies positive dependence.
+-   $\beta_j < 0$ implies negative dependence.
+:::
+
+## 
+
+</br>
+
+$$f(\boldsymbol{X}) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p,$$
+
+**Interpretation**:
+
+-   $\beta_0$ is the [average response]{style="color:blue;"} when all predictors $X_j$ equal 0.
+-   $\beta_j$ is the [amount of increase in the average response]{style="color:blue;"} by a 1 unit increase in the predictor $X_j$, *when all other predictors are fixed to an arbitrary value*.
+
+## Training Data
+
+</br>
+
+The parameters $\beta_0, \beta_1, \ldots, \beta_p$ and $\sigma^2$ are unknown. To learn about them, we use our [**training**]{style="color:blue;"} data.
+
+```{python}
+#| echo: false
+#| output: true
+
+rayon_data.head()
+```
+
+## Notation
+
+-   $X_{ij}$ denotes the i-th observed value of predictor $X_j$.
+-   $Y_i$ denotes the i-th observed value of response $Y$.
+
+```{python}
+#| echo: false
+#| output: true
+
+rayon_data.head()
+```
+
+## 
+
+</br>
+
+Since we believe in the multiple linear regression model, then the observations in the data set must comply with
+
+$$Y_i= \beta_0+\beta_1 X_{i1} + \beta_2 X_{i2} + \cdots + \beta_p X_{ip} + \epsilon_i.$$
+
+where:
+
+-   $i=1, \ldots, n.$
+
+-   $n$ is the number of observations. In our example, $n = 26$.
+
+-   The $\epsilon_1, \epsilon_2, \ldots, \epsilon_n$ are random errors.
+
+## Assumptions of the errors
+
+$$Y_i= \beta_0+\beta_1 X_{i1} + \beta_2 X_{i2} + \cdots + \beta_p X_{ip} + \epsilon_i $$
+
+The error $\epsilon_i$’s must satisfy the following assumptions:
+
+::: incremental
+1.  On average, they are close to zero for any values of the predictors $X_j$.
+2.  For any value of a predictor $X_i$, the dispersion or variance is constant and equal to $\sigma^2$.
+3.  The $\epsilon_i$’s are all independent from each other.
+4.  [The $\epsilon_i$’s follow normal distribution with mean 0 and variance $\sigma^2$.]{style="color:gray;"}
+:::
+
+## Questions
+
+</br>
+
+::: incremental
+1.  How can we estimate $\beta_0, \beta_1, \ldots, \beta_p$ and $\sigma^2$?
+
+2.  How can we validate the model and all its assumptions?
+
+3.  How can we make inferences about $\beta_0, \beta_1, \ldots, \beta_p$?
+
+4.  If some assumptions are not met, can we do something about it?
+
+5.  How can we make predictions of future responses using the multiple linear regression model?
+:::
+
+## Matrix notation
+
+In what follows, it is useful to denote the multiple linear regression model using matrix notation:
+
+$\mathbf{Y} = \begin{pmatrix} Y_1 \\ Y_2 \\ \vdots \\ Y_n \end{pmatrix}$ and $\mathbf{X} = \begin{pmatrix}
+1& X_{11} & X_{12} & \cdots & X_{1p} \\
+1& X_{21} & X_{22} & \cdots & X_{2p} \\
+\vdots &\vdots & \vdots & \cdots & \vdots \\
+1& X_{n1} & X_{n2} & \cdots & X_{np} \\
+\end{pmatrix}$, where
+
+-   $\mathbf{Y}$ is an $n \times 1$ vector.
+-   $\mathbf{X}$ is a $n \times (p+1)$ matrix.
+
+## 
+
+</br>
+
+And,
+
+$\boldsymbol{\beta} = \begin{pmatrix}\beta_0 \\ \beta_1 \\ \vdots \\ \beta_p \end{pmatrix}$ and $\boldsymbol{\epsilon} = \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \vdots \\ \epsilon_n \end{pmatrix}$, where
+
+-   $\boldsymbol{\beta}$ is an $(p+1) \times 1$ vector.
+-   $\boldsymbol{\epsilon}$ is an $n \times 1$ vector.
+
+## 
+
+</br>
+
+The multiple linear regression model then is
+
+$$\mathbf{Y} =  \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}.$$ This expression means
+
+$\begin{pmatrix} Y_1 \\ Y_2 \\ \vdots \\ Y_n \end{pmatrix} = \begin{pmatrix}
+\beta_0 + \beta_1 X_{11} + \beta_2 X_{12} + \cdots + \beta_p X_{1p} \\
+\beta_0 + \beta_1 X_{21} + \beta_2 X_{22} + \cdots + \beta_p X_{2p} \\
+\vdots  \\
+\beta_0 + \beta_1 X_{n1} + \beta_2 X_{n2} + \cdots + \beta_p X_{np} \\
+\end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \vdots \\ \epsilon_n \end{pmatrix}$
+
+# Parameter Estimation
+
+## Questions
+
+</br>
+
+1.  [How can we estimate $\beta_0, \beta_1, \ldots, \beta_p$ and $\sigma^2$?]{style="color:blue;"}
+
+2.  How can we validate the model and all its assumptions?
+
+3.  How can we make inferences about $\beta_0, \beta_1, \ldots, \beta_p$?
+
+4.  If some assumptions are not met, can we do something about it?
+
+5.  How can we make predictions of future responses using the multiple linear regression model?
+
+## An estimator for $\boldsymbol{\beta}$
+
+Our **goal** is to find an estimator for the vector $\boldsymbol{\beta}$ (and all its components). For the moment, let’s assume that we have one:
+
+$\hat{\boldsymbol{\beta}} = \begin{pmatrix} \hat{\beta}_0 \\ \hat{\beta}_1 \\ \vdots\\ \hat{\beta}_p \end{pmatrix}$, where $\hat{\beta}_j$ is an estimator for $\beta_j$, $j = 0, \ldots, p$.
+
+. . .
+
+Using this estimator, we can compute the predicted responses of our model $\hat{\mathbf{Y}} = \mathbf{X}\hat{\boldsymbol{\beta}}$, where $\hat{\mathbf{Y}} = (\hat{Y}_1, \hat{Y}_2, \ldots, \hat{Y}_n)^{T}$ and $\hat{Y}_i$ is the i-th predicted response.
+
+## 
+
+</br>
+
+The expression $\hat{\mathbf{Y}} = \mathbf{X}\hat{\boldsymbol{\beta}}$ means
+
+$$\begin{pmatrix} \hat{Y}_1 \\ \hat{Y}_2 \\ \vdots \\ \hat{Y}_n \end{pmatrix}  = \begin{pmatrix}
+\hat{\beta}_0 + X_{11} \hat{\beta}_1 + X_{12} \hat{\beta}_2 + \cdots + X_{1p} \hat{\beta}_p\\
+\hat{\beta}_0 + X_{21} \hat{\beta}_1 + X_{22}\hat{\beta}_2 + \cdots + X_{2p}\hat{\beta}_p \\
+\vdots  \\
+\hat{\beta}_0 + X_{n1} \hat{\beta}_1 + X_{n2}\hat{\beta}_2 + \cdots + X_{np} \hat{\beta}_p \\
+\end{pmatrix}$$
+
+## 
+
+</br> </br>
+
+This means that the residuals of the estimated model are
+
+$$\hat{\boldsymbol{\epsilon}} = \mathbf{Y} - \hat{\mathbf{Y}} = \mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}},$$
+
+where $\hat{\boldsymbol{\epsilon}} = (\hat{\epsilon}_1, \hat{\epsilon}_2, \ldots, \hat{\epsilon}_n)^{T}$ and $\hat{\epsilon}_i = Y_i - \hat{Y}_i$ is the i-th residual.
+
+## Least squares estimator
+
+To find the best estimator for $\boldsymbol{\beta}$ (and all its elements), we use the method of least squares. This method finds the best $\hat{\boldsymbol{\beta}}$ that minimizes the residual sum of squares (RSS):
+
+$$RSS = \left(\mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}}\right)^{T} \left(\mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}}\right) = \sum_{i=1}^{n} \hat{\epsilon}^2_i = \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2.$$
+
+. . .
+
+The estimator that minimizes the expression above is called the [**least squares estimator**]{style="color:brown;"}:
+
+$$\hat{\boldsymbol{\beta}} = (\mathbf{X}^{T}\mathbf{X})^{-1} \mathbf{X}^{T}\mathbf{Y}$$
+
+## Computation of $\hat{\boldsymbol{\beta}} = (\mathbf{X}^{T}\mathbf{X})^{-1} \mathbf{X}^{T}\mathbf{Y}$
+
+</br>
+
+::: incremental
+1.  Compute the transpose of a matrix: $\mathbf{X}^{T}$.
+2.  Compute the product of a matrix and a vector: $\mathbf{X}^{T}\mathbf{Y}$.
+3.  Compute the product of two matrices: $\mathbf{X}^{T} \mathbf{X}$.
+4.  Compute the [**inverse**]{style="color:red;"} of a matrix: $(\mathbf{X}^{T} \mathbf{X})^{-1}$.
+:::
+
+## Remarks
+
+4.  Compute the [**inverse**]{style="color:red;"} of a matrix: $(\mathbf{X}^{T} \mathbf{X})^{-1}$.
+
+-   Not all matrices have an inverse.
+-   If it does not have an inverse then the matrix is called [**singular**]{style="color:darkblue;"}. Otherwise, it is called **non-singular**.
+-   For the inverse to exist, the columns in $\mathbf{X}$ must be *linearly independent*.
+-   Or, equivalently, the determinant $|\mathbf{X}^{T} \mathbf{X}| > 0$.
+
+## Computation in Python
+
+</br>
+
+To compute the least squares estimates, we first split the data set into a matrix with the values of the predictors only, and a matrix with the response values.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Matrix with predictors.
+rayon_predictors = rayon_data.drop(columns=['Y'])
+
+# Add intercept.
+rayon_X_train = sm.add_constant(rayon_predictors)
+
+# Matrix with response.
+rayon_Y_train = rayon_data['Y']
+```
+
+## 
+
+</br></br>
+
+Next, we use the functions `OLS()` and `fit()` from **statsmodels**.
+
+```{python}
+#| echo: true
+#| output: false
+
+# Create linear regression object
+regr = sm.OLS(rayon_Y_train, rayon_X_train)
+
+# Train the model using the training sets
+linear_model = regr.fit()
+```
+
+## 
+
+</br>
+
+To show the estimated coefficients, we use the argument `params` of the `linear_model` object created previously.
+
+```{python}
+#| echo: true
+#| output: true
+
+# The estimated coefficients.
+print(linear_model.params)
+```
+
+The elements in the vector above are the estimates $\hat{\beta}_0$, $\hat{\beta}_1$, $\hat{\beta}_2$, $\hat{\beta}_3$, $\hat{\beta}_4$, and $\hat{\beta}_5$.
+
+## Interpretation of estimated coefficients
+
+::: incremental
+-   The average whiteness of a rayon is $\hat{\beta}_0 = -35.26$ when all predictors are equal to 0.
+
+-   Increasing the acid bath temperature by 1 unit increases the average whiteness of a rayon by $\hat{\beta}_1 = 0.745$ units.
+
+-   Increasing the cascade acid concentration by 1 unit increases the average whiteness of a rayon by $\hat{\beta}_2 = 20.23$ units.
+:::
+
+## 
+
+</br></br>
+
+-   Increasing the water temperature by 1 unit increases the average whiteness of a rayon by $\hat{\beta}_3 = 0.793$ units.
+
+-   Increasing the sulfide concentration by 1 unit increases the average whiteness of a rayon by $\hat{\beta}_4 = 25.583$ units.
+
+-   Increasing the amount of chlorine bleach by 1 unit increases the average whiteness of a rayon by $\hat{\beta}_5 = 17.208$ units.
+
+## 
+
+![](images/example_SLR.jpeg){fig-align="center"}
+
+## 
+
+![](images/clipboard-2523519923.png){fig-align="center"}
+
+## Properties of least squares estimators
+
+</br>
+
+If all the assumptions of the linear regression model are met, the least squares estimators have some attractive properties.
+
+. . .
+
+For example:
+
+1.  On average, the estimate $\hat{\beta}_{j}$ equals the true coefficient value $\beta_{j}$ for the predictor $X_j$.
+2.  Each estimate $\hat{\beta}_{j}$ follows a normal distribution with a specific mean and variance.
+
+## Predictions
+
+</br>
+
+Once we estimate the intercept and model coefficients, we make predictions as follows:
+
+$$\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \hat{\beta}_2 X_{i2} + \cdots + \hat{\beta}_p X_{ip}$$
+
+where $\hat{Y}_i$ is the i-th [**fitted**]{style="color:orange;"} or [**predicted**]{style="color:orange;"} response.
+
+In Python, we use the argument `fittedvalues` to show the predicted responses of the estimated model.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Make predictions using the the model
+rayon_Y_pred = linear_model.fittedvalues
+```
+
+## 
+
+</br>
+
+Predictions of the 26 observations in the training dataset.
+
+```{python}
+#| echo: true
+#| output: true
+
+print(rayon_Y_pred)
+```
+
+## Residuals
+
+</br>
+
+Now that we have introduced the estimator $\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p$, we can be more specific in our terminology of the linear model.
+
+</br>
+
+The errors of the estimated model are called [**residuals**]{style="color:purple;"} $\hat{\epsilon}_i = Y_i - \hat{Y}_i$, $i = 1, \ldots, n.$
+
+</br>
+
+If the model is correct, the residuals $\hat{\epsilon}_1, \hat{\epsilon}_2, \ldots, \hat{\epsilon}_n$ give us a good idea of the errors $\epsilon_1, \epsilon_2, \ldots, \epsilon_n$.
+
+## 
+
+In Python, we compute the residuals using the following command.
+
+```{python}
+#| echo: true
+#| output:  true
+
+residuals = linear_model.resid
+
+print(residuals)
+```
+
+## Estimation of variance
+
+</br>
+
+The variance $\sigma^2$ of the errors is estimated by
+
+$$\hat{\sigma}^2=\frac{1}{n-p-1}\sum_{i=1}^{n} \hat{\epsilon}_i^{2},$$
+
+where $n$ and $p$ are the numbers of observations and predictors, respectively. In Python, we compute $\hat{\sigma}^2$ as follows:
+
+```{python}
+#| echo: true
+#| output:  true
+
+error_variance = linear_model.scale
+
+print( round(error_variance, 3) )
+```
+
+## 
+
+</br>
+
+The smaller the value of $\hat{\sigma}^2$, the closer our predictions are to the actual responses.
+
+In practice, it is better to use the standard deviation of the errors. That is,
+
+$$\hat{\sigma}=\left(\frac{1}{n-p-1}\sum_{i=1}^{n} \hat{\epsilon}_i^{2}\right)^{1/2}.$$ In Python, we compute $\hat{\sigma}$ as follows:
+
+```{python}
+#| echo: true
+#| output:  true
+
+print( round(error_variance**(1/2), 3) )
+```
+
+## Interpretation of $\hat{\sigma}$
+
+</br></br></br>
+
+-   The smaller the $\hat{\sigma}$, the closer our predictions are to the actual responses in the [training]{style="color:blue;"} dataset.
+-   The $\hat{\sigma} = 10.292$ implies that, on average, the predictions of our model are off or incorrect by 10.292 units.
+
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN1002B-Website/)

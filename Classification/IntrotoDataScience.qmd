@@ -1,0 +1,398 @@
+---
+title: "Introduction to Data Science"
+subtitle: "IN2004B: Generation of Value with Data Analytics"
+author: 
+  - name: Alan R. Vazquez
+    affiliations:
+      - name: Department of Industrial Engineering
+format: 
+  revealjs:
+    chalkboard: false
+    multiplex: false
+    footer: "Tecnologico de Monterrey"
+    logo: IN2004B_logo.png
+    css: style.css
+    slide-number: True
+    html-math-method: mathjax
+editor: visual
+jupyter: python3
+---
+
+## Agenda
+
+</br>
+
+1.  Data Science
+2.  Supervised and Unsupervised Learning
+
+# Data Science
+
+## Data Science is ...
+
+a multidisciplinary field that uses scientific methods, processes, algorithms, and systems to extract knowledge and insights from vast amounts of structured and unstructured [data]{style="color:purple;"}.
+
+. . .
+
+:::::: center
+::::: columns
+::: {.column width="40%"}
+![](images/clipboard-2707460623.png){fig-align="center" width="377"}
+:::
+
+::: {.column width="50%"}
+![](images/clipboard-3242954590.png){fig-align="center" width="485"}
+:::
+:::::
+::::::
+
+## Other Similar Concepts
+
+</br>
+
+::: incremental
+-   **Data mining** is a process of discovering patterns in large [data sets]{style="color:purple;"} using methods at the intersection of statistics and database systems.
+
+-   **Predictive modeling** is the process of developing a model so that we can understand and quantify the accuracy of the model's prediction in yet-to-be-seen future [data sets]{style="color:purple;"}.
+
+-   **Statistical learning** refers to a set of tools (statistical models and data mining methods) for modeling and understanding complex [data sets]{style="color:purple;"}.
+:::
+
+## In 2004...
+
+Hurricane Frances battered the Caribbean and threatened to directly affect Florida's Atlantic coast.
+
+. . .
+
+::::::: center
+:::::: columns
+::: {.column width="30%"}
+![](images/clipboard-123225538.png){width="194"}
+:::
+
+::: {.column width="30%"}
+![](https://c8.alamy.com/compes/ccn9gk/ft-pierce-9-6-04-un-clubouse-danados-por-el-huracan-frances-en-ocean-village-en-hutchinson-island-el-lunes-el-complejo-tambien-recibio-algunos-danos-a-techos-pisos-de-tierra-y-algunas-unidades-fueron-danadas-por-las-tormentas-foto-por-aguas-lannis-el-palm-beach-post-no-para-su-distribucion-fuera-de-cox-ccn9gk.jpg){width="268"}
+:::
+
+::: {.column width="30%"}
+![](images/clipboard-679480994.png){width="280"}
+:::
+::::::
+:::::::
+
+. . .
+
+Residents headed for higher ground, but in Arkansas, Walmart executives saw a big opportunity for one of their newest data-driven weapons: ***predictive technology***.
+
+## 
+
+</br>
+
+::::::: center
+:::::: columns
+:::: {.column width="70%"}
+::: {style="font-size: 90%;"}
+A week before the storm made landfall, Linda M. Dillman, Wal-Mart's chief information officer, pressured her staff to create forecasts based on what had happened when Hurricane Charley hit the area several weeks earlier.
+
+<br/>
+
+Backed by trillions of bytes of purchase history stored in Walmart's data warehouse, he said, the company could "start predicting what's going to happen, rather than waiting for it to happen," as he put it.
+:::
+::::
+
+::: {.column width="30%"}
+![](images/clipboard-3960378011.png){width="224"}
+
+<br/>
+
+![](images/clipboard-4213549697.png){width="516"}
+:::
+::::::
+:::::::
+
+## The result
+
+::::::: columns
+:::: {.column width="50%"}
+The New York Times reported
+
+::: {style="font-size: 80%;"}
+> *"... Experts analyzed the data and found that stores would indeed need certain products, not just the typical flashlights."*
+:::
+::::
+
+:::: {.column width="50%"}
+Dillman said
+
+::: {style="font-size: 80%;"}
+> *"We didn't know in the past that strawberry Pop-Tarts increase their sales, like seven times their normal sales rate, before a hurricane."*
+:::
+::::
+:::::::
+
+[![](images/clipboard-3670330051.png){fig-align="center" width="529"}](https://www.nytimes.com/2004/11/14/business/yourmoney/what-walmart-knows-about-customers-habits.html)
+
+## Cross-Industry Standard Process (CRISP) for Data Science
+
+![](images/clipboard-4096324521.png){fig-align="center"}
+
+## CRISP Model
+
+</br>
+
+-   **Business Understanding**: What does the business need?
+
+-   **Data Understanding**: What data do we have or need? Is it clean?
+
+-   **Data Preparation**: How do we organize the data for modeling?
+
+-   **Modeling**: What modeling techniques should we apply?
+
+-   **Evaluation**: Which model best meets business objectives?
+
+-   **Implementation**: How do stakeholders access the results?
+
+## Business Understanding
+
+</br></br>
+
+-   Business understanding refers to defining the business problem you are trying to solve.
+
+-   The goal is to reframe the business problem as a data science problem.
+
+-   Reframing the problem and designing a solution is often an iterative process.
+
+## Problems in Data Science
+
+</br>
+
+[**Classification**]{style="color:blue;"} (or class probability estimation) attempts to predict, for each individual in a population, which of a (small) set of classes that individual belongs to. For example, "Among all T-Mobile customers, which ones are likely to respond to a given offer?"
+
+. . .
+
+[**Regression**]{style="color:green;"} attempts to estimate or predict, for each individual, the numerical value of some variable for that individual. For example, "How much will a given customer use the service?"
+
+## 
+
+</br></br></br>
+
+**Clustering** attempts to group individuals in a population based on their similarity, but not for any specific purpose. For example, "Do our customers form natural groups or segments?"
+
+## Discussion
+
+</br>
+
+-   Often, reframing the problem and designing a solution is an iterative process.
+
+-   The initial formulation may not be complete or optimal, so multiple iterations may be necessary to formulate an acceptable solution.
+
+-   [The key to great success is creative problem formulation by an analyst on how to frame the business problem as one or more data science problems.]{style="color:brown;"}
+
+## Data Understanding I
+
+</br>
+
+::: incremental
+-   If the goal is to solve a business problem, data constitutes the raw material available from which the solution will be built.
+
+-   The available data rarely matches the problem.
+
+-   For example, historical data is often collected for purposes unrelated to the current business problem or without any explicit purpose.
+:::
+
+## Data Understanding II
+
+</br>
+
+-   Data costs vary. Some data will be available for free, while others will require effort to obtain.
+
+::: incremental
+-   A key part of the data understanding phase is estimating the costs and benefits of each data source and deciding whether further investment is justified.
+
+-   Even after acquiring all the data sets, compiling them may require additional effort.
+:::
+
+## Example
+
+</br>
+
+In the 1980s, credit cards were essentially priced uniformly because companies didn't have adequate information systems to deal with differential pricing on a massive scale.
+
+</br>
+
+Around 1990, Richard Fairbanks and Nigel Morris realized that information technology was powerful enough to enable more sophisticated predictive models and offer different terms (today: pricing, credit limits, low introductory rate balance transfers, cash back, and loyalty points).
+
+## 
+
+</br>
+
+Signet Bank's management was convinced that modeling profitability, not just the probability of default, was the right strategy.
+
+They knew that a small proportion of customers actually account for more than 100% of a bank's profit from credit card transactions (because the rest are either breaking even or losing money).
+
+If they could model profitability, they could make better offers to the best customers and "skim the cream" of the big banks' clientele.
+
+## 
+
+</br>
+
+But Signet Bank had a really big problem implementing this strategy.
+
+They didn't have the right data to model profitability for offering different terms to different customers!
+
+Since the bank offered credit with a specific set of terms and a specific default model, they had the data to model profitability (1) for the terms they actually offered in the past, and (2) for the type of customer actually offered credit.
+
+## 
+
+</br>
+
+What could Signet Bank do? They put into play a fundamental data science strategy: [**acquire the necessary data at a cost!**]{style="color:darkred;"}
+
+In this case, data on customer profitability with different credit terms could be generated by conducting experiments. Different terms were randomly offered to different customers.
+
+This might seem silly outside the context of data analytics thinking: you're likely to lose money!
+
+This is true. In this case, the losses are the cost of data acquisition.
+
+## What happened?
+
+As expected, Signet's number of bad accounts skyrocketed.
+
+The losses continued for several years while data scientists worked to build predictive models from the data, evaluate them, and implement them to improve profits.
+
+Because the company viewed these losses as investments in data, they persisted despite complaints from stakeholders.
+
+Eventually, Signet's credit card business turned around and became so profitable that it was spun off to separate it from the bank's other operations, which were now overshadowing the success of its consumer lending business.
+
+## Richard Fairbanks and Nigel Morris
+
+![](images/ruchardnigel.jpg){fig-align="center" width="512" height="286"}
+
+::::: columns
+::: {.column width="50%"}
+Founders of
+:::
+
+::: {style="font-size: 50%;"}
+![](images/Capital_One_logo.png){fig-align="center" width="323"}
+:::
+:::::
+
+## Most Used Data Science Tools
+
+1.  Python
+2.  R
+3.  SAS
+4.  Excel
+5.  Power BI
+6.  Tableau
+7.  Apache Spark
+
+<https://hackr.io/blog/top-data-analytics-tools>
+
+## Other Tools Used
+
+-   RapidMiner (<https://rapidminer.com/products/studio/>)
+
+-   JMP (<https://www.jmp.com/es_mx/home.html>)
+
+-   Minitab (<https://www.minitab.com/es-mx/products/minitab/>)
+
+-   Trifacta (<https://www.trifacta.com/>)
+
+-   BigML (<https://bigml.com/>)
+
+-   MLBase (<http://www.mlbase.org/>)
+
+-   Google Cloud AutoML (<https://cloud.google.com/automl/>)
+
+# Supervised and Unsupervised Learning
+
+## Terminology
+
+-   [**Predictors**]{style="color:darkblue;"}. They are represented using the notation $X_1$ for the first predictor, $X_p$ for the second predictor, ..., and $X_p$ for the *p*-th predictor.
+
+-   [**Response**]{style="color:darkred;"}. $Y$ represents the response variable, which we will attempt to predict.
+
+. . .
+
+We want to establish the following relationship
+
+$$ 
+Y = f(X_1, X_2, \ldots, X_p) + \epsilon,
+$$
+
+where $f$ is a function of the predictors and $\epsilon$ is a natural (random) error.
+
+## Types of Learning
+
+</br></br>
+
+In data science (and machine learning), there are two main types of learning:
+
+-   [Supervised learning]{style="color:blue;"}
+
+-   [Unsupervised learning]{style="color:green;"}
+
+## 
+
+![](images/clipboard-2564234206.png)
+
+## Supervised Learning...
+
+Includes algorithms that learn by example. The user provides the supervised algorithm with a known data set that includes the corresponding known inputs and outputs. The algorithm must find a method to determine how to reach those inputs and outputs.
+
+While the user knows the correct answers to the problem, the algorithm identifies patterns in the data, learns from observations, and makes predictions.
+
+The algorithm makes predictions that can be corrected by the user, and this process continues until the algorithm reaches a high level of accuracy and performance.
+
+## Popular Supervised Algorithms
+
+![](images/clipboard-4052653044.png){fig-align="center"}
+
+## 
+
+![](images/clipboard-2622609818.png){fig-align="center"}
+
+## Unsupervised Learning...
+
+</br>
+
+studies data to identify patterns. There is no answer key or human operator to provide instruction. The machine determines correlations and relationships by analyzing the available data.
+
+In this process, the unsupervised algorithm is left to interpret large data sets. The algorithm attempts to organize that data in some way to describe its structure.
+
+As it evaluates more data, its ability to make decisions about it gradually improves and becomes more refined.
+
+## Popular Unsupervised Algorithms
+
+![](images/clipboard-1531600765.png){fig-align="center"}
+
+## Two Data Sets
+
+-   In supervised learning, there are several types of data.
+
+-   [**Training data**]{style="color:darkblue;"} is the data used to construct $\hat{f}(\boldsymbol{X})$.
+
+-   [**Test data**]{style="color:darkgreen;"} is the data that was NOT used in the fitting process, but is used to test the model's performance on unanalyzed data.
+
+![](images/training_test.jpeg){fig-align="center" width="720"}
+
+## Yogi Berra
+
+</br></br></br>
+
+> It’s though to make predictions, especially about the future.
+
+## Let's Play
+
+</br></br>
+
+Let's play with supervised models.
+
+1.  <https://quickdraw.withgoogle.com/>
+
+2.  <https://tenso.rs/demos/rock-paper-scissors/>
+
+3.  <https://teachablemachine.withgoogle.com/>
+
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN2004B/)
