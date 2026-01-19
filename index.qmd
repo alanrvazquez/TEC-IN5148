@@ -1,11 +1,41 @@
 ---
-title: "TEC-IN5148"
+title: "IN5148: Statistics and Data Science with Applications in Engineering"
+author: 
+  - name: Alan R. Vazquez
+    orcid: 0000-0002-3658-0911
+    affiliations:
+      - name: Tecnologico de Monterrey
 ---
 
-This is a Quarto website.
+## Course topics
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+### Introduction
 
-```{r}
-1 + 1
-```
+1.  Indicators ([slides](/Module1/Indicators.slides.html))
+2.  Development and Visualization of Indicators ([slides](/Module1/BSC.slides.html))
+
+### Unsupervised Learning
+
+1.  Introduction to Data Science ([slides](/Module2/IntrotoDataScience.slides.html)) 
+2.  Decision trees for classification ([slides](/Module2/Classification.slides.html)) ([colab](https://drive.google.com/file/d/1iqtGTsLj0qL_zWwdkyrMsKltqOjvM496/view?usp=sharing))
+3.  Ensemble methods ([slides](/Module2/EnsembleMethods.slides.html)) ([colab](https://drive.google.com/file/d/1HAn1pZL2oSJtISVfp2nrvNI8wYzwtAV9/view?usp=sharing))
+4.  *K*-nearest neighbours ([slides](/Module2/KNearestNeighbours.slides.html)) ([colab](https://drive.google.com/file/d/1ItiD4OZrk46WSBHhh_d0va7F-5lY6f25/view?usp=sharing))
+
+### Supervised Learning
+
+## Multiple Linear Regression
+
+1.  Predictive Models ([slides](/Module3/PredictiveModels.slides.html)) ([colab](https://drive.google.com/file/d/12x5bgN_Tt5DAO38DGbeqhPM36gEETCqb/view?usp=sharing))
+2.  Autocorrelation Models ([slides](/Module3/Autocorrelation.slides.html)) ([colab](https://drive.google.com/file/d/1G2EzXu1iOV5UpP_qzU1nUknGJ5FPY0lg/view?usp=sharing))
+3.  Ensemble Methods for Time Series
+
+## Classification Algorithms
+
+1.  Clustering Methods ([slides](/Module4/Clustering.slides.html)) ([colab](https://colab.research.google.com/drive/1sL5LeIXI9YqYmebxWpF3sqPA92IxftYX?usp=sharing))
+2.  Principal Component Analysis ([slides](/Module4/PCA.slides.html)) ([colab](https://colab.research.google.com/drive/1apdp8jOr7DQFIML_QQr1xofdy8-tyCK1?usp=sharing))
+
+## About the author
+
+Alan R. Vazquez ([website](https://alanrvazquez.netlify.app/)) is an assistant professor in the Department of Industrial Engineering at Tecnologico de Monterrey, Monterrey campus.
+
+### License
