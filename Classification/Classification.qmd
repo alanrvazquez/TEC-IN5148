@@ -1660,4 +1660,4 @@ Interpret the Precision, Accuracy, Sensitivity, and Type 1 Error values for the 
 
 ![](images/clipboard-3265772983.png){fig-align="center"}
 
-# [Return to main page](https://alanrvazquez.github.io/TEC-IN2004B/)
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

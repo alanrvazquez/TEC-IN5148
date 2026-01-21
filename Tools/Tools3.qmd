@@ -639,4 +639,4 @@ plt.yticks(fontsize = 12)
 plt.savefig('bar_chart.png',dpi=300)
 ```
 
-# [Return to main page](https://alanrvazquez.github.io/TEC-IN1002B-Website/)
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

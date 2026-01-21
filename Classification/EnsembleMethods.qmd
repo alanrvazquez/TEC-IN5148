@@ -499,4 +499,4 @@ accuracy = accuracy_score(Y_valid, RF_predicted)
 print( round(accuracy, 2) )
 ```
 
-# [Return to main page](https://alanrvazquez.github.io/TEC-IN2004B/)
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

@@ -984,4 +984,4 @@ print( round(linear_model.rsquared_adj, 3) )
 2.  T-tests on the individual coefficients. If $H_0$ is not rejected, this indicates that the predictor $X_j$ can be deleted from the model. We can then delete the predictor and refit the model. We can repeat this process several times until we reach a model in which all variables are significant.
 :::
 
-# [Return to main page](https://alanrvazquez.github.io/TEC-IN1002B-Website/)
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

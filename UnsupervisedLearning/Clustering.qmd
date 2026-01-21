@@ -824,4 +824,4 @@ plt.show()
 
 James et al. (2017)
 
-# [Return to main page](https://alanrvazquez.github.io/TEC-IN2004B/)
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

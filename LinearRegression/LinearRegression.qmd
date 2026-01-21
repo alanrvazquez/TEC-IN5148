@@ -536,4 +536,4 @@ print( round(error_variance**(1/2), 3) )
 -   The smaller the $\hat{\sigma}$, the closer our predictions are to the actual responses in the [training]{style="color:blue;"} dataset.
 -   The $\hat{\sigma} = 10.292$ implies that, on average, the predictions of our model are off or incorrect by 10.292 units.
 
-# [Return to main page](https://alanrvazquez.github.io/TEC-IN1002B-Website/)
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

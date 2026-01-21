@@ -677,4 +677,4 @@ X_train_num_p.info()
 
 All predictors have 240 complete entries.
 
-# [Return to main page](https://alanrvazquez.github.io/TEC-IN1002B-Website/)
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

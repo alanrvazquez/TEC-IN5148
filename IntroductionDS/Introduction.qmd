@@ -305,4 +305,4 @@ $\hat{f}(\boldsymbol{X})$ represents an approximation or estimate of the true mo
 
 > It’s though to make predictions, especially about the future.
 
-# [Return to main page](https://alanrvazquez.github.io/TEC-IN1002B-Website/)
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

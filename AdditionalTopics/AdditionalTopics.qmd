@@ -1055,4 +1055,4 @@ The lower the validation RMSE, the more accurate our model.
 
 [*Interpretation*: On average, our predictions are off by $\pm$ 5,981 dollars.]{style="color:darkblue;"}
 
-# [Return to main page](https://alanrvazquez.github.io/TEC-IN1002B-Website/)
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

@@ -652,4 +652,4 @@ sub_rows_pdata = penguins_data.loc[2:5, ['bill_length_mm',  'species', 'island']
 sub_rows_pdata
 ```
 
-# [Return to main page](https://alanrvazquez.github.io/TEC-IN1002B-Website/)
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)
