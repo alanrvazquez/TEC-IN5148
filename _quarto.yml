@@ -27,7 +27,6 @@ format:
     chalkboard: false
     multiplex: false
     footer: "Tecnologico de Monterrey"
-    logo: IN5148_logo.png
     css: style.css
     slide-number: True
 

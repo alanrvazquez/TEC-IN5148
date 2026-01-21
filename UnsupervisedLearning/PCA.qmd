@@ -1,6 +1,6 @@
 ---
 title: "Principal Component Analysis"
-subtitle: "IN2004B: Generation of Value with Data Analytics"
+subtitle: "IN5148: Statistics and Data Science with Applications in Engineering"
 author: 
   - name: Alan R. Vazquez
     affiliations:
@@ -10,7 +10,6 @@ format:
     chalkboard: false
     multiplex: false
     footer: "Tecnologico de Monterrey"
-    logo: IN2004B_logo.png
     css: style.css
     slide-number: True
     html-math-method: mathjax
