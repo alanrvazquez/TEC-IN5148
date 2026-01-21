@@ -12,30 +12,30 @@ author:
 ### A. Introduction to Data Science and Python
 
 1.  Introduction to Data Science ([slides](/IntroductionDS/Introduction.slides.html))
-2.  Introduction to Python and Pandas ([slides](/Tools/Tools1.slides.html)) ([colab](https://colab.research.google.com/drive/1-CEdOgN1n5fOYus1-LfqRk2K_GQ75t9S?usp=sharing))
-3.  Data Manipulation and Wrangling ([slides](/Tools/Tools2.slides.html)) ([colab](https://colab.research.google.com/drive/1YuFwzwbAlWLXHFxf49d56ulDQUbi5RBT?usp=sharing))
-4.  Data Types and Visualization ([slides](/Tools/Tools3.slides.html)) ([colab](https://colab.research.google.com/drive/1KnrUfS9oUkQa2gHUkrNiMgQ1YNNrbvKt?usp=sharing))
+2.  Introduction to Python and Pandas ([slides](/Tools/Tools1.slides.html)) ([colab](https://colab.research.google.com/drive/1ZVHxntozaf-EfpkmWY-eQffP0YnvDYCz?usp=sharing))
+3.  Data Manipulation and Wrangling ([slides](/Tools/Tools2.slides.html)) ([colab](https://colab.research.google.com/drive/1OaMc_Lv2HTTWy5QBTy7DALupUkr6sq--?usp=sharing))
+4.  Data Types and Visualization ([slides](/Tools/Tools3.slides.html)) ([colab](https://colab.research.google.com/drive/13x9jhRrD7gPZWbWeK4aoxbbNebauCr4p?usp=sharing))
 
 ### B. Data Preprocessing 
 
-1.  Preprocessing: Part 1 ([slides](/PreProcessing/PreProcessing_Part1.slides.html)) ([colab](https://colab.research.google.com/drive/1YyGgcEtTog0MddA_H511CtwJ8M2QN4Ql?usp=sharing))
-2.  Preprocessing: Part 2 ([slides](/PreProcessing/PreProcessing_Part2.slides.html)) ([colab](https://colab.research.google.com/drive/1WuX-UNrU5TCsSj2S_WMpqoj1GBUgaKzH?usp=sharing))
+1.  Preprocessing: Part 1 ([slides](/PreProcessing/PreProcessing_Part1.slides.html)) ([colab](https://colab.research.google.com/drive/1B_-6JX5XXwer3Jt-D6qPFW5W_wWdRYiW?usp=sharing))
+2.  Preprocessing: Part 2 ([slides](/PreProcessing/PreProcessing_Part2.slides.html)) ([colab](https://colab.research.google.com/drive/1xk5TY1AQvOW42mBXGw37qafr5f1LIOLd?usp=sharing))
 
 ### C. Unsupervised Learning
 
-1.  Clustering Methods ([slides](/UnsupervisedLearning/Clustering.slides.html)) ([colab](https://colab.research.google.com/drive/1sL5LeIXI9YqYmebxWpF3sqPA92IxftYX?usp=sharing))
-2.  Principal Component Analysis ([slides](/UnsupervisedLearning/PCA.slides.html)) ([colab](https://colab.research.google.com/drive/1apdp8jOr7DQFIML_QQr1xofdy8-tyCK1?usp=sharing))
+1.  Clustering Methods ([slides](/UnsupervisedLearning/Clustering.slides.html)) ([colab](https://colab.research.google.com/drive/1bvBYsJkHNfy5zRXuQvR3YAj4YKQsTnTX?usp=sharing))
+2.  Principal Component Analysis ([slides](/UnsupervisedLearning/PCA.slides.html)) ([colab](https://colab.research.google.com/drive/1ot5ZaNGzNdk2DgbszgT-fZ8PYI43mWYA?usp=sharing))
 
 ### D. Supervised Learning using Multiple Linear Regression
 
-1.  Introduction to Linear Regression ([slides](/LinearRegression/LinearRegression.slides.html)) ([colab](https://colab.research.google.com/drive/1RPIkJNT2fdFB9jLcYGGjUx22G8JmzAPK?usp=sharing))
-2.  Model Inference and Evaluation ([slides](/ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html)) ([colab](https://colab.research.google.com/drive/1fyUvGw_u9hm5c0Y9sNJAPNgwT3MzyhYA?usp=sharing))
-3.  Additional Topics ([slides](/AdditionalTopics/AdditionalTopics.slides.html)) ([colab](https://colab.research.google.com/drive/1XAUXguROL4Jl4S9RoIS43jw7S2vf95Ei?usp=sharing))
+1.  Introduction to Linear Regression ([slides](/LinearRegression/LinearRegression.slides.html)) ([colab](https://colab.research.google.com/drive/1RnI9499Tzn3B8qihdsUKgeUQPH1ns2v3?usp=sharing))
+2.  Model Inference and Evaluation ([slides](/ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html)) ([colab](https://colab.research.google.com/drive/14s_BBjptHmEpg_zk3Vl_wAUTpDD0RrYJ?usp=sharing))
+3.  Additional Topics ([slides](/AdditionalTopics/AdditionalTopics.slides.html)) ([colab](https://colab.research.google.com/drive/1KxT0uWXH6E-8RTsw1-KXlAvt-rUXkPcr?usp=sharing))
 
 ### E. Supervised Learning using Classification Algorithms
 
-4.  Decision trees for classification ([slides](/Classification/Classification.slides.html)) ([colab](https://drive.google.com/file/d/1iqtGTsLj0qL_zWwdkyrMsKltqOjvM496/view?usp=sharing))
-5.  Ensemble methods ([slides](/Classification/EnsembleMethods.slides.html)) ([colab](https://drive.google.com/file/d/1HAn1pZL2oSJtISVfp2nrvNI8wYzwtAV9/view?usp=sharing))
+4.  Decision trees for classification ([slides](/Classification/Classification.slides.html)) ([colab](https://colab.research.google.com/drive/1Bn63H5HKhFOag_DQ0rTgJB9Vlqa0ZguG?usp=sharing))
+5.  Ensemble methods ([slides](/Classification/EnsembleMethods.slides.html)) ([colab](https://colab.research.google.com/drive/1Ktdp0c5OHFPdoxa-FW1tB5a6j6uv7y6T?usp=sharing))
 
 ## About the author
 
