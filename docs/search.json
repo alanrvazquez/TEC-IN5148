@@ -3022,5 +3022,894 @@
     "title": "Ensemble Methods",
     "section": "Accuracy",
     "text": "Accuracy\n\nThe accuracy of the random forest classifier is 79%.\n\n# Compute accuracy.\naccuracy = accuracy_score(Y_valid, RF_predicted)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.78"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#agenda",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#agenda",
+    "title": "Model Evaluation and Inference",
+    "section": "Agenda",
+    "text": "Agenda\n\n\nResidual analysis\nInference about individual \\(\\beta\\)’s using t-tests\nMultiple and adjusted \\(R^2\\) statistics"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#load-the-libraries",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#load-the-libraries",
+    "title": "Model Evaluation and Inference",
+    "section": "Load the libraries",
+    "text": "Load the libraries\n\nLet’s import statsmodels into Python together with other relevant libraries.\n\n# Importing necessary libraries\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nimport statsmodels.api as sm"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#questions",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#questions",
+    "title": "Model Evaluation and Inference",
+    "section": "Questions",
+    "text": "Questions\n\n\nHow can we estimate \\(\\beta_0, \\beta_1, \\ldots, \\beta_p\\) and \\(\\sigma^2\\)?\nHow can we validate the model and all its assumptions?\nHow can we make inferences about \\(\\beta_0, \\beta_1, \\ldots, \\beta_p\\)?\nIf some assumptions are not met, can we do something about it?\nHow can we make predictions of future responses using the multiple linear regression model?"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#multiple-linear-regression-model",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#multiple-linear-regression-model",
+    "title": "Model Evaluation and Inference",
+    "section": "Multiple linear regression model",
+    "text": "Multiple linear regression model\n\n\\[Y_i = \\beta_0 + \\beta_1 X_{i1} + \\cdots + \\beta_p X_{ip} + \\epsilon_i\\]\n\n\\(p\\) is the number of predictors.\n\\(n\\) is the number of observations.\n\\(X_{ij}\\) is the i-th observation of the j-th predictor.\n\\(Y_{i}\\) is the i-th observation of the response.\n\\(\\epsilon_i\\) is the i-th random error."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#assumptions",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#assumptions",
+    "title": "Model Evaluation and Inference",
+    "section": "Assumptions",
+    "text": "Assumptions\n\nThe error \\(\\epsilon_i\\)’s must then satisfy the following assumptions:\n\nOn average, they are close to zero for any value of the predictors \\(X_j\\).\nFor any value of the predictor \\(X_j\\), the dispersion or variance is constant and equal to \\(\\sigma^2\\).\nThe \\(\\epsilon_i\\)’s are all independent from each other.\nThe \\(\\epsilon_i\\)’s follow normal distribution with mean 0 and variance \\(\\sigma^2\\)."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residuals",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residuals",
+    "title": "Model Evaluation and Inference",
+    "section": "Residuals",
+    "text": "Residuals\n\nThe errors \\(\\epsilon_1, \\ldots, \\epsilon_n\\) are not observed. To overcome this issue, we use the residuals of our model.\n\nSuppose that the multiple linear regression model is correct and consider the fitted responses \\(\\hat{Y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\cdots + \\hat{\\beta}_p X_{ip}\\), where \\(\\hat{\\beta}_{j}\\) is the least squares estimator for the j-th predictor.\n\n\nWe define the residuals \\(\\hat{\\epsilon}_i = Y_i - \\hat{Y}_i\\), \\(i = 1, \\ldots, n.\\)\n\nThe residuals \\(\\hat{\\epsilon}_i\\) are the estimates of the random errors \\(\\epsilon_i\\)."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "If the model structure is correctly specified and assuming that the least-squares estimates \\(\\hat{\\beta}_j\\)’s are close to the true \\(\\beta_j\\)’s, respectively, we have that\n\\[\\hat{\\epsilon}_i = Y_i - \\hat{Y}_i = Y_i - \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\cdots + \\hat{\\beta}_p X_{ip} \\approx \\epsilon_i\\]\nSo, the residuals \\(\\hat{\\epsilon}_i\\) should resemble the random errors \\(\\epsilon\\).\n\nTo evaluate the assumption of a multiple linear regression model, we use a Residual analysis."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residual-analysis-1",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residual-analysis-1",
+    "title": "Model Evaluation and Inference",
+    "section": "Residual Analysis",
+    "text": "Residual Analysis\n\nTo check the validity of these assumptions, we will follow a graphical approach. Specifically, we will construct three informative plots of the residuals.\n\nResiduals vs Fitted Values Plot. To assess the structure of the model and check for constant variance\nResiduals Vs Time Plot. To check independence.\nNormal Quantile-Quantile Plot. To assess if the residuals follow a normal distribution"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#example-1",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#example-1",
+    "title": "Model Evaluation and Inference",
+    "section": "Example 1",
+    "text": "Example 1\n\n\nThis example is inspired by Foster, Stine and Waterman (1997, pages 191–199).\nThe data are in the form of the time taken (in minutes) for a production run, \\(Y\\), and the number of items produced, \\(X\\), for 20 randomly selected orders as supervised by a manager.\nWe wish to develop an equation to model the relationship between the run time (\\(Y\\)) and the run size (\\(X\\))."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#dataset",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#dataset",
+    "title": "Model Evaluation and Inference",
+    "section": "Dataset",
+    "text": "Dataset\nThe dataset is in the file “production.xlsx”.\n\nproduction_data = pd.read_excel('production.xlsx')\nproduction_data.head()\n\n\n\n\n\n\n\n\nCase\nRunTime\nRunSize\n\n\n\n\n0\n1\n195\n175\n\n\n1\n2\n215\n189\n\n\n2\n3\n243\n344\n\n\n3\n4\n162\n88\n\n\n4\n5\n185\n114"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#linear-regression-model",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#linear-regression-model",
+    "title": "Model Evaluation and Inference",
+    "section": "Linear regression model",
+    "text": "Linear regression model\n\\[\nY_i = \\beta_0 + \\beta_1 X_i +\\epsilon_i\n\\]\nwhere \\(X_i\\) is the run size and \\(Y_i\\) is the run time for the \\(i\\)-th observation, \\(i = 1, \\ldots, 20\\).\n\nWe fit the model in Python as follows.\n\n# Defining the predictor (X) and the response variable (Y).\nprod_Y_train = production_data['RunTime']\nprod_X_pred = production_data['RunSize']\nprod_X_train = sm.add_constant(prod_X_pred)\n\n# Fitting the simple linear regression model.\nregr = sm.OLS(prod_Y_train, prod_X_train)\nlinear_model = regr.fit()"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#estimated-model",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#estimated-model",
+    "title": "Model Evaluation and Inference",
+    "section": "Estimated model",
+    "text": "Estimated model\n\n\\[\n\\hat{Y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_i = 149.75 + 0.26 X_i,\n\\]\nwhere \\(\\hat{Y}_i\\) is the predicted or fitted value of run time for the \\(i\\)-th observation, \\(i = 1, \\ldots, 20\\).\nThe residuals of this estimated model are \\(\\hat{\\epsilon}_i = Y_i - \\hat{Y}_i\\)."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#calculation-of-fitted-values-and-residuals",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#calculation-of-fitted-values-and-residuals",
+    "title": "Model Evaluation and Inference",
+    "section": "Calculation of fitted values and residuals",
+    "text": "Calculation of fitted values and residuals\n\nRecall that we can calculate the predicted values and residuals using commands from statsmodels.\n\n# Make predictions using the the model\nprod_Y_pred = linear_model.fittedvalues\n\n# Calculate residuals.\nresiduals = linear_model.resid"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#intuition-behind",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#intuition-behind",
+    "title": "Model Evaluation and Inference",
+    "section": "Intuition behind …",
+    "text": "Intuition behind …\nthe Residuals versus Fitted Values plot."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residuals-vs-fitted-values",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residuals-vs-fitted-values",
+    "title": "Model Evaluation and Inference",
+    "section": "Residuals vs Fitted Values",
+    "text": "Residuals vs Fitted Values\n\n\n\n\nCode\nplt.figure(figsize=(5, 5))\nsns.scatterplot(x='RunSize', y='RunTime', data=production_data, color='blue')\nplt.plot(production_data['RunSize'], lr_model.fittedvalues, color='red', linestyle='--', linewidth=2)\nplt.title(\"Fitted Regression Line\")\nplt.xlabel(\"Run size\", fontsize = 14)\nplt.ylabel(\"Run time\", fontsize = 14)\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\n\nCode\n# Residual vs Fitted Values Plot\nplt.figure(figsize=(5, 5))\nsns.scatterplot(x = prod_Y_pred, y = residuals)\nplt.axhline(y=0, color='red', linestyle='--')\nplt.title('Residuals vs Fitted Values')\nplt.xlabel('Fitted (predicted) Values', fontsize = 14)\nplt.ylabel('Residuals', fontsize = 14)\nplt.show()"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residuals-vs-fitted-values-1",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residuals-vs-fitted-values-1",
+    "title": "Model Evaluation and Inference",
+    "section": "Residuals vs Fitted Values",
+    "text": "Residuals vs Fitted Values\n\n\n\n\nIf there is a trend, the model is misspecified.\nA “funnel” shape indicates that the assumption of constant variance is not met."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-1",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-1",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "Examples of plots that do not support the conclusion of constant variance."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-2",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-2",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "Another example.\n\nThe phenomenon of non-constant variance is called heteroscedasticity."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residuals-vs-time-plot-1",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residuals-vs-time-plot-1",
+    "title": "Model Evaluation and Inference",
+    "section": "Residuals vs Time Plot",
+    "text": "Residuals vs Time Plot\n\nBy “time,” we mean that time the observation was taken or the order in which it was taken. The plot should not show any structure or pattern in the residuals.\nDependence on time is a common source of lack of independence, but other plots might also detect lack of independence.\nIdeally, we plot the residuals versus each variable of interest we could think of, either included or excluded in the model.\nAssessing the assumption of independence is hard in practice."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-3",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-3",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "Code\n# Residuals vs Time (Case) Plot\nplt.figure(figsize=(7, 5))\nsns.scatterplot(x = production_data['Case'], y = residuals)\nplt.axhline(y=0, color='red', linestyle='--')\nplt.title('Residuals vs Time (Case)')\nplt.xlabel('Case')\nplt.xticks(production_data['Case'])\nplt.ylabel('Residuals')\nplt.show()"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-4",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-4",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "Examples of plots that do and do not support the independence assumption."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#checking-for-normality",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#checking-for-normality",
+    "title": "Model Evaluation and Inference",
+    "section": "Checking for normality",
+    "text": "Checking for normality\n\nThis assumption is generally checked by looking at the distribution of the residuals.\nTwo plots:\n\nHistogram.\nNormal Quantile-Quantile Plot (also called normal probability plot)."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#histogram",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#histogram",
+    "title": "Model Evaluation and Inference",
+    "section": "Histogram",
+    "text": "Histogram\nIdeally, the histogram resembles a normal distribution around 0. If the number of observations is small, the histogram may not be an effective visualization.\n\n\nCode\n# Histogram of residuals\nplt.figure(figsize=(5, 3))\nsns.histplot(residuals)\nplt.title('Histogram of Residuals')\nplt.xlabel('Residuals')\nplt.show()"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#normal-quantile-quantile-qq-plot",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#normal-quantile-quantile-qq-plot",
+    "title": "Model Evaluation and Inference",
+    "section": "Normal Quantile-Quantile (QQ) Plot",
+    "text": "Normal Quantile-Quantile (QQ) Plot\n\nA normal QQ plot is helpful for deciding whether a sample was drawn from a distribution that is approximately normal.\n\n\nFirst, let \\(\\hat{\\epsilon}_{[1]}, \\hat{\\epsilon}_{[2]}, \\ldots, \\hat{\\epsilon}_{[n]}\\) be the residuals ranked in an increasing order, where \\(\\hat{\\epsilon}_{[1]}\\) is the minimum and \\(\\hat{\\epsilon}_{[n]}\\) is the maximum. These points define the sample percentiles (or quantiles) of the distribution of the residuals.\n\n\n\n\nNext, calculate the theoretical percentiles of a (standard) Normal distribution calculated using Python."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-5",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-5",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "The normal QQ plot displays the (sample) percentiles of the residuals versus the percentiles of a normal distribution.\nIf these percentiles agree with each other, then they would approximate a straight line.\nThe straight line is usually determined visually, with emphasis on the central values rather than the extremes.\nFor a nice explanation, see this YouTube video."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#qq-plot-in-python",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#qq-plot-in-python",
+    "title": "Model Evaluation and Inference",
+    "section": "QQ plot in Python",
+    "text": "QQ plot in Python\n\nTo construct a QQ plot, we use the function qqplot() statsmodels library.\n\n# QQ plot to assess normality of residuals\nplt.figure(figsize=(5, 3))\nsm.qqplot(residuals, fit = True, line = '45')\nplt.title('QQ Plot of Residuals')\nplt.show()"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-6",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-6",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "Substantial departures from a straight line indicate that the distribution is not normal.\n\n\n&lt;Figure size 672x384 with 0 Axes&gt;"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-7",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-7",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "This plot suggests that the residuals are consistent with a Normal curve.\n\n\n&lt;Figure size 672x384 with 0 Axes&gt;"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#comments",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#comments",
+    "title": "Model Evaluation and Inference",
+    "section": "Comments",
+    "text": "Comments\nThese data are truly Normally distributed. But note that we still see deviations. These are entirely due to chance.\n\nWhen \\(n\\) is relatively small, you tend to see deviations, particularly in the tails."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-8",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-8",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "Normal probability plots for data sets following various distributions. 100 observations in each data set."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#consequences-of-faulty-assumptions",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#consequences-of-faulty-assumptions",
+    "title": "Model Evaluation and Inference",
+    "section": "Consequences of faulty assumptions",
+    "text": "Consequences of faulty assumptions\n\n\nIf the model structure is incorrect, the estimated coefficients \\(\\hat{\\beta}_j\\) will be biased and the predictions \\(\\hat{Y}_i\\) will be inaccurate.\n\n\n\nIf the residuals do not follow a normal distribution, we have two cases:\n\n\nIf sample size is large, we still get accurate p-values for the t-tests (discussed later) for the coefficients thanks to the Central Limit Theorem.\nHowever, the t-tests and all inference tools are invalidated."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-9",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-9",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "If the residuals do not have constant variance, then the linear model is incorrect and everything falls apart!\nIf the residuals are dependent, then the linear model is incorrect and everything falls apart!"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#questions-1",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#questions-1",
+    "title": "Model Evaluation and Inference",
+    "section": "Questions",
+    "text": "Questions\n\n\nHow can we estimate \\(\\beta_0, \\beta_1, \\ldots, \\beta_p\\) and \\(\\sigma^2\\)?\nHow can we validate the model and all its assumptions?\nHow can we make inferences about \\(\\beta_0, \\beta_1, \\ldots, \\beta_p\\)?\nIf some assumptions are not met, can we do something about it?\nHow can we make predictions of future responses using the multiple linear regression model?"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#example-2",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#example-2",
+    "title": "Model Evaluation and Inference",
+    "section": "Example 2",
+    "text": "Example 2\n\nLet’s consider the “auto.xlsx” dataset.\n\nauto_data = pd.read_excel('auto.xlsx')\n\n\nLet’s assume that we want to study the following model.\n\\[\nY_i = \\beta_0 + \\beta_1 X_{i1}+ \\beta_2 X_{i2}+ \\epsilon_i,\n\\]\nwhere \\(Y_i\\) is the mpg, \\(X_{i1}\\) is the weight, and \\(X_{i2}\\) is the acceleration of the \\(i\\)-th car, \\(i = 1, \\ldots, 392\\)."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#research-question",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#research-question",
+    "title": "Model Evaluation and Inference",
+    "section": "Research question",
+    "text": "Research question\n\n\nDo the weight and acceleration have a significant association with the mpg of a car?"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#the-two-cultures-of-statistical-models",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#the-two-cultures-of-statistical-models",
+    "title": "Model Evaluation and Inference",
+    "section": "The two cultures of statistical models",
+    "text": "The two cultures of statistical models\n\n\nInference: develop a model that fits the data well. Then make inferences about the data-generating process based on the structure of such model.\nPrediction: Silent about the underlying mechanism generating the data and allow for many predictive algorithms, which only care about accuracy of predictions.\n\n\nThey overlap very often."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-10",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-10",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "The least squares estimators \\(\\hat{\\beta}_0, \\hat{\\beta}_1, \\ldots, \\hat{\\beta}_p\\) are subject to uncertainty, since they are calculated based on a random sample of data.\nTherefore, assessing the amount of the uncertainty in these estimators is important. To this end, we use hypothesis tests on individual coefficients."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#hypothesis-test",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#hypothesis-test",
+    "title": "Model Evaluation and Inference",
+    "section": "Hypothesis test",
+    "text": "Hypothesis test\n\n\nA statistical hypothesis is a statement about the coefficients of a model.\n\n\nIn our case, we are interested in testing:\n\n\\(H_0: \\beta_j = 0\\) v.s. \\(H_1: \\beta_j \\neq 0\\) (Two-tailed Test)\n\n\nRejecting \\(H_0\\) (in favor of \\(H_1\\)) implies that the predictor has a significant association with the response.\nNot rejecting \\(H_0\\) implies that the predictor does not have a significant association with the response."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-11",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-11",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "\\(H_0: \\beta_j = 0\\) v.s. \\(H_1: \\beta_j \\neq 0\\) (Two-tailed Test)\n\n\nTesting this hypothesis consists of the following steps:\n\nTake a random sample.\nCompute the appropriate test statistic.\nReject or fail to reject the null hypothesis based on a computed p-value."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#step-1.-random-sample",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#step-1.-random-sample",
+    "title": "Model Evaluation and Inference",
+    "section": "Step 1. Random sample",
+    "text": "Step 1. Random sample\n\nThe random sample is the data we use to train or fit the model.\n\n# Dataset with predictors.\npred_auto = auto_data[['weight', 'acceleration']]\n\n# Add the column for the intercept.\nauto_X_train = sm.add_constant(pred_auto)\n\n# Dataset with the response only.\nauto_Y_train = auto_data['mpg']"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#step-2.-test-statistic",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#step-2.-test-statistic",
+    "title": "Model Evaluation and Inference",
+    "section": "Step 2. Test statistic",
+    "text": "Step 2. Test statistic\n\nThe test statistic is\n\\[t_0 = \\frac{\\hat{\\beta}_{j}}{\\sqrt{ \\hat{v}_{jj}} }\\]\n\n\\(\\hat{\\beta}_j\\) is the least squares estimate of the true coefficient \\(\\beta_j\\).\n\\(\\sqrt{\\hat{v}_{jj}}\\) is the standard error of the estimate \\(\\hat{\\beta}_j\\) calculated using Python."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-12",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-12",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "Recall that we obtain the least squares estimates (\\(\\hat{\\beta}_{j}\\)) in Python using:\n\n# Fitting the simple linear regression model.\nregr = sm.OLS(auto_Y_train, auto_X_train)\nlinear_model = regr.fit()\nlinear_model.params\n\nconst           41.095329\nweight          -0.007293\nacceleration     0.261650\ndtype: float64\n\n\nLater, we will see how to obtain the standard error of the estimate \\(\\hat{\\beta}_j\\)."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-13",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-13",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "\\[t_0 = \\frac{\\hat{\\beta}_{j}}{\\sqrt{ \\hat{v}_{jj}} }\\]\n\n\nWe like this statistic because it follows a well-known distribution.\nIf the null hypothesis (\\(H_0: \\beta_j = 0\\)) is true, the statistic \\(t_0\\) follows a \\(t\\) distribution with \\(n-p-1\\) degrees of freedom\nRemember that \\(n\\) is the number of observations and \\(p\\) the number of predictors."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#t-distribution",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#t-distribution",
+    "title": "Model Evaluation and Inference",
+    "section": "t distribution",
+    "text": "t distribution\n\n\n\nThis distribution is also known as the student’s t-distribution.\nIt was invented by William Gosset when he worked at the Guinness Brewery in Ireland.\nIt has one parameter \\(\\nu\\) which generally equals a number of degrees of freedom.\nThe parameter \\(\\nu\\) controls the shape of the distribution.\n\n William Gosset"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-14",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-14",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "The t-distribution resembles a standard normal distribution when \\(\\nu\\) goes to infinity."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#step-3.-calculate-the-p-value",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#step-3.-calculate-the-p-value",
+    "title": "Model Evaluation and Inference",
+    "section": "Step 3. Calculate the p-value",
+    "text": "Step 3. Calculate the p-value\n\nThe p-value is the probability that the \\(t\\) test statistic will get a value that is at least as extreme as the observed \\(t_0\\) value when the null hypothesis (\\(H_0\\)) is true."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-15",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-15",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "For \\(H_0: \\beta_j = 0\\) v.s. \\(H_1: \\beta_j \\neq 0\\), the p-value is calculated using both tails of the \\(t\\) distribution. It is the blue area under the curve below.\n\nWe use the two tails because \\(H_1\\) includes the possibility that the value of \\(\\beta_j\\) is positive or negative."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#the-p-value-is-not-the-probability-that-h_0-is-true",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#the-p-value-is-not-the-probability-that-h_0-is-true",
+    "title": "Model Evaluation and Inference",
+    "section": "The p-value is not the probability that \\(H_0\\) is true",
+    "text": "The p-value is not the probability that \\(H_0\\) is true\nSince the p-value is a probability, and since small p-values indicate that \\(H_0\\) is unlikely to be true, it is tempting to think that the p-value represents the probability that \\(H_0\\) is true.\n\n\n\nThis is not the case!\n\n\n\nRemember that the p-value is the probability that the \\(t\\) test statistic will get a value that is at least as extreme as the observed \\(t_0\\) value when \\(H_0\\) is true."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#how-small-must-the-p-value-be-to-reject-h_0",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#how-small-must-the-p-value-be-to-reject-h_0",
+    "title": "Model Evaluation and Inference",
+    "section": "How small must the p-value be to reject \\(H_0\\)?",
+    "text": "How small must the p-value be to reject \\(H_0\\)?\n\n\n\nAnswer: Very small!\nBut, how small?\nAnswer: Very small!\nBut, tell me, how small?\nAnswer: Okay, it must be less than a value called \\(\\alpha\\) which is usually 0.1, 0.05, or 0.01.\nThank you!\n\n\n Sir Ronald Fisher"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#decision",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#decision",
+    "title": "Model Evaluation and Inference",
+    "section": "Decision",
+    "text": "Decision\n\nFor a significance level of \\(\\alpha = 0.05\\):\n\nIf the p-value is smaller than \\(\\alpha\\), we reject \\(H_0: \\beta_j = 0\\) in favor of \\(H_1: \\beta_j \\neq 0\\).\nIf the p-value is larger than \\(\\alpha\\), we do not reject \\(H_0: \\beta_j = 0\\).\n\nNo scientific basis for this advice. In practice, report the p-value and explore the data using descriptive statistics."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#t-tests-in-python",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#t-tests-in-python",
+    "title": "Model Evaluation and Inference",
+    "section": "t-tests in Python",
+    "text": "t-tests in Python\nWe obtain the t-tests of the coefficients using the function summary() together with the linear_model object.\n\nmodel_summary = linear_model.summary()\nprint(model_summary)\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.700\nModel:                            OLS   Adj. R-squared:                  0.698\nMethod:                 Least Squares   F-statistic:                     453.2\nDate:                Tue, 20 Jan 2026   Prob (F-statistic):          2.43e-102\nTime:                        18:40:18   Log-Likelihood:                -1125.4\nNo. Observations:                 392   AIC:                             2257.\nDf Residuals:                     389   BIC:                             2269.\nDf Model:                           2                                         \nCovariance Type:            nonrobust                                         \n================================================================================\n                   coef    std err          t      P&gt;|t|      [0.025      0.975]\n--------------------------------------------------------------------------------\nconst           41.0953      1.868     21.999      0.000      37.423      44.768\nweight          -0.0073      0.000    -25.966      0.000      -0.008      -0.007\nacceleration     0.2617      0.086      3.026      0.003       0.092       0.432\n==============================================================================\nOmnibus:                       31.397   Durbin-Watson:                   0.818\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               39.962\nSkew:                           0.632   Prob(JB):                     2.10e-09\nKurtosis:                       3.922   Cond. No.                     2.67e+04\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n[2] The condition number is large, 2.67e+04. This might indicate that there are\nstrong multicollinearity or other numerical problems."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#table-of-t-tests",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#table-of-t-tests",
+    "title": "Model Evaluation and Inference",
+    "section": "Table of t-tests",
+    "text": "Table of t-tests\n\n\n\n\n\n\n\n\n\n\n\n\n\ncoef\nstd err\nt\nP&gt;\\(|t|\\)\n\\([0.025\\)\n\\(0.975 ]\\)\n\n\n\n\nconst\n41.0953\n1.868\n21.999\n0.000\n37.423\n44.768\n\n\nweight\n-0.0073\n0.000\n-25.966\n0.000\n-0.008\n-0.007\n\n\nacceleration\n0.2617\n0.086\n3.026\n0.003\n0.092\n0.432\n\n\n\nThe column std err contains the values of the estimated standard error (\\(\\sqrt{ \\hat{v}_{jj}}\\)) of the estimates \\(\\hat{\\beta}_j\\). They represent the variability in the estimates."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-17",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-17",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "coef\nstd err\nt\nP&gt;\\(|t|\\)\n\\([0.025\\)\n\\(0.975 ]\\)\n\n\n\n\nconst\n41.0953\n1.868\n21.999\n0.000\n37.423\n44.768\n\n\nweight\n-0.0073\n0.000\n-25.966\n0.000\n-0.008\n-0.007\n\n\nacceleration\n0.2617\n0.086\n3.026\n0.003\n0.092\n0.432\n\n\n\nThe column t contains the values of the observed statistic \\(t_0\\) for the hypothesis tests."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-18",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-18",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "coef\nstd err\nt\nP&gt;\\(|t|\\)\n\\([0.025\\)\n\\(0.975 ]\\)\n\n\n\n\nconst\n41.0953\n1.868\n21.999\n0.000\n37.423\n44.768\n\n\nweight\n-0.0073\n0.000\n-25.966\n0.000\n-0.008\n-0.007\n\n\nacceleration\n0.2617\n0.086\n3.026\n0.003\n0.092\n0.432\n\n\n\nThe column P&gt;|t| contains the p-values for the hypothesis tests.\nSince the p-value is smaller than \\(\\alpha = 0.05\\), we reject \\(H_0\\) for acceleration and weight. Therefore, weight and acceleration have a significant association with the mpg of a car."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-19",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-19",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "coef\nstd err\nt\nP&gt;\\(|t|\\)\n\\([0.025\\)\n\\(0.975 ]\\)\n\n\n\n\nconst\n41.0953\n1.868\n21.999\n0.000\n37.423\n44.768\n\n\nweight\n-0.0073\n0.000\n-25.966\n0.000\n-0.008\n-0.007\n\n\nacceleration\n0.2617\n0.086\n3.026\n0.003\n0.092\n0.432\n\n\n\nThe columns \\([0.025\\) and \\(0.975]\\) show the limits of a 95% confidence interval on each true coefficient \\(\\beta_j\\). This interval contains the true parameter value with a confidence of 95%."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#total-sum-of-squares",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#total-sum-of-squares",
+    "title": "Model Evaluation and Inference",
+    "section": "Total Sum of Squares",
+    "text": "Total Sum of Squares\n\nLet’s consider the total sum of squares\n\\[SS_{Total} = \\sum_{i=1}^{n} (Y_i - \\bar{Y})^2 \\text{ where } \\bar{Y} = \\sum_{i=1}^{n} \\frac{Y_i}{n}.\\]\nThis quantity measures the total variation of the response.\nIn other words, it is the amount of variability inherent in the response before we fit a regression model."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residual-sum-of-squares",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residual-sum-of-squares",
+    "title": "Model Evaluation and Inference",
+    "section": "Residual Sum of Squares",
+    "text": "Residual Sum of Squares\nLet’s also consider the residual sum of squares\n\\[RSS = \\sum_{i=1}^{n} (Y_i - \\hat{Y}_i)^2.\\]\nRSS is the sum of squares due to residuals of the linear regression model; or, residual variation left unexplained by this model.\nThe better the predictions of the model, the smaller the RSS value."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#coefficient-of-determination",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#coefficient-of-determination",
+    "title": "Model Evaluation and Inference",
+    "section": "Coefficient of determination",
+    "text": "Coefficient of determination\n\\[R^2 = 1 - \\frac{RSS}{SS_{total}}\\]\n\\(R^2\\) measures the “proportion of variation in the response explained by the full regression model.”"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-20",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-20",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "\\[R^2 = 1 - \\frac{RSS}{SS_{total}}\\]\nWhat would you conclude about RSS if \\(R^2 = 1\\)?\n\nIn this case, \\(RSS = 0\\) and the model fits the data perfectly.\nIf \\(R^2\\) is small, then large RSS: lots of scatter and the model’s fit is not good.\nIt turns out that \\(R^2\\) is the square of the correlation between the observed (\\(Y_i\\)) and predicted (\\(\\hat{Y}_i\\)) responses."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#remarks-on-r2",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#remarks-on-r2",
+    "title": "Model Evaluation and Inference",
+    "section": "Remarks on \\(R^2\\)",
+    "text": "Remarks on \\(R^2\\)\n\n\nThe statistic \\(R^2\\) should be used with caution because it is always possible to make it unity by simply adding more and more predictors.\nIf \\(R^2\\) is large, it does not necessarily imply that the full model will provide accurate predictions of future observations."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#adjusted-r2-statistic",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#adjusted-r2-statistic",
+    "title": "Model Evaluation and Inference",
+    "section": "Adjusted \\(R^2\\) statistic",
+    "text": "Adjusted \\(R^2\\) statistic\nAdjusted \\(R^2\\) is a better measure to decide whether to add a new variable into the model or not. It is:\n\\[R_{adj}^2=1-\\frac{RSS/(n-k-1)}{SS_{total}/(n-1)},\\]\nwhere \\(k\\) is the number of variables in the model. For the full model, \\(k = p\\).\n\nIf adjusted \\(R^2\\) goes down or stays the same, then new variable is not important.\nIf adjusted \\(R^2\\) goes up, then it is probably useful."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-23",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-23",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "Why is adjusted \\(R^2\\) more useful than \\(R^2\\) for adding new variables?\n\\[R_{adj}^2=1-\\frac{RSS/(n-k-1)}{SS_{total}/(n-1)}\\]\n\nAs we explain more variability, the numerator gets smaller and adjusted \\(R^2\\) gets closer to 1. So, we want to make the numerator small.\nIf we add a “good” variable to the model, RSS will go down. However, \\(n - k - 1\\) will decrease a little bit (because \\(k\\) is now bigger by 1.) So the numerator does not go down by as much as it does in ‘plain’ \\(R^2\\)."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-24",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-24",
+    "title": "Model Evaluation and Inference",
+    "section": "",
+    "text": "\\[R_{adj}^2=1-\\frac{RSS/(n-k-1)}{SS_{total}/(n-1)}\\]\n\nIf we add a useless predictor, RSS goes down a tiny bit, but because we divide by \\(n - k - 1\\), the numerator might actually get bigger or change very little.\nSo, adjusted \\(R^2\\) is a better measure of whether adding a new predictor is an improvement. If adjusted \\(R^2\\) goes down or stays the same, the new predictor is irrelevant. If it goes up, then it is probably useful."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#in-python",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#in-python",
+    "title": "Model Evaluation and Inference",
+    "section": "In Python",
+    "text": "In Python\n\nTo show the \\(R^2\\) value, we use the rsquared argument of the linear_model object.\n\nprint( round(linear_model.rsquared, 3) )\n\n0.7\n\n\nTo show the adjusted \\(R^2\\) value, we use the rsquared argument of the linear_model object.\n\nprint( round(linear_model.rsquared_adj, 3) )\n\n0.698"
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#model-building",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#model-building",
+    "title": "Model Evaluation and Inference",
+    "section": "Model building",
+    "text": "Model building\n\n\nModel building refers to a set of techniques to reduce the full model to one that only includes significant predictors.\nIt is more a deconstruction than building an actual model, since the full model must be a valid one to begin with. Specifically, the full model must provide residuals that satisfy all the assumptions (1)-(4).\nAfter we have obtained a satisfactory full model, we can start the model building process."
+  },
+  {
+    "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#two-model-building-techniques",
+    "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#two-model-building-techniques",
+    "title": "Model Evaluation and Inference",
+    "section": "Two model building techniques",
+    "text": "Two model building techniques\n\n\nAdjusted \\(R^2\\) statistic. We add one variable at a time and see the change in adjusted \\(R^2\\) statistic. If the value decreases, then we stop and evaluate the resulting model.\nT-tests on the individual coefficients. If \\(H_0\\) is not rejected, this indicates that the predictor \\(X_j\\) can be deleted from the model. We can then delete the predictor and refit the model. We can repeat this process several times until we reach a model in which all variables are significant."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#agenda",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#agenda",
+    "title": "Additional Topics",
+    "section": "Agenda",
+    "text": "Agenda\n\n\nLinear models with categorical variables\nLinear models with standardized numerical predictors\nRemedies for faulty assumptions\nPredicting future observations"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#load-the-libraries",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#load-the-libraries",
+    "title": "Additional Topics",
+    "section": "Load the libraries",
+    "text": "Load the libraries\n\nLet’s import scikit-learn into Python together with the other relevant libraries.\n\n# Importing necessary libraries\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nimport statsmodels.api as sm\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import mean_squared_error\n\nWe will not use all the functions from the scikit-learn library. Instead, we will use specific functions from the sub-libraries preprocessing, model_selection, and metrics."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#categorical-predictors",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#categorical-predictors",
+    "title": "Additional Topics",
+    "section": "Categorical predictors",
+    "text": "Categorical predictors\n\nA categorical predictor takes on values that are categories, say, names or labels.\nTheir use in regression requires dummy variables, which are quantitative variables.\nWhen a categorical predictor has more than two levels, a single dummy variable cannot represent all possible categories.\nIn general, a categorical predictor with \\(k\\) categories requires \\(k-1\\) dummy variables."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#dummy-coding",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#dummy-coding",
+    "title": "Additional Topics",
+    "section": "Dummy coding",
+    "text": "Dummy coding\n\nTraditionally, dummy variables are binary variables which can only take the values 0 and 1.\nThis approach implies a reference category. Specifically, the category that results when all dummy variables equal 0.\nThis coding impacts the interpretation of the model coefficients:\n\n\\(\\beta_0\\) is the mean response under the reference category.\n\\(\\beta_j\\) is the amount of increase in the mean response when we change from the reference category to another category."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#example-1",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#example-1",
+    "title": "Additional Topics",
+    "section": "Example 1",
+    "text": "Example 1\n\nThe auto data set includes a categorical variable “Origin” which shows the origin of each car.\n\n# Load the Excel file into a pandas DataFrame.\nauto_data = pd.read_excel(\"auto.xlsx\")\n\n# Set categorical variables.\nauto_data['origin'] = pd.Categorical(auto_data['origin'])\n\nIn this section, we will consider the auto_data as our training dataset."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#dataset",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#dataset",
+    "title": "Additional Topics",
+    "section": "Dataset",
+    "text": "Dataset\n\n(auto_data\n.filter(['mpg', 'origin'])\n).head(6)\n\n\n\n\n\n\n\n\nmpg\norigin\n\n\n\n\n0\n18.0\nAmerican\n\n\n1\n15.0\nAmerican\n\n\n2\n18.0\nAmerican\n\n\n3\n16.0\nAmerican\n\n\n4\n17.0\nAmerican\n\n\n5\n15.0\nAmerican"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#dummy-variables",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#dummy-variables",
+    "title": "Additional Topics",
+    "section": "Dummy variables",
+    "text": "Dummy variables\n\nOrigin has 3 categories: European, American, Japanese.\nSo, 2 dummy variables are required:\n\\[d_1 =\n\\begin{cases}\n1 \\text{ if car is European}\\\\\n0 \\text{ if car is not European}\n\\end{cases} \\text{ and }\\]\n\\[d_2 =\n\\begin{cases}\n1 \\text{ if car is Japanese}\\\\\n0 \\text{ if car is not Japanese}\n\\end{cases}.\\]\n“American” acts as the reference category."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "The dataset with the dummy variables looks like this:\n\n\n\norigin\n\\(d_1\\)\n\\(d_2\\)\n\n\n\n\nAmerican\n0\n0\n\n\nAmerican\n0\n0\n\n\nEuropean\n1\n0\n\n\nEuropean\n1\n0\n\n\nAmerican\n0\n0\n\n\nJapanese\n0\n1\n\n\n\\(\\vdots\\)\n\\(\\vdots\\)\n\\(\\vdots\\)"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#the-multiple-linear-regression-model",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#the-multiple-linear-regression-model",
+    "title": "Additional Topics",
+    "section": "The multiple linear regression model",
+    "text": "The multiple linear regression model\n\n\\[Y_i= \\beta_0+\\beta_1 d_{1i} +\\beta_2 d_{2i} +\\epsilon_i \\ \\text{for} \\ i=1,\\ldots,n.\\]\n\n\\(Y_i\\) is the i-th response.\n\\(d_{1i}\\) is 1 if the i-th observation is from a European car, and 0 otherwise.\n\\(d_{2i}\\) is 1 if the i-th observation is from a Japanese car, and 0 otherwise."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#model-coefficients",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#model-coefficients",
+    "title": "Additional Topics",
+    "section": "Model coefficients",
+    "text": "Model coefficients\n\n\\[Y_i= \\beta_0+\\beta_1 d_{1i} +\\beta_2 d_{2i} +\\epsilon_i \\ \\text{for} \\ i=1,\\ldots,n.\\]\n\n\\(\\beta_0\\) is the mean response (mpg) for American cars.\n\\(\\beta_1\\) is the amount of increase in the mean response when changing from an American to a European car.\n\\(\\beta_2\\) is the amount of increase in the mean response when changing from an American to a Japanese car.\n\\(\\epsilon_i\\)’s follow the same assumptions as before."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-1",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-1",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "Alternatively, we can write the regression model as:\n\\[Y_i= \\beta_0+\\beta_1 d_{1i} +\\beta_2 d_{2i} +\\epsilon_i = \\begin{cases}\n\\beta_0+\\beta_1 +\\epsilon_i \\text{ if car is European}\\\\\n\\beta_0+\\beta_2 +\\epsilon_i \\text{ if car is Japanese} \\\\\n\\beta_0 +\\epsilon_i\\;\\;\\;\\;\\;\\;\\ \\text{ if car is American}\n\\end{cases}\\]\nGiven this model representation:\n\n\\(\\beta_0\\) is the mean mpg for American cars,\n\\(\\beta_1\\) is the difference in the mean mpg between European and American cars, and\n\\(\\beta_2\\) is the difference in the mean mpg between Japanese and American cars."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#in-python",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#in-python",
+    "title": "Additional Topics",
+    "section": "In Python",
+    "text": "In Python\n\nWe follow three steps to fit a linear model with a categorical predictor. First, we compute the dummy variables.\n\n# Create linear regression object\ndummy_data = pd.get_dummies(auto_data['origin'], drop_first = True, \n                            dtype = 'int')\n\nNext, we construct the response column and matrix of predictors with the intercept.\n\n# Create response vector\nY_train = auto_data['mpg']\n\n# Create matrix of predictors with intercept\ndummy_X_train = sm.add_constant(dummy_data)"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-2",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-2",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "Finally, we fit the model using OLS() and fit() from statsmodels.\n\n# Create linear regression object\nregr = sm.OLS(Y_train, dummy_X_train)\n\n# Train the model using the training sets\nlinear_model = regr.fit()\n\n# Summary of the models.\nsummary_model = linear_model.summary()"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-3",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-3",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "print(summary_model)\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.332\nModel:                            OLS   Adj. R-squared:                  0.328\nMethod:                 Least Squares   F-statistic:                     96.60\nDate:                Tue, 20 Jan 2026   Prob (F-statistic):           8.67e-35\nTime:                        18:40:27   Log-Likelihood:                -1282.2\nNo. Observations:                 392   AIC:                             2570.\nDf Residuals:                     389   BIC:                             2582.\nDf Model:                           2                                         \nCovariance Type:            nonrobust                                         \n==============================================================================\n                 coef    std err          t      P&gt;|t|      [0.025      0.975]\n------------------------------------------------------------------------------\nconst         20.0335      0.409     49.025      0.000      19.230      20.837\nEuropean       7.5695      0.877      8.634      0.000       5.846       9.293\nJapanese      10.4172      0.828     12.588      0.000       8.790      12.044\n==============================================================================\nOmnibus:                       26.330   Durbin-Watson:                   0.763\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               30.217\nSkew:                           0.679   Prob(JB):                     2.74e-07\nKurtosis:                       3.066   Cond. No.                         3.16\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#analysis-of-covariance",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#analysis-of-covariance",
+    "title": "Additional Topics",
+    "section": "Analysis of covariance",
+    "text": "Analysis of covariance\n\nModels that mix categorical and numerical predictors are sometimes referred to as analysis of covariance (ANCOVA) models.\nExample (cont): Consider the predictor weight (\\(X\\)).\n\\[Y_i= \\beta_0+\\beta_1 d_{1i} +\\beta_2 d_{2i} + \\beta_3 X_{i} +\\epsilon_i,\\]\nwhere \\(X_i\\) denotes the i-th observed value of weight and \\(\\beta_3\\) is the coefficient of this predictor."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#ancova-model",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#ancova-model",
+    "title": "Additional Topics",
+    "section": "ANCOVA model",
+    "text": "ANCOVA model\nThe components of the ANCOVA model are individual functions of the coefficients.\nTo gain insight into the model, we write it as follows:\n\\[\n\\begin{align}\nY_i &= \\beta_0+\\beta_1 d_{1i} +\\beta_2 d_{2i} + \\beta_3 X_{i} +\\epsilon_i \\\\ &= \\begin{cases}\n(\\beta_0+\\beta_1)  + \\beta_3 X_{i} +\\epsilon_i \\text{ if car is European} \\\\\n(\\beta_0+\\beta_2) + \\beta_3 X_{i} +\\epsilon_i \\text{ if car is Japanese} \\\\\n\\beta_0 + \\beta_3 X_{i} +\\epsilon_i\\;\\;\\;\\;\\;\\;\\;\\;\\  \\text{ if car is American}\n\\end{cases}.\n\\end{align}\n\\]\nNote that these models have different intercepts but the same slope."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-4",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-4",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "To estimate \\(\\beta_0\\), \\(\\beta_1\\), \\(\\beta_2\\) and \\(\\beta_3\\), we use least squares. To estimate \\(\\sigma^2\\), we use the mean squared error (MSE).\nWe could make individual inferences on \\(\\beta_1\\) and \\(\\beta_2\\) using t-tests and confidence intervals.\nHowever, better tests are possible such as overall and partial F-tests (not discussed here)."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#in-python-1",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#in-python-1",
+    "title": "Additional Topics",
+    "section": "In Python",
+    "text": "In Python\n\nTo fit an ANCOVA model, we use similar steps as before. The only extra step is to concatenate the data with the dummy variables and the numerical predictor using the function concat() from pandas.\n\n# Concatenate the two data sets.\nX_train = pd.concat([dummy_X_train, auto_data['weight']], axis = 1)\n\n# Create linear regression object\nregr = sm.OLS(auto_data['mpg'], X_train)\n\n# Train the model using the training sets\nancova_model = regr.fit()"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#model-summary",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#model-summary",
+    "title": "Additional Topics",
+    "section": "Model summary",
+    "text": "Model summary\n\n# Summary of the models.\nsummary_ancova = ancova_model.summary()\nprint(summary_ancova)\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.702\nModel:                            OLS   Adj. R-squared:                  0.700\nMethod:                 Least Squares   F-statistic:                     304.7\nDate:                Tue, 20 Jan 2026   Prob (F-statistic):          1.28e-101\nTime:                        18:40:27   Log-Likelihood:                -1123.9\nNo. Observations:                 392   AIC:                             2256.\nDf Residuals:                     388   BIC:                             2272.\nDf Model:                           3                                         \nCovariance Type:            nonrobust                                         \n==============================================================================\n                 coef    std err          t      P&gt;|t|      [0.025      0.975]\n------------------------------------------------------------------------------\nconst         43.7322      1.113     39.277      0.000      41.543      45.921\nEuropean       0.9709      0.659      1.474      0.141      -0.324       2.266\nJapanese       2.3271      0.665      3.501      0.001       1.020       3.634\nweight        -0.0070      0.000    -21.956      0.000      -0.008      -0.006\n==============================================================================\nOmnibus:                       40.731   Durbin-Watson:                   0.832\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               61.938\nSkew:                           0.689   Prob(JB):                     3.55e-14\nKurtosis:                       4.377   Cond. No.                     1.83e+04\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n[2] The condition number is large, 1.83e+04. This might indicate that there are\nstrong multicollinearity or other numerical problems."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#standardization",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#standardization",
+    "title": "Additional Topics",
+    "section": "Standardization",
+    "text": "Standardization\n\n\nStandardization refers to centering and scaling each numeric predictor individually.\nTo center a predictor variable, the average predictor value is subtracted from all the values.\nTo scale a predictor, each of its value is divided by its standard deviation."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-5",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-5",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "In mathematical terms, we standardize a predictor \\(X\\) as:\n\\[{\\color{blue} \\tilde{X}_{i}} = \\frac{{ X_{i} - \\bar{X}}}{ \\sqrt{\\frac{1}{n -1} \\sum_{i=1}^{n} (X_{i} - \\bar{X})^2 }} \\text{ with } \\bar{X} = \\sum_{i=1}^n \\frac{X_i}{n}.\\]\nThe average value of \\(\\tilde{X}\\) is 0.\nThe standard deviation of \\(\\tilde{X}\\) is 1."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#benefits-and-limitations",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#benefits-and-limitations",
+    "title": "Additional Topics",
+    "section": "Benefits and limitations",
+    "text": "Benefits and limitations\n\nBenefits:\n\nAll quantitative predictors are on the same scale.\nSize and importance of linear regression coefficients can be compared easily.\n\n\nLimitations:\n\nThe interpretation of the coefficients is affected."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#interpretation",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#interpretation",
+    "title": "Additional Topics",
+    "section": "Interpretation",
+    "text": "Interpretation\n\\[Y = \\beta_0 + \\beta_1 \\tilde{X}_1 + \\beta_2 \\tilde{X}_2 + \\cdots + \\beta_p \\tilde{X}_p + \\epsilon,\\]\nwhere \\(\\tilde{X}_i\\) is the standardized version of the predictor \\(X_i\\).\nInterpretation:\n\n\\(\\beta_0\\) is the mean response when all original predictors \\(X_1, X_2, \\ldots, X_p\\) are set to their average value.\n\\(\\beta_j\\) is the amount of increase in the mean response by an increase of 1 standard deviation in the original predictor \\(X_j,\\) when all other predictors are fixed to an arbitrary value."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#example-2",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#example-2",
+    "title": "Additional Topics",
+    "section": "Example 2",
+    "text": "Example 2\n\nThe yield of a chemical process (\\(Y\\)) is related to the concentration of the reactant (\\(X_1\\)) and the operating temperature (\\(X_2\\)).\n\nAn experiment was conducted to study the effect between these factors on the yield.\n\nThe training dataset is in the file “catalyst.xlsx”."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-6",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-6",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "The units of concentration and temperature are percentages and Farenheit degrees, respectively.\n\ncatalyst_data = pd.read_excel(\"catalyst.xlsx\")\ncatalyst_data\n\n\n\n\n\n\n\n\nOrder\nYield\nConcentration\nTemperature\n\n\n\n\n0\n1\n90\n2\n180\n\n\n1\n2\n91\n2\n180\n\n\n2\n3\n84\n2\n150\n\n\n3\n4\n89\n1\n180\n\n\n4\n5\n83\n2\n150\n\n\n5\n6\n79\n1\n150\n\n\n6\n7\n81\n1\n150\n\n\n7\n8\n87\n1\n180"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#standarization-in-python",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#standarization-in-python",
+    "title": "Additional Topics",
+    "section": "Standarization in Python",
+    "text": "Standarization in Python\n\nRecall that we standardize numerical predictors using the scaler() function from scikit-learn.\n\n# Select predictor matrix.\npredictor_data = (catalyst_data\n                  .filter(['Concentration', 'Temperature'])\n                  )\n\n# Define the scaling operator.\nscaler = StandardScaler()\n\n# Apply the scaling operator.\nXs_training = scaler.fit_transform(predictor_data)"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-7",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-7",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "Now the predictors are on the same scale\n\n\nCode\nXs_training = pd.DataFrame(Xs_training, columns = predictor_data.columns)\nXs_training \n\n\n\n\n\n\n\n\n\nConcentration\nTemperature\n\n\n\n\n0\n1.0\n1.0\n\n\n1\n1.0\n1.0\n\n\n2\n1.0\n-1.0\n\n\n3\n-1.0\n1.0\n\n\n4\n1.0\n-1.0\n\n\n5\n-1.0\n-1.0\n\n\n6\n-1.0\n-1.0\n\n\n7\n-1.0\n1.0"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-8",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-8",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "To fit the model, we follow the same functions as before.\n\n# Set the response.\nYc = catalyst_data['Yield']\n\n# Add the intercept.\nXs_training_int = sm.add_constant(Xs_training)\n\n# Create linear regression object.\nstd_regr = sm.OLS(Yc, Xs_training)\n\n# Train the model using the training sets.\nstd_linear_model = std_regr.fit()\n\n# Summary of the model.\nstd_summary_model = std_linear_model.summary()"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-9",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-9",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "print(std_summary_model)\n\n                                 OLS Regression Results                                \n=======================================================================================\nDep. Variable:                  Yield   R-squared (uncentered):                   0.002\nModel:                            OLS   Adj. R-squared (uncentered):             -0.330\nMethod:                 Least Squares   F-statistic:                           0.006694\nDate:                Tue, 20 Jan 2026   Prob (F-statistic):                       0.993\nTime:                        18:40:27   Log-Likelihood:                         -46.940\nNo. Observations:                   8   AIC:                                      97.88\nDf Residuals:                       6   BIC:                                      98.04\nDf Model:                           2                                                  \nCovariance Type:            nonrobust                                                  \n=================================================================================\n                    coef    std err          t      P&gt;|t|      [0.025      0.975]\n---------------------------------------------------------------------------------\nConcentration     1.5000     34.907      0.043      0.967     -83.914      86.914\nTemperature       3.7500     34.907      0.107      0.918     -81.664      89.164\n==============================================================================\nOmnibus:                        2.258   Durbin-Watson:                   0.000\nProb(Omnibus):                  0.323   Jarque-Bera (JB):                0.627\nSkew:                           0.000   Prob(JB):                        0.731\nKurtosis:                       1.628   Cond. No.                         1.00\n==============================================================================\n\nNotes:\n[1] R² is computed without centering (uncentered) since the model does not contain a constant.\n[2] Standard Errors assume that the covariance matrix of the errors is correctly specified."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#discussion",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#discussion",
+    "title": "Additional Topics",
+    "section": "Discussion",
+    "text": "Discussion\nStandardization of predictors has no impact on the overall quality of the linear regression model.\n\n\\(R^2\\) and adjusted \\(R^2\\) statistics are identical.\nPredictions are identical.\nResiduals do not change.\n\n\nStandardization does not affect the correlation between two predictors. So, it has not effect on collinearity.\n\n\nIdeally, the dummy variables for the categorical predictors are standardized too."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#questions",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#questions",
+    "title": "Additional Topics",
+    "section": "Questions",
+    "text": "Questions\n\n\nHow can we estimate \\(\\beta_0, \\beta_1, \\ldots, \\beta_p\\) and \\(\\sigma^2\\)?\nHow can we validate the model and all its assumptions?\nHow can we make inferences about \\(\\beta_0, \\beta_1, \\ldots, \\beta_p\\)?\nIf some assumptions are not met, can we do something about it?\nHow can we make predictions of future responses using the multiple linear regression model?"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#incorrect-model",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#incorrect-model",
+    "title": "Additional Topics",
+    "section": "Incorrect model",
+    "text": "Incorrect model\n\nA model is incorrect if\n\nThe assumed model structure is incorrect. That is, \\(Y \\neq \\beta_0 + \\beta_1 X + \\epsilon\\).\nThe residuals do not have constant variance.\nThe residuals are not independent."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#example-3",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#example-3",
+    "title": "Additional Topics",
+    "section": "Example 3",
+    "text": "Example 3\nConsider the fitting the following model to the auto_data:\n\\[Y_i = \\beta_0 + \\beta_1 X_{i} + \\epsilon_i\\] where:\n\n\\(Y_i\\) is the mpg of the i-th car.\n\\(X_i\\) is the horsepower of the i-th car.\n\nWe fit the model:\n\nX_train = sm.add_constant(auto_data['horsepower'])\nregr = sm.OLS(auto_data['mpg'], X_train)\nlinear_model = regr.fit()"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#residual-analysis",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#residual-analysis",
+    "title": "Additional Topics",
+    "section": "Residual analysis",
+    "text": "Residual analysis"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#problems-and-remedies",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#problems-and-remedies",
+    "title": "Additional Topics",
+    "section": "Problems and remedies",
+    "text": "Problems and remedies\n\nThe assumed model structure is incorrect. That is, \\(Y \\neq \\beta_0 + \\beta_1 X + \\epsilon\\).\n\nRemedies: Add high powers of the predictor variable to the model or transform the response (or predictor)."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-10",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-10",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "The residuals of the fitted model do not have constant variance.\n\nRemedies: Transform the response or predictor variable.\n\nLogarithm transformation\nSquare root transformation\nBox-Cox transformation."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#transformations",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#transformations",
+    "title": "Additional Topics",
+    "section": "Transformations",
+    "text": "Transformations\nTwo commonly used transformations are:\nNatural logarithm (ln) \\[\\ln(Y) = \\beta_0 + \\beta_1 X + \\epsilon\\] \\[\\ln(Y) = \\beta_0 + \\beta_1 \\ln(X) + \\epsilon\\]\nSquared root (sqrt)\n\\[\\sqrt{Y} = \\beta_0 + \\beta_1 X + \\epsilon\\] \\[\\sqrt{Y} = \\beta_0 + \\beta_1 \\sqrt{X} + \\epsilon\\]"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#effect-of-transformations",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#effect-of-transformations",
+    "title": "Additional Topics",
+    "section": "Effect of transformations",
+    "text": "Effect of transformations\n\n\nIn many cases, the \\(\\ln{(\\cdot)}\\) transformation Improves the relationship between predictor and response.\nProduces residuals that have constant variance (variance-stabilizing transformation).\nThe \\(\\sqrt{\\cdot}\\) transformation provides similar benefits, except that it is useful for response variables that are counts or follow a Poisson distribution."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#numpy-library",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#numpy-library",
+    "title": "Additional Topics",
+    "section": "NumPy library",
+    "text": "NumPy library\n\n\n\nnumpy is a powerful, open-source data manipulation and analysis library for Python\nIt is the backbone for scikit-learn and pandas\nhttps://numpy.org/\n\n\n\n\n\n\n\n\nLoad it using:\n\nimport numpy as np"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#continuation-of-example-3",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#continuation-of-example-3",
+    "title": "Additional Topics",
+    "section": "Continuation of Example 3",
+    "text": "Continuation of Example 3\nTo transform the response (\\(Y\\)) using \\(\\ln{(Y)}\\) or \\(\\sqrt{Y}\\) we use the functions log() and sqrt(), respectively, from numpy.\n\nsqrt_Y = np.sqrt( auto_data['mpg'] )\nlog_Y = np.log( auto_data['mpg'] )\n\nLet’s consider the logarithm transformation. The model then is:\n\\[\\log{(Y_i)} = \\beta_0 + \\beta_1 X_i +\\epsilon_i,\\]\nwhich we fit using the code below.\n\nlog_regr = sm.OLS(log_Y, X_train)\nlog_linear_model = log_regr.fit()"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#new-residual-analysis",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#new-residual-analysis",
+    "title": "Additional Topics",
+    "section": "New residual analysis",
+    "text": "New residual analysis"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#quadratic-model",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#quadratic-model",
+    "title": "Additional Topics",
+    "section": "Quadratic model",
+    "text": "Quadratic model\n\nAlthough there is an improvement in the Residuals vs Fitted Values plot when using the logarithm. The two plots suggests that we are missing a term in the model.\n\n\nIn fact, a better model for the data is a quadratic model with the logarithm of the response:\n\\[\\log{(Y_i)} = \\beta_0 + \\beta_1 X_i + \\beta_2 X_i^2 +\\epsilon_i.\\]"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-11",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-11",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "To fit this model to the data, we construct a new predictor matrix.\n\nX_quad = pd.concat([X_train, auto_data['horsepower']**2], axis = 1)\n\nNext, we fit the model as before.\n\nquad_regr = sm.OLS(log_Y, X_quad)\nquadratic_model = quad_regr.fit()\n\nAnd calculate the residuals and predicted values.\n\nY_pred = quadratic_model.fittedvalues\nresiduals = quadratic_model.resid"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#residual-analysis-of-quadratic-model",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#residual-analysis-of-quadratic-model",
+    "title": "Additional Topics",
+    "section": "Residual analysis of quadratic model",
+    "text": "Residual analysis of quadratic model\n\n\n\n\nCode\n# Residual vs Fitted Values Plot\nplt.figure(figsize=(5, 5))\nsns.scatterplot(x = Y_pred, y = residuals)\nplt.axhline(y=0, color='red', linestyle='--')\nplt.title('Residuals vs Fitted Values')\nplt.xlabel('Predicted Values')\nplt.ylabel('Residuals')\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\n\nCode\n# Residual vs Time Plot\nplt.figure(figsize=(5, 5))\norder = range(residuals.shape[0])\nsns.scatterplot(x = order, y = residuals)\nplt.axhline(y=0, color='red', linestyle='--')\nplt.title('Residuals vs Time')\nplt.xlabel('Time')\nplt.ylabel('Residuals')\nplt.show()"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#conclusions",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#conclusions",
+    "title": "Additional Topics",
+    "section": "Conclusions",
+    "text": "Conclusions\n\nTransformations may help us to develop models that better approximate the data. However, the interpretation of these models may be too complex. For instance, how can you interpret \\(\\beta_1\\) in \\(\\log{(Y)} = \\beta_0 + \\beta_1\\ X + \\epsilon\\)?\nTherefore, transformations are more useful to build good predictive models. That is, models whose goal is to give accurate predictions of future observations.\nNote that, we need to transform back our response predictions to the original scale. For example, if \\(Y' = \\ln{Y}\\) is the transformed response, then our final prediction is \\(Y^\\star = e^{{Y'}^\\star}\\)."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#questions-1",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#questions-1",
+    "title": "Additional Topics",
+    "section": "Questions",
+    "text": "Questions\n\n\nHow can we estimate \\(\\beta_0, \\beta_1, \\ldots, \\beta_p\\) and \\(\\sigma^2\\)?\nHow can we validate the model and all its assumptions?\nHow can we make inferences about \\(\\beta_0, \\beta_1, \\ldots, \\beta_p\\)?\nIf some assumptions are not met, can we do something about it?\nHow can we make predictions of future responses using the multiple linear regression model?"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#two-datasets",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#two-datasets",
+    "title": "Additional Topics",
+    "section": "Two datasets",
+    "text": "Two datasets\n\nThe application of data science models needs two data sets:\n\nTraining data that we use to train or estimate the linear regression model \\(\\hat{Y} = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_1 + \\cdots + \\hat{\\beta}_p X_p\\).\nTest data that we use to evaluate the quality of the predictions \\(\\hat{Y}\\) of the response \\(Y\\) using unobserved data."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-12",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-12",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "A random sample of \\(n\\) observations.\nUse it to build the linear regression model \\(\\hat{Y} = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_1 + \\cdots + \\hat{\\beta}_p X_p\\).\n\n\n\n\n\nAnother random sample of \\(n_t\\) observations, which is independent of the training data.\nUse it to evaluate the predictions \\(\\hat{Y}\\) of the model."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#validation-dataset",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#validation-dataset",
+    "title": "Additional Topics",
+    "section": "Validation Dataset",
+    "text": "Validation Dataset\nIn many practical situations, a test dataset is not available. To overcome this issue, we use a validation dataset.\n\nIdea: Apply model to your validation dataset to mimic what will happen when you apply it to test dataset."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#example-4",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#example-4",
+    "title": "Additional Topics",
+    "section": "Example 4",
+    "text": "Example 4\n\nThe “BostonHousing.xlsx” contains data collected by the US Bureau of the Census concerning housing in the area of Boston, Massachusetts. The dataset includes data on 506 census housing tracts in the Boston area in 1970s.\nThe goal is to predict the median house price in new tracts based on information such as crime rate, pollution, and number of rooms.\nThe response is the median value of owner-occupied homes in $1000s, contained in the column MEDV."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#the-predictors",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#the-predictors",
+    "title": "Additional Topics",
+    "section": "The predictors",
+    "text": "The predictors\n\n\nCRIM: per capita crime rate by town.\nZN: proportion of residential land zoned for lots over 25,000 sq.ft.\nINDUS: proportion of non-retail business acres per town.\nCHAS: Charles River dummy variable (= 1 if tract bounds river; 0 otherwise).\nNOX: nitrogen oxides concentration (parts per 10 million).\nRM: average number of rooms per dwelling.\nAGE: proportion of owner-occupied units built prior to 1940.\nDIS: weighted mean of distances to five Boston employment centers\nRAD: index of accessibility to radial highways.\nTAX: full-value property-tax rate per $10,000.\nPTRATIO: pupil-teacher ratio by town.\nLSTAT: lower status of the population (percent)."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#read-the-dataset",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#read-the-dataset",
+    "title": "Additional Topics",
+    "section": "Read the dataset",
+    "text": "Read the dataset\nWe read the dataset and set the variable CHAS as categorical.\n\n# Load Excel file (make sure the file is in your Colab)\nBoston_data = pd.read_excel('BostonHousing.xlsx')\n\n# Drop the categorical variable.\nBoston_data['CHAS'] = pd.Categorical(Boston_data['CHAS'])\nBoston_data['RAD'] = pd.Categorical(Boston_data['RAD'])\n\n# Preview the dataset.\nBoston_data.head(3)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n0\n0.00632\n18.0\n2.31\nNo\n0.538\n6.575\n65.2\n4.0900\nLow\n296\n15.3\n4.98\n24.0\n\n\n1\n0.02731\n0.0\n7.07\nNo\n0.469\n6.421\n78.9\n4.9671\nLow\n242\n17.8\n9.14\n21.6\n\n\n2\n0.02729\n0.0\n7.07\nNo\n0.469\n7.185\n61.1\n4.9671\nLow\n242\n17.8\n4.03\n34.7"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#train-and-validation-data",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#train-and-validation-data",
+    "title": "Additional Topics",
+    "section": "Train and validation data",
+    "text": "Train and validation data\nWe split the dataset into a training and a validation dataset using the function train_test_split() from scikit-learn.\n\n# Set full matrix of predictors.\nX_full = Boston_data.drop(columns = ['MEDV']) \n\n# Set full matrix of responses.\nY_full = Boston_data['MEDV']\n\n# Split the dataset into training and validation.\nX_train, X_valid, Y_train, Y_valid = train_test_split(X_full, Y_full, \n                                                      test_size=0.3,\n                                                      random_state = 59227)\n\nThe parameter test_size sets the portion of the dataset that will go to the validation set. It is usually 0.3 or 0.2."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#transform-the-categorical-predictors",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#transform-the-categorical-predictors",
+    "title": "Additional Topics",
+    "section": "Transform the categorical predictors",
+    "text": "Transform the categorical predictors\n\nBefore we start, let’s turn the categorical predictors into dummy variables\n\n# Transform categorical predictors into dummy variables\nX_train_dummy = pd.get_dummies(X_train, drop_first = True, dtype = 'int')\nX_train_dummy.head(3)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nNOX\nRM\nAGE\nDIS\nTAX\nPTRATIO\nLSTAT\nCHAS_Yes\nRAD_Low\nRAD_Medium\n\n\n\n\n452\n5.09017\n0.0\n18.10\n0.713\n6.297\n91.8\n2.3682\n666\n20.2\n17.27\n0\n0\n0\n\n\n317\n0.24522\n0.0\n9.90\n0.544\n5.782\n71.7\n4.0317\n304\n18.4\n15.94\n0\n0\n1\n\n\n352\n0.07244\n60.0\n1.69\n0.411\n5.884\n18.5\n10.7103\n411\n18.3\n7.79\n0\n0\n1"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#fit-a-model-using-training-data",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#fit-a-model-using-training-data",
+    "title": "Additional Topics",
+    "section": "Fit a model using training data",
+    "text": "Fit a model using training data\n\nWe fit a multiple linear regression model to predict the MEDV in terms of the 12 predictors using the functions OLS() and fit() from statsmodels.\n\n# Add intercept.\nBoston_X_train = sm.add_constant(X_train_dummy)\n\n# Create linear regression object\nregr = sm.OLS(Y_train, Boston_X_train)\n\n# Train the model using the training sets\nlinear_model = regr.fit()"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#brief-residual-analysis",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#brief-residual-analysis",
+    "title": "Additional Topics",
+    "section": "Brief Residual Analysis",
+    "text": "Brief Residual Analysis\nWe evaluate the model using a “Residual versus Fitted Values” plot. The plot does not show concerning patterns in the residuals. So, we assume that the model satisfices the assumption of constant variance."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#validation-mean-squared-error",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#validation-mean-squared-error",
+    "title": "Additional Topics",
+    "section": "Validation Mean Squared Error",
+    "text": "Validation Mean Squared Error\n\nWhen the response is numeric, the most common evaluation metric is the validation Mean Squared Error (MSE):\n\\[\n\\frac{1}{n_{v}} \\sum_{i=1}^{n_{v}} \\left( Y_i - \\hat{Y}_i \\right)^2\n\\]\nwhere \\((Y_1, \\boldsymbol{X}_1), \\ldots, (Y_{n_{v} }, \\boldsymbol{X}_{n_{v}} )\\) are the \\(n_{v}\\) observations in the validation dataset, and \\(\\hat{Y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\hat{\\beta}_2 X_{i2} + \\cdots + \\hat{\\beta}_p X_{ip}\\) is the model prediction of the i-th response."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-13",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-13",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "Another useful metric is the validation Root Mean Squared Error (RMSE):\n\\[\n\\sqrt{\\frac{1}{n_{v}} \\sum_{i=1}^{n_{v}} \\left( Y_i - \\hat{Y}_i \\right)^2}\n\\]\nBenefits:\n\n\nThe RMSE is in the same units as the response.\nThe RMSE value is interpreted as either how far (on average) the residuals are from zero.\nIt can also be interpreted as the average distance between the observed response values and the model predictions."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#in-python-2",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#in-python-2",
+    "title": "Additional Topics",
+    "section": "In Python",
+    "text": "In Python\nWe first compute the predictions of our model on the validation dataset. To this end, we create the dummy variables of the categorical variables using the validation dataset.\n\nX_valid_dummy = pd.get_dummies(X_valid, drop_first = True, dtype = 'int')\nX_valid_dummy.head(3)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nNOX\nRM\nAGE\nDIS\nTAX\nPTRATIO\nLSTAT\nCHAS_Yes\nRAD_Low\nRAD_Medium\n\n\n\n\n482\n5.73116\n0.0\n18.1\n0.532\n7.061\n77.0\n3.4106\n666\n20.2\n7.01\n0\n0\n0\n\n\n367\n13.52220\n0.0\n18.1\n0.631\n3.863\n100.0\n1.5106\n666\n20.2\n13.33\n0\n0\n0\n\n\n454\n9.51363\n0.0\n18.1\n0.713\n6.728\n94.1\n2.4961\n666\n20.2\n18.71\n0\n0\n0"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-14",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-14",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "Now, we use the values of the predictors in this dataset and use it as input to our model. Our model then computes the prediction of the response for each combination of values of the predictors.\n\n# Add constant to the predictor matrix from the validation set.\nBoston_X_val = sm.add_constant(X_valid_dummy)\n\n# Predict responses using validation data.\npredicted_medv_val = linear_model.predict(Boston_X_val)"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-15",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#section-15",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "We compute the validation RMSE by first computing the validation MSE using a function with the same name of scikit-learn.\n\nmse = mean_squared_error(Y_valid, predicted_medv_val)\nrmse = mse**(1/2)\nprint( round(rmse, 3) )\n\n6.02\n\n\nThe lower the validation RMSE, the more accurate our model.\nInterpretation: On average, our predictions are off by \\(\\pm\\) 5,981 dollars."
   }
 ]

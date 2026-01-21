@@ -1,0 +1,1058 @@
+---
+title: "Additional Topics"
+subtitle: "IN1002B: Introduction to Data Science Projects"
+author: 
+  - name: Alan R. Vazquez
+    affiliations:
+      - name: Department of Industrial Engineering
+format: 
+  revealjs:
+    chalkboard: false
+    multiplex: true
+    footer: "Tecnologico de Monterrey"
+    logo: IN1002b_logo.png
+    css: style.css
+    slide-number: True
+    html-math-method: mathjax
+editor: visual
+jupyter: python3
+---
+
+## Agenda
+
+</br>
+
+1.  Linear models with categorical variables
+2.  Linear models with standardized numerical predictors
+3.  Remedies for faulty assumptions
+4.  Predicting future observations
+
+## Load the libraries
+
+</br>
+
+Let's import **scikit-learn** into Python together with the other relevant libraries.
+
+```{python}
+#| echo: true
+#| output: false
+
+# Importing necessary libraries
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+```
+
+We will not use all the functions from the **scikit-learn** library. Instead, we will use specific functions from the sub-libraries **preprocessing**, **model_selection**, and **metrics**.
+
+# Linear models with categorical predictors
+
+## Categorical predictors
+
+::: incremental
+-   A categorical predictor takes on values that are categories, say, names or labels.
+-   Their use in regression requires dummy variables, which are quantitative variables.
+-   When a categorical predictor has more than two levels, a single dummy variable cannot represent all possible categories.
+-   In general, a categorical predictor with $k$ categories requires $k-1$ dummy variables.
+:::
+
+## Dummy coding
+
+-   Traditionally, dummy variables are binary variables which can only take the values 0 and 1.
+
+-   This approach implies a reference category. Specifically, the category that results when all dummy variables equal 0.
+
+-   This coding impacts the interpretation of the model coefficients:
+
+    -   [$\beta_0$ is the mean response under the reference category.]{style="color:darkgreen;"}
+    -   [$\beta_j$ is the amount of increase in the mean response when we change from the reference category to another category.]{style="color:darkgreen;"}
+
+## Example 1
+
+</br>
+
+The auto data set includes a categorical variable “Origin” which shows the origin of each car.
+
+```{python}
+#| echo: true
+
+# Load the Excel file into a pandas DataFrame.
+auto_data = pd.read_excel("auto.xlsx")
+
+# Set categorical variables.
+auto_data['origin'] = pd.Categorical(auto_data['origin'])
+```
+
+In this section, we will consider the `auto_data` as our [**training**]{style="color:darkblue;"} dataset.
+
+## Dataset
+
+```{python}
+#| echo: true
+
+(auto_data
+.filter(['mpg', 'origin'])
+).head(6)
+```
+
+## Dummy variables
+
+</br>
+
+Origin has 3 categories: European, American, Japanese.
+
+So, 2 dummy variables are required:
+
+$$d_1 =
+\begin{cases}
+1 \text{ if car is European}\\
+0 \text{ if car is not European}
+\end{cases} \text{ and }$$
+
+$$d_2 =
+\begin{cases}
+1 \text{ if car is Japanese}\\
+0 \text{ if car is not Japanese}
+\end{cases}.$$
+
+“American” acts as the reference category.
+
+## 
+
+The dataset with the dummy variables looks like this:
+
+| origin   | $d_1$    | $d_2$    |
+|----------|----------|----------|
+| American | 0        | 0        |
+| American | 0        | 0        |
+| European | 1        | 0        |
+| European | 1        | 0        |
+| American | 0        | 0        |
+| Japanese | 0        | 1        |
+| $\vdots$ | $\vdots$ | $\vdots$ |
+
+## The multiple linear regression model
+
+</br>
+
+$$Y_i= \beta_0+\beta_1 d_{1i} +\beta_2 d_{2i} +\epsilon_i \ \text{for} \ i=1,\ldots,n.$$
+
+-   $Y_i$ is the i-th response.
+-   $d_{1i}$ is 1 if the i-th observation is from a European car, and 0 otherwise.
+-   $d_{2i}$ is 1 if the i-th observation is from a Japanese car, and 0 otherwise.
+
+## Model coefficients
+
+</br>
+
+$$Y_i= \beta_0+\beta_1 d_{1i} +\beta_2 d_{2i} +\epsilon_i \ \text{for} \ i=1,\ldots,n.$$
+
+::: incremental
+-   $\beta_0$ is the mean response (mpg) for American cars.
+-   $\beta_1$ is the amount of increase in the mean response when changing from an American to a European car.
+-   $\beta_2$ is the amount of increase in the mean response when changing from an American to a Japanese car.
+-   $\epsilon_i$’s follow the same assumptions as before.
+:::
+
+## 
+
+Alternatively, we can write the regression model as:
+
+$$Y_i= \beta_0+\beta_1 d_{1i} +\beta_2 d_{2i} +\epsilon_i = \begin{cases}
+\beta_0+\beta_1 +\epsilon_i \text{ if car is European}\\
+\beta_0+\beta_2 +\epsilon_i \text{ if car is Japanese} \\
+\beta_0 +\epsilon_i\;\;\;\;\;\;\ \text{ if car is American} 
+\end{cases}$$
+
+Given this model representation:
+
+-   $\beta_0$ is the mean mpg for American cars,
+-   $\beta_1$ is the difference in the mean mpg between European and American cars, and
+-   $\beta_2$ is the difference in the mean mpg between Japanese and American cars.
+
+## In Python
+
+</br>
+
+We follow three steps to fit a linear model with a categorical predictor. First, we compute the dummy variables.
+
+```{python}
+#| echo: true
+#| output: false
+
+# Create linear regression object
+dummy_data = pd.get_dummies(auto_data['origin'], drop_first = True, 
+                            dtype = 'int')
+```
+
+Next, we construct the response column and matrix of predictors with the intercept.
+
+```{python}
+#| echo: true
+#| output: false
+
+# Create response vector
+Y_train = auto_data['mpg']
+
+# Create matrix of predictors with intercept
+dummy_X_train = sm.add_constant(dummy_data)
+```
+
+## 
+
+</br></br>
+
+Finally, we fit the model using `OLS()` and `fit()` from **statsmodels**.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Create linear regression object
+regr = sm.OLS(Y_train, dummy_X_train)
+
+# Train the model using the training sets
+linear_model = regr.fit()
+
+# Summary of the models.
+summary_model = linear_model.summary()
+```
+
+## 
+
+</br>
+
+```{python}
+#| echo: true
+#| output: true
+
+print(summary_model)
+```
+
+## Analysis of covariance
+
+</br>
+
+Models that mix categorical and numerical predictors are sometimes referred to as analysis of covariance (ANCOVA) models.
+
+**Example** (cont): Consider the predictor weight ($X$).
+
+$$Y_i= \beta_0+\beta_1 d_{1i} +\beta_2 d_{2i} + \beta_3 X_{i} +\epsilon_i,$$
+
+where $X_i$ denotes the i-th observed value of weight and $\beta_3$ is the coefficient of this predictor.
+
+## ANCOVA model
+
+The components of the ANCOVA model are individual functions of the coefficients.
+
+To gain insight into the model, we write it as follows:
+
+$$
+\begin{align}
+Y_i &= \beta_0+\beta_1 d_{1i} +\beta_2 d_{2i} + \beta_3 X_{i} +\epsilon_i \\ &= \begin{cases}
+(\beta_0+\beta_1)  + \beta_3 X_{i} +\epsilon_i \text{ if car is European} \\
+(\beta_0+\beta_2) + \beta_3 X_{i} +\epsilon_i \text{ if car is Japanese} \\
+\beta_0 + \beta_3 X_{i} +\epsilon_i\;\;\;\;\;\;\;\;\  \text{ if car is American}
+\end{cases}.
+\end{align}
+$$
+
+Note that these models have different intercepts but the same slope.
+
+## 
+
+</br></br></br>
+
+-   To estimate $\beta_0$, $\beta_1$, $\beta_2$ and $\beta_3$, we use least squares. To estimate $\sigma^2$, we use the mean squared error (MSE).
+-   We could make individual inferences on $\beta_1$ and $\beta_2$ using t-tests and confidence intervals.
+-   However, better tests are possible such as overall and partial F-tests (not discussed here).
+
+## In Python
+
+</br>
+
+To fit an ANCOVA model, we use similar steps as before. The only extra step is to concatenate the data with the dummy variables and the numerical predictor using the function `concat()` from **pandas**.
+
+```{python}
+#| echo: true
+#| output: false
+
+# Concatenate the two data sets.
+X_train = pd.concat([dummy_X_train, auto_data['weight']], axis = 1)
+
+# Create linear regression object
+regr = sm.OLS(auto_data['mpg'], X_train)
+
+# Train the model using the training sets
+ancova_model = regr.fit()
+```
+
+## Model summary
+
+```{python}
+#| echo: true
+#| output: true
+
+# Summary of the models.
+summary_ancova = ancova_model.summary()
+print(summary_ancova)
+```
+
+# Linear models with standardized predictors
+
+## Standardization
+
+</br></br>
+
+::: incremental
+-   Standardization refers to centering and scaling each numeric predictor individually.
+
+-   To center a predictor variable, the average predictor value is subtracted from all the values.
+
+-   To scale a predictor, each of its value is divided by its standard deviation.
+:::
+
+## 
+
+</br></br>
+
+In mathematical terms, we standardize a predictor $X$ as:
+
+$${\color{blue} \tilde{X}_{i}} = \frac{{ X_{i} - \bar{X}}}{ \sqrt{\frac{1}{n -1} \sum_{i=1}^{n} (X_{i} - \bar{X})^2 }} \text{ with } \bar{X} = \sum_{i=1}^n \frac{X_i}{n}.$$
+
+The average value of $\tilde{X}$ is 0.
+
+The standard deviation of $\tilde{X}$ is 1.
+
+## Benefits and limitations
+
+</br>
+
+Benefits:
+
+-   All quantitative predictors are on the same scale.
+-   Size and importance of linear regression coefficients can be compared easily.
+
+. . .
+
+Limitations:
+
+-   The interpretation of the coefficients is affected.
+
+## Interpretation
+
+$$Y = \beta_0 + \beta_1 \tilde{X}_1 + \beta_2 \tilde{X}_2 + \cdots + \beta_p \tilde{X}_p + \epsilon,$$
+
+where $\tilde{X}_i$ is the standardized version of the predictor $X_i$.
+
+Interpretation:
+
+::: incremental
+-   $\beta_0$ is the mean response when all [**original**]{style="color:darkblue;"} predictors $X_1, X_2, \ldots, X_p$ are set to their average value.
+-   $\beta_j$ is the amount of increase in the mean response by an increase of 1 standard deviation in the [**original**]{style="color:darkblue;"} predictor $X_j,$ *when all other predictors are fixed to an arbitrary value*.
+:::
+
+## Example 2
+
+</br>
+
+The yield of a chemical process ($Y$) is related to the concentration of the reactant ($X_1$) and the operating temperature ($X_2$).
+
+</br>
+
+An experiment was conducted to study the effect between these factors on the yield.
+
+</br>
+
+The [**training**]{style="color:darkblue;"} dataset is in the file "catalyst.xlsx".
+
+## 
+
+The units of concentration and temperature are percentages and Farenheit degrees, respectively.
+
+```{python}
+#| echo: true
+
+catalyst_data = pd.read_excel("catalyst.xlsx")
+catalyst_data
+```
+
+## Standarization in Python
+
+</br>
+
+Recall that we standardize numerical predictors using the `scaler()` function from **scikit-learn**.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Select predictor matrix.
+predictor_data = (catalyst_data
+                  .filter(['Concentration', 'Temperature'])
+                  )
+
+# Define the scaling operator.
+scaler = StandardScaler()
+
+# Apply the scaling operator.
+Xs_training = scaler.fit_transform(predictor_data)
+```
+
+## 
+
+Now the predictors are on the same scale
+
+```{python}
+#| echo: true
+#| code-fold: true
+#| output: true
+
+Xs_training = pd.DataFrame(Xs_training, columns = predictor_data.columns)
+Xs_training 
+```
+
+## 
+
+</br>
+
+To fit the model, we follow the same functions as before.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Set the response.
+Yc = catalyst_data['Yield']
+
+# Add the intercept.
+Xs_training_int = sm.add_constant(Xs_training)
+
+# Create linear regression object.
+std_regr = sm.OLS(Yc, Xs_training)
+
+# Train the model using the training sets.
+std_linear_model = std_regr.fit()
+
+# Summary of the model.
+std_summary_model = std_linear_model.summary()
+```
+
+## 
+
+```{python}
+#| echo: true
+
+print(std_summary_model)
+```
+
+## Discussion
+
+Standardization of predictors has no impact on the overall quality of the linear regression model.
+
+::: incremental
+-   $R^2$ and adjusted $R^2$ statistics are identical.
+-   Predictions are identical.
+-   Residuals do not change.
+:::
+
+. . .
+
+Standardization does not affect the correlation between two predictors. So, it has not effect on collinearity.
+
+. . .
+
+Ideally, the dummy variables for the categorical predictors are standardized too.
+
+# Remedies for faulty assumptions
+
+## Questions
+
+</br>
+
+1.  How can we estimate $\beta_0, \beta_1, \ldots, \beta_p$ and $\sigma^2$?
+
+2.  How can we validate the model and all its assumptions?
+
+3.  How can we make inferences about $\beta_0, \beta_1, \ldots, \beta_p$?
+
+4.  [If some assumptions are not met, can we do something about it?]{style="color:blue;"}
+
+5.  How can we make predictions of future responses using the multiple linear regression model?
+
+## Incorrect model
+
+</br></br>
+
+A model is incorrect if
+
+::: incremental
+-   The assumed model structure is incorrect. That is, $Y \neq \beta_0 + \beta_1 X + \epsilon$.
+-   The residuals do not have constant variance.
+-   The residuals are not independent.
+:::
+
+## Example 3
+
+Consider the fitting the following model to the `auto_data`:
+
+$$Y_i = \beta_0 + \beta_1 X_{i} + \epsilon_i$$ where:
+
+-   $Y_i$ is the mpg of the i-th car.
+-   $X_i$ is the horsepower of the i-th car.
+
+We fit the model:
+
+```{python}
+#| echo: true
+#| output: true
+
+X_train = sm.add_constant(auto_data['horsepower'])
+regr = sm.OLS(auto_data['mpg'], X_train)
+linear_model = regr.fit()
+```
+
+## Residual analysis
+
+```{python}
+#| echo: false
+#| output: false
+
+
+Y_pred = linear_model.fittedvalues
+residuals = linear_model.resid
+```
+
+::::: columns
+::: {.column width="50%"}
+```{python}
+#| echo: false
+#| output: true
+
+# Residual vs Fitted Values Plot
+plt.figure(figsize=(5, 5))
+sns.scatterplot(x = Y_pred, y = residuals)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.title('Residuals vs Fitted Values')
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.show()
+```
+:::
+
+::: {.column width="50%"}
+```{python}
+#| echo: false
+#| output: true
+
+# Residual vs Time Plot
+plt.figure(figsize=(5, 5))
+order = range(residuals.shape[0])
+sns.scatterplot(x = order, y = residuals)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.title('Residuals vs Time')
+plt.xlabel('Time')
+plt.ylabel('Residuals')
+plt.show()
+```
+:::
+:::::
+
+## Problems and remedies
+
+</br></br>
+
+[The assumed model structure is incorrect.]{style="color:red;"} That is, $Y \neq \beta_0 + \beta_1 X + \epsilon$.
+
+. . .
+
+**Remedies**: Add high powers of the predictor variable to the model or transform the response (or predictor).
+
+## 
+
+</br></br>
+
+The [residuals]{style="color:red;"} of the fitted model [do not have constant variance]{style="color:red;"}.
+
+. . .
+
+**Remedies**: Transform the response or predictor variable.
+
+-   Logarithm transformation
+-   Square root transformation
+-   Box-Cox transformation.
+
+## Transformations
+
+Two commonly used transformations are:
+
+**Natural logarithm** (ln) $$\ln(Y) = \beta_0 + \beta_1 X + \epsilon$$ $$\ln(Y) = \beta_0 + \beta_1 \ln(X) + \epsilon$$
+
+**Squared root** (sqrt)
+
+$$\sqrt{Y} = \beta_0 + \beta_1 X + \epsilon$$ $$\sqrt{Y} = \beta_0 + \beta_1 \sqrt{X} + \epsilon$$
+
+## Effect of transformations
+
+</br>
+
+::: incremental
+-   In many cases, the $\ln{(\cdot)}$ transformation Improves the relationship between predictor and response.
+-   Produces residuals that have constant variance (variance-stabilizing transformation).
+-   The $\sqrt{\cdot}$ transformation provides similar benefits, except that it is useful for response variables that are counts or follow a Poisson distribution.
+:::
+
+## NumPy library
+
+::::: columns
+::: {.column width="60%"}
+-   **numpy** is a powerful, open-source data manipulation and analysis library for Python
+-   It is the backbone for **scikit-learn** and **pandas**
+-   <https://numpy.org/>
+:::
+
+::: {.column width="40%"}
+![](images/NumPy_logo_2020.png){fig-align="center"}
+:::
+:::::
+
+Load it using:
+
+```{python}
+#| echo: true
+
+import numpy as np
+```
+
+## Continuation of Example 3
+
+To transform the response ($Y$) using $\ln{(Y)}$ or $\sqrt{Y}$ we use the functions `log()` and `sqrt()`, respectively, from **numpy**.
+
+```{python}
+#| echo: true
+#| output: false
+
+sqrt_Y = np.sqrt( auto_data['mpg'] )
+log_Y = np.log( auto_data['mpg'] )
+```
+
+Let's consider the logarithm transformation. The model then is:
+
+$$\log{(Y_i)} = \beta_0 + \beta_1 X_i +\epsilon_i,$$
+
+which we fit using the code below.
+
+```{python}
+#| echo: true
+#| output: false
+
+log_regr = sm.OLS(log_Y, X_train)
+log_linear_model = log_regr.fit()
+```
+
+## New residual analysis
+
+```{python}
+#| echo: false
+#| output: false
+
+Y_pred = log_linear_model.fittedvalues
+residuals = log_linear_model.resid
+```
+
+::::: columns
+::: {.column width="50%"}
+```{python}
+#| echo: false
+#| output: true
+
+# Residual vs Fitted Values Plot
+plt.figure(figsize=(5, 5))
+sns.scatterplot(x = Y_pred, y = residuals)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.title('Residuals vs Fitted Values')
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.show()
+```
+:::
+
+::: {.column width="50%"}
+```{python}
+#| echo: false
+#| output: true
+
+# Residual vs Time Plot
+plt.figure(figsize=(5, 5))
+order = range(residuals.shape[0])
+sns.scatterplot(x = order, y = residuals)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.title('Residuals vs Time')
+plt.xlabel('Time')
+plt.ylabel('Residuals')
+plt.show()
+```
+:::
+:::::
+
+## Quadratic model
+
+</br>
+
+Although there is an improvement in the **Residuals vs Fitted Values** plot when using the logarithm. The two plots suggests that we are missing a term in the model.
+
+</br>
+
+. . .
+
+In fact, a better model for the data is a quadratic model with the logarithm of the response:
+
+$$\log{(Y_i)} = \beta_0 + \beta_1 X_i + \beta_2 X_i^2 +\epsilon_i.$$
+
+## 
+
+</br>
+
+To fit this model to the data, we construct a new predictor matrix.
+
+```{python}
+#| echo: true
+#| output: true
+
+X_quad = pd.concat([X_train, auto_data['horsepower']**2], axis = 1)
+```
+
+Next, we fit the model as before.
+
+```{python}
+#| echo: true
+#| output: true
+
+quad_regr = sm.OLS(log_Y, X_quad)
+quadratic_model = quad_regr.fit()
+```
+
+And calculate the residuals and predicted values.
+
+```{python}
+#| echo: true
+#| output: false
+
+Y_pred = quadratic_model.fittedvalues
+residuals = quadratic_model.resid
+```
+
+## Residual analysis of quadratic model
+
+::::: columns
+::: {.column width="50%"}
+```{python}
+#| echo: true
+#| output: true
+#| code-fold: true
+
+# Residual vs Fitted Values Plot
+plt.figure(figsize=(5, 5))
+sns.scatterplot(x = Y_pred, y = residuals)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.title('Residuals vs Fitted Values')
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.show()
+```
+:::
+
+::: {.column width="50%"}
+```{python}
+#| echo: true
+#| output: true
+#| code-fold: true
+
+# Residual vs Time Plot
+plt.figure(figsize=(5, 5))
+order = range(residuals.shape[0])
+sns.scatterplot(x = order, y = residuals)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.title('Residuals vs Time')
+plt.xlabel('Time')
+plt.ylabel('Residuals')
+plt.show()
+```
+:::
+:::::
+
+## Conclusions
+
+::: incremental
+-   Transformations may help us to develop models that better approximate the data. However, the interpretation of these models may be too complex. For instance, how can you interpret $\beta_1$ in $\log{(Y)} = \beta_0 + \beta_1\ X + \epsilon$?
+
+-   Therefore, transformations are more useful to build good predictive models. That is, models whose goal is to give accurate predictions of future observations.
+
+-   Note that, we need to transform back our response predictions to the original scale. For example, if $Y' = \ln{Y}$ is the transformed response, then our final prediction is $Y^\star = e^{{Y'}^\star}$.
+:::
+
+# Predicting future observations
+
+## Questions
+
+</br>
+
+1.  How can we estimate $\beta_0, \beta_1, \ldots, \beta_p$ and $\sigma^2$?
+
+2.  How can we validate the model and all its assumptions?
+
+3.  How can we make inferences about $\beta_0, \beta_1, \ldots, \beta_p$?
+
+4.  If some assumptions are not met, can we do something about it?
+
+5.  [How can we make predictions of future responses using the multiple linear regression model?]{style="color:blue;"}
+
+## Two datasets
+
+</br></br>
+
+The application of data science models needs two data sets:
+
+::: incremental
+-   [**Training data**]{style="color:blue;"} that we use to train or estimate the linear regression model $\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1 X_1 + \cdots + \hat{\beta}_p X_p$.
+
+-   [**Test data**]{style="color:green;"} that we use to evaluate the quality of the predictions $\hat{Y}$ of the response $Y$ using unobserved data.
+:::
+
+## 
+
+::::: columns
+::: {.column width="30%"}
+![](images/training.png){width="256"}
+:::
+
+::: {.column width="70%"}
+</br>
+
+A random sample of $n$ observations.
+
+Use it to **build** the linear regression model $\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1 X_1 + \cdots + \hat{\beta}_p X_p$.
+:::
+:::::
+
+::::: columns
+::: {.column width="30%"}
+![](images/test.png){width="262"}
+:::
+
+::: {.column width="70%"}
+Another random sample of $n_t$ observations, which is independent of the training data.
+
+Use it to **evaluate** the predictions $\hat{Y}$ of the model.
+:::
+:::::
+
+## Validation Dataset
+
+In many practical situations, a test dataset is not available. To overcome this issue, we use a [**validation dataset**]{style="color:orange;"}.
+
+![](images/validation.png){fig-align="center" width="645"}
+
+**Idea**: Apply model to your [**validation dataset**]{style="color:orange;"} to mimic what will happen when you apply it to test dataset.
+
+## Example 4
+
+</br>
+
+The "BostonHousing.xlsx" contains data collected by the US Bureau of the Census concerning housing in the area of Boston, Massachusetts. The dataset includes data on 506 census housing tracts in the Boston area in 1970s.
+
+The goal is to predict the median house price in new tracts based on information such as crime rate, pollution, and number of rooms.
+
+The response is the median value of owner-occupied homes in \$1000s, contained in the column `MEDV`.
+
+## The predictors
+
+::: {style="font-size: 70%;"}
+-   `CRIM`: per capita crime rate by town.
+-   `ZN`: proportion of residential land zoned for lots over 25,000 sq.ft.
+-   `INDUS`: proportion of non-retail business acres per town.
+-   `CHAS`: Charles River dummy variable (= 1 if tract bounds river; 0 otherwise).
+-   `NOX`: nitrogen oxides concentration (parts per 10 million).
+-   `RM`: average number of rooms per dwelling.
+-   `AGE`: proportion of owner-occupied units built prior to 1940.
+-   `DIS`: weighted mean of distances to five Boston employment centers
+-   `RAD`: index of accessibility to radial highways.
+-   `TAX`: full-value property-tax rate per \$10,000.
+-   `PTRATIO`: pupil-teacher ratio by town.
+-   `LSTAT`: lower status of the population (percent).
+:::
+
+## Read the dataset
+
+We read the dataset and set the variable `CHAS` as categorical.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Load Excel file (make sure the file is in your Colab)
+Boston_data = pd.read_excel('BostonHousing.xlsx')
+
+# Drop the categorical variable.
+Boston_data['CHAS'] = pd.Categorical(Boston_data['CHAS'])
+Boston_data['RAD'] = pd.Categorical(Boston_data['RAD'])
+
+# Preview the dataset.
+Boston_data.head(3)
+```
+
+## Train and validation data
+
+We split the dataset into a training and a validation dataset using the function `train_test_split()` from **scikit-learn**.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Set full matrix of predictors.
+X_full = Boston_data.drop(columns = ['MEDV']) 
+
+# Set full matrix of responses.
+Y_full = Boston_data['MEDV']
+
+# Split the dataset into training and validation.
+X_train, X_valid, Y_train, Y_valid = train_test_split(X_full, Y_full, 
+                                                      test_size=0.3,
+                                                      random_state = 59227)
+```
+
+The parameter `test_size` sets the portion of the dataset that will go to the validation set. It is usually 0.3 or 0.2.
+
+## Transform the categorical predictors
+
+</br>
+
+Before we start, let's turn the categorical predictors into dummy variables
+
+```{python}
+#| echo: true
+#| output: true
+
+# Transform categorical predictors into dummy variables
+X_train_dummy = pd.get_dummies(X_train, drop_first = True, dtype = 'int')
+X_train_dummy.head(3)
+```
+
+## Fit a model using training data
+
+</br>
+
+We fit a multiple linear regression model to predict the `MEDV` in terms of the 12 predictors using the functions `OLS()` and `fit()` from **statsmodels**.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Add intercept.
+Boston_X_train = sm.add_constant(X_train_dummy)
+
+# Create linear regression object
+regr = sm.OLS(Y_train, Boston_X_train)
+
+# Train the model using the training sets
+linear_model = regr.fit()
+```
+
+## Brief Residual Analysis
+
+We evaluate the model using a "Residual versus Fitted Values" plot. The plot does not show concerning patterns in the residuals. So, we assume that the model satisfices the assumption of constant variance.
+
+```{python}
+#| echo: false
+#| output: true
+#| code-fold: true
+#| fig-align: center
+
+# Residual vs Fitted Values Plot
+plt.figure(figsize=(7, 4))
+sns.scatterplot(x = linear_model.fittedvalues, y = linear_model.resid)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.title('Residuals vs Fitted Values')
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.show()
+```
+
+## Validation Mean Squared Error
+
+</br>
+
+When the response is numeric, the most common evaluation metric is the validation [**Mean Squared Error**]{style="color:orange;"} ([**MSE**]{style="color:orange;"}):
+
+$$
+\frac{1}{n_{v}} \sum_{i=1}^{n_{v}} \left( Y_i - \hat{Y}_i \right)^2
+$$
+
+where $(Y_1, \boldsymbol{X}_1), \ldots, (Y_{n_{v} }, \boldsymbol{X}_{n_{v}} )$ are the $n_{v}$ observations in the validation dataset, and $\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \hat{\beta}_2 X_{i2} + \cdots + \hat{\beta}_p X_{ip}$ is the model prediction of the i-th response.
+
+## 
+
+Another useful metric is the validation [**Root Mean Squared Error**]{style="color:orange;"} ([**RMSE**]{style="color:orange;"}):
+
+$$
+\sqrt{\frac{1}{n_{v}} \sum_{i=1}^{n_{v}} \left( Y_i - \hat{Y}_i \right)^2}
+$$
+
+Benefits:
+
+::: {style="font-size: 90%;"}
+-   The RMSE is in the same units as the response.
+-   The RMSE value is interpreted as either how far (on average) the residuals are from zero.
+-   It can also be interpreted as the average distance between the observed response values and the model predictions.
+:::
+
+## In Python
+
+We first compute the predictions of our model on the validation dataset. To this end, we create the dummy variables of the categorical variables using the validation dataset.
+
+```{python}
+#| echo: true
+
+X_valid_dummy = pd.get_dummies(X_valid, drop_first = True, dtype = 'int')
+X_valid_dummy.head(3)
+```
+
+## 
+
+</br>
+
+Now, we use the values of the predictors in this dataset and use it as input to our model. Our model then computes the prediction of the response for each combination of values of the predictors.
+
+```{python}
+#| echo: true
+
+# Add constant to the predictor matrix from the validation set.
+Boston_X_val = sm.add_constant(X_valid_dummy)
+
+# Predict responses using validation data.
+predicted_medv_val = linear_model.predict(Boston_X_val)
+```
+
+## 
+
+</br>
+
+We compute the validation RMSE by first computing the validation MSE using a function with the same name of **scikit-learn**.
+
+```{python}
+#| echo: true
+
+mse = mean_squared_error(Y_valid, predicted_medv_val)
+rmse = mse**(1/2)
+print( round(rmse, 3) )
+```
+
+The lower the validation RMSE, the more accurate our model.
+
+[*Interpretation*: On average, our predictions are off by $\pm$ 5,981 dollars.]{style="color:darkblue;"}
+
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN1002B-Website/)
