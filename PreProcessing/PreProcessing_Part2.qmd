@@ -10,6 +10,7 @@ format:
     chalkboard: false
     multiplex: true
     footer: "Tecnologico de Monterrey"
+    logo: IN5148_logo.png
     css: style.css
     slide-number: True
     html-math-method: mathjax

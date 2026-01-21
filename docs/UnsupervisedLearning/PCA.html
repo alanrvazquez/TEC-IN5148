@@ -288,7 +288,7 @@ window.Quarto = {
 <section id="load-the-libraries" class="level3">
 <h3 class="anchored" data-anchor-id="load-the-libraries">Load the libraries</h3>
 <p>Before we start, let’s import the data science libraries into Python.</p>
-<div id="fed909d8" class="cell" data-execution_count="1">
+<div id="1b30f2b3" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -747,7 +747,7 @@ window.Quarto = {
 </section>
 <section id="the-data" class="level3">
 <h3 class="anchored" data-anchor-id="the-data">The data</h3>
-<div id="2928426f" class="cell" data-execution_count="2">
+<div id="59afa61e" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tiktok_data <span class="op">=</span> pd.read_excel(<span class="st">"TikTok_Songs_2020_Reduced.xlsx"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>tiktok_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
@@ -853,7 +853,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="standardize-the-data">Standardize the data</h3>
 <p><br></p>
 <p>Remember that PCA works with distances, so we must standardize the quantitative predictors to have an accurate analysis.</p>
-<div id="7ddeb9fb" class="cell" data-execution_count="3">
+<div id="c16a698a" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the predictors</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">'danceability'</span>, <span class="st">'energy'</span>, <span class="st">'loudness'</span>, <span class="st">'speechiness'</span>,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">'acousticness'</span>, <span class="st">'liveness'</span>, <span class="st">'valence'</span>, <span class="st">'tempo'</span>]</span>
@@ -868,7 +868,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="pca-in-python">PCA in Python</h3>
 <p><br><br></p>
 <p>We tell Python that we want to apply PCA using the function <code>PCA()</code> from <strong>sklearn</strong>. Next, we run the algorithm using <code>.fit_transform()</code>.</p>
-<div id="16be7903" class="cell" data-execution_count="4">
+<div id="3b6acbf6" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA()</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>PCA_tiktok <span class="op">=</span> pca.fit_transform(Xs_tiktok)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
@@ -892,7 +892,7 @@ window.Quarto = {
 <li><p>This graph is used to define the total number of components to use.</p></li>
 </ul>
 </div><div class="column" style="width:50%;">
-<div id="7fcd791c" class="cell" data-execution_count="5">
+<div id="b219c0b5" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -909,7 +909,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="section-8"></h3>
 <p><br><br></p>
 <p>The code to generate a scree plot is below.</p>
-<div id="f9b2bfd2" class="cell" data-execution_count="6">
+<div id="a4e43112" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>explained_var <span class="op">=</span> pca.explained_variance_ratio_</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
@@ -935,7 +935,7 @@ window.Quarto = {
 <li>A red line indicates the growth direction of the labeled variable.</li>
 </ul>
 </div><div class="column" style="width:50%;">
-<div id="0ca1edce" class="cell" data-execution_count="7">
+<div id="755279b7" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -952,7 +952,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="section-9"></h3>
 <p>The code to generate the biplot is lenghty but it can be broken into three steps.</p>
 <p>Step 1. Create a DataFrame with the PCA results</p>
-<div id="38097760" class="cell" data-execution_count="8">
+<div id="3e432440" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pca_df <span class="op">=</span> pd.DataFrame(PCA_tiktok, columns<span class="op">=</span>[<span class="ss">f'PC</span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">'</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(PCA_tiktok.shape[<span class="dv">1</span>])])</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pca_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
@@ -1039,7 +1039,7 @@ window.Quarto = {
 <section id="section-10" class="level3">
 <h3 class="anchored" data-anchor-id="section-10"></h3>
 <p>Step 2. Create biplot of first two principal components</p>
-<div id="28bff86a" class="cell" data-execution_count="9">
+<div id="37f497ad" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">5.5</span>))</span>
@@ -1065,7 +1065,7 @@ window.Quarto = {
 <section id="section-11" class="level3">
 <h3 class="anchored" data-anchor-id="section-11"></h3>
 <p>Step 3. Add more information to the biplot.</p>
-<div id="0869d61d" class="cell" data-execution_count="10">
+<div id="5d7c2c9c" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">5.5</span>))</span>
@@ -1099,7 +1099,7 @@ window.Quarto = {
 <section id="section-12" class="level3">
 <h3 class="anchored" data-anchor-id="section-12"></h3>
 <p>With some extra lines of code, we label the points in the plot.</p>
-<div id="27aa56bf" class="cell" data-execution_count="11">
+<div id="5b8915e6" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pca_df <span class="op">=</span> pd.DataFrame(PCA_tiktok, columns<span class="op">=</span>[<span class="ss">f'PC</span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">'</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(PCA_tiktok.shape[<span class="dv">1</span>])])</span>

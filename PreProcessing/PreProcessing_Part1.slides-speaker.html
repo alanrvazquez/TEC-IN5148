@@ -198,7 +198,7 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">Data preprocessing: Part I</h1>
-  <p class="subtitle">IN1002B: Introduction to Data Science Projects</p>
+  <p class="subtitle">IN5148: Statistics and Data Science with Applications in Engineering</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -264,7 +264,7 @@ Alan R. Vazquez
 <h2></h2>
 <p><br></p>
 <p>Let’s import <strong>scikit-learn</strong> into Python together with the other relevant libraries.</p>
-<div id="e60ee06d" class="cell" data-execution_count="1">
+<div id="3dafa410" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
@@ -355,7 +355,7 @@ Alan R. Vazquez
 <h2>Read the dataset</h2>
 <p><br></p>
 <p>We read the dataset and set the variable <code>CHAS</code> and <code>RAD</code> as categorical.</p>
-<div id="d0cb5fcb" class="cell" data-execution_count="2">
+<div id="f2b591c6" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>Boston_data <span class="op">=</span> pd.read_excel(<span class="st">'BostonHousing.xlsx'</span>)</span>
 <span id="cb2-2"><a></a></span>
 <span id="cb2-3"><a></a>Boston_data[<span class="st">'CHAS'</span>] <span class="op">=</span> pd.Categorical(Boston_data[<span class="st">'CHAS'</span>])</span>
@@ -367,7 +367,7 @@ Alan R. Vazquez
 <section id="section-3" class="slide level2">
 <h2></h2>
 <p><br></p>
-<div id="5b9d6890" class="cell" data-execution_count="3">
+<div id="01252250" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>Boston_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -506,7 +506,7 @@ Alan R. Vazquez
 <section id="create-the-predictor-matrix" class="slide level2">
 <h2>Create the predictor matrix</h2>
 <p>We use the function <code>.drop()</code> from <strong>pandas</strong>. This function drops one or more columns from a data frame. Let’s drop the response column <code>MEDV</code> and store the result in <code>X_full</code>.</p>
-<div id="2c87c0ae" class="cell" data-execution_count="4">
+<div id="f45cdff1" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># Set full matrix of predictors.</span></span>
 <span id="cb4-2"><a></a>X_full <span class="op">=</span> Boston_data.drop(columns <span class="op">=</span> [<span class="st">'MEDV'</span>]) </span>
 <span id="cb4-3"><a></a>X_full.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -615,7 +615,7 @@ Alan R. Vazquez
 <section id="create-the-response-column" class="slide level2">
 <h2>Create the response column</h2>
 <p>We use the function <code>.filter()</code> from <strong>pandas</strong> to extract the column <code>MEDV</code> from the data frame. We store the result in <code>Y_full</code>.</p>
-<div id="5c8c2a41" class="cell" data-execution_count="5">
+<div id="59213b9f" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="co"># Set full matrix of responses.</span></span>
 <span id="cb5-2"><a></a>Y_full <span class="op">=</span> Boston_data.<span class="bu">filter</span>([<span class="st">'MEDV'</span>])</span>
 <span id="cb5-3"><a></a>Y_full.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -669,7 +669,7 @@ Alan R. Vazquez
 <section id="lets-partition-the-dataset" class="slide level2">
 <h2>Let’s partition the dataset</h2>
 <p><br></p>
-<div id="09983c5c" class="cell" data-execution_count="6">
+<div id="f97dd8ad" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="co"># Split the dataset into training and validation.</span></span>
 <span id="cb6-2"><a></a>X_train, X_valid, Y_train, Y_valid <span class="op">=</span> train_test_split(X_full, Y_full, </span>
 <span id="cb6-3"><a></a>                                                      test_size <span class="op">=</span> <span class="fl">0.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -683,7 +683,7 @@ Alan R. Vazquez
 <section id="section-4" class="slide level2">
 <h2></h2>
 <p>The predictors and response in the training dataset are in the objects <code>X_train</code> and <code>Y_train</code>, respectively. We compile these objects into a single dataset using the function <code>.concat()</code> from <strong>pandas</strong>. The argument <code>axis = 1</code> tells <code>.concat()</code> to concatenate the datasets by their rows.</p>
-<div id="307a5955" class="cell" data-execution_count="7">
+<div id="b661a378" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>training_dataset <span class="op">=</span> pd.concat([X_train, Y_train], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb7-2"><a></a>training_dataset.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -723,68 +723,68 @@ Alan R. Vazquez
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">318</th>
-<td>0.40202</td>
-<td>0.0</td>
-<td>9.90</td>
+<th data-quarto-table-cell-role="th">286</th>
+<td>0.01965</td>
+<td>80.0</td>
+<td>1.76</td>
 <td>No</td>
-<td>0.544</td>
-<td>6.382</td>
-<td>67.2</td>
-<td>3.5325</td>
-<td>Medium</td>
-<td>304</td>
-<td>18.4</td>
-<td>10.36</td>
-<td>23.1</td>
+<td>0.385</td>
+<td>6.230</td>
+<td>31.5</td>
+<td>9.0892</td>
+<td>Low</td>
+<td>241</td>
+<td>18.2</td>
+<td>12.93</td>
+<td>20.1</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">172</th>
-<td>0.13914</td>
-<td>0.0</td>
-<td>4.05</td>
-<td>No</td>
-<td>0.510</td>
-<td>5.572</td>
-<td>88.5</td>
-<td>2.5961</td>
-<td>Medium</td>
-<td>296</td>
-<td>16.6</td>
-<td>14.69</td>
-<td>23.1</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">441</th>
-<td>9.72418</td>
+<th data-quarto-table-cell-role="th">485</th>
+<td>3.67367</td>
 <td>0.0</td>
 <td>18.10</td>
 <td>No</td>
-<td>0.740</td>
-<td>6.406</td>
-<td>97.2</td>
-<td>2.0651</td>
+<td>0.583</td>
+<td>6.312</td>
+<td>51.9</td>
+<td>3.9917</td>
 <td>High</td>
 <td>666</td>
 <td>20.2</td>
-<td>19.52</td>
-<td>17.1</td>
+<td>10.58</td>
+<td>21.2</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">143</th>
+<td>4.09740</td>
+<td>0.0</td>
+<td>19.58</td>
+<td>No</td>
+<td>0.871</td>
+<td>5.468</td>
+<td>100.0</td>
+<td>1.4118</td>
+<td>Medium</td>
+<td>403</td>
+<td>14.7</td>
+<td>26.42</td>
+<td>15.6</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">313</th>
-<td>0.26938</td>
+<th data-quarto-table-cell-role="th">463</th>
+<td>5.82115</td>
 <td>0.0</td>
-<td>9.90</td>
+<td>18.10</td>
 <td>No</td>
-<td>0.544</td>
-<td>6.266</td>
-<td>82.8</td>
-<td>3.2628</td>
-<td>Medium</td>
-<td>304</td>
-<td>18.4</td>
-<td>7.90</td>
-<td>21.6</td>
+<td>0.713</td>
+<td>6.513</td>
+<td>89.9</td>
+<td>2.8016</td>
+<td>High</td>
+<td>666</td>
+<td>20.2</td>
+<td>10.29</td>
+<td>20.2</td>
 </tr>
 </tbody>
 </table>
@@ -796,7 +796,7 @@ Alan R. Vazquez
 <section id="section-5" class="slide level2">
 <h2></h2>
 <p>Equivalently, the predictors and response in the validation dataset are in the objects <code>X_valid</code> and <code>Y_valid</code>, respectively.</p>
-<div id="d9c11ec4" class="cell" data-execution_count="8">
+<div id="2c7220c9" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>validation_dataset <span class="op">=</span> pd.concat([X_valid, Y_valid], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb8-2"><a></a>validation_dataset.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
@@ -836,84 +836,84 @@ Alan R. Vazquez
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">47</th>
-<td>0.22927</td>
+<th data-quarto-table-cell-role="th">311</th>
+<td>0.79041</td>
 <td>0.0</td>
-<td>6.91</td>
+<td>9.90</td>
 <td>No</td>
-<td>0.448</td>
-<td>6.030</td>
-<td>85.5</td>
-<td>5.6894</td>
-<td>Low</td>
-<td>233</td>
-<td>17.9</td>
-<td>18.80</td>
-<td>16.6</td>
+<td>0.544</td>
+<td>6.122</td>
+<td>52.8</td>
+<td>2.6403</td>
+<td>Medium</td>
+<td>304</td>
+<td>18.4</td>
+<td>5.98</td>
+<td>22.1</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">69</th>
-<td>0.12816</td>
-<td>12.5</td>
-<td>6.07</td>
+<th data-quarto-table-cell-role="th">278</th>
+<td>0.07978</td>
+<td>40.0</td>
+<td>6.41</td>
 <td>No</td>
-<td>0.409</td>
-<td>5.885</td>
-<td>33.0</td>
-<td>6.4980</td>
+<td>0.447</td>
+<td>6.482</td>
+<td>32.1</td>
+<td>4.1403</td>
 <td>Medium</td>
-<td>345</td>
-<td>18.9</td>
-<td>8.79</td>
-<td>20.9</td>
+<td>254</td>
+<td>17.6</td>
+<td>7.19</td>
+<td>29.1</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">57</th>
-<td>0.01432</td>
-<td>100.0</td>
-<td>1.32</td>
+<th data-quarto-table-cell-role="th">351</th>
+<td>0.07950</td>
+<td>60.0</td>
+<td>1.69</td>
 <td>No</td>
 <td>0.411</td>
-<td>6.816</td>
-<td>40.5</td>
-<td>8.3248</td>
+<td>6.579</td>
+<td>35.9</td>
+<td>10.7103</td>
 <td>Medium</td>
-<td>256</td>
-<td>15.1</td>
-<td>3.95</td>
-<td>31.6</td>
+<td>411</td>
+<td>18.3</td>
+<td>5.49</td>
+<td>24.1</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">161</th>
-<td>1.46336</td>
+<th data-quarto-table-cell-role="th">384</th>
+<td>20.08490</td>
 <td>0.0</td>
-<td>19.58</td>
+<td>18.10</td>
 <td>No</td>
-<td>0.605</td>
-<td>7.489</td>
-<td>90.8</td>
-<td>1.9709</td>
-<td>Medium</td>
-<td>403</td>
-<td>14.7</td>
-<td>1.73</td>
-<td>50.0</td>
+<td>0.700</td>
+<td>4.368</td>
+<td>91.2</td>
+<td>1.4395</td>
+<td>High</td>
+<td>666</td>
+<td>20.2</td>
+<td>30.63</td>
+<td>8.8</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">288</th>
-<td>0.04590</td>
-<td>52.5</td>
-<td>5.32</td>
+<th data-quarto-table-cell-role="th">476</th>
+<td>4.87141</td>
+<td>0.0</td>
+<td>18.10</td>
 <td>No</td>
-<td>0.405</td>
-<td>6.315</td>
-<td>45.6</td>
-<td>7.3172</td>
-<td>Medium</td>
-<td>293</td>
-<td>16.6</td>
-<td>7.60</td>
-<td>22.3</td>
+<td>0.614</td>
+<td>6.484</td>
+<td>93.6</td>
+<td>2.3053</td>
+<td>High</td>
+<td>666</td>
+<td>20.2</td>
+<td>18.68</td>
+<td>16.7</td>
 </tr>
 </tbody>
 </table>
@@ -970,7 +970,7 @@ Alan R. Vazquez
 <h2>Example 2</h2>
 <p><br></p>
 <p>Let’s use the penguins dataset available in the file “penguins.xlsx”.</p>
-<div id="a6ecd18f" class="cell" data-execution_count="9">
+<div id="e32486b2" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a><span class="co"># Load the Excel file into a pandas DataFrame.</span></span>
 <span id="cb9-2"><a></a>penguins_data <span class="op">=</span> pd.read_excel(<span class="st">"penguins.xlsx"</span>)</span>
 <span id="cb9-3"><a></a></span>
@@ -985,7 +985,7 @@ Alan R. Vazquez
 <p>For illustrative purposes, we assume that we want to predict the species (in the column <code>species</code>) of a penguin using the predictors <code>bill_length_mm</code>, <code>bill_depth_mm</code>, <code>flipper_length_mm</code>, <code>body_mass_g</code>, and <code>sex</code>.</p>
 <p><br></p>
 <p>We create the predictor matrix and response column.</p>
-<div id="9c9cf92d" class="cell" data-execution_count="10">
+<div id="2538dd29" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a><span class="co"># Set full matrix of predictors.</span></span>
 <span id="cb10-2"><a></a>X_full_p <span class="op">=</span> (penguins_data</span>
 <span id="cb10-3"><a></a>           .<span class="bu">filter</span>([<span class="st">'bill_length_mm'</span>, <span class="st">'bill_depth_mm'</span>, </span>
@@ -998,7 +998,7 @@ Alan R. Vazquez
 <section id="section-8" class="slide level2">
 <h2></h2>
 <p>We use a validation dataset with 30% of the observations in <code>penguins_data</code>. The other 70% will be in the training dataset.</p>
-<div id="13b71c82" class="cell" data-execution_count="11">
+<div id="ff97ae1d" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a><span class="co"># Split the dataset into training and validation.</span></span>
 <span id="cb11-2"><a></a>X_train_p, X_valid_p, Y_train_p, Y_valid_p <span class="op">=</span> train_test_split(X_full_p, Y_full_p, </span>
 <span id="cb11-3"><a></a>                                                      test_size <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -1011,7 +1011,7 @@ Alan R. Vazquez
 <h2></h2>
 <p><br></p>
 <p>Since preprocessing techniques are meant for the predictors, we will work on the <code>X_train_p</code> data frame.</p>
-<div id="c33e6754" class="cell" data-execution_count="12">
+<div id="d7418ee7" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-display" data-execution_count="12">
 <div>
 <style scoped="">
@@ -1091,7 +1091,7 @@ Alan R. Vazquez
 <h2></h2>
 <p><br></p>
 <p>Let’s check if the dataset has missing observations using the function <code>.info()</code> from <strong>pandas</strong>.</p>
-<div id="a7f40266" class="cell" data-execution_count="13">
+<div id="bdf80459" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>X_train_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -1112,7 +1112,7 @@ memory usage: 9.7 KB</code></pre>
 <section id="section-11" class="slide level2">
 <h2></h2>
 <p>In the output of the function, “non-null” refers to the number of entries in a column that have actual values. That is, the number of entries where there are not <code>NaN</code>.</p>
-<div id="41a79a7c" class="cell" data-execution_count="14">
+<div id="2703bb30" class="cell" data-execution_count="14">
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
 Index: 240 entries, 31 to 293
@@ -1133,7 +1133,7 @@ memory usage: 9.7 KB</code></pre>
 <section id="section-12" class="slide level2">
 <h2></h2>
 <p>The output below shows that there are 240 entries but <code>bill_length_mm</code> has 238 that are “non-null”. Therefore, this column has <strong>two</strong> missing observations.</p>
-<div id="7dc8a32a" class="cell" data-execution_count="15">
+<div id="6b9efe88" class="cell" data-execution_count="15">
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
 Index: 240 entries, 31 to 293
@@ -1156,7 +1156,7 @@ memory usage: 9.7 KB</code></pre>
 <p><br></p>
 <p>Alternatively, we can use the function <code>.isnull()</code> together with <code>sum()</code> to determine the number of missing values for each column in the dataset.</p>
 <p><br></p>
-<div id="ba424929" class="cell" data-execution_count="16">
+<div id="4fdd8473" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>missing_values <span class="op">=</span> X_train_p.isnull().<span class="bu">sum</span>()</span>
 <span id="cb16-2"><a></a>missing_values</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
@@ -1172,7 +1172,7 @@ dtype: int64</code></pre>
 <section id="removing-missing-values" class="slide level2">
 <h2>Removing missing values</h2>
 <p>If we want to remove all rows in the dataset that have at least one missing value, we use the function <code>.dropna()</code>.</p>
-<div id="0f4832be" class="cell" data-execution_count="17">
+<div id="405b77d2" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a>complete_predictors <span class="op">=</span> X_train_p.dropna()</span>
 <span id="cb18-2"><a></a>complete_predictors.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
@@ -1252,7 +1252,7 @@ dtype: int64</code></pre>
 </section>
 <section id="section-14" class="slide level2">
 <h2></h2>
-<div id="8dd6e500" class="cell" data-execution_count="18">
+<div id="1572ad01" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a>complete_predictors.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -1275,7 +1275,7 @@ memory usage: 9.4 KB</code></pre>
 <section id="imputation-using-the-mean" class="slide level2">
 <h2>Imputation using the mean</h2>
 <p>We can impute the missing values of a numeric variable using the <strong>mean</strong> or <strong>median</strong> of its available values. For example, consider the variable <code>bill_length_mm</code> that has two missing values.</p>
-<div id="23ec1d0f" class="cell" data-execution_count="19">
+<div id="7820fb60" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>X_train_p[<span class="st">'bill_length_mm'</span>].info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.series.Series'&gt;
@@ -1295,7 +1295,7 @@ memory usage: 3.8 KB</code></pre>
 <p><br></p>
 <p>Using <code>SimpleImputer()</code>, we set the method to impute missing values using the <strong>mean</strong>.</p>
 <p>We also use the function <code>fit_transform()</code> to apply the imputation method to the variable.</p>
-<div id="48f2be20" class="cell" data-execution_count="20">
+<div id="41a2e9ce" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a><span class="co"># Imputation for numerical variables (using the mean)</span></span>
 <span id="cb23-2"><a></a>num_imputer <span class="op">=</span> SimpleImputer(strategy <span class="op">=</span> <span class="st">'mean'</span>)</span>
 <span id="cb23-3"><a></a></span>
@@ -1307,7 +1307,7 @@ memory usage: 3.8 KB</code></pre>
 <h2></h2>
 <p><br></p>
 <p>After imputation, the information of the predictors in the dataset looks like this.</p>
-<div id="e2c0506c" class="cell" data-execution_count="21">
+<div id="7c0d839f" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a>X_train_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -1329,7 +1329,7 @@ memory usage: 9.7 KB</code></pre>
 <section id="section-17" class="slide level2">
 <h2></h2>
 <p>To impute the missing values using the <strong>median</strong>, we simply set this method in <code>SimpleImputer()</code>. For example, let’s impute the missing values of <code>bill_depth_mm</code>.</p>
-<div id="51242e11" class="cell" data-execution_count="22">
+<div id="8af3d22c" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a></a><span class="co"># Imputation for numerical variables (using the mean)</span></span>
 <span id="cb26-2"><a></a>num_imputer <span class="op">=</span> SimpleImputer(strategy <span class="op">=</span> <span class="st">'median'</span>)</span>
 <span id="cb26-3"><a></a></span>
@@ -1372,7 +1372,7 @@ memory usage: 3.8 KB</code></pre>
 <h2>Imputation method for a categorical variable</h2>
 <p>If a categorical variable has missing values, we can use the <strong>most frequent</strong> of the available values to replace the missing values. To this end, we use similar commands as before.</p>
 <p>For example, let’s impute the missing values of <code>sex</code> using this strategy.</p>
-<div id="9c930714" class="cell" data-execution_count="23">
+<div id="4c62f48b" class="cell" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a></a><span class="co"># Imputation for categorical variables (using the most frequent value)</span></span>
 <span id="cb28-2"><a></a>cat_imputer <span class="op">=</span> SimpleImputer(strategy <span class="op">=</span> <span class="st">'most_frequent'</span>)</span>
 <span id="cb28-3"><a></a></span>
@@ -1383,7 +1383,7 @@ memory usage: 3.8 KB</code></pre>
 <section id="section-19" class="slide level2">
 <h2></h2>
 <p>Let’s now have a look at the information of the dataset.</p>
-<div id="47ca62b1" class="cell" data-execution_count="24">
+<div id="42bf205b" class="cell" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a></a><span class="co"># Apply imputation strategy for categorical variables.</span></span>
 <span id="cb29-2"><a></a>X_train_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -1407,7 +1407,7 @@ memory usage: 11.2+ KB</code></pre>
 <h2></h2>
 <p><br></p>
 <p>Unfortunately, after applying <code>cat_imputer</code> to the dataset, the variable <code>sex</code> is an object. To change it to categorical, we use the function <code>pd.Categorical</code> again.</p>
-<div id="d8041739" class="cell" data-execution_count="25">
+<div id="5d0c3d02" class="cell" data-execution_count="25">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a></a><span class="co"># Apply imputation strategy for categorical variables.</span></span>
 <span id="cb31-2"><a></a>X_train_p[<span class="st">'sex'</span>] <span class="op">=</span> pd.Categorical(X_train_p[<span class="st">'sex'</span>])</span>
 <span id="cb31-3"><a></a>X_train_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1457,7 +1457,7 @@ memory usage: 9.7 KB</code></pre>
 <section id="in-python" class="slide level2">
 <h2>In Python</h2>
 <p>You can use KNN using the function <code>KNNImputer()</code>. Its main input is the number of nearest neighbours to use. You set this value using the parameter <code>n_neighbors</code>.</p>
-<div id="3973e57d" class="cell" data-execution_count="26">
+<div id="297b0513" class="cell" data-execution_count="26">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a></a><span class="co"># Set the KNN imputer using two neighbours.</span></span>
 <span id="cb33-2"><a></a>KNN_imputer <span class="op">=</span> KNNImputer(n_neighbors <span class="op">=</span> <span class="dv">2</span>)</span>
 <span id="cb33-3"><a></a></span>
@@ -1473,7 +1473,7 @@ memory usage: 9.7 KB</code></pre>
 <h2></h2>
 <p><br></p>
 <p>Let’s look at the new dataset.</p>
-<div id="5c474a9b" class="cell" data-execution_count="27">
+<div id="69e1bda2" class="cell" data-execution_count="27">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a></a>X_train_num_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -1498,7 +1498,7 @@ memory usage: 7.6 KB</code></pre>
 </section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
-<p><img src="IN1002b_logo.png" class="slide-logo"></p>
+<p><img src="IN5148_logo.png" class="slide-logo"></p>
 <div class="footer footer-default">
 <p>Tecnologico de Monterrey</p>
 </div>

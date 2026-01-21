@@ -1,67 +1,80 @@
 #install.packages("hexSticker")
 
 library(hexSticker)
-
 library(tidyverse)
-library(qcc)
-#library(ggQC)
 library(readxl)
-library(forecast)
 
-# Read data
-Airline_data <- read_excel("Module3/Airline.xlsx")
+library(ggplot2)
 
-# Step 2: Prepare time series
-# Assume monthly data and T is already ordered
-ts_data <- ts(Airline_data$`Number of passengers`, frequency = 12)
+bank_data = read_excel("Classification/banknotes.xlsx")
+line.seg = 0.2
+pp.size = 0.21
+p = ggplot(bank_data, aes(x = Top, y = Bottom, color = Status)) +
+  # Scatter plot
+  geom_point(size = pp.size) +
+  
+  # Discrete color mapping
+  scale_color_manual(
+    values = c(genuine = "blue", counterfeit = "orange")
+  ) +
+  
+  # Decision boundaries
+  geom_hline(yintercept = 9.55, linewidth = line.seg, color = "black") +
+  geom_segment(
+    aes(x = 10.95, xend = 10.95, y = -Inf, yend = 9.55),
+    linewidth = line.seg,
+    color = "black"
+  ) +
+  geom_segment(
+    aes(x = 11.3, xend = 11.3, y = -Inf, yend = 9.55),
+    linewidth = line.seg,
+    color = "black"
+  ) +
+  # Axis labels
+  labs(
+    x = "Top",
+    y = "Bottom",
+    color = "Status"
+  ) +
+  
+  # Remove axis titles
+  labs(x = NULL, y = NULL, color = "Status") +
+  
+  # Theme similar to seaborn whitegrid
+  theme_minimal(base_size = 14) +
+  theme(
+    panel.grid.major = element_line(color = "grey80"),
+    panel.grid.minor = element_blank()
+  )
 
-# Step 3: Fit ARIMA model
-model <- auto.arima(ts_data)
+p = p + theme_transparent() + theme(legend.position="none", axis.text.x = element_blank(),
+                                    axis.text.y = element_blank())
 
-# Step 4: Forecast next 5 periods
-forecast_result <- forecast(model, h = 12)
+sticker(p, package="IN5148", p_size=25, p_color = "#f18f01", s_x=1, s_y=0.8, 
+        s_width=1.3, s_height=0.9, h_fill="#fde4c2", h_color="white", h_size = 0.3,
+        filename="IN5148_logo.png")
 
-# Step 5: Combine original and forecast data for ggplot
-# Convert time series to data frame
-historical_df <- data.frame(
-  T = time(ts_data),
-  Passengers = as.numeric(ts_data),
-  Type = "Observed"
+sticker(
+  p,
+  package = "IN5148",
+  p_size = 25,
+  p_color = "#1F4E79",      # Deep blue text
+  s_x = 1, s_y = 0.8,
+  s_width = 1.3, s_height = 0.9,
+  h_fill = "#DCE3EC",       # Soft gray-blue (clearly visible on white)
+  h_color = "white",
+  filename = "IN5148_logo.png"
 )
 
-forecast_df <- data.frame(
-  T = time(forecast_result$mean),
-  Passengers = as.numeric(forecast_result$mean),
-  Lower = forecast_result$lower[, 2],
-  Upper = forecast_result$upper[, 2],
-  Type = "Forecast"
-)
-
-# Combine datasets
-plot_data <- bind_rows(
-  historical_df %>% mutate(Lower = NA, Upper = NA),
-  forecast_df
-)
-
-# Step 6: Plot with ggplot2
-p <- ggplot(plot_data, aes(x = T, y = Passengers, color = Type)) +
-  geom_line() + 
-  scale_color_manual(values = c("Observed" = "#2a4d69", 
-                                "Forecast" = "gray"))
-
-p <- p + theme_void() + theme_transparent() + theme(legend.position="none")
-p
 
 
-sticker(p, package="IN2004B", p_size=25, p_color = "#f18f01", s_x=1, s_y=0.8, 
-        s_width=1.3, s_height=0.9, h_fill="#fde4c2", h_color="#f18f01",
-        filename="IN2004B_logo.png")
-
-
+# Create a basic scatter plot
+p = ggplot(data = mtcars, aes(x = wt, y = mpg)) +
+  geom_point()
 ############################
 sticker(p, package="IN2004B", p_size=25, p_color = "#195e83", s_x=1, s_y=0.8, 
         s_width=1.2, s_height=0.8, h_fill="white", h_color="#195e83",
-        filename="IN2004B_logo.png")
+        filename="IN2004B_logo.png", white_around_sticker = FALSE)
 
 
 sticker(p, package = "IN2004B", p_size = 25,

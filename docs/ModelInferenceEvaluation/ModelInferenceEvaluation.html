@@ -329,7 +329,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="load-the-libraries">Load the libraries</h3>
 <p><br><br></p>
 <p>Let’s import <strong>statsmodels</strong> into Python together with other relevant libraries.</p>
-<div id="0d0d3e2b" class="cell" data-execution_count="1">
+<div id="8340c422" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importing necessary libraries</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
@@ -420,7 +420,7 @@ window.Quarto = {
 <section id="dataset" class="level3">
 <h3 class="anchored" data-anchor-id="dataset">Dataset</h3>
 <p>The dataset is in the file “production.xlsx”.</p>
-<div id="281d24c4" class="cell" data-execution_count="2">
+<div id="3b309b24" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>production_data <span class="op">=</span> pd.read_excel(<span class="st">'production.xlsx'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>production_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
@@ -482,7 +482,7 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <p>where <span class="math inline">\(X_i\)</span> is the run size and <span class="math inline">\(Y_i\)</span> is the run time for the <span class="math inline">\(i\)</span>-th observation, <span class="math inline">\(i = 1, \ldots, 20\)</span>.</p>
 <p>. . .</p>
 <p>We fit the model in Python as follows.</p>
-<div id="c484ef24" class="cell" data-execution_count="3">
+<div id="91825d9d" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Defining the predictor (X) and the response variable (Y).</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>prod_Y_train <span class="op">=</span> production_data[<span class="st">'RunTime'</span>]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>prod_X_pred <span class="op">=</span> production_data[<span class="st">'RunSize'</span>]</span>
@@ -506,7 +506,7 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <h3 class="anchored" data-anchor-id="calculation-of-fitted-values-and-residuals">Calculation of fitted values and residuals</h3>
 <p><br></p>
 <p>Recall that we can calculate the predicted values and residuals using commands from <strong>statsmodels</strong>.</p>
-<div id="823efd05" class="cell" data-execution_count="4">
+<div id="68d4a7df" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions using the the model</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>prod_Y_pred <span class="op">=</span> linear_model.fittedvalues</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -520,11 +520,11 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <section id="intuition-behind" class="level3">
 <h3 class="anchored" data-anchor-id="intuition-behind">Intuition behind …</h3>
 <p>the Residuals versus Fitted Values plot.</p>
-<div id="636f7c4c" class="cell" data-execution_count="5">
+<div id="1cba268b" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="ModelInferenceEvaluation_files/figure-html/cell-6-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="599" height="455"></p>
+<p><img src="ModelInferenceEvaluation_files/figure-revealjs/cell-6-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="599" height="455"></p>
 </figure>
 </div>
 </div>
@@ -534,7 +534,7 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <h3 class="anchored" data-anchor-id="residuals-vs-fitted-values">Residuals vs Fitted Values</h3>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="a7c99574" class="cell" data-execution_count="6">
+<div id="b2a1daa8" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
@@ -548,13 +548,13 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="ModelInferenceEvaluation_files/figure-html/cell-7-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="453" height="455"></p>
+<p><img src="ModelInferenceEvaluation_files/figure-revealjs/cell-7-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="453" height="455"></p>
 </figure>
 </div>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="ed7561e2" class="cell" data-execution_count="7">
+<div id="630e0887" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Residual vs Fitted Values Plot</span></span>
@@ -569,7 +569,7 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="ModelInferenceEvaluation_files/figure-html/cell-8-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="453" height="455"></p>
+<p><img src="ModelInferenceEvaluation_files/figure-revealjs/cell-8-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="453" height="455"></p>
 </figure>
 </div>
 </div>
@@ -588,11 +588,11 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 </ul>
 </div><div class="column" style="width:60%;">
 <p><br></p>
-<div id="2f33757a" class="cell" data-execution_count="8">
+<div id="9f27fb24" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="ModelInferenceEvaluation_files/figure-html/cell-9-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="448" height="449"></p>
+<p><img src="ModelInferenceEvaluation_files/figure-revealjs/cell-9-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="448" height="449"></p>
 </figure>
 </div>
 </div>
@@ -636,7 +636,7 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <section id="section-3" class="level3">
 <h3 class="anchored" data-anchor-id="section-3"></h3>
 <p><br></p>
-<div id="38f195e4" class="cell" data-execution_count="9">
+<div id="7cc4d999" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Residuals vs Time (Case) Plot</span></span>
@@ -652,7 +652,7 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="ModelInferenceEvaluation_files/figure-html/cell-10-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="596" height="449"></p>
+<p><img src="ModelInferenceEvaluation_files/figure-revealjs/cell-10-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="596" height="449"></p>
 </figure>
 </div>
 </div>
@@ -689,7 +689,7 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <section id="histogram" class="level3">
 <h3 class="anchored" data-anchor-id="histogram">Histogram</h3>
 <p>Ideally, the histogram resembles a normal distribution around 0. If the number of observations is small, the histogram may not be an effective visualization.</p>
-<div id="5b205405" class="cell" data-execution_count="10">
+<div id="1e066481" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram of residuals</span></span>
@@ -702,7 +702,7 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="ModelInferenceEvaluation_files/figure-html/cell-11-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="427" height="302"></p>
+<p><img src="ModelInferenceEvaluation_files/figure-revealjs/cell-11-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="427" height="302"></p>
 </figure>
 </div>
 </div>
@@ -735,7 +735,7 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <h3 class="anchored" data-anchor-id="qq-plot-in-python">QQ plot in Python</h3>
 <p><br><br><br></p>
 <p>To construct a QQ plot, we use the function <code>qqplot()</code> <strong>statsmodels</strong> library.</p>
-<div id="86ea0b0e" class="cell" data-execution_count="11">
+<div id="95232d5a" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># QQ plot to assess normality of residuals</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">3</span>))</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>sm.qqplot(residuals, fit <span class="op">=</span> <span class="va">True</span>, line <span class="op">=</span> <span class="st">'45'</span>)</span>
@@ -746,14 +746,14 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <section id="section-6" class="level3">
 <h3 class="anchored" data-anchor-id="section-6"></h3>
 <p>Substantial departures from a straight line indicate that the distribution is not normal.</p>
-<div id="42cde734" class="cell" data-execution_count="12">
+<div id="be699dba" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-display">
 <pre><code>&lt;Figure size 672x384 with 0 Axes&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="ModelInferenceEvaluation_files/figure-html/cell-13-output-2.png" class="quarto-figure quarto-figure-center figure-img" width="600" height="449"></p>
+<p><img src="ModelInferenceEvaluation_files/figure-revealjs/cell-13-output-2.png" class="quarto-figure quarto-figure-center figure-img" width="823" height="449"></p>
 </figure>
 </div>
 </div>
@@ -762,14 +762,14 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <section id="section-7" class="level3">
 <h3 class="anchored" data-anchor-id="section-7"></h3>
 <p>This plot suggests that the residuals are consistent with a Normal curve.</p>
-<div id="c746fb9b" class="cell" data-execution_count="13">
+<div id="ede761d1" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <pre><code>&lt;Figure size 672x384 with 0 Axes&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="ModelInferenceEvaluation_files/figure-html/cell-14-output-2.png" class="quarto-figure quarto-figure-center figure-img" width="600" height="449"></p>
+<p><img src="ModelInferenceEvaluation_files/figure-revealjs/cell-14-output-2.png" class="quarto-figure quarto-figure-center figure-img" width="823" height="449"></p>
 </figure>
 </div>
 </div>
@@ -835,7 +835,7 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <h3 class="anchored" data-anchor-id="example-2">Example 2</h3>
 <p><br></p>
 <p>Let’s consider the “auto.xlsx” dataset.</p>
-<div id="f928a854" class="cell" data-execution_count="14">
+<div id="6fed7c34" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>auto_data <span class="op">=</span> pd.read_excel(<span class="st">'auto.xlsx'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
@@ -908,7 +908,7 @@ Y_i = \beta_0 + \beta_1 X_{i1}+ \beta_2 X_{i2}+ \epsilon_i,
 <h3 class="anchored" data-anchor-id="step-1.-random-sample">Step 1. Random sample</h3>
 <p><br><br></p>
 <p>The random sample is the data we use to train or fit the model.</p>
-<div id="1d18928c" class="cell" data-execution_count="15">
+<div id="3de2c35f" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dataset with predictors.</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pred_auto <span class="op">=</span> auto_data[[<span class="st">'weight'</span>, <span class="st">'acceleration'</span>]]</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -933,7 +933,7 @@ Y_i = \beta_0 + \beta_1 X_{i1}+ \beta_2 X_{i2}+ \epsilon_i,
 <h3 class="anchored" data-anchor-id="section-12"></h3>
 <p><br></p>
 <p>Recall that we obtain the least squares estimates (<span class="math inline">\(\hat{\beta}_{j}\)</span>) in Python using:</p>
-<div id="2ed51586" class="cell" data-execution_count="16">
+<div id="ccef908e" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting the simple linear regression model.</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>regr <span class="op">=</span> sm.OLS(auto_Y_train, auto_X_train)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>linear_model <span class="op">=</span> regr.fit()</span>
@@ -1053,7 +1053,7 @@ dtype: float64</code></pre>
 <section id="t-tests-in-python" class="level3">
 <h3 class="anchored" data-anchor-id="t-tests-in-python">t-tests in Python</h3>
 <p>We obtain the t-tests of the coefficients using the function <code>summary()</code> together with the <code>linear_model</code> object.</p>
-<div id="798b7ea4" class="cell" data-execution_count="17">
+<div id="a1a3de07" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model_summary <span class="op">=</span> linear_model.summary()</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model_summary)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -1063,7 +1063,7 @@ Dep. Variable:                    mpg   R-squared:                       0.700
 Model:                            OLS   Adj. R-squared:                  0.698
 Method:                 Least Squares   F-statistic:                     453.2
 Date:                Wed, 21 Jan 2026   Prob (F-statistic):          2.43e-102
-Time:                        09:28:32   Log-Likelihood:                -1125.4
+Time:                        11:01:03   Log-Likelihood:                -1125.4
 No. Observations:                 392   AIC:                             2257.
 Df Residuals:                     389   BIC:                             2269.
 Df Model:                           2                                         
@@ -1410,14 +1410,14 @@ strong multicollinearity or other numerical problems.</code></pre>
 <h3 class="anchored" data-anchor-id="in-python">In Python</h3>
 <p><br></p>
 <p>To show the <span class="math inline">\(R^2\)</span> value, we use the <code>rsquared</code> argument of the <code>linear_model</code> object.</p>
-<div id="72583219" class="cell" data-execution_count="18">
+<div id="d560968d" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( <span class="bu">round</span>(linear_model.rsquared, <span class="dv">3</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>0.7</code></pre>
 </div>
 </div>
 <p>To show the adjusted <span class="math inline">\(R^2\)</span> value, we use the <code>rsquared</code> argument of the <code>linear_model</code> object.</p>
-<div id="74d2c177" class="cell" data-execution_count="19">
+<div id="b7ce9531" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( <span class="bu">round</span>(linear_model.rsquared_adj, <span class="dv">3</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>0.698</code></pre>

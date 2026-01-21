@@ -304,7 +304,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="before-we-start">Before we start</h3>
 <p><br></p>
 <p>Let’s import <strong>scikit-learn</strong> into Python together with the other relevant libraries.</p>
-<div id="9b7793e6" class="cell" data-execution_count="1">
+<div id="9e98bb60" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
@@ -355,7 +355,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="section"></h3>
 <p><br><br></p>
 <p>The dataset is in the file “auto.xlsx”. Let’s read the data using <strong>pandas</strong>.</p>
-<div id="a881b309" class="cell" data-execution_count="2">
+<div id="fdd20aa1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Excel file into a pandas DataFrame.</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>auto_data <span class="op">=</span> pd.read_excel(<span class="st">"auto.xlsx"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -368,7 +368,7 @@ window.Quarto = {
 <p><br></p>
 <p>For illustrative purposes, we assume that we want to predict the miles per gallon of a car using the six predictors, <span class="math inline">\(X_1, \ldots, X_6\)</span>.</p>
 <p>We create the predictor matrix and response column.</p>
-<div id="a8b26f71" class="cell" data-execution_count="3">
+<div id="ed41513e" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set full matrix of predictors.</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X_full_c <span class="op">=</span> (auto_data</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>           .<span class="bu">filter</span>([<span class="st">'cylinders'</span>, <span class="st">'displacement'</span>, </span>
@@ -382,7 +382,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="section-1"></h3>
 <p><br></p>
 <p>We will use a validation dataset with 30% of the observations in <code>auto_data</code>. The other 70% will be in the training dataset.</p>
-<div id="3a987a0b" class="cell" data-execution_count="4">
+<div id="dcf7e68d" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the dataset into training and validation.</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>X_train_c, X_valid_c, Y_train_c, Y_valid_c <span class="op">=</span> train_test_split(X_full_c, Y_full_c, </span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                                                      test_size <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -393,7 +393,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="section-2"></h3>
 <p><br></p>
 <p>Let’s look at the full training dataset.</p>
-<div id="fc415430" class="cell" data-execution_count="5">
+<div id="0081f1e2" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>training_auto <span class="op">=</span> pd.concat([X_train_c, Y_train_c], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>training_auto.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
@@ -476,7 +476,7 @@ window.Quarto = {
 <p><br></p>
 <p>The dataset has missing values. In this example, we remove each row with at least one missing value.</p>
 <p><br></p>
-<div id="75605a36" class="cell" data-execution_count="6">
+<div id="2d2c1579" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows with missing values.</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>complete_Auto <span class="op">=</span> training_auto.dropna()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -625,7 +625,7 @@ window.Quarto = {
 <p>We can get the dummy variables of a categorical variable using the function <code>pd.get_dummies()</code> from <strong>pandas</strong>.</p>
 <p>The input of the function is the categorical variable.</p>
 <p>The function has an extra argument called <code>drop_first</code> to drop the first dummy variable. It also has the argument <code>dtype</code> to show the values as integers.</p>
-<div id="b2c4bb37" class="cell" data-execution_count="7">
+<div id="5deff7eb" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dummy_data <span class="op">=</span> pd.get_dummies(complete_Auto[<span class="st">'origin'</span>], drop_first <span class="op">=</span> <span class="va">True</span>, </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                            dtype <span class="op">=</span> <span class="st">'int'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -633,7 +633,7 @@ window.Quarto = {
 <section id="section-5" class="level3">
 <h3 class="anchored" data-anchor-id="section-5"></h3>
 <p><br><br></p>
-<div id="4a862806" class="cell" data-execution_count="8">
+<div id="9c0182f4" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dummy_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <div>
@@ -683,7 +683,7 @@ window.Quarto = {
 <section id="section-6" class="level3">
 <h3 class="anchored" data-anchor-id="section-6"></h3>
 <p>Now, to add the dummy variables to the dataset, we use the function <code>concat()</code> from <strong>pandas</strong>.</p>
-<div id="3bd721b4" class="cell" data-execution_count="9">
+<div id="12bd5f61" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>augmented_auto <span class="op">=</span> pd.concat([complete_Auto, dummy_data], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>augmented_auto.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
@@ -811,12 +811,12 @@ window.Quarto = {
 <section id="read-the-dataset" class="level3">
 <h3 class="anchored" data-anchor-id="read-the-dataset">Read the dataset</h3>
 <p>We read the dataset.</p>
-<div id="f5276652" class="cell" data-execution_count="10">
+<div id="78f62acd" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Boston_data <span class="op">=</span> pd.read_excel(<span class="st">'BostonHousing.xlsx'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <p>The variables <code>CHAS</code> and <code>RAD</code> are categorical variables. Therefore, we turn tthem into categorical using <code>.Categorical()</code> function from <strong>pandas</strong>.</p>
-<div id="6c873999" class="cell" data-execution_count="11">
+<div id="1e16f034" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>Boston_data[<span class="st">'CHAS'</span>] <span class="op">=</span> pd.Categorical(Boston_data[<span class="st">'CHAS'</span>])</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>Boston_data[<span class="st">'RAD'</span>] <span class="op">=</span> pd.Categorical(Boston_data[<span class="st">'RAD'</span>], </span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                                      categories<span class="op">=</span>[<span class="st">"Low"</span>, <span class="st">"Medium"</span>, <span class="st">"High"</span>], </span>
@@ -827,7 +827,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="section-7"></h3>
 <p><br></p>
 <p>Before we continue, we generate a training dataset with 80% of the observations. To this end, let’s create the predictor matrix and response column.</p>
-<div id="38ec501f" class="cell" data-execution_count="12">
+<div id="b55827a6" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set full matrix of predictors.</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>X_full_b <span class="op">=</span> Boston_data.drop(columns <span class="op">=</span> [<span class="st">'MEDV'</span>]) </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -845,7 +845,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="section-8"></h3>
 <p><br></p>
 <p>The new training dataset we will work with is:</p>
-<div id="18c62a46" class="cell" data-execution_count="13">
+<div id="5064cf2e" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>Boston_training <span class="op">=</span> pd.concat([X_train_b, Y_train_b], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>Boston_training.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
@@ -962,7 +962,7 @@ window.Quarto = {
 <section id="distribution-of-dis" class="level3">
 <h3 class="anchored" data-anchor-id="distribution-of-dis">Distribution of <code>DIS</code></h3>
 <p>A right-skewed distribution is characterized by the right tail (or the side with higher values) being longer and more extended than the left tail.</p>
-<div id="e9c58147" class="cell" data-execution_count="14">
+<div id="88cd22b9" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="fl">3.5</span>)) <span class="co"># Create space for figure.</span></span>
@@ -974,7 +974,7 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="PreProcessing_Part2_files/figure-html/cell-15-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="659" height="339"></p>
+<p><img src="PreProcessing_Part2_files/figure-revealjs/cell-15-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="659" height="339"></p>
 </figure>
 </div>
 </div>
@@ -1005,7 +1005,7 @@ window.Quarto = {
 <section id="in-python" class="level3">
 <h3 class="anchored" data-anchor-id="in-python">In Python</h3>
 <p>We apply the Box-Cox transformation using the <code>PowerTransformer</code> and <code>fit_transform</code> functions of the <strong>scikit-learn</strong> library.</p>
-<div id="1d221dd8" class="cell" data-execution_count="15">
+<div id="4ec9f350" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pt <span class="op">=</span> PowerTransformer(method<span class="op">=</span><span class="st">'box-cox'</span>, standardize <span class="op">=</span> <span class="va">False</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>DIS_transform <span class="op">=</span> pt.fit_transform(Boston_training[[<span class="st">'DIS'</span>]])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1015,7 +1015,7 @@ window.Quarto = {
 <section id="section-9" class="level3">
 <h3 class="anchored" data-anchor-id="section-9"></h3>
 <p>The result from the function is a <strong>numpy</strong> array. However, since we are working with <strong>pandas</strong> dataframes, we must transform the output to this format using the following code.</p>
-<div id="d5745ee2" class="cell" data-execution_count="16">
+<div id="c0b25f1e" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>DIS_transform_df <span class="op">=</span> pd.DataFrame(DIS_transform, columns<span class="op">=</span>[<span class="st">'DIS_boxcox'</span>])</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>DIS_transform_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
@@ -1063,7 +1063,7 @@ window.Quarto = {
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Original predictor</p>
-<div id="e3dbce0b" class="cell" data-execution_count="17">
+<div id="4ef7139d" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>,<span class="dv">4</span>)) <span class="co"># Create space for figure.</span></span>
@@ -1075,14 +1075,14 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="PreProcessing_Part2_files/figure-html/cell-18-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="585" height="376"></p>
+<p><img src="PreProcessing_Part2_files/figure-revealjs/cell-18-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="585" height="376"></p>
 </figure>
 </div>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
 <p>Box-Cox transformation</p>
-<div id="ea86207d" class="cell" data-execution_count="18">
+<div id="0b171aa1" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>,<span class="dv">4</span>)) <span class="co"># Create space for figure.</span></span>
@@ -1094,7 +1094,7 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="PreProcessing_Part2_files/figure-html/cell-19-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="585" height="376"></p>
+<p><img src="PreProcessing_Part2_files/figure-revealjs/cell-19-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="585" height="376"></p>
 </figure>
 </div>
 </div>
@@ -1107,7 +1107,7 @@ window.Quarto = {
 <p><br></p>
 <p>Recall that the Box-Cox transformation finds the best value of <span class="math inline">\(\lambda\)</span> that makes the transformed predictor <span class="math inline">\(X^\lambda\)</span> to follow a normal distribution.</p>
 <p>We can obtain the value of <span class="math inline">\(\lambda\)</span> actually used in the transformation using the following code.</p>
-<div id="733c9fdd" class="cell" data-execution_count="19">
+<div id="38d7251e" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieve the lambda value</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pt.lambdas_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -1158,7 +1158,7 @@ window.Quarto = {
 <p><br></p>
 <p>We consider a data set related to Glass identification. The data has 214 glass samples labeled as one of seven glass categories. There are nine predictors including the refractive index (RI) and percentages of eight elements: Na, Mg, Al, Si, K, Ca, Ba, and Fe.</p>
 <p>Let’s read the data set.</p>
-<div id="8df5fc84" class="cell" data-execution_count="20">
+<div id="125d3fc1" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Excel file (make sure the file is in your Colab)</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>glass_data <span class="op">=</span> pd.read_excel(<span class="st">'glass.xlsx'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1166,7 +1166,7 @@ window.Quarto = {
 <section id="training-and-validation-datasets-1" class="level3">
 <h3 class="anchored" data-anchor-id="training-and-validation-datasets-1">Training and validation datasets</h3>
 <p>Let’s create a training and validation dataset. To this end, we will consider the variable <code>Type</code> as the response and the other numeric variables as the predictors. We will use 80% of the observations for the training dataset. The other 20% of the observations will go to the validation dataset.</p>
-<div id="7b696aae" class="cell" data-execution_count="21">
+<div id="06c8994e" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set full matrix of predictors.</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>X_full_g <span class="op">=</span> glass_data.drop(columns <span class="op">=</span> [<span class="st">'Type'</span>]) </span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1183,7 +1183,7 @@ window.Quarto = {
 <section id="in-python-1" class="level3">
 <h3 class="anchored" data-anchor-id="in-python-1">In Python</h3>
 <p>We use the function <code>VarianceThreshold()</code> to set the threshold for determining a <em>low</em> sample variance. We also use other functions such as <code>.fit()</code> and <code>.get_support()</code>.</p>
-<div id="8f85b4d6" class="cell" data-execution_count="22">
+<div id="0b091db3" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set threshold</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>selector <span class="op">=</span> VarianceThreshold(threshold<span class="op">=</span><span class="fl">0.01</span>)</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1205,7 +1205,7 @@ window.Quarto = {
 <p><br><br></p>
 <p>After identifying predictors with low variability, we remove them from the problem because they do not add much to the problem. To this end, we use the command below.</p>
 <p><br></p>
-<div id="3d1895f7" class="cell" data-execution_count="23">
+<div id="cadcb2da" class="cell" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing problematic predictors</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>sb_Xtrain_glass <span class="op">=</span> X_train_g.drop(columns<span class="op">=</span>low_variance_cols)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1221,7 +1221,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="example-1-cont.-1">Example 1 (cont.)</h3>
 <p><br></p>
 <p>We concentrate on the five numerical predictors in the <code>complete_Auto</code> dataset.</p>
-<div id="69a7a2be" class="cell" data-execution_count="24">
+<div id="954997dc" class="cell" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select specific variables.</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>complete_sbAuto <span class="op">=</span> complete_Auto[[<span class="st">'cylinders'</span>, <span class="st">'displacement'</span>, </span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">'horsepower'</span>, <span class="st">'weight'</span>, </span>
@@ -1232,7 +1232,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="correlation-matrix">Correlation matrix</h3>
 <p><br></p>
 <p>In Python, we calculate the correlation matrix using the command below.</p>
-<div id="b53c940f" class="cell" data-execution_count="25">
+<div id="00780bfa" class="cell" data-execution_count="25">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>correlation_matrix <span class="op">=</span> complete_sbAuto.corr()</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(correlation_matrix)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -1248,13 +1248,13 @@ acceleration  -0.503982     -0.549727   -0.702888 -0.413908      1.000000</code>
 <section id="section-12" class="level3">
 <h3 class="anchored" data-anchor-id="section-12"></h3>
 <p>Next, we plot the correlation matrix using the function <code>heatmap()</code> from <strong>seaborn</strong>. The argument <code>annot</code> shows the actual value of the pair-wise correlations, and <code>cmap</code> shows a nice color theme.</p>
-<div id="cde1c031" class="cell" data-execution_count="26">
+<div id="0864732d" class="cell" data-execution_count="26">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">3</span>))</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(correlation_matrix, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, annot <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="PreProcessing_Part2_files/figure-html/cell-27-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="369" height="345"></p>
+<p><img src="PreProcessing_Part2_files/figure-revealjs/cell-27-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="369" height="345"></p>
 </figure>
 </div>
 </div>
@@ -1264,11 +1264,11 @@ acceleration  -0.503982     -0.549727   -0.702888 -0.413908      1.000000</code>
 <h3 class="anchored" data-anchor-id="section-13"></h3>
 <p><br></p>
 <p>The predictors cylinders and displacement are highly correlated. In fact, their correlation is 0.95.</p>
-<div id="f8a3c516" class="cell" data-execution_count="27">
+<div id="3f3c9251" class="cell" data-execution_count="27">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="PreProcessing_Part2_files/figure-html/cell-28-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="599" height="435"></p>
+<p><img src="PreProcessing_Part2_files/figure-revealjs/cell-28-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="599" height="435"></p>
 </figure>
 </div>
 </div>
@@ -1279,7 +1279,7 @@ acceleration  -0.503982     -0.549727   -0.702888 -0.413908      1.000000</code>
 <p><br></p>
 <p>We deal with collinearity by removing the minimum number of predictors to ensure that all pairwise correlations are below a certain threshold, say, 0.75.</p>
 <p>We can identify the variables that are highly correlated using quite complex code. However, here we will do it manually using the correlation map.</p>
-<div id="7905c0b4" class="cell" data-execution_count="28">
+<div id="f13571aa" class="cell" data-execution_count="28">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dataset without highly correlated predictors.</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>reduced_auto <span class="op">=</span> complete_sbAuto[ [<span class="st">'weight'</span>, <span class="st">'acceleration'</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1321,7 +1321,7 @@ acceleration  -0.503982     -0.549727   -0.702888 -0.413908      1.000000</code>
 <section id="example-1-cont.-2" class="level3">
 <h3 class="anchored" data-anchor-id="example-1-cont.-2">Example 1 (cont.)</h3>
 <p>We use on the five numerical predictors in the <code>complete_sbAuto</code> dataset.</p>
-<div id="93f44270" class="cell" data-execution_count="29">
+<div id="6f66eb27" class="cell" data-execution_count="29">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>complete_sbAuto.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="29">
 <div>
@@ -1391,11 +1391,11 @@ acceleration  -0.503982     -0.549727   -0.702888 -0.413908      1.000000</code>
 <p>Consider the <code>complete_sbAuto</code> dataset created previously. Consider two points in the plot: <span class="math inline">\((175, 5140)\)</span> and <span class="math inline">\((69, 1613)\)</span>.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="385a136a" class="cell" data-execution_count="30">
+<div id="955154bd" class="cell" data-execution_count="30">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="PreProcessing_Part2_files/figure-html/cell-31-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="458" height="435"></p>
+<p><img src="PreProcessing_Part2_files/figure-revealjs/cell-31-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="458" height="435"></p>
 </figure>
 </div>
 </div>
@@ -1411,7 +1411,7 @@ acceleration  -0.503982     -0.549727   -0.702888 -0.413908      1.000000</code>
 <p><br></p>
 <p>To standardize <strong>numerical</strong> predictors, we use the function <code>StandardScaler()</code>. Moreover, we apply the function to the variables using the function <code>fit_transform()</code>.</p>
 <p><br></p>
-<div id="037cdbe0" class="cell" data-execution_count="31">
+<div id="932eb2b6" class="cell" data-execution_count="31">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>Xs <span class="op">=</span> scaler.fit_transform(complete_sbAuto)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1419,7 +1419,7 @@ acceleration  -0.503982     -0.549727   -0.702888 -0.413908      1.000000</code>
 <section id="section-16" class="level3">
 <h3 class="anchored" data-anchor-id="section-16"></h3>
 <p>Unfortunately, the resulting object is not a pandas data frame. We then convert this object to this format. <br></p>
-<div id="3e8372c7" class="cell" data-execution_count="32">
+<div id="3d11bcc5" class="cell" data-execution_count="32">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>scaled_df <span class="op">=</span> pd.DataFrame(Xs, columns <span class="op">=</span> complete_sbAuto.columns)</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>scaled_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="32">
@@ -1490,11 +1490,11 @@ acceleration  -0.503982     -0.549727   -0.702888 -0.413908      1.000000</code>
 <p>In the new scale, the two points are now: <span class="math inline">\((1.82, 2.53)\)</span> and <span class="math inline">\((-0.91, -1.60)\)</span>.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="37ac9290" class="cell" data-execution_count="33">
+<div id="7a0447b5" class="cell" data-execution_count="33">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="PreProcessing_Part2_files/figure-html/cell-34-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="444" height="435"></p>
+<p><img src="PreProcessing_Part2_files/figure-revealjs/cell-34-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="444" height="435"></p>
 </figure>
 </div>
 </div>
