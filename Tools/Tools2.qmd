@@ -194,7 +194,11 @@ We can even **combine** `.filter()` and `.query()`. For example, let's select th
 
 ## Create new columns with `.assign()`
 
+</br>
+
 With `.assign()`, we can create new columns (variables) that are functions of existing ones. This function uses a special Python keyword called `lambda`. Technically, this keyword defines an *anonymous* function.
+
+</br>
 
 For example, we create a new variable `LDRatio` equaling the ratio of `bill_length_mm` and `bill_depth_mm`.
 
@@ -209,7 +213,7 @@ For example, we create a new variable `LDRatio` equaling the ratio of `bill_leng
 
 ## 
 
-</br>
+</br></br>
 
 In this code, the `df` after `lambda` indicates that the dataframe (`penguins_data`) will be referred to as `df` inside the function. The colon `:` sets the start of the function.
 

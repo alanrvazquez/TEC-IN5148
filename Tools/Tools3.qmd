@@ -64,8 +64,8 @@ import pandas as pd
 # Load the Excel file into a pandas DataFrame.
 penguins_data = pd.read_excel("penguins.xlsx")
 
-# Print the first 4 rows of the dataset.
-penguins_data.head(4)
+# Print the first 3 rows of the dataset.
+penguins_data.head(3)
 ```
 
 ## 
@@ -89,6 +89,8 @@ penguins_data.info()
 -   `object` format for general variables with characters.
 
 ## Define categorical variables
+
+</br>
 
 Technically, the variable `sex` in `penguins_data` is [**categorical**]{style="color:pink;"}. To explicitly tell this to Python, we use the following code.
 

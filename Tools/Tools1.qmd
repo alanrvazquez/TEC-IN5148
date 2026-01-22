@@ -29,6 +29,8 @@ jupyter: python3
 
 ## Python
 
+</br>
+
 ::::: columns
 ::: {.column width="70%"}
 -   A versatile programming language.
@@ -59,6 +61,8 @@ jupyter: python3
 
 ## Let's try a command in Python
 
+</br></br></br>
+
 What do you think will happen if we run this command?
 
 ```{python}
@@ -79,6 +83,8 @@ print("Hello world!")
 
 ## Let's try another command
 
+</br></br></br>
+
 What do you think will happen if we run this command?
 
 ```{python}
@@ -98,6 +104,8 @@ sum([1, 5, 10])
 ```
 
 ## Use Python as a basic calculator
+
+</br></br>
 
 ```{python}
 #| echo: true
@@ -205,8 +213,8 @@ This is accomplished by using an assignment operator, which can be an equals sym
 You can make up any name you want for a Python object. However, there are two basic rules for this:
 
 ::: incremental
-1.  It has to be different from a function name in Python.
-2.  It has to be as specific as possible.
+1.  It **must** be different from a function name in Python.
+2.  It should be as specific as possible.
 :::
 
 ## For example
@@ -423,9 +431,9 @@ We often have to find these mistakes through trial and error.
 
 ## Python libraries
 
-</br>
-
 Libraries are the fundamental units of reproducible Python code. They include reusable Python functions, documentation describing how to use them, and sample data.
+
+</br>
 
 In this course, we will be working mostly with the following libraries:
 
@@ -492,6 +500,8 @@ In this study, housekeepers were either informed or not that their daily work of
 So one of the variables, `Condition`, indicates whether they were informed of this fact or not.
 
 ## 
+
+</br>
 
 Other variables include the age of the housekeeper (`Age`), her weight before starting the study (`Wt`), and her weight at the end of the study (`Wt2`), measured four weeks later.
 

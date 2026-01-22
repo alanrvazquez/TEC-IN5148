@@ -250,7 +250,7 @@ Alan R. Vazquez
 <section id="example-1" class="slide level2">
 <h2>Example 1</h2>
 <p>Let’s load the dataset and the <strong>pandas</strong> library.</p>
-<div id="b1b0327a" class="cell" data-execution_count="1">
+<div id="6eca1212" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a></a></span>
 <span id="cb1-3"><a></a><span class="co"># Load the Excel file into a pandas DataFrame.</span></span>
@@ -258,7 +258,7 @@ Alan R. Vazquez
 <span id="cb1-5"><a></a></span>
 <span id="cb1-6"><a></a><span class="co"># Preview the dataset.</span></span>
 <span id="cb1-7"><a></a>penguins_data.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="127">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -343,11 +343,11 @@ Alan R. Vazquez
 <section id="selecting-columns-with-.filter" class="slide level2">
 <h2>Selecting columns with <code>.filter()</code></h2>
 <p>Select the columns <code>species</code>, <code>body_mass_g</code> and <code>sex</code>.</p>
-<div id="7492f667" class="cell" data-execution_count="2">
+<div id="9ec9d92e" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>(penguins_data</span>
 <span id="cb2-2"><a></a>  .<span class="bu">filter</span>([<span class="st">"species"</span>, <span class="st">"body_mass_g"</span>, <span class="st">"sex"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb2-3"><a></a>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="128">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -414,7 +414,7 @@ Alan R. Vazquez
 <h2></h2>
 <p><br></p>
 <p>The <code>axis</code> argument tells <code>.filter()</code> whether to select rows (<code>0</code>) or columns (<code>1</code>) from the dataframe.</p>
-<div id="3a5658a1" class="cell" data-execution_count="3">
+<div id="054243f7" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>(penguins_data</span>
 <span id="cb3-2"><a></a>  .<span class="bu">filter</span>([<span class="st">"species"</span>, <span class="st">"body_mass_g"</span>, <span class="st">"sex"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb3-3"><a></a>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -428,11 +428,11 @@ Alan R. Vazquez
 <h2></h2>
 <p><br></p>
 <p>We can also use <code>.filter()</code> to select rows too. To this end, we set <code>axis = 1</code>. We can select specific rows, such as 0 and 10.</p>
-<div id="5768acb4" class="cell" data-execution_count="4">
+<div id="68cf493b" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>(penguins_data</span>
 <span id="cb4-2"><a></a>  .<span class="bu">filter</span>([<span class="dv">0</span>, <span class="dv">10</span>], axis <span class="op">=</span> <span class="dv">0</span>)</span>
 <span id="cb4-3"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="130">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -495,11 +495,11 @@ Alan R. Vazquez
 <section id="section-3" class="slide level2">
 <h2></h2>
 <p>Or, we can select a set of rows using the function <code>range()</code>. For example, let’s select the first 5 rows.</p>
-<div id="becd2fc0" class="cell" data-execution_count="5">
+<div id="940f6bfb" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>(penguins_data</span>
 <span id="cb5-2"><a></a>  .<span class="bu">filter</span>(<span class="bu">range</span>(<span class="dv">5</span>), axis <span class="op">=</span> <span class="dv">0</span>)</span>
 <span id="cb5-3"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="131">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -598,7 +598,7 @@ Alan R. Vazquez
 <p>An alternative way of selecting rows is <code>.query()</code>. Compared to <code>.filter()</code>, <code>.query()</code> allows us to filter the data using statements or <em>queries</em> involving the variables.</p>
 <p><br></p>
 <p>For example, let’s filter the data for the species “Gentoo.”</p>
-<div id="bb774ca7" class="cell" data-execution_count="6">
+<div id="0b7c1e2d" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>(penguins_data</span>
 <span id="cb6-2"><a></a>  .query(<span class="st">"species == 'Gentoo'"</span>)</span>
 <span id="cb6-3"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -607,11 +607,11 @@ Alan R. Vazquez
 <section id="section-4" class="slide level2">
 <h2></h2>
 <p><br></p>
-<div id="18109c87" class="cell" data-execution_count="7">
+<div id="d0315a60" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>(penguins_data</span>
 <span id="cb7-2"><a></a>  .query(<span class="st">"species == 'Gentoo'"</span>)</span>
 <span id="cb7-3"><a></a>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="133">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -707,11 +707,11 @@ Alan R. Vazquez
 <section id="section-5" class="slide level2">
 <h2></h2>
 <p>We can also filter the data to get penguins with a body mass greater than 5000g.</p>
-<div id="5c6fa49e" class="cell" data-execution_count="8">
+<div id="a9b90ade" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>(penguins_data</span>
 <span id="cb8-2"><a></a>  .query(<span class="st">"body_mass_g &gt; 5000"</span>)</span>
 <span id="cb8-3"><a></a>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="134">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -807,12 +807,12 @@ Alan R. Vazquez
 <section id="section-6" class="slide level2">
 <h2></h2>
 <p>We can even <strong>combine</strong> <code>.filter()</code> and <code>.query()</code>. For example, let’s select the columns <code>species</code>, <code>body_mass_g</code> and <code>sex</code>, then filter the data for the “Gentoo” species.</p>
-<div id="3003b775" class="cell" data-execution_count="9">
+<div id="8518db66" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>(penguins_data</span>
 <span id="cb9-2"><a></a>  .<span class="bu">filter</span>([<span class="st">"species"</span>, <span class="st">"body_mass_g"</span>, <span class="st">"sex"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb9-3"><a></a>  .query(<span class="st">"species == 'Gentoo'"</span>)</span>
 <span id="cb9-4"><a></a>).head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="135">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -871,9 +871,11 @@ Alan R. Vazquez
 </section>
 <section id="create-new-columns-with-.assign" class="slide level2">
 <h2>Create new columns with <code>.assign()</code></h2>
+<p><br></p>
 <p>With <code>.assign()</code>, we can create new columns (variables) that are functions of existing ones. This function uses a special Python keyword called <code>lambda</code>. Technically, this keyword defines an <em>anonymous</em> function.</p>
+<p><br></p>
 <p>For example, we create a new variable <code>LDRatio</code> equaling the ratio of <code>bill_length_mm</code> and <code>bill_depth_mm</code>.</p>
-<div id="b37b5c5e" class="cell" data-execution_count="10">
+<div id="a694085c" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>(penguins_data</span>
 <span id="cb10-2"><a></a>  .assign(LDRatio <span class="op">=</span> <span class="kw">lambda</span> df: df[<span class="st">"bill_length_mm"</span>] <span class="op">/</span> df[<span class="st">"bill_depth_mm"</span>])</span>
 <span id="cb10-3"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -881,9 +883,9 @@ Alan R. Vazquez
 </section>
 <section id="section-7" class="slide level2">
 <h2></h2>
-<p><br></p>
+<p><br><br></p>
 <p>In this code, the <code>df</code> after <code>lambda</code> indicates that the dataframe (<code>penguins_data</code>) will be referred to as <code>df</code> inside the function. The colon <code>:</code> sets the start of the function.</p>
-<div id="6fc72b40" class="cell" data-execution_count="11">
+<div id="ab12b310" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>(penguins_data</span>
 <span id="cb11-2"><a></a>  .assign(LDRatio <span class="op">=</span> <span class="kw">lambda</span> df: df[<span class="st">"bill_length_mm"</span>] <span class="op">/</span> df[<span class="st">"bill_depth_mm"</span>])</span>
 <span id="cb11-3"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -893,12 +895,12 @@ Alan R. Vazquez
 <section id="section-8" class="slide level2">
 <h2></h2>
 <p>We can see the new variable using <code>.filter()</code>.</p>
-<div id="9ebba020" class="cell" data-execution_count="12">
+<div id="8a46613c" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>(penguins_data</span>
 <span id="cb12-2"><a></a>  .assign(LDRatio <span class="op">=</span> <span class="kw">lambda</span> df: df[<span class="st">"bill_length_mm"</span>] <span class="op">/</span> df[<span class="st">"bill_depth_mm"</span>])</span>
 <span id="cb12-3"><a></a>  .<span class="bu">filter</span>([<span class="st">"bill_length_mm"</span>, <span class="st">"bill_depth_mm"</span>, <span class="st">"LDRatio"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb12-4"><a></a>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="138">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -964,11 +966,11 @@ Alan R. Vazquez
 <section id="sorting-with-.sort_values" class="slide level2">
 <h2>Sorting with <code>.sort_values()</code></h2>
 <p>We can sort the data based on a column like <code>bill_length_mm</code>.</p>
-<div id="86108fbd" class="cell" data-execution_count="13">
+<div id="505ddf88" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>(penguins_data</span>
 <span id="cb13-2"><a></a>  .sort_values(<span class="st">"bill_length_mm"</span>)</span>
 <span id="cb13-3"><a></a>).head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="139">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1053,11 +1055,11 @@ Alan R. Vazquez
 <section id="section-9" class="slide level2">
 <h2></h2>
 <p>To sort in descending order, use <code>ascending=False</code> inside <code>sort_values()</code>.</p>
-<div id="1b53e0c4" class="cell" data-execution_count="14">
+<div id="73c79506" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>(penguins_data</span>
 <span id="cb14-2"><a></a>  .sort_values(<span class="st">"bill_length_mm"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb14-3"><a></a>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="140">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1153,12 +1155,12 @@ Alan R. Vazquez
 <section id="summarizing-with-.agg" class="slide level2">
 <h2>Summarizing with <code>.agg()</code></h2>
 <p>We can calculate summary statistics of the columns <code>bill_length_mm</code>, <code>bill_depth_mm</code>, and <code>body_mass_g</code>.</p>
-<div id="86a100ca" class="cell" data-execution_count="15">
+<div id="3295605a" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>(penguins_data</span>
 <span id="cb15-2"><a></a>  .<span class="bu">filter</span>([<span class="st">"bill_length_mm"</span>, <span class="st">"bill_depth_mm"</span>, <span class="st">"body_mass_g"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb15-3"><a></a>  .agg([<span class="st">"mean"</span>])</span>
 <span id="cb15-4"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="141">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1205,14 +1207,14 @@ Alan R. Vazquez
 <h2>Saving results in new objects</h2>
 <p><br></p>
 <p>After performing operations on our data, we can save the modified dataset as a new object.</p>
-<div id="d39110dc" class="cell" data-execution_count="16">
+<div id="5779ad68" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>mean_penguins_data <span class="op">=</span> (penguins_data</span>
 <span id="cb16-2"><a></a>  .<span class="bu">filter</span>([<span class="st">"bill_length_mm"</span>, <span class="st">"bill_depth_mm"</span>, <span class="st">"body_mass_g"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb16-3"><a></a>  .agg([<span class="st">"mean"</span>])</span>
 <span id="cb16-4"><a></a>)</span>
 <span id="cb16-5"><a></a></span>
 <span id="cb16-6"><a></a>mean_penguins_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div class="cell-output cell-output-display" data-execution_count="142">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1277,17 +1279,17 @@ Alan R. Vazquez
 <p>Consider an industrial engineer who receives a messy Excel file from a manufacturing client. The data file is called “industrial_dataset.xlsx”, which file includes data about machine maintenance logs, production output, and operator comments.</p>
 <p>The <strong>goal</strong> is to clean and prepare this dataset using pandas so it can be analyzed.</p>
 <p>Let’s read the data set into Python.</p>
-<div id="9f3547af" class="cell" data-execution_count="17">
+<div id="9fd2792f" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a><span class="co"># Load the Excel file into a pandas DataFrame.</span></span>
 <span id="cb17-2"><a></a>client_data <span class="op">=</span> pd.read_excel(<span class="st">"industrial_dataset.xlsx"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="section-10" class="slide level2">
 <h2></h2>
-<div id="5ae4892f" class="cell" data-execution_count="18">
+<div id="cbf6b85a" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a><span class="co"># Preview the dataset.</span></span>
 <span id="cb18-2"><a></a>client_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
+<div class="cell-output cell-output-display" data-execution_count="144">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1367,7 +1369,7 @@ Alan R. Vazquez
 <p><br><br></p>
 <p>Duplicate or identical rows are rows that have the same entries in every column in the dataset.</p>
 <p>If only one row is needed for the analysis, we can remove the duplicates using the <code>.drop_duplicates()</code> function.</p>
-<div id="9efb42dd" class="cell" data-execution_count="19">
+<div id="2747fd06" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a>client_data_single <span class="op">=</span> (client_data</span>
 <span id="cb19-2"><a></a>                     .drop_duplicates()</span>
 <span id="cb19-3"><a></a>                      )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1376,9 +1378,9 @@ Alan R. Vazquez
 <section id="section-11" class="slide level2">
 <h2></h2>
 <p>The <code>client_data_single</code> dataframe does not have duplicate rows.</p>
-<div id="2f08a72d" class="cell" data-execution_count="20">
+<div id="3f344dc3" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a>client_data_single.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div class="cell-output cell-output-display" data-execution_count="146">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1457,7 +1459,7 @@ Alan R. Vazquez
 <h2>Add an index column</h2>
 <p><br></p>
 <p>In some cases, it is useful to have a unique identifier for each row in the dataset. We can create an identifier using the function <code>.assign</code> with some extra syntaxis.</p>
-<div id="1b8138f1" class="cell" data-execution_count="21">
+<div id="50418ba5" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>client_data_single <span class="op">=</span> (client_data_single</span>
 <span id="cb21-2"><a></a>                      .reset_index(drop <span class="op">=</span> <span class="va">True</span>)</span>
 <span id="cb21-3"><a></a>                      .assign(ID <span class="op">=</span> <span class="kw">lambda</span> x: x.index <span class="op">+</span> <span class="dv">1</span>)</span>
@@ -1467,9 +1469,9 @@ Alan R. Vazquez
 <section id="section-12" class="slide level2">
 <h2></h2>
 <p>The new column is appended to the end of the dataframe.</p>
-<div id="668a5ef9" class="cell" data-execution_count="22">
+<div id="6ed8ac0f" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a></a>client_data_single.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div class="cell-output cell-output-display" data-execution_count="148">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1553,13 +1555,13 @@ Alan R. Vazquez
 <section id="section-13" class="slide level2">
 <h2></h2>
 <p>To bring it to the begining of the array, we can use the <code>.filter()</code> function.</p>
-<div id="b6b7bb92" class="cell" data-execution_count="23">
+<div id="b24fd3eb" class="cell" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a>client_data_single <span class="op">=</span> (client_data_single</span>
 <span id="cb23-2"><a></a>.<span class="bu">filter</span>([<span class="st">'ID'</span>, <span class="st">'Machine ID'</span>,    <span class="st">'Output (units)'</span>,   </span>
 <span id="cb23-3"><a></a>        <span class="st">'Maintenance Date'</span>, <span class="st">'Operator'</span>, <span class="st">'Comment'</span>])</span>
 <span id="cb23-4"><a></a>)</span>
 <span id="cb23-5"><a></a>client_data_single.head(<span class="dv">3</span>)  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="149">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1626,7 +1628,7 @@ Alan R. Vazquez
 <h2>Fill blank cells</h2>
 <p>In the dataset, there are columns with missing values. If we would like to fill them with specific values or text, we use the <code>.fillna()</code> function. In this function, we use the syntaxis <code>'Variable': 'Replace'</code>, where the <code>Variable</code> is the column in the dataset and <code>Replace</code> is the text or number to fill the entry in.</p>
 <p>Let’s fill in the missing entries of the columns <code>Operator</code>, <code>Maintenance Date</code>, and <code>Comment</code>.</p>
-<div id="6cf09b7f" class="cell" data-execution_count="24">
+<div id="fdcf8062" class="cell" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a>complete_data <span class="op">=</span> (client_data_single</span>
 <span id="cb24-2"><a></a>                .fillna({<span class="st">'Operator'</span>: <span class="st">'Unknown'</span>, </span>
 <span id="cb24-3"><a></a>                <span class="st">'Maintenance Date'</span>: <span class="st">'2023-01-01'</span>,</span>
@@ -1636,9 +1638,9 @@ Alan R. Vazquez
 </section>
 <section id="section-14" class="slide level2">
 <h2></h2>
-<div id="62ae95c9" class="cell" data-execution_count="25">
+<div id="5cd1b300" class="cell" data-execution_count="25">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a></a>complete_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="25">
+<div class="cell-output cell-output-display" data-execution_count="151">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1723,9 +1725,9 @@ Alan R. Vazquez
 <h2>Replace values</h2>
 <p><br></p>
 <p>There are some cases in which columns have some undesired or unwatned values. Consider the <code>Output (units)</code> as an example.</p>
-<div id="9edb47dd" class="cell" data-execution_count="26">
+<div id="c7b720f9" class="cell" data-execution_count="26">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a></a>complete_data[<span class="st">'Output (units)'</span>].head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="26">
+<div class="cell-output cell-output-display" data-execution_count="152">
 <pre><code>0     1200
 1     1200
 2     1050
@@ -1740,7 +1742,7 @@ Name: Output (units), dtype: object</code></pre>
 <h2></h2>
 <p><br></p>
 <p>We can replace the “error” in this column by a user-specified value, say, 0. To this end, we use the function <code>.replace()</code>. The function has two inputs. The first one is the value to replace and the second one is the replacement value.</p>
-<div id="03f859bc" class="cell" data-execution_count="27">
+<div id="c8f3067e" class="cell" data-execution_count="27">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a></a>complete_data[<span class="st">'Output (units)'</span>] <span class="op">=</span> complete_data[<span class="st">'Output (units)'</span>].replace(<span class="st">'error'</span>, <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
@@ -1748,9 +1750,9 @@ Name: Output (units), dtype: object</code></pre>
 <h2></h2>
 <p><br></p>
 <p>Let’s check the new column.</p>
-<div id="d54edb87" class="cell" data-execution_count="28">
+<div id="4eb1745e" class="cell" data-execution_count="28">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a></a>complete_data[<span class="st">'Output (units)'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="28">
+<div class="cell-output cell-output-display" data-execution_count="154">
 <pre><code>0     1200
 1     1200
 2     1050
@@ -1770,9 +1772,9 @@ Name: Output (units), Length: 100, dtype: int64</code></pre>
 <section id="split-column-into-multiple-ones" class="slide level2">
 <h2>Split column into multiple ones</h2>
 <p>There are some cases in which we want to split a column according to a character. For example, consider the column <code>Comment</code> from the dataset.</p>
-<div id="611b2249" class="cell" data-execution_count="29">
+<div id="a5c4d5bb" class="cell" data-execution_count="29">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a></a>complete_data[<span class="st">'Comment'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="155">
 <pre><code>0                       ok
 1                       ok
 2               Needs oil!
@@ -1791,8 +1793,8 @@ Name: Comment, Length: 100, dtype: object</code></pre>
 <section id="section-17" class="slide level2">
 <h2></h2>
 <p>The column has some values such as “Requires part: valve” and “Delay: maintenance” that we may want to split into columns.</p>
-<div id="ac95e286" class="cell" data-execution_count="30">
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div id="d59094ab" class="cell" data-execution_count="30">
+<div class="cell-output cell-output-display" data-execution_count="156">
 <pre><code>0                       ok
 1                       ok
 2               Needs oil!
@@ -1814,17 +1816,17 @@ Name: Comment, Length: 100, dtype: object</code></pre>
 <p>We can split the values in the column according to the colon “:”.</p>
 <p>That is, everything before the colon will be in a column. Everything after the colon will be in another column. To achieve this, we use the function <code>str.split()</code>.</p>
 <p>One input of the function is the symbol or character for which we cant to make a split. The other input, <code>expand = True</code> tells Python that we want to create new columns.</p>
-<div id="a8fa82ed" class="cell" data-execution_count="31">
+<div id="92f73cc2" class="cell" data-execution_count="31">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a></a>complete_data[<span class="st">'Comment'</span>].<span class="bu">str</span>.split(<span class="st">':'</span>, expand <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="section-19" class="slide level2">
 <h2></h2>
 <p>The result is two columns.</p>
-<div id="f03f6fb7" class="cell" data-execution_count="32">
+<div id="cbb25011" class="cell" data-execution_count="32">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a></a>split_column <span class="op">=</span> complete_data[<span class="st">'Comment'</span>].<span class="bu">str</span>.split(<span class="st">':'</span>, expand <span class="op">=</span> <span class="va">True</span>)</span>
 <span id="cb35-2"><a></a>split_column.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display" data-execution_count="158">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1885,7 +1887,7 @@ Name: Comment, Length: 100, dtype: object</code></pre>
 <h2></h2>
 <p><br></p>
 <p>We can assign them to new columns in the dataset using the following code.</p>
-<div id="66d38925" class="cell" data-execution_count="33">
+<div id="2c994d01" class="cell" data-execution_count="33">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a></a>augmented_data <span class="op">=</span> (complete_data</span>
 <span id="cb36-2"><a></a>                  .assign(First_comment <span class="op">=</span> split_column.<span class="bu">filter</span>([<span class="dv">0</span>]),</span>
 <span id="cb36-3"><a></a>                  Second_comment <span class="op">=</span> split_column.<span class="bu">filter</span>([<span class="dv">1</span>]))</span>
@@ -1894,9 +1896,9 @@ Name: Comment, Length: 100, dtype: object</code></pre>
 </section>
 <section id="section-21" class="slide level2">
 <h2></h2>
-<div id="12fe03f9" class="cell" data-execution_count="34">
+<div id="b3d5d1c2" class="cell" data-execution_count="34">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a></a>augmented_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div class="cell-output cell-output-display" data-execution_count="160">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1994,7 +1996,7 @@ Name: Comment, Length: 100, dtype: object</code></pre>
 <p><br></p>
 <p>Something that we notice is that the column <code>First_Comment</code> has some extra characters like “” that may be useless when working with the data.</p>
 <p>We can remove them using the function <code>str.strip()</code>. The input of the function is the character to remove.</p>
-<div id="393cde1b" class="cell" data-execution_count="35">
+<div id="071cf9ec" class="cell" data-execution_count="35">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a></a>augmented_data[<span class="st">'First_comment'</span>] <span class="op">=</span> augmented_data[<span class="st">'First_comment'</span>].<span class="bu">str</span>.strip(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
@@ -2002,9 +2004,9 @@ Name: Comment, Length: 100, dtype: object</code></pre>
 <h2></h2>
 <p><br></p>
 <p>Let’s see the cleaned column.</p>
-<div id="f1e3874f" class="cell" data-execution_count="36">
+<div id="c9fa4271" class="cell" data-execution_count="36">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a></a>augmented_data[<span class="st">'First_comment'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="36">
+<div class="cell-output cell-output-display" data-execution_count="162">
 <pre><code>0                ok
 1                ok
 2        Needs oil!
@@ -2024,9 +2026,9 @@ Name: First_comment, Length: 100, dtype: object</code></pre>
 <h2></h2>
 <p><br></p>
 <p>We can also remove other characters.</p>
-<div id="ffddf86b" class="cell" data-execution_count="37">
+<div id="60bc5d5b" class="cell" data-execution_count="37">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a></a>augmented_data[<span class="st">'First_comment'</span>].<span class="bu">str</span>.strip(<span class="st">"!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="37">
+<div class="cell-output cell-output-display" data-execution_count="163">
 <pre><code>0                ok
 1                ok
 2         Needs oil
@@ -2046,9 +2048,9 @@ Name: First_comment, Length: 100, dtype: object</code></pre>
 <h2>Transform text case</h2>
 <p>When working with text columns such as those containing names, it might be possible to have different ways of writing. A common case is when having lower case or upper case names or a combination thereof.</p>
 <p>For example, consider the column <code>Operator</code> containing the names of the operators.</p>
-<div id="cccbf8f2" class="cell" data-execution_count="38">
+<div id="37c88f0f" class="cell" data-execution_count="38">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a></a>complete_data[<span class="st">'Operator'</span>].head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="38">
+<div class="cell-output cell-output-display" data-execution_count="164">
 <pre><code>0       Ana 
 1        Ana
 2        Bob
@@ -2062,10 +2064,10 @@ Name: Operator, dtype: object</code></pre>
 <h2>Remove extra spaces</h2>
 <p><br></p>
 <p>To deal with names, we first use the <code>.str.strip()</code> to remove leading and trailing characters from strings.</p>
-<div id="54a8daf7" class="cell" data-execution_count="39">
+<div id="20093493" class="cell" data-execution_count="39">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a></a>complete_data[<span class="st">'Operator'</span>] <span class="op">=</span> complete_data[<span class="st">'Operator'</span>].<span class="bu">str</span>.strip()</span>
 <span id="cb45-2"><a></a>complete_data[<span class="st">'Operator'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="39">
+<div class="cell-output cell-output-display" data-execution_count="165">
 <pre><code>0         Ana
 1         Ana
 2         Bob
@@ -2085,9 +2087,9 @@ Name: Operator, Length: 100, dtype: object</code></pre>
 <h2>Change to lowercase letters</h2>
 <p><br></p>
 <p>We can turn all names to lowercase using the function <code>str.lower()</code>.</p>
-<div id="ee0eff9a" class="cell" data-execution_count="40">
+<div id="ff322141" class="cell" data-execution_count="40">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a></a>complete_data[<span class="st">'Operator'</span>].<span class="bu">str</span>.lower()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="40">
+<div class="cell-output cell-output-display" data-execution_count="166">
 <pre><code>0         ana
 1         ana
 2         bob
@@ -2107,9 +2109,9 @@ Name: Operator, Length: 100, dtype: object</code></pre>
 <h2>Change to uppercase letters</h2>
 <p><br></p>
 <p>We can turn all names to lowercase using the function <code>str.upper()</code>.</p>
-<div id="8d799d2e" class="cell" data-execution_count="41">
+<div id="e9aa7a6e" class="cell" data-execution_count="41">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a></a>complete_data[<span class="st">'Operator'</span>].<span class="bu">str</span>.upper()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="41">
+<div class="cell-output cell-output-display" data-execution_count="167">
 <pre><code>0         ANA
 1         ANA
 2         BOB
@@ -2129,9 +2131,9 @@ Name: Operator, Length: 100, dtype: object</code></pre>
 <h2>Capitalize the first letter</h2>
 <p><br></p>
 <p>We can convert all names to title case using the function <code>str.title()</code>.</p>
-<div id="a2dc5a60" class="cell" data-execution_count="42">
+<div id="031ad111" class="cell" data-execution_count="42">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a></a>complete_data[<span class="st">'Operator'</span>].<span class="bu">str</span>.title()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="42">
+<div class="cell-output cell-output-display" data-execution_count="168">
 <pre><code>0         Ana
 1         Ana
 2         Bob

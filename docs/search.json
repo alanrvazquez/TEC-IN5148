@@ -840,7 +840,7 @@
     "href": "Tools/Tools3.slides.html#example-1",
     "title": "Data Types and Visualization",
     "section": "Example 1",
-    "text": "Example 1\nLet’s load the data in “penguins.xlsx”.\n\n# Load pandas.\nimport pandas as pd\n\n# Load the Excel file into a pandas DataFrame.\npenguins_data = pd.read_excel(\"penguins.xlsx\")\n\n# Print the first 4 rows of the dataset.\npenguins_data.head(4)\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n0\nAdelie\nTorgersen\n39.1\n18.7\n181.0\n3750.0\nmale\n2007\n\n\n1\nAdelie\nTorgersen\n39.5\n17.4\n186.0\n3800.0\nfemale\n2007\n\n\n2\nAdelie\nTorgersen\n40.3\n18.0\n195.0\n3250.0\nfemale\n2007\n\n\n3\nAdelie\nTorgersen\nNaN\nNaN\nNaN\nNaN\nNaN\n2007"
+    "text": "Example 1\nLet’s load the data in “penguins.xlsx”.\n\n# Load pandas.\nimport pandas as pd\n\n# Load the Excel file into a pandas DataFrame.\npenguins_data = pd.read_excel(\"penguins.xlsx\")\n\n# Print the first 3 rows of the dataset.\npenguins_data.head(3)\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n0\nAdelie\nTorgersen\n39.1\n18.7\n181.0\n3750.0\nmale\n2007\n\n\n1\nAdelie\nTorgersen\n39.5\n17.4\n186.0\n3800.0\nfemale\n2007\n\n\n2\nAdelie\nTorgersen\n40.3\n18.0\n195.0\n3250.0\nfemale\n2007"
   },
   {
     "objectID": "Tools/Tools3.slides.html#section",
@@ -861,7 +861,7 @@
     "href": "Tools/Tools3.slides.html#define-categorical-variables",
     "title": "Data Types and Visualization",
     "section": "Define categorical variables",
-    "text": "Define categorical variables\nTechnically, the variable sex in penguins_data is categorical. To explicitly tell this to Python, we use the following code.\n\npenguins_data['sex'] = pd.Categorical(penguins_data['sex'])\n\nSetting sex to categorical allows us to use effective visualization for this data.\nWe do the same for the other categorical variables species and island.\n\npenguins_data['species'] = pd.Categorical(penguins_data['species'])\npenguins_data['island'] = pd.Categorical(penguins_data['island'])"
+    "text": "Define categorical variables\n\nTechnically, the variable sex in penguins_data is categorical. To explicitly tell this to Python, we use the following code.\n\npenguins_data['sex'] = pd.Categorical(penguins_data['sex'])\n\nSetting sex to categorical allows us to use effective visualization for this data.\nWe do the same for the other categorical variables species and island.\n\npenguins_data['species'] = pd.Categorical(penguins_data['species'])\npenguins_data['island'] = pd.Categorical(penguins_data['island'])"
   },
   {
     "objectID": "Tools/Tools3.slides.html#section-1",
@@ -2541,7 +2541,7 @@
     "href": "Tools/Tools2.slides.html#create-new-columns-with-.assign",
     "title": "Data Manipulation and Wrangling",
     "section": "Create new columns with .assign()",
-    "text": "Create new columns with .assign()\nWith .assign(), we can create new columns (variables) that are functions of existing ones. This function uses a special Python keyword called lambda. Technically, this keyword defines an anonymous function.\nFor example, we create a new variable LDRatio equaling the ratio of bill_length_mm and bill_depth_mm.\n\n(penguins_data\n  .assign(LDRatio = lambda df: df[\"bill_length_mm\"] / df[\"bill_depth_mm\"])\n)"
+    "text": "Create new columns with .assign()\n\nWith .assign(), we can create new columns (variables) that are functions of existing ones. This function uses a special Python keyword called lambda. Technically, this keyword defines an anonymous function.\n\nFor example, we create a new variable LDRatio equaling the ratio of bill_length_mm and bill_depth_mm.\n\n(penguins_data\n  .assign(LDRatio = lambda df: df[\"bill_length_mm\"] / df[\"bill_depth_mm\"])\n)"
   },
   {
     "objectID": "Tools/Tools2.slides.html#section-7",
@@ -2793,7 +2793,7 @@
     "href": "Tools/Tools1.slides.html#python",
     "title": "Introduction to Python and Pandas",
     "section": "Python",
-    "text": "Python\n\n\n\nA versatile programming language.\nIt is free!\nIt is widely used for data cleaning, data visualization, and data modelling.\nIt can be extended with packages (libraries) developed by other users."
+    "text": "Python\n\n\n\n\nA versatile programming language.\nIt is free!\nIt is widely used for data cleaning, data visualization, and data modelling.\nIt can be extended with packages (libraries) developed by other users."
   },
   {
     "objectID": "Tools/Tools1.slides.html#google-colab",
@@ -2807,21 +2807,21 @@
     "href": "Tools/Tools1.slides.html#lets-try-a-command-in-python",
     "title": "Introduction to Python and Pandas",
     "section": "Let’s try a command in Python",
-    "text": "Let’s try a command in Python\nWhat do you think will happen if we run this command?\n\nprint(\"Hello world!\")\n\n\n\n\nHello world!"
+    "text": "Let’s try a command in Python\n\nWhat do you think will happen if we run this command?\n\nprint(\"Hello world!\")\n\n\n\n\nHello world!"
   },
   {
     "objectID": "Tools/Tools1.slides.html#lets-try-another-command",
     "href": "Tools/Tools1.slides.html#lets-try-another-command",
     "title": "Introduction to Python and Pandas",
     "section": "Let’s try another command",
-    "text": "Let’s try another command\nWhat do you think will happen if we run this command?\n\nsum([1, 5, 10])\n\n\n\n\n16"
+    "text": "Let’s try another command\n\nWhat do you think will happen if we run this command?\n\nsum([1, 5, 10])\n\n\n\n\n16"
   },
   {
     "objectID": "Tools/Tools1.slides.html#use-python-as-a-basic-calculator",
     "href": "Tools/Tools1.slides.html#use-python-as-a-basic-calculator",
     "title": "Introduction to Python and Pandas",
     "section": "Use Python as a basic calculator",
-    "text": "Use Python as a basic calculator\n\n5 + 1\n\n6\n\n\n\n10 - 3\n\n7\n\n\n\n2 * 4\n\n8\n\n\n\n9 / 3\n\n3.0"
+    "text": "Use Python as a basic calculator\n\n\n5 + 1\n\n6\n\n\n\n10 - 3\n\n7\n\n\n\n2 * 4\n\n8\n\n\n\n9 / 3\n\n3.0"
   },
   {
     "objectID": "Tools/Tools1.slides.html#comments",
@@ -2842,14 +2842,14 @@
     "href": "Tools/Tools1.slides.html#python-is-strict",
     "title": "Introduction to Python and Pandas",
     "section": "Python is strict",
-    "text": "Python is strict\nPython, like all programming languages, is very strict. For example, if you write\n\nsum([1, 100])\n\n101\n\n\nit will tell you the answer, 101.\n\nBut if you write\n\nSum([1, 100])\n\n\n---------------------------------------------------------------------------\nNameError                                 Traceback (most recent call last)\nCell In[11], line 1\n----&gt; 1 Sum([1, 100])\n\nNameError: name 'Sum' is not defined\n\n\n\nwith the “s” capitalized, he will act like he has no idea what we are talking about!\n\nlo mismo si olvidas incluir un parentesis"
+    "text": "Python is strict\nPython, like all programming languages, is very strict. For example, if you write\n\nsum([1, 100])\n\n101\n\n\nit will tell you the answer, 101.\n\nBut if you write\n\nSum([1, 100])\n\n\n---------------------------------------------------------------------------\nNameError                                 Traceback (most recent call last)\nCell In[161], line 1\n----&gt; 1 Sum([1, 100])\n\nNameError: name 'Sum' is not defined\n\n\n\nwith the “s” capitalized, he will act like he has no idea what we are talking about!\n\nlo mismo si olvidas incluir un parentesis"
   },
   {
     "objectID": "Tools/Tools1.slides.html#save-your-work-in-python-objects",
     "href": "Tools/Tools1.slides.html#save-your-work-in-python-objects",
     "title": "Introduction to Python and Pandas",
     "section": "Save your work in Python objects",
-    "text": "Save your work in Python objects\n\nVirtually anything, including the results of any Python function, can be saved in an object.\nThis is accomplished by using an assignment operator, which can be an equals symbol (=).\n\nYou can make up any name you want for a Python object. However, there are two basic rules for this:\n\nIt has to be different from a function name in Python.\nIt has to be as specific as possible."
+    "text": "Save your work in Python objects\n\nVirtually anything, including the results of any Python function, can be saved in an object.\nThis is accomplished by using an assignment operator, which can be an equals symbol (=).\n\nYou can make up any name you want for a Python object. However, there are two basic rules for this:\n\nIt must be different from a function name in Python.\nIt should be as specific as possible."
   },
   {
     "objectID": "Tools/Tools1.slides.html#for-example",
@@ -2940,7 +2940,7 @@
     "href": "Tools/Tools1.slides.html#python-libraries",
     "title": "Introduction to Python and Pandas",
     "section": "Python libraries",
-    "text": "Python libraries\n\nLibraries are the fundamental units of reproducible Python code. They include reusable Python functions, documentation describing how to use them, and sample data.\nIn this course, we will be working mostly with the following libraries:\n\npandas for data manipulation\nmatplotlib and seaborn for data visualization\nstatsmodels and scikit-learn for data modelling"
+    "text": "Python libraries\nLibraries are the fundamental units of reproducible Python code. They include reusable Python functions, documentation describing how to use them, and sample data.\n\nIn this course, we will be working mostly with the following libraries:\n\npandas for data manipulation\nmatplotlib and seaborn for data visualization\nstatsmodels and scikit-learn for data modelling"
   },
   {
     "objectID": "Tools/Tools1.slides.html#data-organization",
