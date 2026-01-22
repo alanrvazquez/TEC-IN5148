@@ -1,0 +1,2417 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alan R. Vazquez">
+
+<title>Introduction to Python and Pandas – IN5148 Statistics and Data Science with Applications in Engineering</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-ff63373b1067ca6f91cf1456aa1f00a2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Introduction to Python and Pandas</li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link active" data-scroll-target="#agenda">Agenda</a></li>
+  <li><a href="#introduction-to-python" id="toc-introduction-to-python" class="nav-link" data-scroll-target="#introduction-to-python">Introduction to Python</a>
+  <ul class="collapse">
+  <li><a href="#python" id="toc-python" class="nav-link" data-scroll-target="#python">Python</a></li>
+  <li><a href="#google-colab" id="toc-google-colab" class="nav-link" data-scroll-target="#google-colab">Google Colab</a></li>
+  <li><a href="#lets-try-a-command-in-python" id="toc-lets-try-a-command-in-python" class="nav-link" data-scroll-target="#lets-try-a-command-in-python">Let’s try a command in Python</a></li>
+  <li><a href="#lets-try-another-command" id="toc-lets-try-another-command" class="nav-link" data-scroll-target="#lets-try-another-command">Let’s try another command</a></li>
+  <li><a href="#use-python-as-a-basic-calculator" id="toc-use-python-as-a-basic-calculator" class="nav-link" data-scroll-target="#use-python-as-a-basic-calculator">Use Python as a basic calculator</a></li>
+  <li><a href="#comments" id="toc-comments" class="nav-link" data-scroll-target="#comments">Comments</a></li>
+  <li><a href="#introduction-to-functions-in-python" id="toc-introduction-to-functions-in-python" class="nav-link" data-scroll-target="#introduction-to-functions-in-python">Introduction to functions in Python</a></li>
+  <li><a href="#python-is-strict" id="toc-python-is-strict" class="nav-link" data-scroll-target="#python-is-strict">Python is strict</a></li>
+  <li><a href="#save-your-work-in-python-objects" id="toc-save-your-work-in-python-objects" class="nav-link" data-scroll-target="#save-your-work-in-python-objects">Save your work in Python objects</a></li>
+  <li><a href="#for-example" id="toc-for-example" class="nav-link" data-scroll-target="#for-example">For example</a></li>
+  <li><a href="#lists" id="toc-lists" class="nav-link" data-scroll-target="#lists">Lists</a></li>
+  <li><a href="#for-example-1" id="toc-for-example-1" class="nav-link" data-scroll-target="#for-example-1">For example</a></li>
+  <li><a href="#operations" id="toc-operations" class="nav-link" data-scroll-target="#operations">Operations</a></li>
+  <li><a href="#indexing" id="toc-indexing" class="nav-link" data-scroll-target="#indexing">Indexing</a></li>
+  <li><a href="#a-little-more-about-objects-in-python" id="toc-a-little-more-about-objects-in-python" class="nav-link" data-scroll-target="#a-little-more-about-objects-in-python">A little more about objects in Python</a></li>
+  <li><a href="#character-values" id="toc-character-values" class="nav-link" data-scroll-target="#character-values">Character values</a></li>
+  <li><a href="#boolean-values" id="toc-boolean-values" class="nav-link" data-scroll-target="#boolean-values">Boolean values</a></li>
+  <li><a href="#logical-operators" id="toc-logical-operators" class="nav-link" data-scroll-target="#logical-operators">Logical operators</a></li>
+  <li><a href="#common-logical-operators" id="toc-common-logical-operators" class="nav-link" data-scroll-target="#common-logical-operators">Common logical operators</a></li>
+  <li><a href="#question" id="toc-question" class="nav-link" data-scroll-target="#question">Question</a></li>
+  <li><a href="#programming-culture-trial-and-error" id="toc-programming-culture-trial-and-error" class="nav-link" data-scroll-target="#programming-culture-trial-and-error">Programming culture: Trial and error</a></li>
+  <li><a href="#python-libraries" id="toc-python-libraries" class="nav-link" data-scroll-target="#python-libraries">Python libraries</a></li>
+  </ul></li>
+  <li><a href="#reading-data-with-python" id="toc-reading-data-with-python" class="nav-link" data-scroll-target="#reading-data-with-python">Reading data with Python</a>
+  <ul class="collapse">
+  <li><a href="#data-organization" id="toc-data-organization" class="nav-link" data-scroll-target="#data-organization">Data organization</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
+  <li><a href="#loading-data-in-python" id="toc-loading-data-in-python" class="nav-link" data-scroll-target="#loading-data-in-python">Loading data in Python</a></li>
+  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2"></a></li>
+  <li><a href="#pandas-library" id="toc-pandas-library" class="nav-link" data-scroll-target="#pandas-library">pandas library</a></li>
+  <li><a href="#importing-pandas" id="toc-importing-pandas" class="nav-link" data-scroll-target="#importing-pandas">Importing pandas</a></li>
+  <li><a href="#loading-data-using-pandas" id="toc-loading-data-using-pandas" class="nav-link" data-scroll-target="#loading-data-using-pandas">Loading data using pandas</a></li>
+  <li><a href="#the-function-head" id="toc-the-function-head" class="nav-link" data-scroll-target="#the-function-head">The function head()</a></li>
+  <li><a href="#indexing-variables-a-dataset" id="toc-indexing-variables-a-dataset" class="nav-link" data-scroll-target="#indexing-variables-a-dataset">Indexing variables a dataset</a></li>
+  <li><a href="#section-3" id="toc-section-3" class="nav-link" data-scroll-target="#section-3"></a></li>
+  <li><a href="#indexing-rows" id="toc-indexing-rows" class="nav-link" data-scroll-target="#indexing-rows">Indexing rows</a></li>
+  <li><a href="#section-4" id="toc-section-4" class="nav-link" data-scroll-target="#section-4"></a></li>
+  <li><a href="#indexing-rows-and-columns" id="toc-indexing-rows-and-columns" class="nav-link" data-scroll-target="#indexing-rows-and-columns">Indexing rows and columns</a></li>
+  </ul></li>
+  <li><a href="#data-manipulation-with-pandas" id="toc-data-manipulation-with-pandas" class="nav-link" data-scroll-target="#data-manipulation-with-pandas">Data manipulation with pandas</a>
+  <ul class="collapse">
+  <li><a href="#chaining-operations-with-pandas" id="toc-chaining-operations-with-pandas" class="nav-link" data-scroll-target="#chaining-operations-with-pandas">Chaining operations with pandas</a></li>
+  <li><a href="#key-pandas-methods" id="toc-key-pandas-methods" class="nav-link" data-scroll-target="#key-pandas-methods">Key pandas methods</a></li>
+  <li><a href="#section-5" id="toc-section-5" class="nav-link" data-scroll-target="#section-5"></a></li>
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1">Example 1</a></li>
+  <li><a href="#selecting-columns-with-.filter" id="toc-selecting-columns-with-.filter" class="nav-link" data-scroll-target="#selecting-columns-with-.filter">Selecting columns with <code>.filter()</code></a></li>
+  <li><a href="#section-6" id="toc-section-6" class="nav-link" data-scroll-target="#section-6"></a></li>
+  <li><a href="#section-7" id="toc-section-7" class="nav-link" data-scroll-target="#section-7"></a></li>
+  <li><a href="#section-8" id="toc-section-8" class="nav-link" data-scroll-target="#section-8"></a></li>
+  <li><a href="#filtering-rows-with-.query" id="toc-filtering-rows-with-.query" class="nav-link" data-scroll-target="#filtering-rows-with-.query">Filtering rows with <code>.query()</code></a></li>
+  <li><a href="#section-9" id="toc-section-9" class="nav-link" data-scroll-target="#section-9"></a></li>
+  <li><a href="#section-10" id="toc-section-10" class="nav-link" data-scroll-target="#section-10"></a></li>
+  <li><a href="#section-11" id="toc-section-11" class="nav-link" data-scroll-target="#section-11"></a></li>
+  <li><a href="#create-new-columns-with-.assign" id="toc-create-new-columns-with-.assign" class="nav-link" data-scroll-target="#create-new-columns-with-.assign">Create new columns with <code>.assign()</code></a></li>
+  <li><a href="#section-12" id="toc-section-12" class="nav-link" data-scroll-target="#section-12"></a></li>
+  <li><a href="#section-13" id="toc-section-13" class="nav-link" data-scroll-target="#section-13"></a></li>
+  <li><a href="#sorting-with-.sort_values" id="toc-sorting-with-.sort_values" class="nav-link" data-scroll-target="#sorting-with-.sort_values">Sorting with <code>.sort_values()</code></a></li>
+  <li><a href="#section-14" id="toc-section-14" class="nav-link" data-scroll-target="#section-14"></a></li>
+  <li><a href="#summarizing-with-.agg" id="toc-summarizing-with-.agg" class="nav-link" data-scroll-target="#summarizing-with-.agg">Summarizing with <code>.agg()</code></a></li>
+  <li><a href="#saving-results-in-new-objects" id="toc-saving-results-in-new-objects" class="nav-link" data-scroll-target="#saving-results-in-new-objects">Saving results in new objects</a></li>
+  <li><a href="#more-on-pandas" id="toc-more-on-pandas" class="nav-link" data-scroll-target="#more-on-pandas">More on pandas</a></li>
+  </ul></li>
+  <li><a href="#return-to-main-page" id="toc-return-to-main-page" class="nav-link" data-scroll-target="#return-to-main-page">Return to main page</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="Tools1.slides.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introduction to Python and Pandas</h1>
+<p class="subtitle lead">IN5148: Statistics and Data Science with Applications in Engineering</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Alan R. Vazquez </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Department of Industrial Engineering
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="agenda" class="level3">
+<h3 class="anchored" data-anchor-id="agenda">Agenda</h3>
+<p><br></p>
+<ol type="1">
+<li>Introduction to Python</li>
+<li>Reading data with Python</li>
+<li>Data manipulation with pandas</li>
+</ol>
+</section>
+<section id="introduction-to-python" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-to-python">Introduction to Python</h2>
+<section id="python" class="level3">
+<h3 class="anchored" data-anchor-id="python">Python</h3>
+<p><br></p>
+<div class="columns">
+<div class="column" style="width:70%;">
+<ul>
+<li><p>A versatile programming language.</p></li>
+<li><p>It is free!</p></li>
+<li><p>It is widely used for data cleaning, data visualization, and data modelling.</p></li>
+<li><p>It can be extended with packages (libraries) developed by other users.</p></li>
+</ul>
+</div><div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/python.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="324"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="google-colab" class="level3">
+<h3 class="anchored" data-anchor-id="google-colab">Google Colab</h3>
+<p><em>Google’s free cloud collaboration platform for creating Python documents.</em></p>
+<ul>
+<li><p>Run Python and collaborate on Jupyter notebooks for free.</p></li>
+<li><p>Harness the power of GPUs for free to accelerate your data science projects.</p></li>
+<li><p>Easily save and upload your notebooks to Google Drive.</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-right">
+<figure class="figure">
+<p><img src="images/Google_Colaboratory_SVG_Logo.svg.png" class="img-fluid quarto-figure quarto-figure-right figure-img" width="2560"></p>
+</figure>
+</div>
+</section>
+<section id="lets-try-a-command-in-python" class="level3">
+<h3 class="anchored" data-anchor-id="lets-try-a-command-in-python">Let’s try a command in Python</h3>
+<p><br><br><br></p>
+<p>What do you think will happen if we run this command?</p>
+<div id="872e2040" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Hello world!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>. . .</p>
+<div id="944f2b7e" class="cell" data-execution_count="2">
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello world!</code></pre>
+</div>
+</div>
+</section>
+<section id="lets-try-another-command" class="level3">
+<h3 class="anchored" data-anchor-id="lets-try-another-command">Let’s try another command</h3>
+<p><br><br><br></p>
+<p>What do you think will happen if we run this command?</p>
+<div id="4cef21be" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">sum</span>([<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>. . .</p>
+<div id="d342ac58" class="cell" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>16</code></pre>
+</div>
+</div>
+</section>
+<section id="use-python-as-a-basic-calculator" class="level3">
+<h3 class="anchored" data-anchor-id="use-python-as-a-basic-calculator">Use Python as a basic calculator</h3>
+<p><br><br></p>
+<div id="ff10e967" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> <span class="op">+</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>6</code></pre>
+</div>
+</div>
+<div id="67dc4d6d" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">-</span> <span class="dv">3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>7</code></pre>
+</div>
+</div>
+<div id="14429f4f" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="op">*</span> <span class="dv">4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>8</code></pre>
+</div>
+</div>
+<div id="0ee35bd7" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dv">9</span> <span class="op">/</span> <span class="dv">3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>3.0</code></pre>
+</div>
+</div>
+</section>
+<section id="comments" class="level3">
+<h3 class="anchored" data-anchor-id="comments">Comments</h3>
+<p><br></p>
+<p>Sometimes we write things in the coding window that we want Python to ignore. These are called comments and start with <code>#</code>.</p>
+<p><br></p>
+<p>Python will ignore the comments and just execute the code.</p>
+<div id="f1b25f2e" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># you can put whatever after #</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># for example... blah blah blah</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="notes">
+<p>Si desea escribir un comentario que ocupe más de una línea, es una buena idea poner un # al principio de cada línea.</p>
+</div>
+</section>
+<section id="introduction-to-functions-in-python" class="level3">
+<h3 class="anchored" data-anchor-id="introduction-to-functions-in-python">Introduction to functions in Python</h3>
+<p><br></p>
+<p>One of the best things about Python is that there are many built-in commands you can use. These are called <em>functions</em>.</p>
+<p>. . .</p>
+<p>Functions have two basic parts:</p>
+<div class="incremental">
+<ul class="incremental">
+<li><p>The first part is the name of the function (for example, <code>sum</code>).</p></li>
+<li><p>The second part is the input to the function, which goes inside the parentheses (<code>sum([1, 5, 15])</code>).</p></li>
+</ul>
+</div>
+</section>
+<section id="python-is-strict" class="level3">
+<h3 class="anchored" data-anchor-id="python-is-strict">Python is strict</h3>
+<p>Python, like all programming languages, is very strict. For example, if you write</p>
+<div id="f52f6cb7" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="bu">sum</span>([<span class="dv">1</span>, <span class="dv">100</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>101</code></pre>
+</div>
+</div>
+<p>it will tell you the answer, 101.</p>
+<p>. . .</p>
+<p>But if you write</p>
+<div id="1dd9dc7f" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Sum([<span class="dv">1</span>, <span class="dv">100</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[11], line 1</span>
+<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">Sum</span>([<span style="color:rgb(98,98,98)">1</span>, <span style="color:rgb(98,98,98)">100</span>])
+
+<span class="ansi-red-fg">NameError</span>: name 'Sum' is not defined</pre>
+</div>
+</div>
+</div>
+<p>with the “s” capitalized, he will act like he has no idea what we are talking about!</p>
+<div class="notes">
+<p>lo mismo si olvidas incluir un parentesis</p>
+</div>
+</section>
+<section id="save-your-work-in-python-objects" class="level3">
+<h3 class="anchored" data-anchor-id="save-your-work-in-python-objects">Save your work in Python objects</h3>
+<p><br></p>
+<p>Virtually anything, including the results of any Python function, can be saved in an <em>object</em>.</p>
+<p>This is accomplished by using an assignment operator, which can be an equals symbol (<code>=</code>).</p>
+<p>. . .</p>
+<p>You can make up any name you want for a Python object. However, there are two basic rules for this:</p>
+<div class="incremental">
+<ol class="incremental" type="1">
+<li>It <strong>must</strong> be different from a function name in Python.</li>
+<li>It should be as specific as possible.</li>
+</ol>
+</div>
+</section>
+<section id="for-example" class="level3">
+<h3 class="anchored" data-anchor-id="for-example">For example</h3>
+<p><br></p>
+<div id="ecca0c59" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This code will assign the number 18</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># to the object called my_favorite_number</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>my_favorite_number <span class="op">=</span> <span class="dv">18</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>After running this code, nothing happens. But if we run the object on its own, we can see what’s inside it.</p>
+<div id="b365b8e3" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>my_favorite_number</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>18</code></pre>
+</div>
+</div>
+<p>You can also use <code>print(my_favorite_number)</code>.</p>
+</section>
+<section id="lists" class="level3">
+<h3 class="anchored" data-anchor-id="lists">Lists</h3>
+<p><br></p>
+<p>So far we have used Python objects to store a single number. But in statistics we are dealing with variation, which by definition needs more than one number.</p>
+<p>. . .</p>
+<p>A Python object can also store a complete set of numbers, called a <em>list</em>.</p>
+<p>You can think of a list as a vector of numbers (or values).</p>
+<p>. . .</p>
+<p>The <code>[]</code> command can be used to combine several individual values into a list.</p>
+<div class="notes">
+<p>puedes pensar que el c es por combinar</p>
+</div>
+</section>
+<section id="for-example-1" class="level3">
+<h3 class="anchored" data-anchor-id="for-example-1">For example</h3>
+<p><br></p>
+<p>This code creates two vectors</p>
+<div id="53db91e3" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>my_list <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>my_list_2 <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">10</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Let’s see its content</p>
+<div id="f021c24c" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>my_list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>[1, 2, 3, 4, 5]</code></pre>
+</div>
+</div>
+<div id="84f27145" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>my_list_2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>[10, 10, 10, 10, 10]</code></pre>
+</div>
+</div>
+</section>
+<section id="operations" class="level3">
+<h3 class="anchored" data-anchor-id="operations">Operations</h3>
+<p><br></p>
+<p>We can do simple operations with vectors. For example, we can sum all the elements of a list.</p>
+<div id="214a1bba" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>my_list <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sum</span>(my_list)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>15</code></pre>
+</div>
+</div>
+</section>
+<section id="indexing" class="level3">
+<h3 class="anchored" data-anchor-id="indexing">Indexing</h3>
+<p><br></p>
+<p>We can index a position in the vector using square brackets with a number like this: <code>[1]</code>.</p>
+<p>So, if we wanted to print the contents of the first position in <code>my_list</code>, we could write</p>
+<div id="06f6e56e" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>my_list[<span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>2</code></pre>
+</div>
+</div>
+<p><span style="color:red;"><strong>An feature of Python is that the first element of a list or vector is indexed using the number 0.</strong></span></p>
+<div id="450a8caa" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>my_list[<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>1</code></pre>
+</div>
+</div>
+</section>
+<section id="a-little-more-about-objects-in-python" class="level3">
+<h3 class="anchored" data-anchor-id="a-little-more-about-objects-in-python">A little more about objects in Python</h3>
+<p><br></p>
+<p>You can think of Python objects as containers that hold values.</p>
+<p>A Python object can hold a single value, or it can hold a group of values (as in a vector).</p>
+<p>So far, we’ve only put numbers into Python objects.</p>
+<p>. . .</p>
+<p><br></p>
+<p><strong><em>Python objects can actually contain three types of values: numbers, characters, and booleans.</em></strong></p>
+</section>
+<section id="character-values" class="level3">
+<h3 class="anchored" data-anchor-id="character-values">Character values</h3>
+<p><br></p>
+<p>Characters are made up of text, such as words or sentences. An example of a list with characters as elements is:</p>
+<p>. . .</p>
+<div id="09558976" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>many_greetings <span class="op">=</span> [<span class="st">"hi"</span>, <span class="st">"hello"</span>, <span class="st">"hola"</span>, <span class="st">"bonjour"</span>, <span class="st">"ni hao"</span>, <span class="st">"merhaba"</span>]</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>many_greetings</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>['hi', 'hello', 'hola', 'bonjour', 'ni hao', 'merhaba']</code></pre>
+</div>
+</div>
+<p>. . .</p>
+<p>It is important to know that numbers can also be treated as characters, depending on the context.</p>
+<p>For example, when 20 is enclosed in quotes (<code>"20"</code>) it will be treated as a character value, even though it encloses a number in quotes.</p>
+</section>
+<section id="boolean-values" class="level3">
+<h3 class="anchored" data-anchor-id="boolean-values">Boolean values</h3>
+<p><br></p>
+<p>Boolean values are <code>True</code> or <code>False</code>.</p>
+<p>We may have a question like:</p>
+<ul>
+<li>Is the first element of the vector <code>many_greetings</code> <code>"hola"</code>?</li>
+</ul>
+<p>. . .</p>
+<p>We can ask Python to find out and return the answer <code>True</code> or <code>False</code>.</p>
+<div id="a7c40621" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>many_greetings[<span class="dv">1</span>] <span class="op">==</span> <span class="st">"hola"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>False</code></pre>
+</div>
+</div>
+</section>
+<section id="logical-operators" class="level3">
+<h3 class="anchored" data-anchor-id="logical-operators">Logical operators</h3>
+<p><br></p>
+<p>Most of the questions we ask Python to answer with <code>True</code> or <code>False</code> involve comparison operators like <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, and <code>==</code>.</p>
+<p>The double <code>==</code> sign checks whether two values are equal. There is even a comparison operator to check whether values are <em>not</em> equal: <code>!=</code>.</p>
+<p>For example, <code>5 != 3</code> is a <code>True</code> statement.</p>
+</section>
+<section id="common-logical-operators" class="level3">
+<h3 class="anchored" data-anchor-id="common-logical-operators">Common logical operators</h3>
+<p><br></p>
+<ul>
+<li><p><code>&gt;</code> (<em>larger than</em>)</p></li>
+<li><p><code>&gt;=</code> (<em>larger than or equal to</em>)</p></li>
+<li><p><code>&lt;</code> (<em>smaller than</em>)</p></li>
+<li><p><code>&lt;=</code> (<em>smaller than or equal to</em>)</p></li>
+<li><p><code>==</code> (<em>equal to</em>)</p></li>
+<li><p><code>!=</code> (<em>not equal to</em>)</p></li>
+</ul>
+</section>
+<section id="question" class="level3">
+<h3 class="anchored" data-anchor-id="question">Question</h3>
+<p><br></p>
+<p>Read this code and predict its response. Then, run the code in Google Colab and validate if you were correct.</p>
+<div id="79a67e50" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>compare <span class="op">=</span> A <span class="op">&gt;</span> B</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>compare</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="programming-culture-trial-and-error" class="level3">
+<h3 class="anchored" data-anchor-id="programming-culture-trial-and-error">Programming culture: Trial and error</h3>
+<p><br></p>
+<p>The best way to learn programming is to try things out and see what happens. Write some code, run it, and think about why it didn’t work.</p>
+<p>There are many ways to make small mistakes in programming (for example, typing a capital letter when a lowercase letter is needed).</p>
+<p>We often have to find these mistakes through trial and error.</p>
+</section>
+<section id="python-libraries" class="level3">
+<h3 class="anchored" data-anchor-id="python-libraries">Python libraries</h3>
+<p>Libraries are the fundamental units of reproducible Python code. They include reusable Python functions, documentation describing how to use them, and sample data.</p>
+<p><br></p>
+<p>In this course, we will be working mostly with the following libraries:</p>
+<ul>
+<li><code>pandas</code> for data manipulation</li>
+<li><code>matplotlib</code> and <code>seaborn</code> for data visualization</li>
+<li><code>statsmodels</code> and <code>scikit-learn</code> for data modelling</li>
+</ul>
+</section>
+</section>
+<section id="reading-data-with-python" class="level2">
+<h2 class="anchored" data-anchor-id="reading-data-with-python">Reading data with Python</h2>
+<section id="data-organization" class="level3">
+<h3 class="anchored" data-anchor-id="data-organization">Data organization</h3>
+<p>In data science, we organize data into rows and columns.</p>
+<div class="center">
+<pre><code>    Condition  Age   Wt    Wt2
+1  Uninformed   35  136  135.8
+2  Uninformed   45  162  161.8
+3    Informed   52  117  116.8
+4    Informed   29  184  182.8
+5  Uninformed   38  134  136.6
+6    Informed   39  189  183.2</code></pre>
+</div>
+<p>. . .</p>
+<p>The rows are the sampled cases. In this example, the rows are housekeepers from different hotels. There are six rows, so there are six housekeepers in this data set.</p>
+<p>. . .</p>
+<p>Depending on the study, the rows could be people, states, couples, mice—any case you’re taking a sample from to study.</p>
+</section>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>The columns represent variables or attributes of each case that were measured.</p>
+</div><div class="column" style="width:50%;">
+<pre><code>    Condition  Age   Wt    Wt2
+1  Uninformed   35  136  135.8
+2  Uninformed   45  162  161.8
+3    Informed   52  117  116.8
+4    Informed   29  184  182.8
+5  Uninformed   38  134  136.6
+6    Informed   39  189  183.2</code></pre>
+</div>
+</div>
+<p>. . .</p>
+<p><br></p>
+<p>In this study, housekeepers were either informed or not that their daily work of cleaning hotel rooms was equivalent to getting adequate exercise for good health.</p>
+<p>. . .</p>
+<p><br></p>
+<p>So one of the variables, <code>Condition</code>, indicates whether they were informed of this fact or not.</p>
+</section>
+<section id="section-1" class="level3">
+<h3 class="anchored" data-anchor-id="section-1"></h3>
+<p><br></p>
+<p>Other variables include the age of the housekeeper (<code>Age</code>), her weight before starting the study (<code>Wt</code>), and her weight at the end of the study (<code>Wt2</code>), measured four weeks later.</p>
+<p><br></p>
+<p>Therefore, the values in each row represent the values of that particular case in each of the variables measured.</p>
+<pre><code>    Condition  Age   Wt    Wt2
+1  Uninformed   35  136  135.8
+2  Uninformed   45  162  161.8
+3    Informed   52  117  116.8
+4    Informed   29  184  182.8
+5  Uninformed   38  134  136.6
+6    Informed   39  189  183.2</code></pre>
+<div class="notes">
+<p>¿Cuántas variables hay en este conjunto de datos?</p>
+</div>
+</section>
+<section id="loading-data-in-python" class="level3">
+<h3 class="anchored" data-anchor-id="loading-data-in-python">Loading data in Python</h3>
+<p>In this course, we will assume that data is stored in an Excel file with the above organization. As an example, let’s use the file <code>penguins.xlsx</code>.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img src="images/print_excel.png" class="img-fluid" width="418"></p>
+</div><div class="column" style="width:50%;">
+<p><img src="images/clipboard-1776523589.png" class="img-fluid" width="396"></p>
+</div>
+</div>
+<div style="font-size: 85%;">
+<p><span style="color:red;"><strong><em>The file must be previously uploaded to Google Colab.</em></strong></span></p>
+</div>
+</section>
+<section id="section-2" class="level3">
+<h3 class="anchored" data-anchor-id="section-2"></h3>
+<p>The dataset <code>penguins.xlsx</code> contains data from penguins living in three islands.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/penguins_bill.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="pandas-library" class="level3">
+<h3 class="anchored" data-anchor-id="pandas-library">pandas library</h3>
+<p><br></p>
+<div class="columns">
+<div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="images/pandas-logo-300.png" class="img-fluid quarto-figure quarto-figure-left figure-img"></p>
+</figure>
+</div>
+</div><div class="column" style="width:70%;">
+<ul>
+<li><strong>pandas</strong> is an open-source Python library for data manipulation and analysis.</li>
+<li>It is built on top of <strong>numpy</strong> for high-performance data operations..</li>
+<li>It allows the user to import, clean, transform, and analyze data efficiently</li>
+<li><a href="https://pandas.pydata.org/" class="uri">https://pandas.pydata.org/</a></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="importing-pandas" class="level3">
+<h3 class="anchored" data-anchor-id="importing-pandas">Importing pandas</h3>
+<p>Fortunately, the <strong>pandas</strong> library is already pre-installed in Google Colab.</p>
+<p><br></p>
+<p>However, we need to inform Google Colab that we want to use <strong>pandas</strong> and its functions using the following command:</p>
+<div id="b222257e" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><br></p>
+<p>The command <code>as pd</code> allows us to have a short name for <strong>pandas</strong>. To use a function of <strong>pandas</strong>, we use the command <code>pd.function()</code>.</p>
+</section>
+<section id="loading-data-using-pandas" class="level3">
+<h3 class="anchored" data-anchor-id="loading-data-using-pandas">Loading data using pandas</h3>
+<p><br></p>
+<p>The following code shows how to read the data in the file “penguins.xlsx” into Python.</p>
+<div id="660ef990" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Excel file into a pandas DataFrame.</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>penguins_data <span class="op">=</span> pd.read_excel(<span class="st">"penguins.xlsx"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="the-function-head" class="level3">
+<h3 class="anchored" data-anchor-id="the-function-head">The function head()</h3>
+<p>The function <code>head()</code> allows you to print the first rows of a pandas data frame.</p>
+<div id="84f5ba8f" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the first 4 rows of the dataset.</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>penguins_data.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">island</th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>39.1</td>
+<td>18.7</td>
+<td>181.0</td>
+<td>3750.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>39.5</td>
+<td>17.4</td>
+<td>186.0</td>
+<td>3800.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>40.3</td>
+<td>18.0</td>
+<td>195.0</td>
+<td>3250.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2007</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="indexing-variables-a-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="indexing-variables-a-dataset">Indexing variables a dataset</h3>
+<p>We can select a specific variables of a data frame using the syntaxis below.</p>
+<div id="eba81248" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>penguins_data[<span class="st">'bill_length_mm'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>0      39.1
+1      39.5
+2      40.3
+3       NaN
+4      36.7
+       ... 
+339    55.8
+340    43.5
+341    49.6
+342    50.8
+343    50.2
+Name: bill_length_mm, Length: 344, dtype: float64</code></pre>
+</div>
+</div>
+<p>Here, we selected the variable <code>bill_length_mm</code> in the <code>penguins_data</code> dataset.</p>
+</section>
+<section id="section-3" class="level3">
+<h3 class="anchored" data-anchor-id="section-3"></h3>
+<p>To index multiple variables of a data frame, we put the names of the variables in a list object. For example, we select <code>bill_length_mm</code>, <code>species</code>, and <code>island</code> as follows:</p>
+<div id="2e4f4982" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>sub_penguins_data <span class="op">=</span> penguins_data[ [<span class="st">'bill_length_mm'</span>,  <span class="st">'species'</span>, <span class="st">'island'</span>] ]</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>sub_penguins_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">island</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>39.1</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>39.5</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>40.3</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>NaN</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>36.7</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="indexing-rows" class="level3">
+<h3 class="anchored" data-anchor-id="indexing-rows">Indexing rows</h3>
+<p>To index rows in a dataset, we use the argument <code>loc</code> from <strong>pandas</strong>. For example, we select the rows 3 to 6 of the <code>penguins_dataset</code> dataset:</p>
+<div id="974f1d98" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>rows_penguins_data <span class="op">=</span> penguins_data.loc[<span class="dv">2</span>:<span class="dv">5</span>]</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>rows_penguins_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">island</th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>40.3</td>
+<td>18.0</td>
+<td>195.0</td>
+<td>3250.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2007</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>36.7</td>
+<td>19.3</td>
+<td>193.0</td>
+<td>3450.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>39.3</td>
+<td>20.6</td>
+<td>190.0</td>
+<td>3650.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-4" class="level3">
+<h3 class="anchored" data-anchor-id="section-4"></h3>
+<p><br></p>
+<div id="87bc6d82" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>rows_penguins_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">island</th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>40.3</td>
+<td>18.0</td>
+<td>195.0</td>
+<td>3250.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2007</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>36.7</td>
+<td>19.3</td>
+<td>193.0</td>
+<td>3450.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>39.3</td>
+<td>20.6</td>
+<td>190.0</td>
+<td>3650.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Note that the index 2 and 5 refer to observations 3 and 7, respectively, in the dataset. This is because the first index in Python is 0.</p>
+</section>
+<section id="indexing-rows-and-columns" class="level3">
+<h3 class="anchored" data-anchor-id="indexing-rows-and-columns">Indexing rows and columns</h3>
+<p>Using <code>loc</code>, we can also retrieve a subset from the dataset by selecting specific columns and rows.</p>
+<div id="15734b93" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>sub_rows_pdata <span class="op">=</span> penguins_data.loc[<span class="dv">2</span>:<span class="dv">5</span>, [<span class="st">'bill_length_mm'</span>,  <span class="st">'species'</span>, <span class="st">'island'</span>] ]</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>sub_rows_pdata</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">island</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>40.3</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>NaN</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>36.7</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>39.3</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="data-manipulation-with-pandas" class="level2">
+<h2 class="anchored" data-anchor-id="data-manipulation-with-pandas">Data manipulation with pandas</h2>
+<section id="chaining-operations-with-pandas" class="level3">
+<h3 class="anchored" data-anchor-id="chaining-operations-with-pandas">Chaining operations with pandas</h3>
+<p>One of the most important techniques in <strong>pandas</strong> is <span style="color:brown;"><strong>chaining</strong></span>, which allows for cleaner and more readable data manipulation.</p>
+<p>The general structure of chaining looks like this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/chaining_pandas.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="key-pandas-methods" class="level3">
+<h3 class="anchored" data-anchor-id="key-pandas-methods">Key pandas methods</h3>
+<p><strong>pandas</strong> provides methods or functions to solve common data manipulation tasks:</p>
+<div class="incremental">
+<ul class="incremental">
+<li><p><code>.filter()</code> selects specific columns or rows.</p></li>
+<li><p><code>.query()</code> filters observations based on conditions.</p></li>
+<li><p><code>.assign()</code> adds new variables that are functions of existing variables.</p></li>
+<li><p><code>.sort_values()</code> changes the order of rows.</p></li>
+<li><p><code>.agg()</code> reduces multiple values to a single numerical summary.</p></li>
+</ul>
+</div>
+</section>
+<section id="section-5" class="level3">
+<h3 class="anchored" data-anchor-id="section-5"></h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/pandas_manipulation.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>To practice, we will use the dataset <code>penguins_data</code>.</p>
+</section>
+<section id="example-1" class="level3">
+<h3 class="anchored" data-anchor-id="example-1">Example 1</h3>
+<p>Let’s load the dataset and the <strong>pandas</strong> library.</p>
+<div id="7983630c" class="cell" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Excel file into a pandas DataFrame.</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>penguins_data <span class="op">=</span> pd.read_excel(<span class="st">"penguins.xlsx"</span>)</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the dataset.</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>penguins_data.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">island</th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>39.1</td>
+<td>18.7</td>
+<td>181.0</td>
+<td>3750.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>39.5</td>
+<td>17.4</td>
+<td>186.0</td>
+<td>3800.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>40.3</td>
+<td>18.0</td>
+<td>195.0</td>
+<td>3250.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2007</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="selecting-columns-with-.filter" class="level3">
+<h3 class="anchored" data-anchor-id="selecting-columns-with-.filter">Selecting columns with <code>.filter()</code></h3>
+<p>Select the columns <code>species</code>, <code>body_mass_g</code> and <code>sex</code>.</p>
+<div id="0ec18b9c" class="cell" data-execution_count="32">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  .<span class="bu">filter</span>([<span class="st">"species"</span>, <span class="st">"body_mass_g"</span>, <span class="st">"sex"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Adelie</td>
+<td>3750.0</td>
+<td>male</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Adelie</td>
+<td>3800.0</td>
+<td>female</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Adelie</td>
+<td>3250.0</td>
+<td>female</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Adelie</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Adelie</td>
+<td>3450.0</td>
+<td>female</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-6" class="level3">
+<h3 class="anchored" data-anchor-id="section-6"></h3>
+<p><br></p>
+<p>The <code>axis</code> argument tells <code>.filter()</code> whether to select rows (<code>0</code>) or columns (<code>1</code>) from the dataframe.</p>
+<div id="e46c06a6" class="cell" data-execution_count="33">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  .<span class="bu">filter</span>([<span class="st">"species"</span>, <span class="st">"body_mass_g"</span>, <span class="st">"sex"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><br></p>
+<blockquote class="blockquote">
+<p>The <code>.head()</code> command allows us to print the first six rows of the newly produced dataframe. We <strong>must</strong> remove it to have the entire new dataframe.</p>
+</blockquote>
+</section>
+<section id="section-7" class="level3">
+<h3 class="anchored" data-anchor-id="section-7"></h3>
+<p><br></p>
+<p>We can also use <code>.filter()</code> to select rows too. To this end, we set <code>axis = 1</code>. We can select specific rows, such as 0 and 10.</p>
+<div id="2b16cd56" class="cell" data-execution_count="34">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  .<span class="bu">filter</span>([<span class="dv">0</span>, <span class="dv">10</span>], axis <span class="op">=</span> <span class="dv">0</span>)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">island</th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>39.1</td>
+<td>18.7</td>
+<td>181.0</td>
+<td>3750.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">10</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>37.8</td>
+<td>17.1</td>
+<td>186.0</td>
+<td>3300.0</td>
+<td>NaN</td>
+<td>2007</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-8" class="level3">
+<h3 class="anchored" data-anchor-id="section-8"></h3>
+<p>Or, we can select a set of rows using the function <code>range()</code>. For example, let’s select the first 5 rows.</p>
+<div id="efaa8633" class="cell" data-execution_count="35">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  .<span class="bu">filter</span>(<span class="bu">range</span>(<span class="dv">5</span>), axis <span class="op">=</span> <span class="dv">0</span>)</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">island</th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>39.1</td>
+<td>18.7</td>
+<td>181.0</td>
+<td>3750.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>39.5</td>
+<td>17.4</td>
+<td>186.0</td>
+<td>3800.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>40.3</td>
+<td>18.0</td>
+<td>195.0</td>
+<td>3250.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2007</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>36.7</td>
+<td>19.3</td>
+<td>193.0</td>
+<td>3450.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="filtering-rows-with-.query" class="level3">
+<h3 class="anchored" data-anchor-id="filtering-rows-with-.query">Filtering rows with <code>.query()</code></h3>
+<p><br></p>
+<p>An alternative way of selecting rows is <code>.query()</code>. Compared to <code>.filter()</code>, <code>.query()</code> allows us to filter the data using statements or <em>queries</em> involving the variables.</p>
+<p><br></p>
+<p>For example, let’s filter the data for the species “Gentoo.”</p>
+<div id="70fa2499" class="cell" data-execution_count="36">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  .query(<span class="st">"species == 'Gentoo'"</span>)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-9" class="level3">
+<h3 class="anchored" data-anchor-id="section-9"></h3>
+<p><br></p>
+<div id="1afacd9f" class="cell" data-execution_count="37">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  .query(<span class="st">"species == 'Gentoo'"</span>)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">island</th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">152</th>
+<td>Gentoo</td>
+<td>Biscoe</td>
+<td>46.1</td>
+<td>13.2</td>
+<td>211.0</td>
+<td>4500.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">153</th>
+<td>Gentoo</td>
+<td>Biscoe</td>
+<td>50.0</td>
+<td>16.3</td>
+<td>230.0</td>
+<td>5700.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">154</th>
+<td>Gentoo</td>
+<td>Biscoe</td>
+<td>48.7</td>
+<td>14.1</td>
+<td>210.0</td>
+<td>4450.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">155</th>
+<td>Gentoo</td>
+<td>Biscoe</td>
+<td>50.0</td>
+<td>15.2</td>
+<td>218.0</td>
+<td>5700.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">156</th>
+<td>Gentoo</td>
+<td>Biscoe</td>
+<td>47.6</td>
+<td>14.5</td>
+<td>215.0</td>
+<td>5400.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-10" class="level3">
+<h3 class="anchored" data-anchor-id="section-10"></h3>
+<p>We can also filter the data to get penguins with a body mass greater than 5000g.</p>
+<div id="226f2bf6" class="cell" data-execution_count="38">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  .query(<span class="st">"body_mass_g &gt; 5000"</span>)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">island</th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">153</th>
+<td>Gentoo</td>
+<td>Biscoe</td>
+<td>50.0</td>
+<td>16.3</td>
+<td>230.0</td>
+<td>5700.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">155</th>
+<td>Gentoo</td>
+<td>Biscoe</td>
+<td>50.0</td>
+<td>15.2</td>
+<td>218.0</td>
+<td>5700.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">156</th>
+<td>Gentoo</td>
+<td>Biscoe</td>
+<td>47.6</td>
+<td>14.5</td>
+<td>215.0</td>
+<td>5400.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">159</th>
+<td>Gentoo</td>
+<td>Biscoe</td>
+<td>46.7</td>
+<td>15.3</td>
+<td>219.0</td>
+<td>5200.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">161</th>
+<td>Gentoo</td>
+<td>Biscoe</td>
+<td>46.8</td>
+<td>15.4</td>
+<td>215.0</td>
+<td>5150.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-11" class="level3">
+<h3 class="anchored" data-anchor-id="section-11"></h3>
+<p>We can even <strong>combine</strong> <code>.filter()</code> and <code>.query()</code>. For example, let’s select the columns <code>species</code>, <code>body_mass_g</code> and <code>sex</code>, then filter the data for the “Gentoo” species.</p>
+<div id="b550b920" class="cell" data-execution_count="39">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  .<span class="bu">filter</span>([<span class="st">"species"</span>, <span class="st">"body_mass_g"</span>, <span class="st">"sex"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  .query(<span class="st">"species == 'Gentoo'"</span>)</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>).head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">152</th>
+<td>Gentoo</td>
+<td>4500.0</td>
+<td>female</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">153</th>
+<td>Gentoo</td>
+<td>5700.0</td>
+<td>male</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">154</th>
+<td>Gentoo</td>
+<td>4450.0</td>
+<td>female</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">155</th>
+<td>Gentoo</td>
+<td>5700.0</td>
+<td>male</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="create-new-columns-with-.assign" class="level3">
+<h3 class="anchored" data-anchor-id="create-new-columns-with-.assign">Create new columns with <code>.assign()</code></h3>
+<p><br></p>
+<p>With <code>.assign()</code>, we can create new columns (variables) that are functions of existing ones. This function uses a special Python keyword called <code>lambda</code>. Technically, this keyword defines an <em>anonymous</em> function.</p>
+<p><br></p>
+<p>For example, we create a new variable <code>LDRatio</code> equaling the ratio of <code>bill_length_mm</code> and <code>bill_depth_mm</code>.</p>
+<div id="b4ea3612" class="cell" data-execution_count="40">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  .assign(LDRatio <span class="op">=</span> <span class="kw">lambda</span> df: df[<span class="st">"bill_length_mm"</span>] <span class="op">/</span> df[<span class="st">"bill_depth_mm"</span>])</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-12" class="level3">
+<h3 class="anchored" data-anchor-id="section-12"></h3>
+<p><br><br></p>
+<p>In this code, the <code>df</code> after <code>lambda</code> indicates that the dataframe (<code>penguins_data</code>) will be referred to as <code>df</code> inside the function. The colon <code>:</code> sets the start of the function.</p>
+<div id="7daf1c5e" class="cell" data-execution_count="41">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  .assign(LDRatio <span class="op">=</span> <span class="kw">lambda</span> df: df[<span class="st">"bill_length_mm"</span>] <span class="op">/</span> df[<span class="st">"bill_depth_mm"</span>])</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The code appends the new variable to the end of the resulting dataframe.</p>
+</section>
+<section id="section-13" class="level3">
+<h3 class="anchored" data-anchor-id="section-13"></h3>
+<p>We can see the new variable using <code>.filter()</code>.</p>
+<div id="492e8528" class="cell" data-execution_count="42">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  .assign(LDRatio <span class="op">=</span> <span class="kw">lambda</span> df: df[<span class="st">"bill_length_mm"</span>] <span class="op">/</span> df[<span class="st">"bill_depth_mm"</span>])</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  .<span class="bu">filter</span>([<span class="st">"bill_length_mm"</span>, <span class="st">"bill_depth_mm"</span>, <span class="st">"LDRatio"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="42">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">LDRatio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>39.1</td>
+<td>18.7</td>
+<td>2.090909</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>39.5</td>
+<td>17.4</td>
+<td>2.270115</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>40.3</td>
+<td>18.0</td>
+<td>2.238889</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>36.7</td>
+<td>19.3</td>
+<td>1.901554</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="sorting-with-.sort_values" class="level3">
+<h3 class="anchored" data-anchor-id="sorting-with-.sort_values">Sorting with <code>.sort_values()</code></h3>
+<p>We can sort the data based on a column like <code>bill_length_mm</code>.</p>
+<div id="25b9fc7b" class="cell" data-execution_count="43">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  .sort_values(<span class="st">"bill_length_mm"</span>)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>).head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="43">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">island</th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">142</th>
+<td>Adelie</td>
+<td>Dream</td>
+<td>32.1</td>
+<td>15.5</td>
+<td>188.0</td>
+<td>3050.0</td>
+<td>female</td>
+<td>2009</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">98</th>
+<td>Adelie</td>
+<td>Dream</td>
+<td>33.1</td>
+<td>16.1</td>
+<td>178.0</td>
+<td>2900.0</td>
+<td>female</td>
+<td>2008</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">70</th>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>33.5</td>
+<td>19.0</td>
+<td>190.0</td>
+<td>3600.0</td>
+<td>female</td>
+<td>2008</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">92</th>
+<td>Adelie</td>
+<td>Dream</td>
+<td>34.0</td>
+<td>17.1</td>
+<td>185.0</td>
+<td>3400.0</td>
+<td>female</td>
+<td>2008</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-14" class="level3">
+<h3 class="anchored" data-anchor-id="section-14"></h3>
+<p>To sort in descending order, use <code>ascending=False</code> inside <code>sort_values()</code>.</p>
+<div id="51c1c13f" class="cell" data-execution_count="44">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  .sort_values(<span class="st">"bill_length_mm"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">island</th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">185</th>
+<td>Gentoo</td>
+<td>Biscoe</td>
+<td>59.6</td>
+<td>17.0</td>
+<td>230.0</td>
+<td>6050.0</td>
+<td>male</td>
+<td>2007</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">293</th>
+<td>Chinstrap</td>
+<td>Dream</td>
+<td>58.0</td>
+<td>17.8</td>
+<td>181.0</td>
+<td>3700.0</td>
+<td>female</td>
+<td>2007</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">253</th>
+<td>Gentoo</td>
+<td>Biscoe</td>
+<td>55.9</td>
+<td>17.0</td>
+<td>228.0</td>
+<td>5600.0</td>
+<td>male</td>
+<td>2009</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">339</th>
+<td>Chinstrap</td>
+<td>Dream</td>
+<td>55.8</td>
+<td>19.8</td>
+<td>207.0</td>
+<td>4000.0</td>
+<td>male</td>
+<td>2009</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">267</th>
+<td>Gentoo</td>
+<td>Biscoe</td>
+<td>55.1</td>
+<td>16.0</td>
+<td>230.0</td>
+<td>5850.0</td>
+<td>male</td>
+<td>2009</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="summarizing-with-.agg" class="level3">
+<h3 class="anchored" data-anchor-id="summarizing-with-.agg">Summarizing with <code>.agg()</code></h3>
+<p>We can calculate summary statistics of the columns <code>bill_length_mm</code>, <code>bill_depth_mm</code>, and <code>body_mass_g</code>.</p>
+<div id="02d41cc0" class="cell" data-execution_count="45">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>(penguins_data</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  .<span class="bu">filter</span>([<span class="st">"bill_length_mm"</span>, <span class="st">"bill_depth_mm"</span>, <span class="st">"body_mass_g"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  .agg([<span class="st">"mean"</span>])</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="45">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">mean</th>
+<td>43.92193</td>
+<td>17.15117</td>
+<td>4201.754386</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p><br></p>
+<blockquote class="blockquote">
+<p>By default, <code>agg()</code> ignores missing values.</p>
+</blockquote>
+</section>
+<section id="saving-results-in-new-objects" class="level3">
+<h3 class="anchored" data-anchor-id="saving-results-in-new-objects">Saving results in new objects</h3>
+<p><br></p>
+<p>After performing operations on our data, we can save the modified dataset as a new object.</p>
+<div id="2a1794dc" class="cell" data-execution_count="46">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>mean_penguins_data <span class="op">=</span> (penguins_data</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  .<span class="bu">filter</span>([<span class="st">"bill_length_mm"</span>, <span class="st">"bill_depth_mm"</span>, <span class="st">"body_mass_g"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>  .agg([<span class="st">"mean"</span>])</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>mean_penguins_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="46">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">mean</th>
+<td>43.92193</td>
+<td>17.15117</td>
+<td>4201.754386</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="more-on-pandas" class="level3">
+<h3 class="anchored" data-anchor-id="more-on-pandas">More on pandas</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/python_book.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div style="font-size: 50%;">
+<p><a href="https://wesmckinney.com/book/" class="uri">https://wesmckinney.com/book/</a></p>
+</div>
+</section>
+</section>
+<section id="return-to-main-page" class="level2">
+<h2 class="anchored" data-anchor-id="return-to-main-page"><a href="https://alanrvazquez.github.io/TEC-IN5148/">Return to main page</a></h2>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

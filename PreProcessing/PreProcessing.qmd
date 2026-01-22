@@ -1,0 +1,810 @@
+---
+title: "Data preprocessing"
+subtitle: "IN5148: Statistics and Data Science with Applications in Engineering"
+author: 
+  - name: Alan R. Vazquez
+    affiliations:
+      - name: Department of Industrial Engineering
+format: 
+  revealjs:
+    chalkboard: false
+    multiplex: true
+    footer: "Tecnologico de Monterrey"
+    logo: IN5148_logo.png
+    css: style.css
+    slide-number: True
+    html-math-method: mathjax
+editor: visual
+jupyter: python3
+---
+
+## Agenda
+
+</br>
+
+1.  Introduction
+2.  Dealing with missing values
+3.  Transforming predictors
+4.  Reducing the number of predictors
+5.  Standardizing predictors
+
+# Introduction
+
+## Data preprocessing
+
+[**Data pre-processing**]{style="color:lightblue;"} techniques generally refer to the addition, deletion, or transformation of data.
+
+</br>
+
+> It can make or break a model’s predictive ability.
+
+</br>
+
+For example, linear regression models (to be discussed later) are relatively insensitive to the characteristics of the predictor data, but advanced methods like K-nearest neighbors, principal component regression, and LASSO are not.
+
+## 
+
+</br>
+
+We will review some common strategies for processing predictors from the data, without considering how they might be related to the response.
+
+. . .
+
+In particular, we will review:
+
+::: incremental
+-   Dealing with missing values.
+-   Transforming predictors.
+-   Reducing the number of predictors.
+-   Standardizing the units of the predictors.
+:::
+
+## scikit-learn library
+
+-   **scikit-learn** is a robust and popular library for machine learning in Python
+-   It provides simple, efficient tools for data mining and data analysis
+-   It is built on top of libraries such as **NumPy**, **SciPy**, and **Matplotlib**
+-   <https://scikit-learn.org/stable/>
+
+![](images/scikitlearn.png){fig-align="center"}
+
+## 
+
+</br>
+
+Let's import **scikit-learn** into Python together with the other relevant libraries.
+
+```{python}
+#| echo: true
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler 
+```
+
+We will not use all the functions from the **scikit-learn** library. Instead, we will use specific functions from the sub-libraries **preprocessing** and **impute**.
+
+# Dealing with missing values
+
+## Missing values
+
+In many cases, some predictors have no values for a given observation. It is important to understand why the values are missing.
+
+</br>
+
+. . .
+
+There four main types of missing data:
+
+::: incremental
+-   *Structurally missing* data is data that is missing for a logical reason or because it should not exist.
+
+-   *Missing completely at random* assumes that the fact that the data is missing is unrelated to the other information in the data.
+:::
+
+## 
+
+</br></br>
+
+-   *Missing at random* assumes that we can predict the value that is missing based on the other available data.
+
+-   *Missing not at random* assumes that there is a mechanism that generates the missing values, which may include observed and unobserved predictors.
+
+## 
+
+For large data sets, removal of observations based on missing values is not a problem, assuming that the type of missing data is completely at random.
+
+</br>
+
+In a smaller data sets, there is a high price in removing observations. To overcome this issue, we can use methods of imputation, which try to estimate the missing values of a predictor variable using the other predictors' values.
+
+</br>
+
+Here, we will introduce some simple methods for imputing missing values in categorical and numerical variables.
+
+## Example 1
+
+</br>
+
+Let's use the penguins dataset available in the file "penguins.xlsx".
+
+```{python}
+#| echo: true
+
+# Load the Excel file into a pandas DataFrame.
+penguins_data = pd.read_excel("penguins.xlsx")
+
+# Set categorical variables.
+penguins_data['sex'] = pd.Categorical(penguins_data['sex'])
+penguins_data['species'] = pd.Categorical(penguins_data['species'])
+penguins_data['island'] = pd.Categorical(penguins_data['island'])
+```
+
+## Predictor data
+
+For illustrative purposes, we will use the predictors `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `body_mass_g`, and `sex`. We create the predictor matrix.
+
+```{python}
+#| echo: true
+
+# Set full matrix of predictors.
+X_p = (penguins_data
+      .filter(['bill_length_mm', 'bill_depth_mm', 
+           'flipper_length_mm', 'body_mass_g', 'sex']))
+# Preview dataset.
+X_p.head(3)
+```
+
+## 
+
+</br>
+
+Let's check if the dataset has missing observations using the function `.info()` from **pandas**.
+
+```{python}
+#| echo: true
+
+X_p.info()
+```
+
+## 
+
+In the output of the function, "non-null" refers to the number of entries in a column that have actual values. That is, the number of entries where there are not `NaN`.
+
+```{python}
+#| echo: false
+
+X_p.info()
+```
+
+The "Index" section shows the number of observations in the dataset.
+
+## 
+
+The output below shows that there are 240 entries but `bill_length_mm` has 238 that are "non-null". Therefore, this column has **two** missing observations.
+
+```{python}
+#| echo: false
+
+X_p.info()
+```
+
+The same is true for the other predictors except for `sex` that has **eight** missing values.
+
+## 
+
+</br>
+
+Alternatively, we can use the function `.isnull()` together with `sum()` to determine the number of missing values for each column in the dataset.
+
+</br>
+
+```{python}
+#| echo: true
+
+missing_values = X_p.isnull().sum()
+missing_values
+```
+
+## Removing missing values
+
+If we want to remove all rows in the dataset that have at least one missing value, we use the function `.dropna()`.
+
+```{python}
+#| echo: true
+#| output: true
+
+complete_predictors = X_p.dropna()
+complete_predictors.head()
+```
+
+## 
+
+```{python}
+#| echo: true
+#| output: true
+
+complete_predictors.info()
+```
+
+The new data is complete because each column has 232 "non-null" values; the total number of observations in `complete_predictors`.
+
+However, note that we have lost eight of the original observations in `X_train_p`!
+
+## Imputation using the mean
+
+We can impute the missing values of a numeric variable using the **mean** or **median** of its available values. For example, consider the variable `bill_length_mm` that has two missing values.
+
+```{python}
+#| echo: true
+#| output: true
+
+X_p['bill_length_mm'].info()
+```
+
+In **scikit-learn**, we use the function `SimpleImputer()` to define the method of imputation of missing values.
+
+## 
+
+</br>
+
+Using `SimpleImputer()`, we set the method to impute missing values using the **mean**.
+
+We also use the function `fit_transform()` to apply the imputation method to the variable.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Imputation for numerical variables (using the mean)
+num_imputer = SimpleImputer(strategy = 'mean')
+
+# Replace the original variable with new version.
+X_p['bill_length_mm'] = num_imputer.fit_transform(X_p[ ['bill_length_mm'] ] )
+```
+
+## 
+
+</br>
+
+After imputation, the information of the predictors in the dataset looks like this.
+
+```{python}
+#| echo: true
+#| output: true
+
+X_p.info()
+```
+
+Now, `bill_length_mm` has 240 complete values.
+
+## 
+
+To impute the missing values using the **median**, we simply set this method in `SimpleImputer()`. For example, let's impute the missing values of `bill_depth_mm`.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Imputation for numerical variables (using the mean)
+num_imputer = SimpleImputer(strategy = 'median')
+
+# Replace the original variable with new version.
+X_p['bill_depth_mm'] = num_imputer.fit_transform(X_p[ ['bill_depth_mm'] ] )
+
+# Show the information of the predictor.
+X_p['bill_depth_mm'].info()
+```
+
+## Using the mean or the median?
+
+</br></br>
+
+We use the **sample mean** when the data distribution is roughly symmetrical.
+
+-   Pros: Simple and easy to implement.
+
+-   Cons: Sensitive to outliers; may not be accurate for skewed distributions
+
+## 
+
+</br></br>
+
+We use the **sample median** when the data is skewed (e.g., incomes, prices).
+
+-   Pros: Less sensitive to outliers; robust for skewed distributions.
+
+-   Cons: May reduce variability in the data.
+
+## Imputation method for a categorical variable
+
+If a categorical variable has missing values, we can use the **most frequent** of the available values to replace the missing values. To this end, we use similar commands as before.
+
+For example, let's impute the missing values of `sex` using this strategy.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Imputation for categorical variables (using the most frequent value)
+cat_imputer = SimpleImputer(strategy = 'most_frequent')
+
+# Apply imputation strategy for categorical variables.
+X_p['sex'] = cat_imputer.fit_transform(X_p[ ['sex'] ]).ravel()
+```
+
+## 
+
+Let's now have a look at the information of the dataset.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Apply imputation strategy for categorical variables.
+X_p.info()
+```
+
+The columns `bill_length_mm`, `bill_depth_mm`, and `sex` have 240 complete values.
+
+## 
+
+</br>
+
+Unfortunately, after applying `cat_imputer` to the dataset, the variable `sex` is an object. To change it to categorical, we use the function `pd.Categorical` again.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Apply imputation strategy for categorical variables.
+X_p['sex'] = pd.Categorical(X_p['sex'])
+X_p.info()
+```
+
+# Transforming predictors
+
+## Categorical predictors
+
+A [**categorical predictor**]{style="color:darkgreen;"} takes on values that are categories or groups.
+
+. . .
+
+For example:
+
+-   Type of school: Public or private.
+
+-   Treatment: New or placebo.
+
+-   Grade: Passed or not passed.
+
+. . .
+
+The categories can be represented by names, labels or even numbers. Their use in regression requires **dummy variables**, which are numeric.
+
+## Dummy variables
+
+</br></br>
+
+> The traditional choice for a dummy variable is a binary variable, which can only take the values 0 and 1.
+
+</br>
+
+***Initially, a categorical variable with*** $k$ ***categories requires*** $k$ ***dummy variables.***
+
+## Example 2
+
+A market analyst is studying quality characteristics of cars. Specifically, the analyst is investigating the miles per gallon (mpg) of cars can be predicted using:
+
+-   $X_1:$ cylinders. Number of cylinders between 4 and 8
+-   $X_2:$ displacement. Engine displacement (cu. inches)
+-   $X_3:$ horsepower. Engine horsepower
+-   $X_4:$ weight. Vehicle weight (lbs.)
+-   $X_5:$ acceleration. Time to accelerate from 0 to 60 mph (sec.)
+-   $X_6:$ origin. Origin of car (American, European, Japanese)
+
+## 
+
+</br></br>
+
+The dataset is in the file "auto.xlsx". Let's read the data using **pandas**.
+
+```{python}
+#| echo: true
+
+# Load the Excel file into a pandas DataFrame.
+auto_data = pd.read_excel("auto.xlsx")
+
+# Set categorical variables.
+auto_data['origin'] = pd.Categorical(auto_data['origin'])
+```
+
+## Predictor data
+
+For illustrative purposes, we use the six predictors, $X_1, \ldots, X_6$. We create the predictor matrix.
+
+```{python}
+#| echo: true
+
+# Set full matrix of predictors.
+X_c = (auto_data
+      .filter(['cylinders', 'displacement', 
+              'horsepower', 'weight', 'acceleration', 'origin']))
+# Preview first rows.
+X_c.head(3)
+```
+
+## Dealing with missing values
+
+</br>
+
+The dataset has missing values. In this example, we remove each row with at least one missing value.
+
+</br>
+
+```{python}
+#| echo: true
+
+# Remove rows with missing values.
+complete_Auto = X_c.dropna()
+```
+
+## Example 2 (cont.)
+
+Categorical predictor: Origin of a car. Three categories: American, European and Japanese.
+
+Initially, 3 dummy variables are required:
+
+$$d_1 =
+\begin{cases}
+1 \text{ if observation is from an American car}\\
+0 \text{ otherwise}
+\end{cases}$$ $$d_2 =
+\begin{cases}
+1 \text{ if observation is from an European car}\\
+0 \text{ otherwise}
+\end{cases}$$ $$d_3 =
+\begin{cases}
+1 \text{ if observation is from a Japanese car}\\
+0 \text{ otherwise}
+\end{cases}$$
+
+## 
+
+The variable Origin would then be replaced by the three dummy variables
+
+| Origin ($X$) | $d_1$    | $d_2$    | $d_3$    |
+|--------------|----------|----------|----------|
+| American     | 1        | 0        | 0        |
+| American     | 1        | 0        | 0        |
+| European     | 0        | 1        | 0        |
+| European     | 0        | 1        | 0        |
+| American     | 1        | 0        | 0        |
+| Japanese     | 0        | 0        | 1        |
+| $\vdots$     | $\vdots$ | $\vdots$ | $\vdots$ |
+
+## A drawback
+
+</br>
+
+::: incremental
+-   A drawback with the initial dummy variables is that they are [**linearly dependent**]{style="color:red;"}. That is, $d_1 + d_2 + d_3 = 1$.
+
+-   Therefore, we can determine the value of $d_1 = 1- d_2 - d_3.$
+
+-   Predictive models such as linear regression are sensitive to linear dependencies among predictors.
+
+-   **The solution is to drop one of the predictor**, say, $d_1$, from the data.
+:::
+
+## 
+
+The variable Origin would then be replaced by the three dummy variables.
+
+| Origin ($X$) | $d_2$    | $d_3$    |
+|--------------|----------|----------|
+| American     | 0        | 0        |
+| American     | 0        | 0        |
+| European     | 1        | 0        |
+| European     | 1        | 0        |
+| American     | 0        | 0        |
+| Japanese     | 0        | 1        |
+| $\vdots$     | $\vdots$ | $\vdots$ |
+
+## Dummy variables in Python
+
+</br>
+
+We can get the dummy variables of a categorical variable using the function `pd.get_dummies()` from **pandas**.
+
+The input of the function is the categorical variable.
+
+The function has an extra argument called `drop_first` to drop the first dummy variable. It also has the argument `dtype` to show the values as integers.
+
+```{python}
+#| echo: true
+
+dummy_data = pd.get_dummies(complete_Auto['origin'], drop_first = True, 
+                            dtype = 'int')
+```
+
+## 
+
+</br></br>
+
+```{python}
+#| echo: true
+
+dummy_data.head()
+```
+
+## 
+
+Now, to add the dummy variables to the dataset, we use the function `concat()` from **pandas**.
+
+```{python}
+#| echo: true
+
+augmented_auto = pd.concat([complete_Auto, dummy_data], axis = 1)
+augmented_auto.head()
+```
+
+# Reducing the number of predictors
+
+## Removing predictors
+
+</br>
+
+There are potential advantages to removing predictors prior to modeling:
+
+::: incremental
+-   Fewer predictors means decreased computational time and complexity.
+
+-   If two predictors are highly-correlated, they are measuring the same underlying information. So, removing one should not compromise the performance of the model.
+:::
+
+. . .
+
+Here, we will see a popular technique to remove predictors.
+
+## Between-predictor correlation
+
+</br>
+
+[**Collinearity**]{style="color:purple;"} is the technical term for the situation where two predictors have a substantial correlation with each other.
+
+</br>
+
+If two or more predictors are highly correlated (either negatively or positively), then methods such as the linear regression model will not work!
+
+</br>
+
+To visualize the severity of collinearity between predictors, we calculate and visualize the *correlation matrix*.
+
+## Example 2 (cont.)
+
+</br>
+
+We concentrate on the five numerical predictors in the `complete_Auto` dataset.
+
+```{python}
+#| echo: true
+
+# Select specific variables.
+complete_sbAuto = complete_Auto[['cylinders', 'displacement', 
+                                 'horsepower', 'weight', 
+                                 'acceleration']]
+```
+
+## Correlation matrix
+
+</br>
+
+In Python, we calculate the correlation matrix using the command below.
+
+```{python}
+#| echo: true
+#| output: true
+
+correlation_matrix = complete_sbAuto.corr()
+print(correlation_matrix)
+```
+
+## 
+
+Next, we plot the correlation matrix using the function `heatmap()` from **seaborn**. The argument `annot` shows the actual value of the pair-wise correlations, and `cmap` shows a nice color theme.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+
+plt.figure(figsize=(3,3))
+sns.heatmap(correlation_matrix, cmap='coolwarm', annot = True)
+```
+
+## 
+
+</br>
+
+The predictors cylinders and displacement are highly correlated. In fact, their correlation is 0.95.
+
+```{python}
+#| echo: false
+#| output: true
+#| fig-align: center
+
+plt.figure(figsize=(7,5))
+sns.scatterplot(data = complete_sbAuto, x = 'cylinders', y = 'displacement')
+plt.xlabel('cylinders', fontsize = 14)
+plt.ylabel('displacement', fontsize = 14)
+plt.show()
+```
+
+## In practice
+
+</br>
+
+We deal with collinearity by removing the minimum number of predictors to ensure that all pairwise correlations are below a certain threshold, say, 0.75.
+
+</br>
+
+We can identify the variables that are highly correlated using quite complex code. However, here we will do it manually using the correlation map.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Dataset without highly correlated predictors.
+reduced_auto = complete_sbAuto[ ['weight', 'acceleration']]
+```
+
+# Standardizing predictors
+
+## Predictors with different units
+
+Many good predictive models have issues with [**numeric predictors**]{style="color:blue;"} with different units:
+
+1.  Methods such as K-nearest neighbors are based on the distance between observations. If the predictors are on different units or scales, then some predictors will have a larger weight for computing the distance.
+
+2.  Other methods such as LASSO use the variances of the predictors in their calculations. Predictors with different scales will have different variances and so, those with a higher variance will play a bigger role in the calculations.
+
+## 
+
+</br></br></br></br>
+
+::: {style="font-size: 150%;"}
+[***In a nutshell, some predictors will have a higher impact in the model due to its unit and not its information provided to it.***]{style="color:purple;"}
+:::
+
+## Standarization
+
+</br>
+
+Standardization refers to *centering* and *scaling* each numeric predictor individually. It puts every predictor on the same scale.
+
+To **center** a predictor variable, the average predictor value is subtracted from all the values.
+
+Therefore, the centered predictor has a zero mean (that is, its average value is zero).
+
+## 
+
+</br>
+
+To **scale** a predictor, each of its value is divided by its standard deviation.
+
+Scaling the data coerce the values to have a common standard deviation of one.
+
+In mathematical terms, we standardize a predictor as:
+
+$${\color{blue} \tilde{X}_{i}} = \frac{{ X_{i} - \bar{X}}}{ \sqrt{\frac{1}{n -1} \sum_{i=1}^{n} (X_{i} - \bar{X})^2}},$$
+
+with $\bar{X} = \sum_{i=1}^n \frac{x_i}{n}$.
+
+## Example 2 (cont.)
+
+We use on the five numerical predictors in the `complete_sbAuto` dataset.
+
+```{python}
+#| echo: true
+
+complete_sbAuto.head()
+```
+
+## Two predictors in original units
+
+Consider the `complete_sbAuto` dataset created previously. Consider two points in the plot: $(175, 5140)$ and $(69, 1613)$.
+
+::::: columns
+::: {.column width="50%"}
+```{python}
+#| echo: false
+#| output: true
+#| fig-align: center
+
+plt.figure(figsize=(5,5))
+sns.scatterplot(data = complete_sbAuto, x = 'horsepower', y = 'weight')
+plt.scatter(x = 175, y = 5140, color = 'red')
+plt.scatter(x = 69, y = 1613, color = 'red')
+plt.xlabel('Horsepower', fontsize=14)
+plt.ylabel('Weight', fontsize=14)
+plt.show()
+```
+:::
+
+::: {.column width="50%"}
+</br>
+
+The distance between these points is $\sqrt{(69 - 175)^2 + (1613-5140)^2}$ $= \sqrt{11236 + 12439729}$ $= 3528.592$.
+:::
+:::::
+
+## Standarization in Python
+
+</br>
+
+To standardize **numerical** predictors, we use the function `StandardScaler()`. Moreover, we apply the function to the variables using the function `fit_transform()`.
+
+</br>
+
+```{python}
+#| echo: true
+
+scaler = StandardScaler()
+Xs = scaler.fit_transform(complete_sbAuto)
+```
+
+## 
+
+Unfortunately, the resulting object is not a pandas data frame. We then convert this object to this format. </br>
+
+```{python}
+#| echo: true
+
+scaled_df = pd.DataFrame(Xs, columns = complete_sbAuto.columns)
+scaled_df.head()
+```
+
+## Two predictors in standardized units
+
+In the new scale, the two points are now: $(1.82, 2.53)$ and $(-0.91, -1.60)$.
+
+::::: columns
+::: {.column width="50%"}
+```{python}
+#| echo: false
+#| output: true
+#| fig-align: center
+
+plt.figure(figsize=(5,5))
+sns.scatterplot(data = scaled_df, x = 'horsepower', y = 'weight')
+plt.scatter(x = 1.83, y = 2.54, color = 'red')
+plt.scatter(x = -0.90, y = -1.60, color = 'red')
+plt.xlabel('Standardized horsepower', fontsize=14)
+plt.ylabel('Standardized weight', fontsize=14)
+plt.show()
+```
+:::
+
+::: {.column width="50%"}
+</br>
+
+The distance between these points is $\sqrt{(-0.91 - 1.82)^2 + (-1.60-2.53)^2}$ $= \sqrt{7.45 + 17.05} = 4.95$.
+:::
+:::::
+
+## Discussion
+
+::: incremental
+-   Standardized predictors are generally used to improve the numerical stability of some calculations.
+
+-   It is generally recommended to always standardize numeric predictors. Perhaps the only exception would be if we consider a linear regression model.
+
+-   A drawback of these transformations is the [***loss of interpretability***]{style="color:pink;"} since the data are no longer in the original units.
+
+-   Standardizing the predictors does not affect their correlation.
+:::
+
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

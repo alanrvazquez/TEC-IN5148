@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alan R. Vazquez">
+
+<title>Data preprocessing: Part I – IN5148 Statistics and Data Science with Applications in Engineering</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-ff63373b1067ca6f91cf1456aa1f00a2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Data preprocessing: Part I</li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link active" data-scroll-target="#agenda">Agenda</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#data-preprocessing" id="toc-data-preprocessing" class="nav-link" data-scroll-target="#data-preprocessing">Data preprocessing</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#scikit-learn-library" id="toc-scikit-learn-library" class="nav-link" data-scroll-target="#scikit-learn-library">scikit-learn library</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
+  </ul></li>
+  <li><a href="#training-validation-and-test-datasets" id="toc-training-validation-and-test-datasets" class="nav-link" data-scroll-target="#training-validation-and-test-datasets">Training, validation, and test datasets</a>
+  <ul class="collapse">
+  <li><a href="#recall-that" id="toc-recall-that" class="nav-link" data-scroll-target="#recall-that">Recall that …</a></li>
+  <li><a href="#two-datasets" id="toc-two-datasets" class="nav-link" data-scroll-target="#two-datasets">Two datasets</a></li>
+  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2"></a></li>
+  <li><a href="#validation-dataset" id="toc-validation-dataset" class="nav-link" data-scroll-target="#validation-dataset">Validation Dataset</a></li>
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1">Example 1</a></li>
+  <li><a href="#the-predictors" id="toc-the-predictors" class="nav-link" data-scroll-target="#the-predictors">The predictors</a></li>
+  <li><a href="#read-the-dataset" id="toc-read-the-dataset" class="nav-link" data-scroll-target="#read-the-dataset">Read the dataset</a></li>
+  <li><a href="#section-3" id="toc-section-3" class="nav-link" data-scroll-target="#section-3"></a></li>
+  <li><a href="#how-do-we-generate-validation-data" id="toc-how-do-we-generate-validation-data" class="nav-link" data-scroll-target="#how-do-we-generate-validation-data">How do we generate validation data?</a></li>
+  <li><a href="#create-the-predictor-matrix" id="toc-create-the-predictor-matrix" class="nav-link" data-scroll-target="#create-the-predictor-matrix">Create the predictor matrix</a></li>
+  <li><a href="#create-the-response-column" id="toc-create-the-response-column" class="nav-link" data-scroll-target="#create-the-response-column">Create the response column</a></li>
+  <li><a href="#lets-partition-the-dataset" id="toc-lets-partition-the-dataset" class="nav-link" data-scroll-target="#lets-partition-the-dataset">Let’s partition the dataset</a></li>
+  <li><a href="#section-4" id="toc-section-4" class="nav-link" data-scroll-target="#section-4"></a></li>
+  <li><a href="#section-5" id="toc-section-5" class="nav-link" data-scroll-target="#section-5"></a></li>
+  <li><a href="#work-on-your-training-dataset" id="toc-work-on-your-training-dataset" class="nav-link" data-scroll-target="#work-on-your-training-dataset">Work on your training dataset</a></li>
+  </ul></li>
+  <li><a href="#dealing-with-missing-values" id="toc-dealing-with-missing-values" class="nav-link" data-scroll-target="#dealing-with-missing-values">Dealing with missing values</a>
+  <ul class="collapse">
+  <li><a href="#missing-values" id="toc-missing-values" class="nav-link" data-scroll-target="#missing-values">Missing values</a></li>
+  <li><a href="#section-6" id="toc-section-6" class="nav-link" data-scroll-target="#section-6"></a></li>
+  <li><a href="#section-7" id="toc-section-7" class="nav-link" data-scroll-target="#section-7"></a></li>
+  <li><a href="#example-2" id="toc-example-2" class="nav-link" data-scroll-target="#example-2">Example 2</a></li>
+  <li><a href="#training-and-validation-datasets" id="toc-training-and-validation-datasets" class="nav-link" data-scroll-target="#training-and-validation-datasets">Training and validation datasets</a></li>
+  <li><a href="#section-8" id="toc-section-8" class="nav-link" data-scroll-target="#section-8"></a></li>
+  <li><a href="#section-9" id="toc-section-9" class="nav-link" data-scroll-target="#section-9"></a></li>
+  <li><a href="#section-10" id="toc-section-10" class="nav-link" data-scroll-target="#section-10"></a></li>
+  <li><a href="#section-11" id="toc-section-11" class="nav-link" data-scroll-target="#section-11"></a></li>
+  <li><a href="#section-12" id="toc-section-12" class="nav-link" data-scroll-target="#section-12"></a></li>
+  <li><a href="#section-13" id="toc-section-13" class="nav-link" data-scroll-target="#section-13"></a></li>
+  <li><a href="#removing-missing-values" id="toc-removing-missing-values" class="nav-link" data-scroll-target="#removing-missing-values">Removing missing values</a></li>
+  <li><a href="#section-14" id="toc-section-14" class="nav-link" data-scroll-target="#section-14"></a></li>
+  <li><a href="#imputation-using-the-mean" id="toc-imputation-using-the-mean" class="nav-link" data-scroll-target="#imputation-using-the-mean">Imputation using the mean</a></li>
+  <li><a href="#section-15" id="toc-section-15" class="nav-link" data-scroll-target="#section-15"></a></li>
+  <li><a href="#section-16" id="toc-section-16" class="nav-link" data-scroll-target="#section-16"></a></li>
+  <li><a href="#section-17" id="toc-section-17" class="nav-link" data-scroll-target="#section-17"></a></li>
+  <li><a href="#using-the-mean-or-the-median" id="toc-using-the-mean-or-the-median" class="nav-link" data-scroll-target="#using-the-mean-or-the-median">Using the mean or the median?</a></li>
+  <li><a href="#section-18" id="toc-section-18" class="nav-link" data-scroll-target="#section-18"></a></li>
+  <li><a href="#imputation-method-for-a-categorical-variable" id="toc-imputation-method-for-a-categorical-variable" class="nav-link" data-scroll-target="#imputation-method-for-a-categorical-variable">Imputation method for a categorical variable</a></li>
+  <li><a href="#section-19" id="toc-section-19" class="nav-link" data-scroll-target="#section-19"></a></li>
+  <li><a href="#section-20" id="toc-section-20" class="nav-link" data-scroll-target="#section-20"></a></li>
+  <li><a href="#multivariate-imputation-using-k-nearest-neighbours" id="toc-multivariate-imputation-using-k-nearest-neighbours" class="nav-link" data-scroll-target="#multivariate-imputation-using-k-nearest-neighbours">Multivariate imputation using K-nearest neighbours</a></li>
+  <li><a href="#basic-idea" id="toc-basic-idea" class="nav-link" data-scroll-target="#basic-idea">Basic idea</a></li>
+  <li><a href="#notes-on-its-implementation" id="toc-notes-on-its-implementation" class="nav-link" data-scroll-target="#notes-on-its-implementation">Notes on its implementation</a></li>
+  <li><a href="#in-python" id="toc-in-python" class="nav-link" data-scroll-target="#in-python">In Python</a></li>
+  <li><a href="#section-21" id="toc-section-21" class="nav-link" data-scroll-target="#section-21"></a></li>
+  </ul></li>
+  <li><a href="#return-to-main-page" id="toc-return-to-main-page" class="nav-link" data-scroll-target="#return-to-main-page">Return to main page</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="PreProcessing_Part1.slides.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Data preprocessing: Part I</h1>
+<p class="subtitle lead">IN5148: Statistics and Data Science with Applications in Engineering</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Alan R. Vazquez </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Department of Industrial Engineering
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="agenda" class="level3">
+<h3 class="anchored" data-anchor-id="agenda">Agenda</h3>
+<p><br></p>
+<ol type="1">
+<li>Introduction</li>
+<li>Training, validation, and test datasets</li>
+<li>Dealing with missing values</li>
+</ol>
+</section>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<section id="data-preprocessing" class="level3">
+<h3 class="anchored" data-anchor-id="data-preprocessing">Data preprocessing</h3>
+<p><span style="color:lightblue;"><strong>Data pre-processing</strong></span> techniques generally refer to the addition, deletion, or transformation of data.</p>
+<p><br></p>
+<blockquote class="blockquote">
+<p>It can make or break a model’s predictive ability.</p>
+</blockquote>
+<p><br></p>
+<p>For example, linear regression models (to be discussed later) are relatively insensitive to the characteristics of the predictor data, but advanced methods like K-nearest neighbors, principal component regression, and LASSO are not.</p>
+</section>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
+<p><br></p>
+<p>We will review some common strategies for processing predictors from the data, without considering how they might be related to the response.</p>
+<p>. . .</p>
+<p>In particular, we will review:</p>
+<div class="incremental">
+<ul class="incremental">
+<li>Dealing with missing values.</li>
+<li>Transforming predictors.</li>
+<li>Reducing the number of predictors.</li>
+<li>Standardizing the units of the predictors.</li>
+</ul>
+</div>
+</section>
+<section id="scikit-learn-library" class="level3">
+<h3 class="anchored" data-anchor-id="scikit-learn-library">scikit-learn library</h3>
+<ul>
+<li><strong>scikit-learn</strong> is a robust and popular library for machine learning in Python</li>
+<li>It provides simple, efficient tools for data mining and data analysis</li>
+<li>It is built on top of libraries such as <strong>NumPy</strong>, <strong>SciPy</strong>, and <strong>Matplotlib</strong></li>
+<li><a href="https://scikit-learn.org/stable/" class="uri">https://scikit-learn.org/stable/</a></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/scikitlearn.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="section-1" class="level3">
+<h3 class="anchored" data-anchor-id="section-1"></h3>
+<p><br></p>
+<p>Let’s import <strong>scikit-learn</strong> into Python together with the other relevant libraries.</p>
+<div id="63a16c3d" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer, KNNImputer</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PowerTransformer, StandardScaler </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_selection <span class="im">import</span> VarianceThreshold</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We will not use all the functions from the <strong>scikit-learn</strong> library. Instead, we will use specific functions from the sub-libraries <strong>preprocessing</strong>, <strong>feature_selection</strong>, <strong>model_selection</strong> and <strong>impute</strong>.</p>
+</section>
+</section>
+<section id="training-validation-and-test-datasets" class="level2">
+<h2 class="anchored" data-anchor-id="training-validation-and-test-datasets">Training, validation, and test datasets</h2>
+<section id="recall-that" class="level3">
+<h3 class="anchored" data-anchor-id="recall-that">Recall that …</h3>
+<p><br><br></p>
+<p>In data science, we assume that</p>
+<p><span class="math display">\[Y = f(\boldsymbol{X}) + \epsilon\]</span></p>
+<p>where <span class="math inline">\(f(\boldsymbol{X})\)</span> represents the true relationship between <span class="math inline">\(\boldsymbol{X} = (X_1, X_2, \ldots, X_p)\)</span> and <span class="math inline">\(Y\)</span>.</p>
+<ul>
+<li><span class="math inline">\(f(\boldsymbol{X})\)</span> is unknown and very complex!</li>
+</ul>
+</section>
+<section id="two-datasets" class="level3">
+<h3 class="anchored" data-anchor-id="two-datasets">Two datasets</h3>
+<p><br><br></p>
+<p>The application of data science models needs two data sets:</p>
+<div class="incremental">
+<ul class="incremental">
+<li><p><span style="color:blue;"><strong>Training data</strong></span> is data that we use to train or construct the estimated function <span class="math inline">\(\hat{f}(\boldsymbol{X})\)</span>.</p></li>
+<li><p><span style="color:green;"><strong>Test data</strong></span> is data that we use to evaluate the predictive performance of <span class="math inline">\(\hat{f}(\boldsymbol{X})\)</span> only.</p></li>
+</ul>
+</div>
+</section>
+<section id="section-2" class="level3">
+<h3 class="anchored" data-anchor-id="section-2"></h3>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><img src="images/training.png" class="img-fluid" width="256"></p>
+</div><div class="column" style="width:70%;">
+<p><br></p>
+<p>A random sample of <span class="math inline">\(n\)</span> observations.</p>
+<p>Use it to <strong>construct</strong> <span class="math inline">\(\hat{f}(\boldsymbol{X})\)</span>.</p>
+</div>
+</div>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><img src="images/test.png" class="img-fluid" width="262"></p>
+</div><div class="column" style="width:70%;">
+<p>Another random sample of <span class="math inline">\(n_t\)</span> observations, which is independent of the training data.</p>
+<p>Use it to <strong>evaluate</strong> <span class="math inline">\(\hat{f}(\boldsymbol{X})\)</span>.</p>
+</div>
+</div>
+</section>
+<section id="validation-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="validation-dataset">Validation Dataset</h3>
+<p>In many practical situations, a test dataset is not available. To overcome this issue, we use a <span style="color:orange;"><strong>validation dataset</strong></span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/validation.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="645"></p>
+</figure>
+</div>
+<p>. . .</p>
+<p><strong>Idea</strong>: Apply model to your <span style="color:orange;"><strong>validation dataset</strong></span> to mimic what will happen when you apply it to test dataset.</p>
+</section>
+<section id="example-1" class="level3">
+<h3 class="anchored" data-anchor-id="example-1">Example 1</h3>
+<p><br></p>
+<p>The “BostonHousing.xlsx” contains data collected by the US Bureau of the Census concerning housing in the area of Boston, Massachusetts. The dataset includes data on 506 census housing tracts in the Boston area in 1970s.</p>
+<p>The <strong>goal</strong> is to predict the median house price in new tracts based on information such as crime rate, pollution, and number of rooms.</p>
+<p>The <span style="color:darkred;">response</span> is the median value of owner-occupied homes in $1000s, contained in the column <code>MEDV</code>.</p>
+</section>
+<section id="the-predictors" class="level3">
+<h3 class="anchored" data-anchor-id="the-predictors">The predictors</h3>
+<div style="font-size: 70%;">
+<ul>
+<li><code>CRIM</code>: per capita crime rate by town.</li>
+<li><code>ZN</code>: proportion of residential land zoned for lots over 25,000 sq.ft.</li>
+<li><code>INDUS</code>: proportion of non-retail business acres per town.</li>
+<li><code>CHAS</code>: Charles River (‘Yes’ if tract bounds river; ‘No’ otherwise).</li>
+<li><code>NOX</code>: nitrogen oxides concentration (parts per 10 million).</li>
+<li><code>RM</code>: average number of rooms per dwelling.</li>
+<li><code>AGE</code>: proportion of owner-occupied units built prior to 1940.</li>
+<li><code>DIS</code>: weighted mean of distances to five Boston employment centers</li>
+<li><code>RAD</code>: index of accessibility to radial highways (‘Low’, ‘Medium’, ‘High’).</li>
+<li><code>TAX</code>: full-value property-tax rate per $10,000.</li>
+<li><code>PTRATIO</code>: pupil-teacher ratio by town.</li>
+<li><code>LSTAT</code>: lower status of the population (percent).</li>
+</ul>
+</div>
+</section>
+<section id="read-the-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="read-the-dataset">Read the dataset</h3>
+<p><br></p>
+<p>We read the dataset and set the variable <code>CHAS</code> and <code>RAD</code> as categorical.</p>
+<div id="8879737a" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Boston_data <span class="op">=</span> pd.read_excel(<span class="st">'BostonHousing.xlsx'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Boston_data[<span class="st">'CHAS'</span>] <span class="op">=</span> pd.Categorical(Boston_data[<span class="st">'CHAS'</span>])</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>Boston_data[<span class="st">'RAD'</span>] <span class="op">=</span> pd.Categorical(Boston_data[<span class="st">'RAD'</span>], </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                                      categories<span class="op">=</span>[<span class="st">"Low"</span>, <span class="st">"Medium"</span>, <span class="st">"High"</span>], </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                                      ordered<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-3" class="level3">
+<h3 class="anchored" data-anchor-id="section-3"></h3>
+<p><br></p>
+<div id="61e51d08" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Boston_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">CRIM</th>
+<th data-quarto-table-cell-role="th">ZN</th>
+<th data-quarto-table-cell-role="th">INDUS</th>
+<th data-quarto-table-cell-role="th">CHAS</th>
+<th data-quarto-table-cell-role="th">NOX</th>
+<th data-quarto-table-cell-role="th">RM</th>
+<th data-quarto-table-cell-role="th">AGE</th>
+<th data-quarto-table-cell-role="th">DIS</th>
+<th data-quarto-table-cell-role="th">RAD</th>
+<th data-quarto-table-cell-role="th">TAX</th>
+<th data-quarto-table-cell-role="th">PTRATIO</th>
+<th data-quarto-table-cell-role="th">LSTAT</th>
+<th data-quarto-table-cell-role="th">MEDV</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>0.00632</td>
+<td>18.0</td>
+<td>2.31</td>
+<td>No</td>
+<td>0.538</td>
+<td>6.575</td>
+<td>65.2</td>
+<td>4.0900</td>
+<td>Low</td>
+<td>296</td>
+<td>15.3</td>
+<td>4.98</td>
+<td>24.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>0.02731</td>
+<td>0.0</td>
+<td>7.07</td>
+<td>No</td>
+<td>0.469</td>
+<td>6.421</td>
+<td>78.9</td>
+<td>4.9671</td>
+<td>Low</td>
+<td>242</td>
+<td>17.8</td>
+<td>9.14</td>
+<td>21.6</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>0.02729</td>
+<td>0.0</td>
+<td>7.07</td>
+<td>No</td>
+<td>0.469</td>
+<td>7.185</td>
+<td>61.1</td>
+<td>4.9671</td>
+<td>Low</td>
+<td>242</td>
+<td>17.8</td>
+<td>4.03</td>
+<td>34.7</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>0.03237</td>
+<td>0.0</td>
+<td>2.18</td>
+<td>No</td>
+<td>0.458</td>
+<td>6.998</td>
+<td>45.8</td>
+<td>6.0622</td>
+<td>Low</td>
+<td>222</td>
+<td>18.7</td>
+<td>2.94</td>
+<td>33.4</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>0.06905</td>
+<td>0.0</td>
+<td>2.18</td>
+<td>No</td>
+<td>0.458</td>
+<td>7.147</td>
+<td>54.2</td>
+<td>6.0622</td>
+<td>Low</td>
+<td>222</td>
+<td>18.7</td>
+<td>5.33</td>
+<td>36.2</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="how-do-we-generate-validation-data" class="level3">
+<h3 class="anchored" data-anchor-id="how-do-we-generate-validation-data">How do we generate validation data?</h3>
+<p>We split the current dataset into a training and a validation dataset. To this end, we use the function <code>train_test_split()</code> from <strong>scikit-learn</strong>.</p>
+<p><br></p>
+<p>The function has three main inputs:</p>
+<ul>
+<li>A pandas dataframe with the predictor columns only.</li>
+<li>A pandas dataframe with the response column only.</li>
+<li>The parameter <code>test_size</code> which sets the portion of the dataset that will go to the validation set.</li>
+</ul>
+</section>
+<section id="create-the-predictor-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="create-the-predictor-matrix">Create the predictor matrix</h3>
+<p>We use the function <code>.drop()</code> from <strong>pandas</strong>. This function drops one or more columns from a data frame. Let’s drop the response column <code>MEDV</code> and store the result in <code>X_full</code>.</p>
+<div id="06203448" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set full matrix of predictors.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>X_full <span class="op">=</span> Boston_data.drop(columns <span class="op">=</span> [<span class="st">'MEDV'</span>]) </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>X_full.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">CRIM</th>
+<th data-quarto-table-cell-role="th">ZN</th>
+<th data-quarto-table-cell-role="th">INDUS</th>
+<th data-quarto-table-cell-role="th">CHAS</th>
+<th data-quarto-table-cell-role="th">NOX</th>
+<th data-quarto-table-cell-role="th">RM</th>
+<th data-quarto-table-cell-role="th">AGE</th>
+<th data-quarto-table-cell-role="th">DIS</th>
+<th data-quarto-table-cell-role="th">RAD</th>
+<th data-quarto-table-cell-role="th">TAX</th>
+<th data-quarto-table-cell-role="th">PTRATIO</th>
+<th data-quarto-table-cell-role="th">LSTAT</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>0.00632</td>
+<td>18.0</td>
+<td>2.31</td>
+<td>No</td>
+<td>0.538</td>
+<td>6.575</td>
+<td>65.2</td>
+<td>4.0900</td>
+<td>Low</td>
+<td>296</td>
+<td>15.3</td>
+<td>4.98</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>0.02731</td>
+<td>0.0</td>
+<td>7.07</td>
+<td>No</td>
+<td>0.469</td>
+<td>6.421</td>
+<td>78.9</td>
+<td>4.9671</td>
+<td>Low</td>
+<td>242</td>
+<td>17.8</td>
+<td>9.14</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>0.02729</td>
+<td>0.0</td>
+<td>7.07</td>
+<td>No</td>
+<td>0.469</td>
+<td>7.185</td>
+<td>61.1</td>
+<td>4.9671</td>
+<td>Low</td>
+<td>242</td>
+<td>17.8</td>
+<td>4.03</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>0.03237</td>
+<td>0.0</td>
+<td>2.18</td>
+<td>No</td>
+<td>0.458</td>
+<td>6.998</td>
+<td>45.8</td>
+<td>6.0622</td>
+<td>Low</td>
+<td>222</td>
+<td>18.7</td>
+<td>2.94</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="create-the-response-column" class="level3">
+<h3 class="anchored" data-anchor-id="create-the-response-column">Create the response column</h3>
+<p>We use the function <code>.filter()</code> from <strong>pandas</strong> to extract the column <code>MEDV</code> from the data frame. We store the result in <code>Y_full</code>.</p>
+<div id="9f63aaf5" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set full matrix of responses.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Y_full <span class="op">=</span> Boston_data.<span class="bu">filter</span>([<span class="st">'MEDV'</span>])</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>Y_full.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">MEDV</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>24.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>21.6</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>34.7</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>33.4</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="lets-partition-the-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="lets-partition-the-dataset">Let’s partition the dataset</h3>
+<p><br></p>
+<div id="e7e3f88c" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the dataset into training and validation.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>X_train, X_valid, Y_train, Y_valid <span class="op">=</span> train_test_split(X_full, Y_full, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                                                      test_size <span class="op">=</span> <span class="fl">0.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li><p>The function makes a clever partition of the data using the <em>empirical</em> distribution of the response.</p></li>
+<li><p>Technically, it splits the data so that the distribution of the response under the training and validation sets is similar.</p></li>
+<li><p>Usually, the proportion of the dataset that goes to the validation set is 20% or 30%.</p></li>
+</ul>
+</section>
+<section id="section-4" class="level3">
+<h3 class="anchored" data-anchor-id="section-4"></h3>
+<p>The predictors and response in the training dataset are in the objects <code>X_train</code> and <code>Y_train</code>, respectively. We compile these objects into a single dataset using the function <code>.concat()</code> from <strong>pandas</strong>. The argument <code>axis = 1</code> tells <code>.concat()</code> to concatenate the datasets by their rows.</p>
+<div id="5e138192" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>training_dataset <span class="op">=</span> pd.concat([X_train, Y_train], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>training_dataset.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">CRIM</th>
+<th data-quarto-table-cell-role="th">ZN</th>
+<th data-quarto-table-cell-role="th">INDUS</th>
+<th data-quarto-table-cell-role="th">CHAS</th>
+<th data-quarto-table-cell-role="th">NOX</th>
+<th data-quarto-table-cell-role="th">RM</th>
+<th data-quarto-table-cell-role="th">AGE</th>
+<th data-quarto-table-cell-role="th">DIS</th>
+<th data-quarto-table-cell-role="th">RAD</th>
+<th data-quarto-table-cell-role="th">TAX</th>
+<th data-quarto-table-cell-role="th">PTRATIO</th>
+<th data-quarto-table-cell-role="th">LSTAT</th>
+<th data-quarto-table-cell-role="th">MEDV</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">460</th>
+<td>4.81213</td>
+<td>0.0</td>
+<td>18.10</td>
+<td>No</td>
+<td>0.713</td>
+<td>6.701</td>
+<td>90.0</td>
+<td>2.5975</td>
+<td>High</td>
+<td>666</td>
+<td>20.2</td>
+<td>16.42</td>
+<td>16.4</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">142</th>
+<td>3.32105</td>
+<td>0.0</td>
+<td>19.58</td>
+<td>Yes</td>
+<td>0.871</td>
+<td>5.403</td>
+<td>100.0</td>
+<td>1.3216</td>
+<td>Medium</td>
+<td>403</td>
+<td>14.7</td>
+<td>26.82</td>
+<td>13.4</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">196</th>
+<td>0.04011</td>
+<td>80.0</td>
+<td>1.52</td>
+<td>No</td>
+<td>0.404</td>
+<td>7.287</td>
+<td>34.1</td>
+<td>7.3090</td>
+<td>Low</td>
+<td>329</td>
+<td>12.6</td>
+<td>4.08</td>
+<td>33.3</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">491</th>
+<td>0.10574</td>
+<td>0.0</td>
+<td>27.74</td>
+<td>No</td>
+<td>0.609</td>
+<td>5.983</td>
+<td>98.8</td>
+<td>1.8681</td>
+<td>Medium</td>
+<td>711</td>
+<td>20.1</td>
+<td>18.07</td>
+<td>13.6</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-5" class="level3">
+<h3 class="anchored" data-anchor-id="section-5"></h3>
+<p>Equivalently, the predictors and response in the validation dataset are in the objects <code>X_valid</code> and <code>Y_valid</code>, respectively.</p>
+<div id="c62eb1cc" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>validation_dataset <span class="op">=</span> pd.concat([X_valid, Y_valid], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>validation_dataset.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">CRIM</th>
+<th data-quarto-table-cell-role="th">ZN</th>
+<th data-quarto-table-cell-role="th">INDUS</th>
+<th data-quarto-table-cell-role="th">CHAS</th>
+<th data-quarto-table-cell-role="th">NOX</th>
+<th data-quarto-table-cell-role="th">RM</th>
+<th data-quarto-table-cell-role="th">AGE</th>
+<th data-quarto-table-cell-role="th">DIS</th>
+<th data-quarto-table-cell-role="th">RAD</th>
+<th data-quarto-table-cell-role="th">TAX</th>
+<th data-quarto-table-cell-role="th">PTRATIO</th>
+<th data-quarto-table-cell-role="th">LSTAT</th>
+<th data-quarto-table-cell-role="th">MEDV</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">301</th>
+<td>0.03537</td>
+<td>34.0</td>
+<td>6.09</td>
+<td>No</td>
+<td>0.433</td>
+<td>6.590</td>
+<td>40.4</td>
+<td>5.4917</td>
+<td>High</td>
+<td>329</td>
+<td>16.1</td>
+<td>9.50</td>
+<td>22.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">337</th>
+<td>0.03041</td>
+<td>0.0</td>
+<td>5.19</td>
+<td>No</td>
+<td>0.515</td>
+<td>5.895</td>
+<td>59.6</td>
+<td>5.6150</td>
+<td>Medium</td>
+<td>224</td>
+<td>20.2</td>
+<td>10.56</td>
+<td>18.5</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">403</th>
+<td>24.80170</td>
+<td>0.0</td>
+<td>18.10</td>
+<td>No</td>
+<td>0.693</td>
+<td>5.349</td>
+<td>96.0</td>
+<td>1.7028</td>
+<td>High</td>
+<td>666</td>
+<td>20.2</td>
+<td>19.77</td>
+<td>8.3</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">19</th>
+<td>0.72580</td>
+<td>0.0</td>
+<td>8.14</td>
+<td>No</td>
+<td>0.538</td>
+<td>5.727</td>
+<td>69.5</td>
+<td>3.7965</td>
+<td>Medium</td>
+<td>307</td>
+<td>21.0</td>
+<td>11.28</td>
+<td>18.2</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">83</th>
+<td>0.03551</td>
+<td>25.0</td>
+<td>4.86</td>
+<td>No</td>
+<td>0.426</td>
+<td>6.167</td>
+<td>46.7</td>
+<td>5.4007</td>
+<td>Medium</td>
+<td>281</td>
+<td>19.0</td>
+<td>7.51</td>
+<td>22.9</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="work-on-your-training-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="work-on-your-training-dataset">Work on your training dataset</h3>
+<p>After we have partitioned the data, we <strong>work on the</strong> <span style="color:blue;"><strong>training data</strong></span> to develop our predictive pipeline.</p>
+<p>The pipeline has two main steps:</p>
+<ol type="1">
+<li>Data preprocessing.</li>
+<li>Model development.</li>
+</ol>
+<p>We will now discuss preprocessing techniques applied to the predictor columns in the training dataset.</p>
+<p>Note that all preprocessing techniques will also be applied to the <span style="color:orange;"><strong>validation dataset</strong></span> and <span style="color:green;"><strong>test dataset</strong></span> to prepare it for your model!</p>
+</section>
+</section>
+<section id="dealing-with-missing-values" class="level2">
+<h2 class="anchored" data-anchor-id="dealing-with-missing-values">Dealing with missing values</h2>
+<section id="missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="missing-values">Missing values</h3>
+<p>In many cases, some predictors have no values for a given observation. It is important to understand why the values are missing.</p>
+<p><br></p>
+<p>. . .</p>
+<p>There four main types of missing data:</p>
+<div class="incremental">
+<ul class="incremental">
+<li><p><em>Structurally missing</em> data is data that is missing for a logical reason or because it should not exist.</p></li>
+<li><p><em>Missing completely at random</em> assumes that the fact that the data is missing is unrelated to the other information in the data.</p></li>
+</ul>
+</div>
+</section>
+<section id="section-6" class="level3">
+<h3 class="anchored" data-anchor-id="section-6"></h3>
+<p><br><br></p>
+<ul>
+<li><p><em>Missing at random</em> assumes that we can predict the value that is missing based on the other available data.</p></li>
+<li><p><em>Missing not at random</em> assumes that there is a mechanism that generates the missing values, which may include observed and unobserved predictors.</p></li>
+</ul>
+</section>
+<section id="section-7" class="level3">
+<h3 class="anchored" data-anchor-id="section-7"></h3>
+<p>For large data sets, removal of observations based on missing values is not a problem, assuming that the type of missing data is completely at random.</p>
+<p><br></p>
+<p>In a smaller data sets, there is a high price in removing observations. To overcome this issue, we can use methods of imputation, which try to estimate the missing values of a predictor variable using the other predictors’ values.</p>
+<p><br></p>
+<p>Here, we will introduce some simple methods for imputing missing values in categorical and numerical variables.</p>
+</section>
+<section id="example-2" class="level3">
+<h3 class="anchored" data-anchor-id="example-2">Example 2</h3>
+<p><br></p>
+<p>Let’s use the penguins dataset available in the file “penguins.xlsx”.</p>
+<div id="ac5cd94e" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Excel file into a pandas DataFrame.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>penguins_data <span class="op">=</span> pd.read_excel(<span class="st">"penguins.xlsx"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Set categorical variables.</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>penguins_data[<span class="st">'sex'</span>] <span class="op">=</span> pd.Categorical(penguins_data[<span class="st">'sex'</span>])</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>penguins_data[<span class="st">'species'</span>] <span class="op">=</span> pd.Categorical(penguins_data[<span class="st">'species'</span>])</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>penguins_data[<span class="st">'island'</span>] <span class="op">=</span> pd.Categorical(penguins_data[<span class="st">'island'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="training-and-validation-datasets" class="level3">
+<h3 class="anchored" data-anchor-id="training-and-validation-datasets">Training and validation datasets</h3>
+<p>For illustrative purposes, we assume that we want to predict the species (in the column <code>species</code>) of a penguin using the predictors <code>bill_length_mm</code>, <code>bill_depth_mm</code>, <code>flipper_length_mm</code>, <code>body_mass_g</code>, and <code>sex</code>.</p>
+<p><br></p>
+<p>We create the predictor matrix and response column.</p>
+<div id="6ce153a9" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set full matrix of predictors.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>X_full_p <span class="op">=</span> (penguins_data</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>           .<span class="bu">filter</span>([<span class="st">'bill_length_mm'</span>, <span class="st">'bill_depth_mm'</span>, </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>           <span class="st">'flipper_length_mm'</span>, <span class="st">'body_mass_g'</span>, <span class="st">'sex'</span>]))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Set full matrix of responses.</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>Y_full_p <span class="op">=</span> penguins_data.<span class="bu">filter</span>([<span class="st">'species'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-8" class="level3">
+<h3 class="anchored" data-anchor-id="section-8"></h3>
+<p>We use a validation dataset with 30% of the observations in <code>penguins_data</code>. The other 70% will be in the training dataset.</p>
+<div id="671b9f5b" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the dataset into training and validation.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>X_train_p, X_valid_p, Y_train_p, Y_valid_p <span class="op">=</span> train_test_split(X_full_p, Y_full_p, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                                                      test_size <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                                                      random_state <span class="op">=</span> <span class="dv">59227</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><br></p>
+<p>In <code>train_test_split</code>, we use the input <code>random_state</code> to set a <em>random seed</em>. Essentially, this allows you to obtain the same training and validation datasets every time you run the code. <em>The advice is setting</em> <code>random_state</code> <em>to a big integer number generated at random.</em></p>
+</section>
+<section id="section-9" class="level3">
+<h3 class="anchored" data-anchor-id="section-9"></h3>
+<p><br></p>
+<p>Since preprocessing techniques are meant for the predictors, we will work on the <code>X_train_p</code> data frame.</p>
+<div id="d97ebba0" class="cell" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="12">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">31</th>
+<td>37.2</td>
+<td>18.1</td>
+<td>178.0</td>
+<td>3900.0</td>
+<td>male</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">46</th>
+<td>41.1</td>
+<td>19.0</td>
+<td>182.0</td>
+<td>3425.0</td>
+<td>male</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">195</th>
+<td>49.6</td>
+<td>15.0</td>
+<td>216.0</td>
+<td>4750.0</td>
+<td>male</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">43</th>
+<td>44.1</td>
+<td>19.7</td>
+<td>196.0</td>
+<td>4400.0</td>
+<td>male</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">196</th>
+<td>50.5</td>
+<td>15.9</td>
+<td>222.0</td>
+<td>5550.0</td>
+<td>male</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-10" class="level3">
+<h3 class="anchored" data-anchor-id="section-10"></h3>
+<p><br></p>
+<p>Let’s check if the dataset has missing observations using the function <code>.info()</code> from <strong>pandas</strong>.</p>
+<div id="69fe1c86" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>X_train_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Index: 240 entries, 31 to 293
+Data columns (total 5 columns):
+ #   Column             Non-Null Count  Dtype   
+---  ------             --------------  -----   
+ 0   bill_length_mm     238 non-null    float64 
+ 1   bill_depth_mm      238 non-null    float64 
+ 2   flipper_length_mm  238 non-null    float64 
+ 3   body_mass_g        238 non-null    float64 
+ 4   sex                232 non-null    category
+dtypes: category(1), float64(4)
+memory usage: 9.7 KB</code></pre>
+</div>
+</div>
+</section>
+<section id="section-11" class="level3">
+<h3 class="anchored" data-anchor-id="section-11"></h3>
+<p>In the output of the function, “non-null” refers to the number of entries in a column that have actual values. That is, the number of entries where there are not <code>NaN</code>.</p>
+<div id="ff5cebad" class="cell" data-execution_count="14">
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Index: 240 entries, 31 to 293
+Data columns (total 5 columns):
+ #   Column             Non-Null Count  Dtype   
+---  ------             --------------  -----   
+ 0   bill_length_mm     238 non-null    float64 
+ 1   bill_depth_mm      238 non-null    float64 
+ 2   flipper_length_mm  238 non-null    float64 
+ 3   body_mass_g        238 non-null    float64 
+ 4   sex                232 non-null    category
+dtypes: category(1), float64(4)
+memory usage: 9.7 KB</code></pre>
+</div>
+</div>
+<p>The “Index” section shows the number of observations in the dataset.</p>
+</section>
+<section id="section-12" class="level3">
+<h3 class="anchored" data-anchor-id="section-12"></h3>
+<p>The output below shows that there are 240 entries but <code>bill_length_mm</code> has 238 that are “non-null”. Therefore, this column has <strong>two</strong> missing observations.</p>
+<div id="be7499a1" class="cell" data-execution_count="15">
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Index: 240 entries, 31 to 293
+Data columns (total 5 columns):
+ #   Column             Non-Null Count  Dtype   
+---  ------             --------------  -----   
+ 0   bill_length_mm     238 non-null    float64 
+ 1   bill_depth_mm      238 non-null    float64 
+ 2   flipper_length_mm  238 non-null    float64 
+ 3   body_mass_g        238 non-null    float64 
+ 4   sex                232 non-null    category
+dtypes: category(1), float64(4)
+memory usage: 9.7 KB</code></pre>
+</div>
+</div>
+<p>The same is true for the other predictors except for <code>sex</code> that has <strong>eight</strong> missing values.</p>
+</section>
+<section id="section-13" class="level3">
+<h3 class="anchored" data-anchor-id="section-13"></h3>
+<p><br></p>
+<p>Alternatively, we can use the function <code>.isnull()</code> together with <code>sum()</code> to determine the number of missing values for each column in the dataset.</p>
+<p><br></p>
+<div id="889ad23a" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>missing_values <span class="op">=</span> X_train_p.isnull().<span class="bu">sum</span>()</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>missing_values</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>bill_length_mm       2
+bill_depth_mm        2
+flipper_length_mm    2
+body_mass_g          2
+sex                  8
+dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="removing-missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="removing-missing-values">Removing missing values</h3>
+<p>If we want to remove all rows in the dataset that have at least one missing value, we use the function <code>.dropna()</code>.</p>
+<div id="fceb8edc" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>complete_predictors <span class="op">=</span> X_train_p.dropna()</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>complete_predictors.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">31</th>
+<td>37.2</td>
+<td>18.1</td>
+<td>178.0</td>
+<td>3900.0</td>
+<td>male</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">46</th>
+<td>41.1</td>
+<td>19.0</td>
+<td>182.0</td>
+<td>3425.0</td>
+<td>male</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">195</th>
+<td>49.6</td>
+<td>15.0</td>
+<td>216.0</td>
+<td>4750.0</td>
+<td>male</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">43</th>
+<td>44.1</td>
+<td>19.7</td>
+<td>196.0</td>
+<td>4400.0</td>
+<td>male</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">196</th>
+<td>50.5</td>
+<td>15.9</td>
+<td>222.0</td>
+<td>5550.0</td>
+<td>male</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-14" class="level3">
+<h3 class="anchored" data-anchor-id="section-14"></h3>
+<div id="37f68156" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>complete_predictors.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Index: 232 entries, 31 to 293
+Data columns (total 5 columns):
+ #   Column             Non-Null Count  Dtype   
+---  ------             --------------  -----   
+ 0   bill_length_mm     232 non-null    float64 
+ 1   bill_depth_mm      232 non-null    float64 
+ 2   flipper_length_mm  232 non-null    float64 
+ 3   body_mass_g        232 non-null    float64 
+ 4   sex                232 non-null    category
+dtypes: category(1), float64(4)
+memory usage: 9.4 KB</code></pre>
+</div>
+</div>
+<p>The new data is complete because each column has 232 “non-null” values; the total number of observations in <code>complete_predictors</code>.</p>
+<p>However, note that we have lost eight of the original observations in <code>X_train_p</code>!</p>
+</section>
+<section id="imputation-using-the-mean" class="level3">
+<h3 class="anchored" data-anchor-id="imputation-using-the-mean">Imputation using the mean</h3>
+<p>We can impute the missing values of a numeric variable using the <strong>mean</strong> or <strong>median</strong> of its available values. For example, consider the variable <code>bill_length_mm</code> that has two missing values.</p>
+<div id="0206e7c1" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>X_train_p[<span class="st">'bill_length_mm'</span>].info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.series.Series'&gt;
+Index: 240 entries, 31 to 293
+Series name: bill_length_mm
+Non-Null Count  Dtype  
+--------------  -----  
+238 non-null    float64
+dtypes: float64(1)
+memory usage: 3.8 KB</code></pre>
+</div>
+</div>
+<p>In <strong>scikit-learn</strong>, we use the function <code>SimpleImputer()</code> to define the method of imputation of missing values.</p>
+</section>
+<section id="section-15" class="level3">
+<h3 class="anchored" data-anchor-id="section-15"></h3>
+<p><br></p>
+<p>Using <code>SimpleImputer()</code>, we set the method to impute missing values using the <strong>mean</strong>.</p>
+<p>We also use the function <code>fit_transform()</code> to apply the imputation method to the variable.</p>
+<div id="caa5bdaa" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imputation for numerical variables (using the mean)</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>num_imputer <span class="op">=</span> SimpleImputer(strategy <span class="op">=</span> <span class="st">'mean'</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace the original variable with new version.</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>X_train_p[<span class="st">'bill_length_mm'</span>] <span class="op">=</span> num_imputer.fit_transform(X_train_p[ [<span class="st">'bill_length_mm'</span>] ] )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-16" class="level3">
+<h3 class="anchored" data-anchor-id="section-16"></h3>
+<p><br></p>
+<p>After imputation, the information of the predictors in the dataset looks like this.</p>
+<div id="7dfade30" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>X_train_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Index: 240 entries, 31 to 293
+Data columns (total 5 columns):
+ #   Column             Non-Null Count  Dtype   
+---  ------             --------------  -----   
+ 0   bill_length_mm     240 non-null    float64 
+ 1   bill_depth_mm      238 non-null    float64 
+ 2   flipper_length_mm  238 non-null    float64 
+ 3   body_mass_g        238 non-null    float64 
+ 4   sex                232 non-null    category
+dtypes: category(1), float64(4)
+memory usage: 9.7 KB</code></pre>
+</div>
+</div>
+<p>Now, <code>bill_length_mm</code> has 240 complete values.</p>
+</section>
+<section id="section-17" class="level3">
+<h3 class="anchored" data-anchor-id="section-17"></h3>
+<p>To impute the missing values using the <strong>median</strong>, we simply set this method in <code>SimpleImputer()</code>. For example, let’s impute the missing values of <code>bill_depth_mm</code>.</p>
+<div id="bc3cc0c0" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imputation for numerical variables (using the mean)</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>num_imputer <span class="op">=</span> SimpleImputer(strategy <span class="op">=</span> <span class="st">'median'</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace the original variable with new version.</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>X_train_p[<span class="st">'bill_depth_mm'</span>] <span class="op">=</span> num_imputer.fit_transform(X_train_p[ [<span class="st">'bill_depth_mm'</span>] ] )</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the information of the predictor.</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>X_train_p[<span class="st">'bill_depth_mm'</span>].info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.series.Series'&gt;
+Index: 240 entries, 31 to 293
+Series name: bill_depth_mm
+Non-Null Count  Dtype  
+--------------  -----  
+240 non-null    float64
+dtypes: float64(1)
+memory usage: 3.8 KB</code></pre>
+</div>
+</div>
+</section>
+<section id="using-the-mean-or-the-median" class="level3">
+<h3 class="anchored" data-anchor-id="using-the-mean-or-the-median">Using the mean or the median?</h3>
+<p><br><br></p>
+<p>We use the <strong>sample mean</strong> when the data distribution is roughly symmetrical.</p>
+<ul>
+<li><p>Pros: Simple and easy to implement.</p></li>
+<li><p>Cons: Sensitive to outliers; may not be accurate for skewed distributions</p></li>
+</ul>
+</section>
+<section id="section-18" class="level3">
+<h3 class="anchored" data-anchor-id="section-18"></h3>
+<p><br><br></p>
+<p>We use the <strong>sample median</strong> when the data is skewed (e.g., incomes, prices).</p>
+<ul>
+<li><p>Pros: Less sensitive to outliers; robust for skewed distributions.</p></li>
+<li><p>Cons: May reduce variability in the data.</p></li>
+</ul>
+</section>
+<section id="imputation-method-for-a-categorical-variable" class="level3">
+<h3 class="anchored" data-anchor-id="imputation-method-for-a-categorical-variable">Imputation method for a categorical variable</h3>
+<p>If a categorical variable has missing values, we can use the <strong>most frequent</strong> of the available values to replace the missing values. To this end, we use similar commands as before.</p>
+<p>For example, let’s impute the missing values of <code>sex</code> using this strategy.</p>
+<div id="28ee1bf9" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imputation for categorical variables (using the most frequent value)</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>cat_imputer <span class="op">=</span> SimpleImputer(strategy <span class="op">=</span> <span class="st">'most_frequent'</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply imputation strategy for categorical variables.</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>X_train_p[<span class="st">'sex'</span>] <span class="op">=</span> cat_imputer.fit_transform(X_train_p[ [<span class="st">'sex'</span>] ]).ravel()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-19" class="level3">
+<h3 class="anchored" data-anchor-id="section-19"></h3>
+<p>Let’s now have a look at the information of the dataset.</p>
+<div id="23895e5b" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply imputation strategy for categorical variables.</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>X_train_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Index: 240 entries, 31 to 293
+Data columns (total 5 columns):
+ #   Column             Non-Null Count  Dtype  
+---  ------             --------------  -----  
+ 0   bill_length_mm     240 non-null    float64
+ 1   bill_depth_mm      240 non-null    float64
+ 2   flipper_length_mm  238 non-null    float64
+ 3   body_mass_g        238 non-null    float64
+ 4   sex                240 non-null    object 
+dtypes: float64(4), object(1)
+memory usage: 11.2+ KB</code></pre>
+</div>
+</div>
+<p>The columns <code>bill_length_mm</code>, <code>bill_depth_mm</code>, and <code>sex</code> have 240 complete values.</p>
+</section>
+<section id="section-20" class="level3">
+<h3 class="anchored" data-anchor-id="section-20"></h3>
+<p><br></p>
+<p>Unfortunately, after applying <code>cat_imputer</code> to the dataset, the variable <code>sex</code> is an object. To change it to categorical, we use the function <code>pd.Categorical</code> again.</p>
+<div id="b024892a" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply imputation strategy for categorical variables.</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>X_train_p[<span class="st">'sex'</span>] <span class="op">=</span> pd.Categorical(X_train_p[<span class="st">'sex'</span>])</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>X_train_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Index: 240 entries, 31 to 293
+Data columns (total 5 columns):
+ #   Column             Non-Null Count  Dtype   
+---  ------             --------------  -----   
+ 0   bill_length_mm     240 non-null    float64 
+ 1   bill_depth_mm      240 non-null    float64 
+ 2   flipper_length_mm  238 non-null    float64 
+ 3   body_mass_g        238 non-null    float64 
+ 4   sex                240 non-null    category
+dtypes: category(1), float64(4)
+memory usage: 9.7 KB</code></pre>
+</div>
+</div>
+</section>
+<section id="multivariate-imputation-using-k-nearest-neighbours" class="level3">
+<h3 class="anchored" data-anchor-id="multivariate-imputation-using-k-nearest-neighbours">Multivariate imputation using K-nearest neighbours</h3>
+<p>K-nearest neighbours (KNN) is an imputation method to fill in the missing values of a predictor using the available values from this and the other predictors.</p>
+<p><br></p>
+<p>For each missing value in a predictor <span class="math inline">\(X\)</span>:</p>
+<ol type="1">
+<li>Find the <span class="math inline">\(K\)</span> most similar rows based on the other predictors.</li>
+<li>Impute the missing value of <span class="math inline">\(X\)</span> using the <em>average</em> of the available values of <span class="math inline">\(X\)</span> in the <span class="math inline">\(K\)</span> closest rows.</li>
+</ol>
+</section>
+<section id="basic-idea" class="level3">
+<h3 class="anchored" data-anchor-id="basic-idea">Basic idea</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/KNN_idea2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="645"></p>
+</figure>
+</div>
+<div style="font-size: 50%;">
+<p><a href="https://blog.dailydoseofds.com/p/the-most-overlooked-problem-with-768" class="uri">https://blog.dailydoseofds.com/p/the-most-overlooked-problem-with-768</a></p>
+</div>
+</section>
+<section id="notes-on-its-implementation" class="level3">
+<h3 class="anchored" data-anchor-id="notes-on-its-implementation">Notes on its implementation</h3>
+<p><br></p>
+<ul>
+<li><p>KNN captures <em>local patterns</em> better than individual predictor imputation using the mean or the median.</p></li>
+<li><p>However, it only works for numeric predictors!</p></li>
+<li><p>The distance between two rows is calculated using <em>Euclidean</em> distance.</p></li>
+<li><p>KNN only considers rows without missing values in the predictor columns being used.</p></li>
+</ul>
+</section>
+<section id="in-python" class="level3">
+<h3 class="anchored" data-anchor-id="in-python">In Python</h3>
+<p>You can use KNN using the function <code>KNNImputer()</code>. Its main input is the number of nearest neighbours to use. You set this value using the parameter <code>n_neighbors</code>.</p>
+<div id="cea2b02d" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the KNN imputer using two neighbours.</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>KNN_imputer <span class="op">=</span> KNNImputer(n_neighbors <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Select numeric predictors.</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>X_train_num_p <span class="op">=</span> X_train_p.drop(columns <span class="op">=</span> [<span class="st">'sex'</span>]) </span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply imputer and store the rulst in a pandas data frame.</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>X_train_num_p <span class="op">=</span> pd.DataFrame(KNN_imputer.fit_transform(X_train_num_p), </span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>                            columns <span class="op">=</span> X_train_num_p.columns)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-21" class="level3">
+<h3 class="anchored" data-anchor-id="section-21"></h3>
+<p><br></p>
+<p>Let’s look at the new dataset.</p>
+<div id="ed28c704" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>X_train_num_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 240 entries, 0 to 239
+Data columns (total 4 columns):
+ #   Column             Non-Null Count  Dtype  
+---  ------             --------------  -----  
+ 0   bill_length_mm     240 non-null    float64
+ 1   bill_depth_mm      240 non-null    float64
+ 2   flipper_length_mm  240 non-null    float64
+ 3   body_mass_g        240 non-null    float64
+dtypes: float64(4)
+memory usage: 7.6 KB</code></pre>
+</div>
+</div>
+<p>All predictors have 240 complete entries.</p>
+</section>
+</section>
+<section id="return-to-main-page" class="level2">
+<h2 class="anchored" data-anchor-id="return-to-main-page"><a href="https://alanrvazquez.github.io/TEC-IN5148/">Return to main page</a></h2>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

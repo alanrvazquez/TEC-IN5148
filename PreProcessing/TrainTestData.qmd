@@ -1,0 +1,253 @@
+---
+title: "Train, Test, and Validation Datasets"
+subtitle: "IN5148: Statistics and Data Science with Applications in Engineering"
+author: 
+  - name: Alan R. Vazquez
+    affiliations:
+      - name: Department of Industrial Engineering
+format: 
+  revealjs:
+    chalkboard: false
+    multiplex: false
+    footer: "Tecnologico de Monterrey"
+    logo: IN5148_logo.png
+    css: style.css
+    slide-number: True
+    html-math-method: mathjax
+editor: visual
+jupyter: python3
+---
+
+## Before we start,
+
+</br>
+
+Let's import **scikit-learn** into Python together with the other relevant libraries.
+
+```{python}
+#| echo: true
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+```
+
+We will not use all the functions from the **scikit-learn** library. Instead, we will use specific functions from the sub-library **model_selection**.
+
+# Training, validation, and test datasets
+
+## Recall that ...
+
+</br></br>
+
+In data science, we assume that
+
+$$Y = f(\boldsymbol{X}) + \epsilon$$
+
+where $f(\boldsymbol{X})$ represents the true relationship between $\boldsymbol{X} = (X_1, X_2, \ldots, X_p)$ and $Y$.
+
+-   $f(\boldsymbol{X})$ is unknown and very complex!
+
+## Two datasets
+
+</br></br>
+
+The application of data science models needs two data sets:
+
+::: incremental
+-   [**Training data**]{style="color:blue;"} is data that we use to train or construct the estimated function $\hat{f}(\boldsymbol{X})$.
+
+-   [**Test data**]{style="color:green;"} is data that we use to evaluate the predictive performance of $\hat{f}(\boldsymbol{X})$ only.
+:::
+
+## 
+
+::::: columns
+::: {.column width="30%"}
+![](images/training.png){width="256"}
+:::
+
+::: {.column width="70%"}
+</br>
+
+A random sample of $n$ observations.
+
+Use it to **construct** $\hat{f}(\boldsymbol{X})$.
+:::
+:::::
+
+::::: columns
+::: {.column width="30%"}
+![](images/test.png){width="262"}
+:::
+
+::: {.column width="70%"}
+Another random sample of $n_t$ observations, which is independent of the training data.
+
+Use it to **evaluate** $\hat{f}(\boldsymbol{X})$.
+:::
+:::::
+
+## Validation Dataset
+
+In many practical situations, a test dataset is not available. To overcome this issue, we use a [**validation dataset**]{style="color:orange;"}.
+
+![](images/validation.png){fig-align="center" width="645"}
+
+. . .
+
+**Idea**: Apply model to your [**validation dataset**]{style="color:orange;"} to mimic what will happen when you apply it to test dataset.
+
+## Example
+
+</br>
+
+The "BostonHousing.xlsx" contains data collected by the US Bureau of the Census concerning housing in the area of Boston, Massachusetts. The dataset includes data on 506 census housing tracts in the Boston area in 1970s.
+
+The **goal** is to predict the median house price in new tracts based on information such as crime rate, pollution, and number of rooms.
+
+The [response]{style="color:darkred;"} is the median value of owner-occupied homes in \$1000s, contained in the column `MEDV`.
+
+## The predictors
+
+::: {style="font-size: 70%;"}
+-   `CRIM`: per capita crime rate by town.
+-   `ZN`: proportion of residential land zoned for lots over 25,000 sq.ft.
+-   `INDUS`: proportion of non-retail business acres per town.
+-   `CHAS`: Charles River ('Yes' if tract bounds river; 'No' otherwise).
+-   `NOX`: nitrogen oxides concentration (parts per 10 million).
+-   `RM`: average number of rooms per dwelling.
+-   `AGE`: proportion of owner-occupied units built prior to 1940.
+-   `DIS`: weighted mean of distances to five Boston employment centers
+-   `RAD`: index of accessibility to radial highways ('Low', 'Medium', 'High').
+-   `TAX`: full-value property-tax rate per \$10,000.
+-   `PTRATIO`: pupil-teacher ratio by town.
+-   `LSTAT`: lower status of the population (percent).
+:::
+
+## Read the dataset
+
+</br>
+
+We read the dataset and set the variable `CHAS` and `RAD` as categorical.
+
+```{python}
+#| echo: true
+#| output: true
+
+Boston_data = pd.read_excel('BostonHousing.xlsx')
+
+Boston_data['CHAS'] = pd.Categorical(Boston_data['CHAS'])
+Boston_data['RAD'] = pd.Categorical(Boston_data['RAD'], 
+                                      categories=["Low", "Medium", "High"], 
+                                      ordered=True)
+```
+
+## 
+
+</br>
+
+```{python}
+#| echo: true
+#| output: true
+
+Boston_data.head()
+```
+
+## How do we generate validation data?
+
+We split the current dataset into a training and a validation dataset. To this end, we use the function `train_test_split()` from **scikit-learn**.
+
+</br>
+
+The function has three main inputs:
+
+-   A pandas dataframe with the predictor columns only.
+-   A pandas dataframe with the response column only.
+-   The parameter `test_size` which sets the portion of the dataset that will go to the validation set.
+
+## Create the predictor matrix
+
+We use the function `.drop()` from **pandas**. This function drops one or more columns from a data frame. Let's drop the response column `MEDV` and store the result in `X_full`.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Set full matrix of predictors.
+X_full = Boston_data.drop(columns = ['MEDV']) 
+X_full.head(4)
+```
+
+## Create the response column
+
+We use the function `.filter()` from **pandas** to extract the column `MEDV` from the data frame. We store the result in `Y_full`.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Set full matrix of responses.
+Y_full = Boston_data.filter(['MEDV'])
+Y_full.head(4)
+```
+
+## Let's partition the dataset
+
+</br>
+
+```{python}
+#| echo: true
+#| output: true
+
+# Split the dataset into training and validation.
+X_train, X_valid, Y_train, Y_valid = train_test_split(X_full, Y_full, 
+                                                      test_size = 0.3)
+```
+
+-   The function makes a clever partition of the data using the *empirical* distribution of the response.
+
+-   Technically, it splits the data so that the distribution of the response under the training and validation sets is similar.
+
+-   Usually, the proportion of the dataset that goes to the validation set is 20% or 30%.
+
+## 
+
+The predictors and response in the training dataset are in the objects `X_train` and `Y_train`, respectively. We compile these objects into a single dataset using the function `.concat()` from **pandas**. The argument `axis = 1` tells `.concat()` to concatenate the datasets by their rows.
+
+```{python}
+#| echo: true
+#| output: true
+
+training_dataset = pd.concat([X_train, Y_train], axis = 1)
+training_dataset.head(4)
+```
+
+## 
+
+Equivalently, the predictors and response in the validation dataset are in the objects `X_valid` and `Y_valid`, respectively.
+
+```{python}
+#| echo: true
+#| output: true
+
+validation_dataset = pd.concat([X_valid, Y_valid], axis = 1)
+validation_dataset.head()
+```
+
+## Work on your training dataset
+
+After we have partitioned the data, we **work on the** [**training data**]{style="color:blue;"} to develop our predictive pipeline.
+
+The pipeline has two main steps:
+
+1.  Data preprocessing.
+2.  Model development.
+
+We will now discuss preprocessing techniques applied to the predictor columns in the training dataset.
+
+Note that all preprocessing techniques will also be applied to the [**validation dataset**]{style="color:orange;"} and [**test dataset**]{style="color:green;"} to prepare it for your model!
+
+
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)
