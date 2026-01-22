@@ -1,0 +1,848 @@
+---
+title: "Data preprocessing: Part II"
+subtitle: "IN5148: Statistics and Data Science with Applications in Engineering"
+author: 
+  - name: Alan R. Vazquez
+    affiliations:
+      - name: Department of Industrial Engineering
+format: 
+  revealjs:
+    chalkboard: false
+    multiplex: true
+    footer: "Tecnologico de Monterrey"
+    logo: IN5148_logo.png
+    css: style.css
+    slide-number: True
+    html-math-method: mathjax
+editor: visual
+jupyter: python3
+---
+
+## Agenda
+
+</br>
+
+1.  Transforming predictors
+2.  Reducing the number of predictors
+3.  Standardizing the units of the predictors
+
+## Before we start
+
+</br>
+
+Let's import **scikit-learn** into Python together with the other relevant libraries.
+
+```{python}
+#| echo: true
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.impute import SimpleImputer, KNNImputer
+from sklearn.preprocessing import PowerTransformer, StandardScaler 
+from sklearn.feature_selection import VarianceThreshold
+```
+
+We will not use all the functions from the **scikit-learn** library. Instead, we will use specific functions from the sub-libraries **preprocessing**, **feature_selection**, **model_selection** and **impute**.
+
+# Transforming predictors
+
+## Categorical predictors
+
+A [**categorical predictor**]{style="color:darkgreen;"} takes on values that are categories or groups.
+
+. . .
+
+For example:
+
+-   Type of school: Public or private.
+
+-   Treatment: New or placebo.
+
+-   Grade: Passed or not passed.
+
+. . .
+
+The categories can be represented by names, labels or even numbers. Their use in regression requires **dummy variables**, which are numeric.
+
+## Dummy variables
+
+</br></br>
+
+> The traditional choice for a dummy variable is a binary variable, which can only take the values 0 and 1.
+
+</br>
+
+***Initially, a categorical variable with*** $k$ ***categories requires*** $k$ ***dummy variables.***
+
+## Example 1
+
+A market analyst is studying quality characteristics of cars. Specifically, the analyst is investigating the miles per gallon (mpg) of cars can be predicted using:
+
+-   $X_1:$ cylinders. Number of cylinders between 4 and 8
+-   $X_2:$ displacement. Engine displacement (cu. inches)
+-   $X_3:$ horsepower. Engine horsepower
+-   $X_4:$ weight. Vehicle weight (lbs.)
+-   $X_5:$ acceleration. Time to accelerate from 0 to 60 mph (sec.)
+-   $X_6:$ origin. Origin of car (American, European, Japanese)
+
+## 
+
+</br></br>
+
+The dataset is in the file "auto.xlsx". Let's read the data using **pandas**.
+
+```{python}
+#| echo: true
+
+# Load the Excel file into a pandas DataFrame.
+auto_data = pd.read_excel("auto.xlsx")
+
+# Set categorical variables.
+auto_data['origin'] = pd.Categorical(auto_data['origin'])
+```
+
+## Training and validation datasets
+
+</br>
+
+For illustrative purposes, we assume that we want to predict the miles per gallon of a car using the six predictors, $X_1, \ldots, X_6$.
+
+We create the predictor matrix and response column.
+
+```{python}
+#| echo: true
+
+# Set full matrix of predictors.
+X_full_c = (auto_data
+           .filter(['cylinders', 'displacement', 
+           'horsepower', 'weight', 'acceleration', 'origin']))
+
+# Set full matrix of responses.
+Y_full_c = auto_data.filter(['mpg'])
+```
+
+## 
+
+</br>
+
+We will use a validation dataset with 30% of the observations in `auto_data`. The other 70% will be in the training dataset.
+
+```{python}
+#| echo: true
+
+# Split the dataset into training and validation.
+X_train_c, X_valid_c, Y_train_c, Y_valid_c = train_test_split(X_full_c, Y_full_c, 
+                                                      test_size = 0.3,
+                                                      random_state = 59227)
+```
+
+## 
+
+</br>
+
+Let's look at the full training dataset.
+
+```{python}
+#| echo: true
+#| code-fold: false
+
+training_auto = pd.concat([X_train_c, Y_train_c], axis = 1)
+training_auto.head()
+```
+
+## Dealing with missing values
+
+</br>
+
+The dataset has missing values. In this example, we remove each row with at least one missing value.
+
+</br>
+
+```{python}
+#| echo: true
+
+# Remove rows with missing values.
+complete_Auto = training_auto.dropna()
+```
+
+## Example 1 (cont.)
+
+Categorical predictor: Origin of a car. Three categories: American, European and Japanese.
+
+Initially, 3 dummy variables are required:
+
+$$d_1 =
+\begin{cases}
+1 \text{ if observation is from an American car}\\
+0 \text{ otherwise}
+\end{cases}$$ $$d_2 =
+\begin{cases}
+1 \text{ if observation is from an European car}\\
+0 \text{ otherwise}
+\end{cases}$$ $$d_3 =
+\begin{cases}
+1 \text{ if observation is from a Japanese car}\\
+0 \text{ otherwise}
+\end{cases}$$
+
+## 
+
+The variable Origin would then be replaced by the three dummy variables
+
+| Origin ($X$) | $d_1$    | $d_2$    | $d_3$    |
+|--------------|----------|----------|----------|
+| American     | 1        | 0        | 0        |
+| American     | 1        | 0        | 0        |
+| European     | 0        | 1        | 0        |
+| European     | 0        | 1        | 0        |
+| American     | 1        | 0        | 0        |
+| Japanese     | 0        | 0        | 1        |
+| $\vdots$     | $\vdots$ | $\vdots$ | $\vdots$ |
+
+## A drawback
+
+</br>
+
+::: incremental
+-   A drawback with the initial dummy variables is that they are [**linearly dependent**]{style="color:red;"}. That is, $d_1 + d_2 + d_3 = 1$.
+
+-   Therefore, we can determine the value of $d_1 = 1- d_2 - d_3.$
+
+-   Predictive models such as linear regression are sensitive to linear dependencies among predictors.
+
+-   **The solution is to drop one of the predictor**, say, $d_1$, from the data.
+:::
+
+## 
+
+The variable Origin would then be replaced by the three dummy variables.
+
+| Origin ($X$) | $d_2$    | $d_3$    |
+|--------------|----------|----------|
+| American     | 0        | 0        |
+| American     | 0        | 0        |
+| European     | 1        | 0        |
+| European     | 1        | 0        |
+| American     | 0        | 0        |
+| Japanese     | 0        | 1        |
+| $\vdots$     | $\vdots$ | $\vdots$ |
+
+## Dummy variables in Python
+
+</br>
+
+We can get the dummy variables of a categorical variable using the function `pd.get_dummies()` from **pandas**.
+
+The input of the function is the categorical variable.
+
+The function has an extra argument called `drop_first` to drop the first dummy variable. It also has the argument `dtype` to show the values as integers.
+
+```{python}
+#| echo: true
+
+dummy_data = pd.get_dummies(complete_Auto['origin'], drop_first = True, 
+                            dtype = 'int')
+```
+
+## 
+
+</br></br>
+
+```{python}
+#| echo: true
+
+dummy_data.head()
+```
+
+## 
+
+Now, to add the dummy variables to the dataset, we use the function `concat()` from **pandas**.
+
+```{python}
+#| echo: true
+
+augmented_auto = pd.concat([complete_Auto, dummy_data], axis = 1)
+augmented_auto.head()
+```
+
+## Transforming numerical predictors
+
+</br>
+
+A common problem with a predictor is that it may have a *skewed distribution*. That is, a distribution that accumulates many observations in smaller or larger values of the predictor.
+
+</br>
+
+For example, consider the distribution of the predictor `DIS` (weighted mean of distances to five Boston employment centers) in the "BostonHousing.xlsx" dataset.
+
+## Example 2
+
+</br>
+
+We revisit the "BostonHousing.xlsx" dataset that contains data of houses in Boston, Massachusetts.
+
+</br>
+
+The **goal** is to predict the median house price in new tracts based on information such as crime rate, pollution, and number of rooms.
+
+</br>
+
+The [response]{style="color:darkred;"} is the median value of owner-occupied homes in \$1000s, contained in the column `MEDV`.
+
+## The predictors
+
+::: {style="font-size: 70%;"}
+-   `CRIM`: per capita crime rate by town.
+-   `ZN`: proportion of residential land zoned for lots over 25,000 sq.ft.
+-   `INDUS`: proportion of non-retail business acres per town.
+-   `CHAS`: Charles River ('Yes' if tract bounds river; 'No' otherwise).
+-   `NOX`: nitrogen oxides concentration (parts per 10 million).
+-   `RM`: average number of rooms per dwelling.
+-   `AGE`: proportion of owner-occupied units built prior to 1940.
+-   `DIS`: weighted mean of distances to five Boston employment centers
+-   `RAD`: index of accessibility to radial highways ('Low', 'Medium', 'High').
+-   `TAX`: full-value property-tax rate per \$10,000.
+-   `PTRATIO`: pupil-teacher ratio by town.
+-   `LSTAT`: lower status of the population (percent).
+:::
+
+## Read the dataset
+
+We read the dataset.
+
+```{python}
+#| echo: true
+#| output: true
+
+Boston_data = pd.read_excel('BostonHousing.xlsx')
+```
+
+</br>
+
+The variables `CHAS` and `RAD` are categorical variables. Therefore, we turn tthem into categorical using `.Categorical()` function from **pandas**.
+
+```{python}
+#| echo: true
+#| output: true
+
+Boston_data['CHAS'] = pd.Categorical(Boston_data['CHAS'])
+Boston_data['RAD'] = pd.Categorical(Boston_data['RAD'], 
+                                      categories=["Low", "Medium", "High"], 
+                                      ordered=True)
+```
+
+## 
+
+</br>
+
+Before we continue, we generate a training dataset with 80% of the observations. To this end, let's create the predictor matrix and response column.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Set full matrix of predictors.
+X_full_b = Boston_data.drop(columns = ['MEDV']) 
+
+# Set full matrix of responses.
+Y_full_b = Boston_data.filter(['MEDV'])
+
+# Split the dataset into training and validation.
+X_train_b, X_valid_b, Y_train_b, Y_valid_b = train_test_split(X_full_b, 
+                                                      Y_full_b, 
+                                                      test_size = 0.2,
+                                                      random_state = 59227)
+```
+
+## 
+
+</br>
+
+The new training dataset we will work with is:
+
+```{python}
+#| echo: true
+#| output: true
+
+Boston_training = pd.concat([X_train_b, Y_train_b], axis = 1)
+Boston_training.head()
+```
+
+## Distribution of `DIS`
+
+A right-skewed distribution is characterized by the right tail (or the side with higher values) being longer and more extended than the left tail.
+
+```{python}
+#| echo: true
+#| code-fold: true
+#| fig-align: center
+
+plt.figure(figsize=(8,3.5)) # Create space for figure.
+sns.histplot(data = Boston_training, x = 'DIS') # Create the histogram.
+plt.title("Histogram of DIS") # Plot title.
+plt.xlabel("DIS") # X label
+plt.show() # Display the plot
+```
+
+## Problems with strong skewness
+
+</br>
+
+Strong (right or left) skewness in a predictor can:
+
+-   Distort the relationship with the response.
+-   Violate the assumptions of the linear regression model (e.g., linearity, homoscedasticity).
+-   Lead to influential outliers or poor model fit.
+
+To correct the skewness of a predictor's distribution, we can transform the predictor using the [**Box-Cox transformation**]{style="color:orange;"}
+
+## Box-Cox Transformation
+
+</br>
+
+::: incremental
+-   The Box-Cox transformation uses a family of power transformations on a predictor $X$ such that $X' = X^{\lambda}$, where $\lambda$ is a parameter to be determined using the data. When $\lambda = 0,$ this means $X' = \ln(X)$, where $\ln(\cdot)$ is the natural logarithm.
+
+-   The Box-Cox transformation is the element of this family that results in a transformed variable that follows a normal distribution (approximately).
+
+-   [The variable $X$ must be strictly positive!]{style="color:blue;"}
+:::
+
+## In Python
+
+We apply the Box-Cox transformation using the `PowerTransformer` and `fit_transform` functions of the **scikit-learn** library.
+
+```{python}
+#| echo: true
+
+pt = PowerTransformer(method='box-cox', standardize = False)
+DIS_transform = pt.fit_transform(Boston_training[['DIS']])
+```
+
+</br>
+
+In the `PowerTransformer`, the input `standardize` specifies if we wish to standardize the resulting transformed predictor to have a mean of zero and a standard deviation of one. We do not standardize the predictor yet.
+
+## 
+
+The result from the function is a **numpy** array. However, since we are working with **pandas** dataframes, we must transform the output to this format using the following code.
+
+```{python}
+#| echo: true
+
+DIS_transform_df = pd.DataFrame(DIS_transform, columns=['DIS_boxcox'])
+DIS_transform_df.head()
+```
+
+## 
+
+</br>
+
+::::: columns
+::: {.column width="50%"}
+Original predictor
+
+```{python}
+#| echo: true
+#| code-fold: true
+#| fig-align: center
+
+plt.figure(figsize=(7,4)) # Create space for figure.
+sns.histplot(data = Boston_training, x = 'DIS') # Create the histogram.
+plt.title("Histogram of DIS") # Plot title.
+plt.xlabel("DIS") # X label
+plt.show() # Display the plot
+```
+:::
+
+::: {.column width="50%"}
+Box-Cox transformation
+
+```{python}
+#| echo: true
+#| code-fold: true
+#| fig-align: center
+
+plt.figure(figsize=(7,4)) # Create space for figure.
+sns.histplot(data = DIS_transform_df, x = 'DIS_boxcox') # Create the histogram.
+plt.title("Histogram of transformed DIS") # Plot title.
+plt.xlabel("DIS (Box-Cox transformation") # X label
+plt.show() # Display the plot
+```
+:::
+:::::
+
+## Value of $\lambda$
+
+</br>
+
+Recall that the Box-Cox transformation finds the best value of $\lambda$ that makes the transformed predictor $X^\lambda$ to follow a normal distribution.
+
+We can obtain the value of $\lambda$ actually used in the transformation using the following code.
+
+```{python}
+#| echo: true
+
+# Retrieve the lambda value
+print(pt.lambdas_)
+```
+
+This means that the transformed predictor is $X' = X^{-0.123}$.
+
+## Discussion
+
+</br></br>
+
+The Box-Cox transformation can:
+
+-   Make the distribution of a predictor more symmetric.
+
+-   Help to linearize the relationship with the response.
+
+After transformation, the predictor $X'$ must be used instead of the original predictor $X$.
+
+# Reducing the number of predictors
+
+## Removing predictors
+
+</br>
+
+There are potential advantages to removing predictors prior to modeling:
+
+::: incremental
+-   Fewer predictors means decreased computational time and complexity.
+
+-   If two predictors are highly-correlated, they are measuring the same underlying information. So, removing one should not compromise the performance of the model.
+:::
+
+. . .
+
+Here, we will see two techniques to remove predictors.
+
+## Near-Zero variance predictors
+
+</br>
+
+A **near-zero variance predictor variable** is one that has only a handful of unique values that occur with very low frequencies.
+
+</br>
+
+. . .
+
+If the predictor has a single unique value, then it is called a **zero-variance predictor variable**.
+
+</br>
+
+. . .
+
+Since the values of this predictor variable do not vary or change at all, this predictor does not provide any information to the model and must be discarded.
+
+## Example 3
+
+</br>
+
+We consider a data set related to Glass identification. The data has 214 glass samples labeled as one of seven glass categories. There are nine predictors including the refractive index (RI) and percentages of eight elements: Na, Mg, Al, Si, K, Ca, Ba, and Fe.
+
+Let's read the data set.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Load Excel file (make sure the file is in your Colab)
+glass_data = pd.read_excel('glass.xlsx')
+```
+
+## Training and validation datasets
+
+Let's create a training and validation dataset. To this end, we will consider the variable `Type` as the response and the other numeric variables as the predictors. We will use 80% of the observations for the training dataset. The other 20% of the observations will go to the validation dataset.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Set full matrix of predictors.
+X_full_g = glass_data.drop(columns = ['Type']) 
+
+# Set full matrix of responses.
+Y_full_g = glass_data.filter(['Type'])
+
+# Split the dataset into training and validation.
+X_train_g, X_valid_g, Y_train_g, Y_valid_g = train_test_split(X_full_g, 
+                                                      Y_full_g, 
+                                                      test_size = 0.2,
+                                                      random_state = 59227)
+```
+
+## In Python
+
+We use the function `VarianceThreshold()` to set the threshold for determining a *low* sample variance. We also use other functions such as `.fit()` and `.get_support()`.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Set threshold
+selector = VarianceThreshold(threshold=0.01)
+
+# Apply threshold.
+selector.fit(X_train_g)
+
+# Identify predictors with low variance.
+low_variance_cols = X_train_g.columns[~selector.get_support()]
+
+# Print the list of predictors.
+print(f"Low variance columns: {low_variance_cols}")
+```
+
+## 
+
+</br></br>
+
+After identifying predictors with low variability, we remove them from the problem because they do not add much to the problem. To this end, we use the command below.
+
+</br>
+
+```{python}
+#| echo: true
+#| output: true
+
+# Removing problematic predictors
+sb_Xtrain_glass = X_train_g.drop(columns=low_variance_cols)
+```
+
+## Between-predictor correlation
+
+</br>
+
+[**Collinearity**]{style="color:purple;"} is the technical term for the situation where two predictors have a substantial correlation with each other.
+
+If two or more predictors are highly correlated (either negatively or positively), then methods such as the linear regression model will not work!
+
+To visualize the severity of collinearity between predictors, we calculate and visualize the *correlation matrix*.
+
+## Example 1 (cont.)
+
+</br>
+
+We concentrate on the five numerical predictors in the `complete_Auto` dataset.
+
+```{python}
+#| echo: true
+
+# Select specific variables.
+complete_sbAuto = complete_Auto[['cylinders', 'displacement', 
+                                 'horsepower', 'weight', 
+                                 'acceleration']]
+```
+
+## Correlation matrix
+
+</br>
+
+In Python, we calculate the correlation matrix using the command below.
+
+```{python}
+#| echo: true
+#| output: true
+
+correlation_matrix = complete_sbAuto.corr()
+print(correlation_matrix)
+```
+
+## 
+
+Next, we plot the correlation matrix using the function `heatmap()` from **seaborn**. The argument `annot` shows the actual value of the pair-wise correlations, and `cmap` shows a nice color theme.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+
+plt.figure(figsize=(3,3))
+sns.heatmap(correlation_matrix, cmap='coolwarm', annot = True)
+```
+
+## 
+
+</br>
+
+The predictors cylinders and displacement are highly correlated. In fact, their correlation is 0.95.
+
+```{python}
+#| echo: false
+#| output: true
+#| fig-align: center
+
+plt.figure(figsize=(7,5))
+sns.scatterplot(data = complete_sbAuto, x = 'cylinders', y = 'displacement')
+plt.xlabel('cylinders', fontsize = 14)
+plt.ylabel('displacement', fontsize = 14)
+plt.show()
+```
+
+## In practice
+
+</br>
+
+We deal with collinearity by removing the minimum number of predictors to ensure that all pairwise correlations are below a certain threshold, say, 0.75.
+
+We can identify the variables that are highly correlated using quite complex code. However, here we will do it manually using the correlation map.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Dataset without highly correlated predictors.
+reduced_auto = complete_sbAuto[ ['weight', 'acceleration']]
+```
+
+# Standarization
+
+## Predictors with different units
+
+Many good predictive models have issues with [**numeric predictors**]{style="color:blue;"} with different units:
+
+1.  Methods such as K-nearest neighbors are based on the distance between observations. If the predictors are on different units or scales, then some predictors will have a larger weight for computing the distance.
+
+2.  Other methods such as LASSO use the variances of the predictors in their calculations. Predictors with different scales will have different variances and so, those with a higher variance will play a bigger role in the calculations.
+
+## 
+
+</br></br></br></br>
+
+::: {style="font-size: 150%;"}
+[***In a nutshell, some predictors will have a higher impact in the model due to its unit and not its information provided to it.***]{style="color:purple;"}
+:::
+
+## Standarization
+
+</br>
+
+Standardization refers to *centering* and *scaling* each numeric predictor individually. It puts every predictor on the same scale.
+
+To **center** a predictor variable, the average predictor value is subtracted from all the values.
+
+Therefore, the centered predictor has a zero mean (that is, its average value is zero).
+
+## 
+
+</br>
+
+To **scale** a predictor, each of its value is divided by its standard deviation.
+
+Scaling the data coerce the values to have a common standard deviation of one.
+
+In mathematical terms, we standardize a predictor as:
+
+$${\color{blue} \tilde{X}_{i}} = \frac{{ X_{i} - \bar{X}}}{ \sqrt{\frac{1}{n -1} \sum_{i=1}^{n} (X_{i} - \bar{X})^2}},$$
+
+with $\bar{X} = \sum_{i=1}^n \frac{x_i}{n}$.
+
+## Example 1 (cont.)
+
+We use on the five numerical predictors in the `complete_sbAuto` dataset.
+
+```{python}
+#| echo: true
+
+complete_sbAuto.head()
+```
+
+## Two predictors in original units
+
+Consider the `complete_sbAuto` dataset created previously. Consider two points in the plot: $(175, 5140)$ and $(69, 1613)$.
+
+::::: columns
+::: {.column width="50%"}
+```{python}
+#| echo: false
+#| output: true
+#| fig-align: center
+
+plt.figure(figsize=(5,5))
+sns.scatterplot(data = complete_sbAuto, x = 'horsepower', y = 'weight')
+plt.scatter(x = 175, y = 5140, color = 'red')
+plt.scatter(x = 69, y = 1613, color = 'red')
+plt.xlabel('Horsepower', fontsize=14)
+plt.ylabel('Weight', fontsize=14)
+plt.show()
+```
+:::
+
+::: {.column width="50%"}
+</br>
+
+The distance between these points is $\sqrt{(69 - 175)^2 + (1613-5140)^2}$ $= \sqrt{11236 + 12439729}$ $= 3528.592$.
+:::
+:::::
+
+## Standarization in Python
+
+</br>
+
+To standardize **numerical** predictors, we use the function `StandardScaler()`. Moreover, we apply the function to the variables using the function `fit_transform()`.
+
+</br>
+
+```{python}
+#| echo: true
+
+scaler = StandardScaler()
+Xs = scaler.fit_transform(complete_sbAuto)
+```
+
+## 
+
+Unfortunately, the resulting object is not a pandas data frame. We then convert this object to this format. </br>
+
+```{python}
+#| echo: true
+
+scaled_df = pd.DataFrame(Xs, columns = complete_sbAuto.columns)
+scaled_df.head()
+```
+
+## Two predictors in standardized units
+
+In the new scale, the two points are now: $(1.82, 2.53)$ and $(-0.91, -1.60)$.
+
+::::: columns
+::: {.column width="50%"}
+```{python}
+#| echo: false
+#| output: true
+#| fig-align: center
+
+plt.figure(figsize=(5,5))
+sns.scatterplot(data = scaled_df, x = 'horsepower', y = 'weight')
+plt.scatter(x = 1.83, y = 2.54, color = 'red')
+plt.scatter(x = -0.90, y = -1.60, color = 'red')
+plt.xlabel('Standardized horsepower', fontsize=14)
+plt.ylabel('Standardized weight', fontsize=14)
+plt.show()
+```
+:::
+
+::: {.column width="50%"}
+</br>
+
+The distance between these points is $\sqrt{(-0.91 - 1.82)^2 + (-1.60-2.53)^2}$ $= \sqrt{7.45 + 17.05} = 4.95$.
+:::
+:::::
+
+## Discussion
+
+::: incremental
+-   Standardized predictors are generally used to improve the numerical stability of some calculations.
+
+-   It is generally recommended to always standardize numeric predictors. Perhaps the only exception would be if we consider a linear regression model.
+
+-   A drawback of these transformations is the [***loss of interpretability***]{style="color:pink;"} since the data are no longer in the original units.
+
+-   Standardizing the predictors does not affect their correlation.
+:::
+
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)
