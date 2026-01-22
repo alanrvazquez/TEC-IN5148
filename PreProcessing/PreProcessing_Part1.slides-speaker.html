@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.25">
 
   <meta name="author" content="Alan R. Vazquez">
-  <title>IN5148 Statistics and Data Science with Applications in Engineering – Data preprocessing: Part I</title>
+  <title>IN5148 Statistics and Data Science with Applications in Engineering – Data preprocessing</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,7 +197,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Data preprocessing: Part I</h1>
+  <h1 class="title">Data preprocessing</h1>
   <p class="subtitle">IN5148: Statistics and Data Science with Applications in Engineering</p>
 
 <div class="quarto-title-authors">
@@ -217,8 +217,10 @@ Alan R. Vazquez
 <p><br></p>
 <ol type="1">
 <li>Introduction</li>
-<li>Training, validation, and test datasets</li>
 <li>Dealing with missing values</li>
+<li>Transforming predictors</li>
+<li>Reducing the number of predictors</li>
+<li>Standardizing predictors</li>
 </ol>
 </section>
 <section>
@@ -264,674 +266,14 @@ Alan R. Vazquez
 <h2></h2>
 <p><br></p>
 <p>Let’s import <strong>scikit-learn</strong> into Python together with the other relevant libraries.</p>
-<div id="a226db10" class="cell" data-execution_count="1">
+<div id="cacaca50" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb1-4"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb1-5"><a></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer, KNNImputer</span>
-<span id="cb1-6"><a></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PowerTransformer, StandardScaler </span>
-<span id="cb1-7"><a></a><span class="im">from</span> sklearn.feature_selection <span class="im">import</span> VarianceThreshold</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-4"><a></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
+<span id="cb1-5"><a></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>We will not use all the functions from the <strong>scikit-learn</strong> library. Instead, we will use specific functions from the sub-libraries <strong>preprocessing</strong>, <strong>feature_selection</strong>, <strong>model_selection</strong> and <strong>impute</strong>.</p>
-</section></section>
-<section>
-<section id="training-validation-and-test-datasets" class="title-slide slide level1 center">
-<h1>Training, validation, and test datasets</h1>
-
-</section>
-<section id="recall-that" class="slide level2">
-<h2>Recall that …</h2>
-<p><br><br></p>
-<p>In data science, we assume that</p>
-<p><span class="math display">\[Y = f(\boldsymbol{X}) + \epsilon\]</span></p>
-<p>where <span class="math inline">\(f(\boldsymbol{X})\)</span> represents the true relationship between <span class="math inline">\(\boldsymbol{X} = (X_1, X_2, \ldots, X_p)\)</span> and <span class="math inline">\(Y\)</span>.</p>
-<ul>
-<li><span class="math inline">\(f(\boldsymbol{X})\)</span> is unknown and very complex!</li>
-</ul>
-</section>
-<section id="two-datasets" class="slide level2">
-<h2>Two datasets</h2>
-<p><br><br></p>
-<p>The application of data science models needs two data sets:</p>
-<ul>
-<li class="fragment"><p><span style="color:blue;"><strong>Training data</strong></span> is data that we use to train or construct the estimated function <span class="math inline">\(\hat{f}(\boldsymbol{X})\)</span>.</p></li>
-<li class="fragment"><p><span style="color:green;"><strong>Test data</strong></span> is data that we use to evaluate the predictive performance of <span class="math inline">\(\hat{f}(\boldsymbol{X})\)</span> only.</p></li>
-</ul>
-</section>
-<section id="section-2" class="slide level2">
-<h2></h2>
-<div class="columns">
-<div class="column" style="width:30%;">
-<p><img data-src="images/training.png" width="256"></p>
-</div><div class="column" style="width:70%;">
-<p><br></p>
-<p>A random sample of <span class="math inline">\(n\)</span> observations.</p>
-<p>Use it to <strong>construct</strong> <span class="math inline">\(\hat{f}(\boldsymbol{X})\)</span>.</p>
-</div></div>
-<div class="columns">
-<div class="column" style="width:30%;">
-<p><img data-src="images/test.png" width="262"></p>
-</div><div class="column" style="width:70%;">
-<p>Another random sample of <span class="math inline">\(n_t\)</span> observations, which is independent of the training data.</p>
-<p>Use it to <strong>evaluate</strong> <span class="math inline">\(\hat{f}(\boldsymbol{X})\)</span>.</p>
-</div></div>
-</section>
-<section id="validation-dataset" class="slide level2">
-<h2>Validation Dataset</h2>
-<p>In many practical situations, a test dataset is not available. To overcome this issue, we use a <span style="color:orange;"><strong>validation dataset</strong></span>.</p>
-
-<img data-src="images/validation.png" class="quarto-figure quarto-figure-center r-stretch" width="645"><div class="fragment">
-<p><strong>Idea</strong>: Apply model to your <span style="color:orange;"><strong>validation dataset</strong></span> to mimic what will happen when you apply it to test dataset.</p>
-</div>
-</section>
-<section id="example-1" class="slide level2">
-<h2>Example 1</h2>
-<p><br></p>
-<p>The “BostonHousing.xlsx” contains data collected by the US Bureau of the Census concerning housing in the area of Boston, Massachusetts. The dataset includes data on 506 census housing tracts in the Boston area in 1970s.</p>
-<p>The <strong>goal</strong> is to predict the median house price in new tracts based on information such as crime rate, pollution, and number of rooms.</p>
-<p>The <span style="color:darkred;">response</span> is the median value of owner-occupied homes in $1000s, contained in the column <code>MEDV</code>.</p>
-</section>
-<section id="the-predictors" class="slide level2">
-<h2>The predictors</h2>
-<div style="font-size: 70%;">
-<ul>
-<li><code>CRIM</code>: per capita crime rate by town.</li>
-<li><code>ZN</code>: proportion of residential land zoned for lots over 25,000 sq.ft.</li>
-<li><code>INDUS</code>: proportion of non-retail business acres per town.</li>
-<li><code>CHAS</code>: Charles River (‘Yes’ if tract bounds river; ‘No’ otherwise).</li>
-<li><code>NOX</code>: nitrogen oxides concentration (parts per 10 million).</li>
-<li><code>RM</code>: average number of rooms per dwelling.</li>
-<li><code>AGE</code>: proportion of owner-occupied units built prior to 1940.</li>
-<li><code>DIS</code>: weighted mean of distances to five Boston employment centers</li>
-<li><code>RAD</code>: index of accessibility to radial highways (‘Low’, ‘Medium’, ‘High’).</li>
-<li><code>TAX</code>: full-value property-tax rate per $10,000.</li>
-<li><code>PTRATIO</code>: pupil-teacher ratio by town.</li>
-<li><code>LSTAT</code>: lower status of the population (percent).</li>
-</ul>
-</div>
-</section>
-<section id="read-the-dataset" class="slide level2">
-<h2>Read the dataset</h2>
-<p><br></p>
-<p>We read the dataset and set the variable <code>CHAS</code> and <code>RAD</code> as categorical.</p>
-<div id="eec72458" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>Boston_data <span class="op">=</span> pd.read_excel(<span class="st">'BostonHousing.xlsx'</span>)</span>
-<span id="cb2-2"><a></a></span>
-<span id="cb2-3"><a></a>Boston_data[<span class="st">'CHAS'</span>] <span class="op">=</span> pd.Categorical(Boston_data[<span class="st">'CHAS'</span>])</span>
-<span id="cb2-4"><a></a>Boston_data[<span class="st">'RAD'</span>] <span class="op">=</span> pd.Categorical(Boston_data[<span class="st">'RAD'</span>], </span>
-<span id="cb2-5"><a></a>                                      categories<span class="op">=</span>[<span class="st">"Low"</span>, <span class="st">"Medium"</span>, <span class="st">"High"</span>], </span>
-<span id="cb2-6"><a></a>                                      ordered<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="section-3" class="slide level2">
-<h2></h2>
-<p><br></p>
-<div id="595cec88" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>Boston_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">CRIM</th>
-<th data-quarto-table-cell-role="th">ZN</th>
-<th data-quarto-table-cell-role="th">INDUS</th>
-<th data-quarto-table-cell-role="th">CHAS</th>
-<th data-quarto-table-cell-role="th">NOX</th>
-<th data-quarto-table-cell-role="th">RM</th>
-<th data-quarto-table-cell-role="th">AGE</th>
-<th data-quarto-table-cell-role="th">DIS</th>
-<th data-quarto-table-cell-role="th">RAD</th>
-<th data-quarto-table-cell-role="th">TAX</th>
-<th data-quarto-table-cell-role="th">PTRATIO</th>
-<th data-quarto-table-cell-role="th">LSTAT</th>
-<th data-quarto-table-cell-role="th">MEDV</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>0.00632</td>
-<td>18.0</td>
-<td>2.31</td>
-<td>No</td>
-<td>0.538</td>
-<td>6.575</td>
-<td>65.2</td>
-<td>4.0900</td>
-<td>Low</td>
-<td>296</td>
-<td>15.3</td>
-<td>4.98</td>
-<td>24.0</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
-<td>0.02731</td>
-<td>0.0</td>
-<td>7.07</td>
-<td>No</td>
-<td>0.469</td>
-<td>6.421</td>
-<td>78.9</td>
-<td>4.9671</td>
-<td>Low</td>
-<td>242</td>
-<td>17.8</td>
-<td>9.14</td>
-<td>21.6</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
-<td>0.02729</td>
-<td>0.0</td>
-<td>7.07</td>
-<td>No</td>
-<td>0.469</td>
-<td>7.185</td>
-<td>61.1</td>
-<td>4.9671</td>
-<td>Low</td>
-<td>242</td>
-<td>17.8</td>
-<td>4.03</td>
-<td>34.7</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
-<td>0.03237</td>
-<td>0.0</td>
-<td>2.18</td>
-<td>No</td>
-<td>0.458</td>
-<td>6.998</td>
-<td>45.8</td>
-<td>6.0622</td>
-<td>Low</td>
-<td>222</td>
-<td>18.7</td>
-<td>2.94</td>
-<td>33.4</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
-<td>0.06905</td>
-<td>0.0</td>
-<td>2.18</td>
-<td>No</td>
-<td>0.458</td>
-<td>7.147</td>
-<td>54.2</td>
-<td>6.0622</td>
-<td>Low</td>
-<td>222</td>
-<td>18.7</td>
-<td>5.33</td>
-<td>36.2</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-</section>
-<section id="how-do-we-generate-validation-data" class="slide level2">
-<h2>How do we generate validation data?</h2>
-<p>We split the current dataset into a training and a validation dataset. To this end, we use the function <code>train_test_split()</code> from <strong>scikit-learn</strong>.</p>
-<p><br></p>
-<p>The function has three main inputs:</p>
-<ul>
-<li>A pandas dataframe with the predictor columns only.</li>
-<li>A pandas dataframe with the response column only.</li>
-<li>The parameter <code>test_size</code> which sets the portion of the dataset that will go to the validation set.</li>
-</ul>
-</section>
-<section id="create-the-predictor-matrix" class="slide level2">
-<h2>Create the predictor matrix</h2>
-<p>We use the function <code>.drop()</code> from <strong>pandas</strong>. This function drops one or more columns from a data frame. Let’s drop the response column <code>MEDV</code> and store the result in <code>X_full</code>.</p>
-<div id="2e476029" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># Set full matrix of predictors.</span></span>
-<span id="cb4-2"><a></a>X_full <span class="op">=</span> Boston_data.drop(columns <span class="op">=</span> [<span class="st">'MEDV'</span>]) </span>
-<span id="cb4-3"><a></a>X_full.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">CRIM</th>
-<th data-quarto-table-cell-role="th">ZN</th>
-<th data-quarto-table-cell-role="th">INDUS</th>
-<th data-quarto-table-cell-role="th">CHAS</th>
-<th data-quarto-table-cell-role="th">NOX</th>
-<th data-quarto-table-cell-role="th">RM</th>
-<th data-quarto-table-cell-role="th">AGE</th>
-<th data-quarto-table-cell-role="th">DIS</th>
-<th data-quarto-table-cell-role="th">RAD</th>
-<th data-quarto-table-cell-role="th">TAX</th>
-<th data-quarto-table-cell-role="th">PTRATIO</th>
-<th data-quarto-table-cell-role="th">LSTAT</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>0.00632</td>
-<td>18.0</td>
-<td>2.31</td>
-<td>No</td>
-<td>0.538</td>
-<td>6.575</td>
-<td>65.2</td>
-<td>4.0900</td>
-<td>Low</td>
-<td>296</td>
-<td>15.3</td>
-<td>4.98</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
-<td>0.02731</td>
-<td>0.0</td>
-<td>7.07</td>
-<td>No</td>
-<td>0.469</td>
-<td>6.421</td>
-<td>78.9</td>
-<td>4.9671</td>
-<td>Low</td>
-<td>242</td>
-<td>17.8</td>
-<td>9.14</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
-<td>0.02729</td>
-<td>0.0</td>
-<td>7.07</td>
-<td>No</td>
-<td>0.469</td>
-<td>7.185</td>
-<td>61.1</td>
-<td>4.9671</td>
-<td>Low</td>
-<td>242</td>
-<td>17.8</td>
-<td>4.03</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
-<td>0.03237</td>
-<td>0.0</td>
-<td>2.18</td>
-<td>No</td>
-<td>0.458</td>
-<td>6.998</td>
-<td>45.8</td>
-<td>6.0622</td>
-<td>Low</td>
-<td>222</td>
-<td>18.7</td>
-<td>2.94</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-</section>
-<section id="create-the-response-column" class="slide level2">
-<h2>Create the response column</h2>
-<p>We use the function <code>.filter()</code> from <strong>pandas</strong> to extract the column <code>MEDV</code> from the data frame. We store the result in <code>Y_full</code>.</p>
-<div id="d408e5a8" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="co"># Set full matrix of responses.</span></span>
-<span id="cb5-2"><a></a>Y_full <span class="op">=</span> Boston_data.<span class="bu">filter</span>([<span class="st">'MEDV'</span>])</span>
-<span id="cb5-3"><a></a>Y_full.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">MEDV</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>24.0</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
-<td>21.6</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
-<td>34.7</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
-<td>33.4</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-</section>
-<section id="lets-partition-the-dataset" class="slide level2">
-<h2>Let’s partition the dataset</h2>
-<p><br></p>
-<div id="6d5aa869" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="co"># Split the dataset into training and validation.</span></span>
-<span id="cb6-2"><a></a>X_train, X_valid, Y_train, Y_valid <span class="op">=</span> train_test_split(X_full, Y_full, </span>
-<span id="cb6-3"><a></a>                                                      test_size <span class="op">=</span> <span class="fl">0.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<ul>
-<li><p>The function makes a clever partition of the data using the <em>empirical</em> distribution of the response.</p></li>
-<li><p>Technically, it splits the data so that the distribution of the response under the training and validation sets is similar.</p></li>
-<li><p>Usually, the proportion of the dataset that goes to the validation set is 20% or 30%.</p></li>
-</ul>
-</section>
-<section id="section-4" class="slide level2">
-<h2></h2>
-<p>The predictors and response in the training dataset are in the objects <code>X_train</code> and <code>Y_train</code>, respectively. We compile these objects into a single dataset using the function <code>.concat()</code> from <strong>pandas</strong>. The argument <code>axis = 1</code> tells <code>.concat()</code> to concatenate the datasets by their rows.</p>
-<div id="9f7976d2" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>training_dataset <span class="op">=</span> pd.concat([X_train, Y_train], axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb7-2"><a></a>training_dataset.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">CRIM</th>
-<th data-quarto-table-cell-role="th">ZN</th>
-<th data-quarto-table-cell-role="th">INDUS</th>
-<th data-quarto-table-cell-role="th">CHAS</th>
-<th data-quarto-table-cell-role="th">NOX</th>
-<th data-quarto-table-cell-role="th">RM</th>
-<th data-quarto-table-cell-role="th">AGE</th>
-<th data-quarto-table-cell-role="th">DIS</th>
-<th data-quarto-table-cell-role="th">RAD</th>
-<th data-quarto-table-cell-role="th">TAX</th>
-<th data-quarto-table-cell-role="th">PTRATIO</th>
-<th data-quarto-table-cell-role="th">LSTAT</th>
-<th data-quarto-table-cell-role="th">MEDV</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">428</th>
-<td>7.36711</td>
-<td>0.0</td>
-<td>18.10</td>
-<td>No</td>
-<td>0.679</td>
-<td>6.193</td>
-<td>78.1</td>
-<td>1.9356</td>
-<td>High</td>
-<td>666</td>
-<td>20.2</td>
-<td>21.52</td>
-<td>11.0</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">170</th>
-<td>1.20742</td>
-<td>0.0</td>
-<td>19.58</td>
-<td>No</td>
-<td>0.605</td>
-<td>5.875</td>
-<td>94.6</td>
-<td>2.4259</td>
-<td>Medium</td>
-<td>403</td>
-<td>14.7</td>
-<td>14.43</td>
-<td>17.4</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">206</th>
-<td>0.22969</td>
-<td>0.0</td>
-<td>10.59</td>
-<td>No</td>
-<td>0.489</td>
-<td>6.326</td>
-<td>52.5</td>
-<td>4.3549</td>
-<td>Medium</td>
-<td>277</td>
-<td>18.6</td>
-<td>10.97</td>
-<td>24.4</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">41</th>
-<td>0.12744</td>
-<td>0.0</td>
-<td>6.91</td>
-<td>No</td>
-<td>0.448</td>
-<td>6.770</td>
-<td>2.9</td>
-<td>5.7209</td>
-<td>Low</td>
-<td>233</td>
-<td>17.9</td>
-<td>4.84</td>
-<td>26.6</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-</section>
-<section id="section-5" class="slide level2">
-<h2></h2>
-<p>Equivalently, the predictors and response in the validation dataset are in the objects <code>X_valid</code> and <code>Y_valid</code>, respectively.</p>
-<div id="1717d745" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>validation_dataset <span class="op">=</span> pd.concat([X_valid, Y_valid], axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb8-2"><a></a>validation_dataset.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">CRIM</th>
-<th data-quarto-table-cell-role="th">ZN</th>
-<th data-quarto-table-cell-role="th">INDUS</th>
-<th data-quarto-table-cell-role="th">CHAS</th>
-<th data-quarto-table-cell-role="th">NOX</th>
-<th data-quarto-table-cell-role="th">RM</th>
-<th data-quarto-table-cell-role="th">AGE</th>
-<th data-quarto-table-cell-role="th">DIS</th>
-<th data-quarto-table-cell-role="th">RAD</th>
-<th data-quarto-table-cell-role="th">TAX</th>
-<th data-quarto-table-cell-role="th">PTRATIO</th>
-<th data-quarto-table-cell-role="th">LSTAT</th>
-<th data-quarto-table-cell-role="th">MEDV</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">358</th>
-<td>5.20177</td>
-<td>0.0</td>
-<td>18.10</td>
-<td>Yes</td>
-<td>0.770</td>
-<td>6.127</td>
-<td>83.4</td>
-<td>2.7227</td>
-<td>High</td>
-<td>666</td>
-<td>20.2</td>
-<td>11.48</td>
-<td>22.7</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">387</th>
-<td>22.59710</td>
-<td>0.0</td>
-<td>18.10</td>
-<td>No</td>
-<td>0.700</td>
-<td>5.000</td>
-<td>89.5</td>
-<td>1.5184</td>
-<td>High</td>
-<td>666</td>
-<td>20.2</td>
-<td>31.99</td>
-<td>7.4</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">297</th>
-<td>0.14103</td>
-<td>0.0</td>
-<td>13.92</td>
-<td>No</td>
-<td>0.437</td>
-<td>5.790</td>
-<td>58.0</td>
-<td>6.3200</td>
-<td>Medium</td>
-<td>289</td>
-<td>16.0</td>
-<td>15.84</td>
-<td>20.3</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">161</th>
-<td>1.46336</td>
-<td>0.0</td>
-<td>19.58</td>
-<td>No</td>
-<td>0.605</td>
-<td>7.489</td>
-<td>90.8</td>
-<td>1.9709</td>
-<td>Medium</td>
-<td>403</td>
-<td>14.7</td>
-<td>1.73</td>
-<td>50.0</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">503</th>
-<td>0.06076</td>
-<td>0.0</td>
-<td>11.93</td>
-<td>No</td>
-<td>0.573</td>
-<td>6.976</td>
-<td>91.0</td>
-<td>2.1675</td>
-<td>Low</td>
-<td>273</td>
-<td>21.0</td>
-<td>5.64</td>
-<td>23.9</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-</section>
-<section id="work-on-your-training-dataset" class="slide level2">
-<h2>Work on your training dataset</h2>
-<p>After we have partitioned the data, we <strong>work on the</strong> <span style="color:blue;"><strong>training data</strong></span> to develop our predictive pipeline.</p>
-<p>The pipeline has two main steps:</p>
-<ol type="1">
-<li>Data preprocessing.</li>
-<li>Model development.</li>
-</ol>
-<p>We will now discuss preprocessing techniques applied to the predictor columns in the training dataset.</p>
-<p>Note that all preprocessing techniques will also be applied to the <span style="color:orange;"><strong>validation dataset</strong></span> and <span style="color:green;"><strong>test dataset</strong></span> to prepare it for your model!</p>
+<p>We will not use all the functions from the <strong>scikit-learn</strong> library. Instead, we will use specific functions from the sub-libraries <strong>preprocessing</strong> and <strong>impute</strong>.</p>
 </section></section>
 <section>
 <section id="dealing-with-missing-values" class="title-slide slide level1 center">
@@ -950,7 +292,7 @@ Alan R. Vazquez
 </ul>
 </div>
 </section>
-<section id="section-6" class="slide level2">
+<section id="section-2" class="slide level2">
 <h2></h2>
 <p><br><br></p>
 <ul>
@@ -958,7 +300,7 @@ Alan R. Vazquez
 <li><p><em>Missing not at random</em> assumes that there is a mechanism that generates the missing values, which may include observed and unobserved predictors.</p></li>
 </ul>
 </section>
-<section id="section-7" class="slide level2">
+<section id="section-3" class="slide level2">
 <h2></h2>
 <p>For large data sets, removal of observations based on missing values is not a problem, assuming that the type of missing data is completely at random.</p>
 <p><br></p>
@@ -966,53 +308,31 @@ Alan R. Vazquez
 <p><br></p>
 <p>Here, we will introduce some simple methods for imputing missing values in categorical and numerical variables.</p>
 </section>
-<section id="example-2" class="slide level2">
-<h2>Example 2</h2>
+<section id="example-1" class="slide level2">
+<h2>Example 1</h2>
 <p><br></p>
 <p>Let’s use the penguins dataset available in the file “penguins.xlsx”.</p>
-<div id="57f282d1" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a><span class="co"># Load the Excel file into a pandas DataFrame.</span></span>
-<span id="cb9-2"><a></a>penguins_data <span class="op">=</span> pd.read_excel(<span class="st">"penguins.xlsx"</span>)</span>
-<span id="cb9-3"><a></a></span>
-<span id="cb9-4"><a></a><span class="co"># Set categorical variables.</span></span>
-<span id="cb9-5"><a></a>penguins_data[<span class="st">'sex'</span>] <span class="op">=</span> pd.Categorical(penguins_data[<span class="st">'sex'</span>])</span>
-<span id="cb9-6"><a></a>penguins_data[<span class="st">'species'</span>] <span class="op">=</span> pd.Categorical(penguins_data[<span class="st">'species'</span>])</span>
-<span id="cb9-7"><a></a>penguins_data[<span class="st">'island'</span>] <span class="op">=</span> pd.Categorical(penguins_data[<span class="st">'island'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="78e94640" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="co"># Load the Excel file into a pandas DataFrame.</span></span>
+<span id="cb2-2"><a></a>penguins_data <span class="op">=</span> pd.read_excel(<span class="st">"penguins.xlsx"</span>)</span>
+<span id="cb2-3"><a></a></span>
+<span id="cb2-4"><a></a><span class="co"># Set categorical variables.</span></span>
+<span id="cb2-5"><a></a>penguins_data[<span class="st">'sex'</span>] <span class="op">=</span> pd.Categorical(penguins_data[<span class="st">'sex'</span>])</span>
+<span id="cb2-6"><a></a>penguins_data[<span class="st">'species'</span>] <span class="op">=</span> pd.Categorical(penguins_data[<span class="st">'species'</span>])</span>
+<span id="cb2-7"><a></a>penguins_data[<span class="st">'island'</span>] <span class="op">=</span> pd.Categorical(penguins_data[<span class="st">'island'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="training-and-validation-datasets" class="slide level2">
-<h2>Training and validation datasets</h2>
-<p>For illustrative purposes, we assume that we want to predict the species (in the column <code>species</code>) of a penguin using the predictors <code>bill_length_mm</code>, <code>bill_depth_mm</code>, <code>flipper_length_mm</code>, <code>body_mass_g</code>, and <code>sex</code>.</p>
-<p><br></p>
-<p>We create the predictor matrix and response column.</p>
-<div id="61ea8cd4" class="cell" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a><span class="co"># Set full matrix of predictors.</span></span>
-<span id="cb10-2"><a></a>X_full_p <span class="op">=</span> (penguins_data</span>
-<span id="cb10-3"><a></a>           .<span class="bu">filter</span>([<span class="st">'bill_length_mm'</span>, <span class="st">'bill_depth_mm'</span>, </span>
-<span id="cb10-4"><a></a>           <span class="st">'flipper_length_mm'</span>, <span class="st">'body_mass_g'</span>, <span class="st">'sex'</span>]))</span>
-<span id="cb10-5"><a></a></span>
-<span id="cb10-6"><a></a><span class="co"># Set full matrix of responses.</span></span>
-<span id="cb10-7"><a></a>Y_full_p <span class="op">=</span> penguins_data.<span class="bu">filter</span>([<span class="st">'species'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="section-8" class="slide level2">
-<h2></h2>
-<p>We use a validation dataset with 30% of the observations in <code>penguins_data</code>. The other 70% will be in the training dataset.</p>
-<div id="d4b9e278" class="cell" data-execution_count="11">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a><span class="co"># Split the dataset into training and validation.</span></span>
-<span id="cb11-2"><a></a>X_train_p, X_valid_p, Y_train_p, Y_valid_p <span class="op">=</span> train_test_split(X_full_p, Y_full_p, </span>
-<span id="cb11-3"><a></a>                                                      test_size <span class="op">=</span> <span class="fl">0.3</span>,</span>
-<span id="cb11-4"><a></a>                                                      random_state <span class="op">=</span> <span class="dv">59227</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p><br></p>
-<p>In <code>train_test_split</code>, we use the input <code>random_state</code> to set a <em>random seed</em>. Essentially, this allows you to obtain the same training and validation datasets every time you run the code. <em>The advice is setting</em> <code>random_state</code> <em>to a big integer number generated at random.</em></p>
-</section>
-<section id="section-9" class="slide level2">
-<h2></h2>
-<p><br></p>
-<p>Since preprocessing techniques are meant for the predictors, we will work on the <code>X_train_p</code> data frame.</p>
-<div id="c1d22c5a" class="cell" data-execution_count="12">
-<div class="cell-output cell-output-display" data-execution_count="12">
+<section id="predictor-data" class="slide level2">
+<h2>Predictor data</h2>
+<p>For illustrative purposes, we will use the predictors <code>bill_length_mm</code>, <code>bill_depth_mm</code>, <code>flipper_length_mm</code>, <code>body_mass_g</code>, and <code>sex</code>. We create the predictor matrix.</p>
+<div id="834844e2" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="co"># Set full matrix of predictors.</span></span>
+<span id="cb3-2"><a></a>X_p <span class="op">=</span> (penguins_data</span>
+<span id="cb3-3"><a></a>      .<span class="bu">filter</span>([<span class="st">'bill_length_mm'</span>, <span class="st">'bill_depth_mm'</span>, </span>
+<span id="cb3-4"><a></a>           <span class="st">'flipper_length_mm'</span>, <span class="st">'body_mass_g'</span>, <span class="st">'sex'</span>]))</span>
+<span id="cb3-5"><a></a><span class="co"># Preview dataset.</span></span>
+<span id="cb3-6"><a></a>X_p.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="291">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1041,44 +361,28 @@ Alan R. Vazquez
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">31</th>
-<td>37.2</td>
-<td>18.1</td>
-<td>178.0</td>
-<td>3900.0</td>
+<th data-quarto-table-cell-role="th">0</th>
+<td>39.1</td>
+<td>18.7</td>
+<td>181.0</td>
+<td>3750.0</td>
 <td>male</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">46</th>
-<td>41.1</td>
-<td>19.0</td>
-<td>182.0</td>
-<td>3425.0</td>
-<td>male</td>
+<th data-quarto-table-cell-role="th">1</th>
+<td>39.5</td>
+<td>17.4</td>
+<td>186.0</td>
+<td>3800.0</td>
+<td>female</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">195</th>
-<td>49.6</td>
-<td>15.0</td>
-<td>216.0</td>
-<td>4750.0</td>
-<td>male</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">43</th>
-<td>44.1</td>
-<td>19.7</td>
-<td>196.0</td>
-<td>4400.0</td>
-<td>male</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">196</th>
-<td>50.5</td>
-<td>15.9</td>
-<td>222.0</td>
-<td>5550.0</td>
-<td>male</td>
+<th data-quarto-table-cell-role="th">2</th>
+<td>40.3</td>
+<td>18.0</td>
+<td>195.0</td>
+<td>3250.0</td>
+<td>female</td>
 </tr>
 </tbody>
 </table>
@@ -1087,84 +391,84 @@ Alan R. Vazquez
 </div>
 </div>
 </section>
-<section id="section-10" class="slide level2">
+<section id="section-4" class="slide level2">
 <h2></h2>
 <p><br></p>
 <p>Let’s check if the dataset has missing observations using the function <code>.info()</code> from <strong>pandas</strong>.</p>
-<div id="2e8f6e2c" class="cell" data-execution_count="13">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>X_train_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="bc243b8b" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>X_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
-Index: 240 entries, 31 to 293
+RangeIndex: 344 entries, 0 to 343
 Data columns (total 5 columns):
  #   Column             Non-Null Count  Dtype   
 ---  ------             --------------  -----   
- 0   bill_length_mm     238 non-null    float64 
- 1   bill_depth_mm      238 non-null    float64 
- 2   flipper_length_mm  238 non-null    float64 
- 3   body_mass_g        238 non-null    float64 
- 4   sex                232 non-null    category
+ 0   bill_length_mm     342 non-null    float64 
+ 1   bill_depth_mm      342 non-null    float64 
+ 2   flipper_length_mm  342 non-null    float64 
+ 3   body_mass_g        342 non-null    float64 
+ 4   sex                333 non-null    category
 dtypes: category(1), float64(4)
-memory usage: 9.7 KB</code></pre>
+memory usage: 11.3 KB</code></pre>
 </div>
 </div>
 </section>
-<section id="section-11" class="slide level2">
+<section id="section-5" class="slide level2">
 <h2></h2>
 <p>In the output of the function, “non-null” refers to the number of entries in a column that have actual values. That is, the number of entries where there are not <code>NaN</code>.</p>
-<div id="7842e6fe" class="cell" data-execution_count="14">
+<div id="f5601377" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
-Index: 240 entries, 31 to 293
+RangeIndex: 344 entries, 0 to 343
 Data columns (total 5 columns):
  #   Column             Non-Null Count  Dtype   
 ---  ------             --------------  -----   
- 0   bill_length_mm     238 non-null    float64 
- 1   bill_depth_mm      238 non-null    float64 
- 2   flipper_length_mm  238 non-null    float64 
- 3   body_mass_g        238 non-null    float64 
- 4   sex                232 non-null    category
+ 0   bill_length_mm     342 non-null    float64 
+ 1   bill_depth_mm      342 non-null    float64 
+ 2   flipper_length_mm  342 non-null    float64 
+ 3   body_mass_g        342 non-null    float64 
+ 4   sex                333 non-null    category
 dtypes: category(1), float64(4)
-memory usage: 9.7 KB</code></pre>
+memory usage: 11.3 KB</code></pre>
 </div>
 </div>
 <p>The “Index” section shows the number of observations in the dataset.</p>
 </section>
-<section id="section-12" class="slide level2">
+<section id="section-6" class="slide level2">
 <h2></h2>
 <p>The output below shows that there are 240 entries but <code>bill_length_mm</code> has 238 that are “non-null”. Therefore, this column has <strong>two</strong> missing observations.</p>
-<div id="777b4fcc" class="cell" data-execution_count="15">
+<div id="7ee907a8" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
-Index: 240 entries, 31 to 293
+RangeIndex: 344 entries, 0 to 343
 Data columns (total 5 columns):
  #   Column             Non-Null Count  Dtype   
 ---  ------             --------------  -----   
- 0   bill_length_mm     238 non-null    float64 
- 1   bill_depth_mm      238 non-null    float64 
- 2   flipper_length_mm  238 non-null    float64 
- 3   body_mass_g        238 non-null    float64 
- 4   sex                232 non-null    category
+ 0   bill_length_mm     342 non-null    float64 
+ 1   bill_depth_mm      342 non-null    float64 
+ 2   flipper_length_mm  342 non-null    float64 
+ 3   body_mass_g        342 non-null    float64 
+ 4   sex                333 non-null    category
 dtypes: category(1), float64(4)
-memory usage: 9.7 KB</code></pre>
+memory usage: 11.3 KB</code></pre>
 </div>
 </div>
 <p>The same is true for the other predictors except for <code>sex</code> that has <strong>eight</strong> missing values.</p>
 </section>
-<section id="section-13" class="slide level2">
+<section id="section-7" class="slide level2">
 <h2></h2>
 <p><br></p>
 <p>Alternatively, we can use the function <code>.isnull()</code> together with <code>sum()</code> to determine the number of missing values for each column in the dataset.</p>
 <p><br></p>
-<div id="9c666d8d" class="cell" data-execution_count="16">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>missing_values <span class="op">=</span> X_train_p.isnull().<span class="bu">sum</span>()</span>
-<span id="cb16-2"><a></a>missing_values</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
-<pre><code>bill_length_mm       2
-bill_depth_mm        2
-flipper_length_mm    2
-body_mass_g          2
-sex                  8
+<div id="bcde265a" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>missing_values <span class="op">=</span> X_p.isnull().<span class="bu">sum</span>()</span>
+<span id="cb8-2"><a></a>missing_values</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="295">
+<pre><code>bill_length_mm        2
+bill_depth_mm         2
+flipper_length_mm     2
+body_mass_g           2
+sex                  11
 dtype: int64</code></pre>
 </div>
 </div>
@@ -1172,10 +476,10 @@ dtype: int64</code></pre>
 <section id="removing-missing-values" class="slide level2">
 <h2>Removing missing values</h2>
 <p>If we want to remove all rows in the dataset that have at least one missing value, we use the function <code>.dropna()</code>.</p>
-<div id="fc11a3e4" class="cell" data-execution_count="17">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a>complete_predictors <span class="op">=</span> X_train_p.dropna()</span>
-<span id="cb18-2"><a></a>complete_predictors.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="17">
+<div id="f513c954" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>complete_predictors <span class="op">=</span> X_p.dropna()</span>
+<span id="cb10-2"><a></a>complete_predictors.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="296">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1204,43 +508,43 @@ dtype: int64</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">31</th>
-<td>37.2</td>
-<td>18.1</td>
-<td>178.0</td>
-<td>3900.0</td>
+<th data-quarto-table-cell-role="th">0</th>
+<td>39.1</td>
+<td>18.7</td>
+<td>181.0</td>
+<td>3750.0</td>
 <td>male</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">46</th>
-<td>41.1</td>
-<td>19.0</td>
-<td>182.0</td>
-<td>3425.0</td>
-<td>male</td>
+<th data-quarto-table-cell-role="th">1</th>
+<td>39.5</td>
+<td>17.4</td>
+<td>186.0</td>
+<td>3800.0</td>
+<td>female</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">195</th>
-<td>49.6</td>
-<td>15.0</td>
-<td>216.0</td>
-<td>4750.0</td>
-<td>male</td>
+<th data-quarto-table-cell-role="th">2</th>
+<td>40.3</td>
+<td>18.0</td>
+<td>195.0</td>
+<td>3250.0</td>
+<td>female</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">43</th>
-<td>44.1</td>
-<td>19.7</td>
-<td>196.0</td>
-<td>4400.0</td>
-<td>male</td>
+<th data-quarto-table-cell-role="th">4</th>
+<td>36.7</td>
+<td>19.3</td>
+<td>193.0</td>
+<td>3450.0</td>
+<td>female</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">196</th>
-<td>50.5</td>
-<td>15.9</td>
-<td>222.0</td>
-<td>5550.0</td>
+<th data-quarto-table-cell-role="th">5</th>
+<td>39.3</td>
+<td>20.6</td>
+<td>190.0</td>
+<td>3650.0</td>
 <td>male</td>
 </tr>
 </tbody>
@@ -1250,23 +554,23 @@ dtype: int64</code></pre>
 </div>
 </div>
 </section>
-<section id="section-14" class="slide level2">
+<section id="section-8" class="slide level2">
 <h2></h2>
-<div id="0bf241c1" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a>complete_predictors.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="25233f29" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>complete_predictors.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
-Index: 232 entries, 31 to 293
+Index: 333 entries, 0 to 343
 Data columns (total 5 columns):
  #   Column             Non-Null Count  Dtype   
 ---  ------             --------------  -----   
- 0   bill_length_mm     232 non-null    float64 
- 1   bill_depth_mm      232 non-null    float64 
- 2   flipper_length_mm  232 non-null    float64 
- 3   body_mass_g        232 non-null    float64 
- 4   sex                232 non-null    category
+ 0   bill_length_mm     333 non-null    float64 
+ 1   bill_depth_mm      333 non-null    float64 
+ 2   flipper_length_mm  333 non-null    float64 
+ 3   body_mass_g        333 non-null    float64 
+ 4   sex                333 non-null    category
 dtypes: category(1), float64(4)
-memory usage: 9.4 KB</code></pre>
+memory usage: 13.5 KB</code></pre>
 </div>
 </div>
 <p>The new data is complete because each column has 232 “non-null” values; the total number of observations in <code>complete_predictors</code>.</p>
@@ -1275,78 +579,78 @@ memory usage: 9.4 KB</code></pre>
 <section id="imputation-using-the-mean" class="slide level2">
 <h2>Imputation using the mean</h2>
 <p>We can impute the missing values of a numeric variable using the <strong>mean</strong> or <strong>median</strong> of its available values. For example, consider the variable <code>bill_length_mm</code> that has two missing values.</p>
-<div id="63d2956f" class="cell" data-execution_count="19">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>X_train_p[<span class="st">'bill_length_mm'</span>].info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="c1e6ad7d" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>X_p[<span class="st">'bill_length_mm'</span>].info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.series.Series'&gt;
-Index: 240 entries, 31 to 293
+RangeIndex: 344 entries, 0 to 343
 Series name: bill_length_mm
 Non-Null Count  Dtype  
 --------------  -----  
-238 non-null    float64
+342 non-null    float64
 dtypes: float64(1)
-memory usage: 3.8 KB</code></pre>
+memory usage: 2.8 KB</code></pre>
 </div>
 </div>
 <p>In <strong>scikit-learn</strong>, we use the function <code>SimpleImputer()</code> to define the method of imputation of missing values.</p>
 </section>
-<section id="section-15" class="slide level2">
+<section id="section-9" class="slide level2">
 <h2></h2>
 <p><br></p>
 <p>Using <code>SimpleImputer()</code>, we set the method to impute missing values using the <strong>mean</strong>.</p>
 <p>We also use the function <code>fit_transform()</code> to apply the imputation method to the variable.</p>
-<div id="d9a2013a" class="cell" data-execution_count="20">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a><span class="co"># Imputation for numerical variables (using the mean)</span></span>
-<span id="cb23-2"><a></a>num_imputer <span class="op">=</span> SimpleImputer(strategy <span class="op">=</span> <span class="st">'mean'</span>)</span>
-<span id="cb23-3"><a></a></span>
-<span id="cb23-4"><a></a><span class="co"># Replace the original variable with new version.</span></span>
-<span id="cb23-5"><a></a>X_train_p[<span class="st">'bill_length_mm'</span>] <span class="op">=</span> num_imputer.fit_transform(X_train_p[ [<span class="st">'bill_length_mm'</span>] ] )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="1e31ead4" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a><span class="co"># Imputation for numerical variables (using the mean)</span></span>
+<span id="cb15-2"><a></a>num_imputer <span class="op">=</span> SimpleImputer(strategy <span class="op">=</span> <span class="st">'mean'</span>)</span>
+<span id="cb15-3"><a></a></span>
+<span id="cb15-4"><a></a><span class="co"># Replace the original variable with new version.</span></span>
+<span id="cb15-5"><a></a>X_p[<span class="st">'bill_length_mm'</span>] <span class="op">=</span> num_imputer.fit_transform(X_p[ [<span class="st">'bill_length_mm'</span>] ] )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="section-16" class="slide level2">
+<section id="section-10" class="slide level2">
 <h2></h2>
 <p><br></p>
 <p>After imputation, the information of the predictors in the dataset looks like this.</p>
-<div id="efcf5a13" class="cell" data-execution_count="21">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a>X_train_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="a5a9cdb3" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>X_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
-Index: 240 entries, 31 to 293
+RangeIndex: 344 entries, 0 to 343
 Data columns (total 5 columns):
  #   Column             Non-Null Count  Dtype   
 ---  ------             --------------  -----   
- 0   bill_length_mm     240 non-null    float64 
- 1   bill_depth_mm      238 non-null    float64 
- 2   flipper_length_mm  238 non-null    float64 
- 3   body_mass_g        238 non-null    float64 
- 4   sex                232 non-null    category
+ 0   bill_length_mm     344 non-null    float64 
+ 1   bill_depth_mm      342 non-null    float64 
+ 2   flipper_length_mm  342 non-null    float64 
+ 3   body_mass_g        342 non-null    float64 
+ 4   sex                333 non-null    category
 dtypes: category(1), float64(4)
-memory usage: 9.7 KB</code></pre>
+memory usage: 11.3 KB</code></pre>
 </div>
 </div>
 <p>Now, <code>bill_length_mm</code> has 240 complete values.</p>
 </section>
-<section id="section-17" class="slide level2">
+<section id="section-11" class="slide level2">
 <h2></h2>
 <p>To impute the missing values using the <strong>median</strong>, we simply set this method in <code>SimpleImputer()</code>. For example, let’s impute the missing values of <code>bill_depth_mm</code>.</p>
-<div id="3d5b1cec" class="cell" data-execution_count="22">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a></a><span class="co"># Imputation for numerical variables (using the mean)</span></span>
-<span id="cb26-2"><a></a>num_imputer <span class="op">=</span> SimpleImputer(strategy <span class="op">=</span> <span class="st">'median'</span>)</span>
-<span id="cb26-3"><a></a></span>
-<span id="cb26-4"><a></a><span class="co"># Replace the original variable with new version.</span></span>
-<span id="cb26-5"><a></a>X_train_p[<span class="st">'bill_depth_mm'</span>] <span class="op">=</span> num_imputer.fit_transform(X_train_p[ [<span class="st">'bill_depth_mm'</span>] ] )</span>
-<span id="cb26-6"><a></a></span>
-<span id="cb26-7"><a></a><span class="co"># Show the information of the predictor.</span></span>
-<span id="cb26-8"><a></a>X_train_p[<span class="st">'bill_depth_mm'</span>].info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="8add5c7c" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a><span class="co"># Imputation for numerical variables (using the mean)</span></span>
+<span id="cb18-2"><a></a>num_imputer <span class="op">=</span> SimpleImputer(strategy <span class="op">=</span> <span class="st">'median'</span>)</span>
+<span id="cb18-3"><a></a></span>
+<span id="cb18-4"><a></a><span class="co"># Replace the original variable with new version.</span></span>
+<span id="cb18-5"><a></a>X_p[<span class="st">'bill_depth_mm'</span>] <span class="op">=</span> num_imputer.fit_transform(X_p[ [<span class="st">'bill_depth_mm'</span>] ] )</span>
+<span id="cb18-6"><a></a></span>
+<span id="cb18-7"><a></a><span class="co"># Show the information of the predictor.</span></span>
+<span id="cb18-8"><a></a>X_p[<span class="st">'bill_depth_mm'</span>].info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.series.Series'&gt;
-Index: 240 entries, 31 to 293
+RangeIndex: 344 entries, 0 to 343
 Series name: bill_depth_mm
 Non-Null Count  Dtype  
 --------------  -----  
-240 non-null    float64
+344 non-null    float64
 dtypes: float64(1)
-memory usage: 3.8 KB</code></pre>
+memory usage: 2.8 KB</code></pre>
 </div>
 </div>
 </section>
@@ -1359,7 +663,7 @@ memory usage: 3.8 KB</code></pre>
 <li><p>Cons: Sensitive to outliers; may not be accurate for skewed distributions</p></li>
 </ul>
 </section>
-<section id="section-18" class="slide level2">
+<section id="section-12" class="slide level2">
 <h2></h2>
 <p><br><br></p>
 <p>We use the <strong>sample median</strong> when the data is skewed (e.g., incomes, prices).</p>
@@ -1372,124 +676,852 @@ memory usage: 3.8 KB</code></pre>
 <h2>Imputation method for a categorical variable</h2>
 <p>If a categorical variable has missing values, we can use the <strong>most frequent</strong> of the available values to replace the missing values. To this end, we use similar commands as before.</p>
 <p>For example, let’s impute the missing values of <code>sex</code> using this strategy.</p>
-<div id="1849c9a6" class="cell" data-execution_count="23">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a></a><span class="co"># Imputation for categorical variables (using the most frequent value)</span></span>
-<span id="cb28-2"><a></a>cat_imputer <span class="op">=</span> SimpleImputer(strategy <span class="op">=</span> <span class="st">'most_frequent'</span>)</span>
-<span id="cb28-3"><a></a></span>
-<span id="cb28-4"><a></a><span class="co"># Apply imputation strategy for categorical variables.</span></span>
-<span id="cb28-5"><a></a>X_train_p[<span class="st">'sex'</span>] <span class="op">=</span> cat_imputer.fit_transform(X_train_p[ [<span class="st">'sex'</span>] ]).ravel()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="750ff424" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a><span class="co"># Imputation for categorical variables (using the most frequent value)</span></span>
+<span id="cb20-2"><a></a>cat_imputer <span class="op">=</span> SimpleImputer(strategy <span class="op">=</span> <span class="st">'most_frequent'</span>)</span>
+<span id="cb20-3"><a></a></span>
+<span id="cb20-4"><a></a><span class="co"># Apply imputation strategy for categorical variables.</span></span>
+<span id="cb20-5"><a></a>X_p[<span class="st">'sex'</span>] <span class="op">=</span> cat_imputer.fit_transform(X_p[ [<span class="st">'sex'</span>] ]).ravel()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="section-19" class="slide level2">
+<section id="section-13" class="slide level2">
 <h2></h2>
 <p>Let’s now have a look at the information of the dataset.</p>
-<div id="6eaeaffd" class="cell" data-execution_count="24">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a></a><span class="co"># Apply imputation strategy for categorical variables.</span></span>
-<span id="cb29-2"><a></a>X_train_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="743be44a" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a><span class="co"># Apply imputation strategy for categorical variables.</span></span>
+<span id="cb21-2"><a></a>X_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
-Index: 240 entries, 31 to 293
+RangeIndex: 344 entries, 0 to 343
 Data columns (total 5 columns):
  #   Column             Non-Null Count  Dtype  
 ---  ------             --------------  -----  
- 0   bill_length_mm     240 non-null    float64
- 1   bill_depth_mm      240 non-null    float64
- 2   flipper_length_mm  238 non-null    float64
- 3   body_mass_g        238 non-null    float64
- 4   sex                240 non-null    object 
+ 0   bill_length_mm     344 non-null    float64
+ 1   bill_depth_mm      344 non-null    float64
+ 2   flipper_length_mm  342 non-null    float64
+ 3   body_mass_g        342 non-null    float64
+ 4   sex                344 non-null    object 
 dtypes: float64(4), object(1)
-memory usage: 11.2+ KB</code></pre>
+memory usage: 13.6+ KB</code></pre>
 </div>
 </div>
 <p>The columns <code>bill_length_mm</code>, <code>bill_depth_mm</code>, and <code>sex</code> have 240 complete values.</p>
 </section>
-<section id="section-20" class="slide level2">
+<section id="section-14" class="slide level2">
 <h2></h2>
 <p><br></p>
 <p>Unfortunately, after applying <code>cat_imputer</code> to the dataset, the variable <code>sex</code> is an object. To change it to categorical, we use the function <code>pd.Categorical</code> again.</p>
-<div id="4fccba18" class="cell" data-execution_count="25">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a></a><span class="co"># Apply imputation strategy for categorical variables.</span></span>
-<span id="cb31-2"><a></a>X_train_p[<span class="st">'sex'</span>] <span class="op">=</span> pd.Categorical(X_train_p[<span class="st">'sex'</span>])</span>
-<span id="cb31-3"><a></a>X_train_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="c904d4c6" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a><span class="co"># Apply imputation strategy for categorical variables.</span></span>
+<span id="cb23-2"><a></a>X_p[<span class="st">'sex'</span>] <span class="op">=</span> pd.Categorical(X_p[<span class="st">'sex'</span>])</span>
+<span id="cb23-3"><a></a>X_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
-Index: 240 entries, 31 to 293
+RangeIndex: 344 entries, 0 to 343
 Data columns (total 5 columns):
  #   Column             Non-Null Count  Dtype   
 ---  ------             --------------  -----   
- 0   bill_length_mm     240 non-null    float64 
- 1   bill_depth_mm      240 non-null    float64 
- 2   flipper_length_mm  238 non-null    float64 
- 3   body_mass_g        238 non-null    float64 
- 4   sex                240 non-null    category
+ 0   bill_length_mm     344 non-null    float64 
+ 1   bill_depth_mm      344 non-null    float64 
+ 2   flipper_length_mm  342 non-null    float64 
+ 3   body_mass_g        342 non-null    float64 
+ 4   sex                344 non-null    category
 dtypes: category(1), float64(4)
-memory usage: 9.7 KB</code></pre>
+memory usage: 11.3 KB</code></pre>
 </div>
 </div>
-</section>
-<section id="multivariate-imputation-using-k-nearest-neighbours" class="slide level2">
-<h2>Multivariate imputation using K-nearest neighbours</h2>
-<p>K-nearest neighbours (KNN) is an imputation method to fill in the missing values of a predictor using the available values from this and the other predictors.</p>
-<p><br></p>
-<p>For each missing value in a predictor <span class="math inline">\(X\)</span>:</p>
-<ol type="1">
-<li>Find the <span class="math inline">\(K\)</span> most similar rows based on the other predictors.</li>
-<li>Impute the missing value of <span class="math inline">\(X\)</span> using the <em>average</em> of the available values of <span class="math inline">\(X\)</span> in the <span class="math inline">\(K\)</span> closest rows.</li>
-</ol>
-</section>
-<section id="basic-idea" class="slide level2">
-<h2>Basic idea</h2>
+</section></section>
+<section>
+<section id="transforming-predictors" class="title-slide slide level1 center">
+<h1>Transforming predictors</h1>
 
-<img data-src="images/KNN_idea2.png" class="quarto-figure quarto-figure-center r-stretch" width="645"><div style="font-size: 50%;">
-<p><a href="https://blog.dailydoseofds.com/p/the-most-overlooked-problem-with-768" class="uri">https://blog.dailydoseofds.com/p/the-most-overlooked-problem-with-768</a></p>
+</section>
+<section id="categorical-predictors" class="slide level2">
+<h2>Categorical predictors</h2>
+<p>A <span style="color:darkgreen;"><strong>categorical predictor</strong></span> takes on values that are categories or groups.</p>
+<div class="fragment">
+<p>For example:</p>
+<ul>
+<li><p>Type of school: Public or private.</p></li>
+<li><p>Treatment: New or placebo.</p></li>
+<li><p>Grade: Passed or not passed.</p></li>
+</ul>
+</div>
+<div class="fragment">
+<p>The categories can be represented by names, labels or even numbers. Their use in regression requires <strong>dummy variables</strong>, which are numeric.</p>
 </div>
 </section>
-<section id="notes-on-its-implementation" class="slide level2">
-<h2>Notes on its implementation</h2>
+<section id="dummy-variables" class="slide level2">
+<h2>Dummy variables</h2>
+<p><br><br></p>
+<blockquote>
+<p>The traditional choice for a dummy variable is a binary variable, which can only take the values 0 and 1.</p>
+</blockquote>
 <p><br></p>
+<p><strong><em>Initially, a categorical variable with</em></strong> <span class="math inline">\(k\)</span> <strong><em>categories requires</em></strong> <span class="math inline">\(k\)</span> <strong><em>dummy variables.</em></strong></p>
+</section>
+<section id="example-2" class="slide level2">
+<h2>Example 2</h2>
+<p>A market analyst is studying quality characteristics of cars. Specifically, the analyst is investigating the miles per gallon (mpg) of cars can be predicted using:</p>
 <ul>
-<li><p>KNN captures <em>local patterns</em> better than individual predictor imputation using the mean or the median.</p></li>
-<li><p>However, it only works for numeric predictors!</p></li>
-<li><p>The distance between two rows is calculated using <em>Euclidean</em> distance.</p></li>
-<li><p>KNN only considers rows without missing values in the predictor columns being used.</p></li>
+<li><span class="math inline">\(X_1:\)</span> cylinders. Number of cylinders between 4 and 8</li>
+<li><span class="math inline">\(X_2:\)</span> displacement. Engine displacement (cu. inches)</li>
+<li><span class="math inline">\(X_3:\)</span> horsepower. Engine horsepower</li>
+<li><span class="math inline">\(X_4:\)</span> weight. Vehicle weight (lbs.)</li>
+<li><span class="math inline">\(X_5:\)</span> acceleration. Time to accelerate from 0 to 60 mph (sec.)</li>
+<li><span class="math inline">\(X_6:\)</span> origin. Origin of car (American, European, Japanese)</li>
 </ul>
 </section>
-<section id="in-python" class="slide level2">
-<h2>In Python</h2>
-<p>You can use KNN using the function <code>KNNImputer()</code>. Its main input is the number of nearest neighbours to use. You set this value using the parameter <code>n_neighbors</code>.</p>
-<div id="ce9a7c0b" class="cell" data-execution_count="26">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a></a><span class="co"># Set the KNN imputer using two neighbours.</span></span>
-<span id="cb33-2"><a></a>KNN_imputer <span class="op">=</span> KNNImputer(n_neighbors <span class="op">=</span> <span class="dv">2</span>)</span>
-<span id="cb33-3"><a></a></span>
-<span id="cb33-4"><a></a><span class="co"># Select numeric predictors.</span></span>
-<span id="cb33-5"><a></a>X_train_num_p <span class="op">=</span> X_train_p.drop(columns <span class="op">=</span> [<span class="st">'sex'</span>]) </span>
-<span id="cb33-6"><a></a></span>
-<span id="cb33-7"><a></a><span class="co"># Apply imputer and store the rulst in a pandas data frame.</span></span>
-<span id="cb33-8"><a></a>X_train_num_p <span class="op">=</span> pd.DataFrame(KNN_imputer.fit_transform(X_train_num_p), </span>
-<span id="cb33-9"><a></a>                            columns <span class="op">=</span> X_train_num_p.columns)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="section-15" class="slide level2">
+<h2></h2>
+<p><br><br></p>
+<p>The dataset is in the file “auto.xlsx”. Let’s read the data using <strong>pandas</strong>.</p>
+<div id="36fd9144" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a></a><span class="co"># Load the Excel file into a pandas DataFrame.</span></span>
+<span id="cb25-2"><a></a>auto_data <span class="op">=</span> pd.read_excel(<span class="st">"auto.xlsx"</span>)</span>
+<span id="cb25-3"><a></a></span>
+<span id="cb25-4"><a></a><span class="co"># Set categorical variables.</span></span>
+<span id="cb25-5"><a></a>auto_data[<span class="st">'origin'</span>] <span class="op">=</span> pd.Categorical(auto_data[<span class="st">'origin'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="predictor-data-1" class="slide level2">
+<h2>Predictor data</h2>
+<p>For illustrative purposes, we use the six predictors, <span class="math inline">\(X_1, \ldots, X_6\)</span>. We create the predictor matrix.</p>
+<div id="fba8a881" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a></a><span class="co"># Set full matrix of predictors.</span></span>
+<span id="cb26-2"><a></a>X_c <span class="op">=</span> (auto_data</span>
+<span id="cb26-3"><a></a>      .<span class="bu">filter</span>([<span class="st">'cylinders'</span>, <span class="st">'displacement'</span>, </span>
+<span id="cb26-4"><a></a>              <span class="st">'horsepower'</span>, <span class="st">'weight'</span>, <span class="st">'acceleration'</span>, <span class="st">'origin'</span>]))</span>
+<span id="cb26-5"><a></a><span class="co"># Preview first rows.</span></span>
+<span id="cb26-6"><a></a>X_c.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="306">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">cylinders</th>
+<th data-quarto-table-cell-role="th">displacement</th>
+<th data-quarto-table-cell-role="th">horsepower</th>
+<th data-quarto-table-cell-role="th">weight</th>
+<th data-quarto-table-cell-role="th">acceleration</th>
+<th data-quarto-table-cell-role="th">origin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>8</td>
+<td>307.0</td>
+<td>130</td>
+<td>3504</td>
+<td>12.0</td>
+<td>American</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>8</td>
+<td>350.0</td>
+<td>165</td>
+<td>3693</td>
+<td>11.5</td>
+<td>American</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>8</td>
+<td>318.0</td>
+<td>150</td>
+<td>3436</td>
+<td>11.0</td>
+<td>American</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="dealing-with-missing-values-1" class="slide level2">
+<h2>Dealing with missing values</h2>
+<p><br></p>
+<p>The dataset has missing values. In this example, we remove each row with at least one missing value.</p>
+<p><br></p>
+<div id="73d20c95" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a></a><span class="co"># Remove rows with missing values.</span></span>
+<span id="cb27-2"><a></a>complete_Auto <span class="op">=</span> X_c.dropna()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="example-2-cont." class="slide level2">
+<h2>Example 2 (cont.)</h2>
+<p>Categorical predictor: Origin of a car. Three categories: American, European and Japanese.</p>
+<p>Initially, 3 dummy variables are required:</p>
+<p><span class="math display">\[d_1 =
+\begin{cases}
+1 \text{ if observation is from an American car}\\
+0 \text{ otherwise}
+\end{cases}\]</span> <span class="math display">\[d_2 =
+\begin{cases}
+1 \text{ if observation is from an European car}\\
+0 \text{ otherwise}
+\end{cases}\]</span> <span class="math display">\[d_3 =
+\begin{cases}
+1 \text{ if observation is from a Japanese car}\\
+0 \text{ otherwise}
+\end{cases}\]</span></p>
+</section>
+<section id="section-16" class="slide level2">
+<h2></h2>
+<p>The variable Origin would then be replaced by the three dummy variables</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Origin (<span class="math inline">\(X\)</span>)</th>
+<th><span class="math inline">\(d_1\)</span></th>
+<th><span class="math inline">\(d_2\)</span></th>
+<th><span class="math inline">\(d_3\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>American</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>American</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>European</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>European</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>American</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>Japanese</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\vdots\)</span></td>
+<td><span class="math inline">\(\vdots\)</span></td>
+<td><span class="math inline">\(\vdots\)</span></td>
+<td><span class="math inline">\(\vdots\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="a-drawback" class="slide level2">
+<h2>A drawback</h2>
+<p><br></p>
+<ul>
+<li class="fragment"><p>A drawback with the initial dummy variables is that they are <span style="color:red;"><strong>linearly dependent</strong></span>. That is, <span class="math inline">\(d_1 + d_2 + d_3 = 1\)</span>.</p></li>
+<li class="fragment"><p>Therefore, we can determine the value of <span class="math inline">\(d_1 = 1- d_2 - d_3.\)</span></p></li>
+<li class="fragment"><p>Predictive models such as linear regression are sensitive to linear dependencies among predictors.</p></li>
+<li class="fragment"><p><strong>The solution is to drop one of the predictor</strong>, say, <span class="math inline">\(d_1\)</span>, from the data.</p></li>
+</ul>
+</section>
+<section id="section-17" class="slide level2">
+<h2></h2>
+<p>The variable Origin would then be replaced by the three dummy variables.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Origin (<span class="math inline">\(X\)</span>)</th>
+<th><span class="math inline">\(d_2\)</span></th>
+<th><span class="math inline">\(d_3\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>American</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>American</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>European</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>European</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>American</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>Japanese</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\vdots\)</span></td>
+<td><span class="math inline">\(\vdots\)</span></td>
+<td><span class="math inline">\(\vdots\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dummy-variables-in-python" class="slide level2">
+<h2>Dummy variables in Python</h2>
+<p><br></p>
+<p>We can get the dummy variables of a categorical variable using the function <code>pd.get_dummies()</code> from <strong>pandas</strong>.</p>
+<p>The input of the function is the categorical variable.</p>
+<p>The function has an extra argument called <code>drop_first</code> to drop the first dummy variable. It also has the argument <code>dtype</code> to show the values as integers.</p>
+<div id="9b56cb00" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a></a>dummy_data <span class="op">=</span> pd.get_dummies(complete_Auto[<span class="st">'origin'</span>], drop_first <span class="op">=</span> <span class="va">True</span>, </span>
+<span id="cb28-2"><a></a>                            dtype <span class="op">=</span> <span class="st">'int'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-18" class="slide level2">
+<h2></h2>
+<p><br><br></p>
+<div id="2474858c" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a></a>dummy_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="309">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">European</th>
+<th data-quarto-table-cell-role="th">Japanese</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-19" class="slide level2">
+<h2></h2>
+<p>Now, to add the dummy variables to the dataset, we use the function <code>concat()</code> from <strong>pandas</strong>.</p>
+<div id="6b9012cf" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a></a>augmented_auto <span class="op">=</span> pd.concat([complete_Auto, dummy_data], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb30-2"><a></a>augmented_auto.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="310">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">cylinders</th>
+<th data-quarto-table-cell-role="th">displacement</th>
+<th data-quarto-table-cell-role="th">horsepower</th>
+<th data-quarto-table-cell-role="th">weight</th>
+<th data-quarto-table-cell-role="th">acceleration</th>
+<th data-quarto-table-cell-role="th">origin</th>
+<th data-quarto-table-cell-role="th">European</th>
+<th data-quarto-table-cell-role="th">Japanese</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>8</td>
+<td>307.0</td>
+<td>130</td>
+<td>3504</td>
+<td>12.0</td>
+<td>American</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>8</td>
+<td>350.0</td>
+<td>165</td>
+<td>3693</td>
+<td>11.5</td>
+<td>American</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>8</td>
+<td>318.0</td>
+<td>150</td>
+<td>3436</td>
+<td>11.0</td>
+<td>American</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>8</td>
+<td>304.0</td>
+<td>150</td>
+<td>3433</td>
+<td>12.0</td>
+<td>American</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>8</td>
+<td>302.0</td>
+<td>140</td>
+<td>3449</td>
+<td>10.5</td>
+<td>American</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="reducing-the-number-of-predictors" class="title-slide slide level1 center">
+<h1>Reducing the number of predictors</h1>
+
+</section>
+<section id="removing-predictors" class="slide level2">
+<h2>Removing predictors</h2>
+<p><br></p>
+<p>There are potential advantages to removing predictors prior to modeling:</p>
+<ul>
+<li class="fragment"><p>Fewer predictors means decreased computational time and complexity.</p></li>
+<li class="fragment"><p>If two predictors are highly-correlated, they are measuring the same underlying information. So, removing one should not compromise the performance of the model.</p></li>
+</ul>
+<div class="fragment">
+<p>Here, we will see a popular technique to remove predictors.</p>
+</div>
+</section>
+<section id="between-predictor-correlation" class="slide level2">
+<h2>Between-predictor correlation</h2>
+<p><br></p>
+<p><span style="color:purple;"><strong>Collinearity</strong></span> is the technical term for the situation where two predictors have a substantial correlation with each other.</p>
+<p><br></p>
+<p>If two or more predictors are highly correlated (either negatively or positively), then methods such as the linear regression model will not work!</p>
+<p><br></p>
+<p>To visualize the severity of collinearity between predictors, we calculate and visualize the <em>correlation matrix</em>.</p>
+</section>
+<section id="example-2-cont.-1" class="slide level2">
+<h2>Example 2 (cont.)</h2>
+<p><br></p>
+<p>We concentrate on the five numerical predictors in the <code>complete_Auto</code> dataset.</p>
+<div id="da7a10f2" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a></a><span class="co"># Select specific variables.</span></span>
+<span id="cb31-2"><a></a>complete_sbAuto <span class="op">=</span> complete_Auto[[<span class="st">'cylinders'</span>, <span class="st">'displacement'</span>, </span>
+<span id="cb31-3"><a></a>                                 <span class="st">'horsepower'</span>, <span class="st">'weight'</span>, </span>
+<span id="cb31-4"><a></a>                                 <span class="st">'acceleration'</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="correlation-matrix" class="slide level2">
+<h2>Correlation matrix</h2>
+<p><br></p>
+<p>In Python, we calculate the correlation matrix using the command below.</p>
+<div id="e2ae50ab" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a></a>correlation_matrix <span class="op">=</span> complete_sbAuto.corr()</span>
+<span id="cb32-2"><a></a><span class="bu">print</span>(correlation_matrix)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              cylinders  displacement  horsepower    weight  acceleration
+cylinders      1.000000      0.950823    0.842983  0.897527     -0.504683
+displacement   0.950823      1.000000    0.897257  0.932994     -0.543800
+horsepower     0.842983      0.897257    1.000000  0.864538     -0.689196
+weight         0.897527      0.932994    0.864538  1.000000     -0.416839
+acceleration  -0.504683     -0.543800   -0.689196 -0.416839      1.000000</code></pre>
+</div>
+</div>
+</section>
+<section id="section-20" class="slide level2">
+<h2></h2>
+<p>Next, we plot the correlation matrix using the function <code>heatmap()</code> from <strong>seaborn</strong>. The argument <code>annot</code> shows the actual value of the pair-wise correlations, and <code>cmap</code> shows a nice color theme.</p>
+<div id="dbdd1817" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">3</span>))</span>
+<span id="cb34-2"><a></a>sns.heatmap(correlation_matrix, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, annot <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="PreProcessing_Part1_files/figure-revealjs/cell-26-output-1.png" class="quarto-figure quarto-figure-center" width="369" height="345"></p>
+</figure>
+</div>
+</div>
 </div>
 </section>
 <section id="section-21" class="slide level2">
 <h2></h2>
 <p><br></p>
-<p>Let’s look at the new dataset.</p>
-<div id="be89693e" class="cell" data-execution_count="27">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a></a>X_train_num_p.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
-RangeIndex: 240 entries, 0 to 239
-Data columns (total 4 columns):
- #   Column             Non-Null Count  Dtype  
----  ------             --------------  -----  
- 0   bill_length_mm     240 non-null    float64
- 1   bill_depth_mm      240 non-null    float64
- 2   flipper_length_mm  240 non-null    float64
- 3   body_mass_g        240 non-null    float64
-dtypes: float64(4)
-memory usage: 7.6 KB</code></pre>
+<p>The predictors cylinders and displacement are highly correlated. In fact, their correlation is 0.95.</p>
+<div id="1c0a2d1b" class="cell" data-execution_count="26">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="PreProcessing_Part1_files/figure-revealjs/cell-27-output-1.png" class="quarto-figure quarto-figure-center" width="599" height="435"></p>
+</figure>
 </div>
 </div>
-<p>All predictors have 240 complete entries.</p>
+</div>
+</section>
+<section id="in-practice" class="slide level2">
+<h2>In practice</h2>
+<p><br></p>
+<p>We deal with collinearity by removing the minimum number of predictors to ensure that all pairwise correlations are below a certain threshold, say, 0.75.</p>
+<p><br></p>
+<p>We can identify the variables that are highly correlated using quite complex code. However, here we will do it manually using the correlation map.</p>
+<div id="91060cea" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a></a><span class="co"># Dataset without highly correlated predictors.</span></span>
+<span id="cb35-2"><a></a>reduced_auto <span class="op">=</span> complete_sbAuto[ [<span class="st">'weight'</span>, <span class="st">'acceleration'</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section></section>
+<section>
+<section id="standardizing-predictors" class="title-slide slide level1 center">
+<h1>Standardizing predictors</h1>
+
+</section>
+<section id="predictors-with-different-units" class="slide level2">
+<h2>Predictors with different units</h2>
+<p>Many good predictive models have issues with <span style="color:blue;"><strong>numeric predictors</strong></span> with different units:</p>
+<ol type="1">
+<li><p>Methods such as K-nearest neighbors are based on the distance between observations. If the predictors are on different units or scales, then some predictors will have a larger weight for computing the distance.</p></li>
+<li><p>Other methods such as LASSO use the variances of the predictors in their calculations. Predictors with different scales will have different variances and so, those with a higher variance will play a bigger role in the calculations.</p></li>
+</ol>
+</section>
+<section id="section-22" class="slide level2">
+<h2></h2>
+<p><br><br><br><br></p>
+<div style="font-size: 150%;">
+<p><span style="color:purple;"><strong><em>In a nutshell, some predictors will have a higher impact in the model due to its unit and not its information provided to it.</em></strong></span></p>
+</div>
+</section>
+<section id="standarization" class="slide level2">
+<h2>Standarization</h2>
+<p><br></p>
+<p>Standardization refers to <em>centering</em> and <em>scaling</em> each numeric predictor individually. It puts every predictor on the same scale.</p>
+<p>To <strong>center</strong> a predictor variable, the average predictor value is subtracted from all the values.</p>
+<p>Therefore, the centered predictor has a zero mean (that is, its average value is zero).</p>
+</section>
+<section id="section-23" class="slide level2">
+<h2></h2>
+<p><br></p>
+<p>To <strong>scale</strong> a predictor, each of its value is divided by its standard deviation.</p>
+<p>Scaling the data coerce the values to have a common standard deviation of one.</p>
+<p>In mathematical terms, we standardize a predictor as:</p>
+<p><span class="math display">\[{\color{blue} \tilde{X}_{i}} = \frac{{ X_{i} - \bar{X}}}{ \sqrt{\frac{1}{n -1} \sum_{i=1}^{n} (X_{i} - \bar{X})^2}},\]</span></p>
+<p>with <span class="math inline">\(\bar{X} = \sum_{i=1}^n \frac{x_i}{n}\)</span>.</p>
+</section>
+<section id="example-2-cont.-2" class="slide level2">
+<h2>Example 2 (cont.)</h2>
+<p>We use on the five numerical predictors in the <code>complete_sbAuto</code> dataset.</p>
+<div id="308a07c5" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a></a>complete_sbAuto.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="316">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">cylinders</th>
+<th data-quarto-table-cell-role="th">displacement</th>
+<th data-quarto-table-cell-role="th">horsepower</th>
+<th data-quarto-table-cell-role="th">weight</th>
+<th data-quarto-table-cell-role="th">acceleration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>8</td>
+<td>307.0</td>
+<td>130</td>
+<td>3504</td>
+<td>12.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>8</td>
+<td>350.0</td>
+<td>165</td>
+<td>3693</td>
+<td>11.5</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>8</td>
+<td>318.0</td>
+<td>150</td>
+<td>3436</td>
+<td>11.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>8</td>
+<td>304.0</td>
+<td>150</td>
+<td>3433</td>
+<td>12.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>8</td>
+<td>302.0</td>
+<td>140</td>
+<td>3449</td>
+<td>10.5</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="two-predictors-in-original-units" class="slide level2">
+<h2>Two predictors in original units</h2>
+<p>Consider the <code>complete_sbAuto</code> dataset created previously. Consider two points in the plot: <span class="math inline">\((175, 5140)\)</span> and <span class="math inline">\((69, 1613)\)</span>.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="60919fb0" class="cell" data-execution_count="29">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="PreProcessing_Part1_files/figure-revealjs/cell-30-output-1.png" class="quarto-figure quarto-figure-center" width="458" height="435"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p><br></p>
+<p>The distance between these points is <span class="math inline">\(\sqrt{(69 - 175)^2 + (1613-5140)^2}\)</span> <span class="math inline">\(= \sqrt{11236 + 12439729}\)</span> <span class="math inline">\(= 3528.592\)</span>.</p>
+</div></div>
+</section>
+<section id="standarization-in-python" class="slide level2">
+<h2>Standarization in Python</h2>
+<p><br></p>
+<p>To standardize <strong>numerical</strong> predictors, we use the function <code>StandardScaler()</code>. Moreover, we apply the function to the variables using the function <code>fit_transform()</code>.</p>
+<p><br></p>
+<div id="9bdab855" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a></a>scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb37-2"><a></a>Xs <span class="op">=</span> scaler.fit_transform(complete_sbAuto)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-24" class="slide level2">
+<h2></h2>
+<p>Unfortunately, the resulting object is not a pandas data frame. We then convert this object to this format. <br></p>
+<div id="f54112c4" class="cell" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a></a>scaled_df <span class="op">=</span> pd.DataFrame(Xs, columns <span class="op">=</span> complete_sbAuto.columns)</span>
+<span id="cb38-2"><a></a>scaled_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="319">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">cylinders</th>
+<th data-quarto-table-cell-role="th">displacement</th>
+<th data-quarto-table-cell-role="th">horsepower</th>
+<th data-quarto-table-cell-role="th">weight</th>
+<th data-quarto-table-cell-role="th">acceleration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1.483947</td>
+<td>1.077290</td>
+<td>0.664133</td>
+<td>0.620540</td>
+<td>-1.285258</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>1.483947</td>
+<td>1.488732</td>
+<td>1.574594</td>
+<td>0.843334</td>
+<td>-1.466724</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>1.483947</td>
+<td>1.182542</td>
+<td>1.184397</td>
+<td>0.540382</td>
+<td>-1.648189</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>1.483947</td>
+<td>1.048584</td>
+<td>1.184397</td>
+<td>0.536845</td>
+<td>-1.285258</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>1.483947</td>
+<td>1.029447</td>
+<td>0.924265</td>
+<td>0.555706</td>
+<td>-1.829655</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="two-predictors-in-standardized-units" class="slide level2">
+<h2>Two predictors in standardized units</h2>
+<p>In the new scale, the two points are now: <span class="math inline">\((1.82, 2.53)\)</span> and <span class="math inline">\((-0.91, -1.60)\)</span>.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="1df67eb8" class="cell" data-execution_count="32">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="PreProcessing_Part1_files/figure-revealjs/cell-33-output-1.png" class="quarto-figure quarto-figure-center" width="444" height="435"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p><br></p>
+<p>The distance between these points is <span class="math inline">\(\sqrt{(-0.91 - 1.82)^2 + (-1.60-2.53)^2}\)</span> <span class="math inline">\(= \sqrt{7.45 + 17.05} = 4.95\)</span>.</p>
+</div></div>
+</section>
+<section id="discussion" class="slide level2">
+<h2>Discussion</h2>
+<ul>
+<li class="fragment"><p>Standardized predictors are generally used to improve the numerical stability of some calculations.</p></li>
+<li class="fragment"><p>It is generally recommended to always standardize numeric predictors. Perhaps the only exception would be if we consider a linear regression model.</p></li>
+<li class="fragment"><p>A drawback of these transformations is the <span style="color:pink;"><strong><em>loss of interpretability</em></strong></span> since the data are no longer in the original units.</p></li>
+<li class="fragment"><p>Standardizing the predictors does not affect their correlation.</p></li>
+</ul>
 </section></section>
 <section id="return-to-main-page" class="title-slide slide level1 center">
 <h1><a href="https://alanrvazquez.github.io/TEC-IN5148/">Return to main page</a></h1>

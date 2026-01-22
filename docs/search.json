@@ -4275,37 +4275,37 @@
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#agenda",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#agenda",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "Agenda",
-    "text": "Agenda\n\n\nIntroduction\nTraining, validation, and test datasets\nDealing with missing values"
+    "text": "Agenda\n\n\nIntroduction\nDealing with missing values\nTransforming predictors\nReducing the number of predictors\nStandardizing predictors"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#data-preprocessing",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#data-preprocessing",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "Data preprocessing",
     "text": "Data preprocessing\nData pre-processing techniques generally refer to the addition, deletion, or transformation of data.\n\n\nIt can make or break a model’s predictive ability.\n\n\nFor example, linear regression models (to be discussed later) are relatively insensitive to the characteristics of the predictor data, but advanced methods like K-nearest neighbors, principal component regression, and LASSO are not."
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
     "text": "We will review some common strategies for processing predictors from the data, without considering how they might be related to the response.\n\nIn particular, we will review:\n\nDealing with missing values.\nTransforming predictors.\nReducing the number of predictors.\nStandardizing the units of the predictors."
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#scikit-learn-library",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#scikit-learn-library",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "scikit-learn library",
     "text": "scikit-learn library\n\nscikit-learn is a robust and popular library for machine learning in Python\nIt provides simple, efficient tools for data mining and data analysis\nIt is built on top of libraries such as NumPy, SciPy, and Matplotlib\nhttps://scikit-learn.org/stable/"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-1",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-1",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "Let’s import scikit-learn into Python together with the other relevant libraries.\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.impute import SimpleImputer, KNNImputer\nfrom sklearn.preprocessing import PowerTransformer, StandardScaler \nfrom sklearn.feature_selection import VarianceThreshold\n\nWe will not use all the functions from the scikit-learn library. Instead, we will use specific functions from the sub-libraries preprocessing, feature_selection, model_selection and impute."
+    "text": "Let’s import scikit-learn into Python together with the other relevant libraries.\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.impute import SimpleImputer\nfrom sklearn.preprocessing import StandardScaler \n\nWe will not use all the functions from the scikit-learn library. Instead, we will use specific functions from the sub-libraries preprocessing and impute."
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#recall-that",
@@ -4324,9 +4324,9 @@
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-2",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-2",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "A random sample of \\(n\\) observations.\nUse it to construct \\(\\hat{f}(\\boldsymbol{X})\\).\n\n\n\n\n\nAnother random sample of \\(n_t\\) observations, which is independent of the training data.\nUse it to evaluate \\(\\hat{f}(\\boldsymbol{X})\\)."
+    "text": "Missing at random assumes that we can predict the value that is missing based on the other available data.\nMissing not at random assumes that there is a mechanism that generates the missing values, which may include observed and unobserved predictors."
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#validation-dataset",
@@ -4338,9 +4338,9 @@
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#example-1",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#example-1",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "Example 1",
-    "text": "Example 1\n\nThe “BostonHousing.xlsx” contains data collected by the US Bureau of the Census concerning housing in the area of Boston, Massachusetts. The dataset includes data on 506 census housing tracts in the Boston area in 1970s.\nThe goal is to predict the median house price in new tracts based on information such as crime rate, pollution, and number of rooms.\nThe response is the median value of owner-occupied homes in $1000s, contained in the column MEDV."
+    "text": "Example 1\n\nLet’s use the penguins dataset available in the file “penguins.xlsx”.\n\n# Load the Excel file into a pandas DataFrame.\npenguins_data = pd.read_excel(\"penguins.xlsx\")\n\n# Set categorical variables.\npenguins_data['sex'] = pd.Categorical(penguins_data['sex'])\npenguins_data['species'] = pd.Categorical(penguins_data['species'])\npenguins_data['island'] = pd.Categorical(penguins_data['island'])"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#the-predictors",
@@ -4354,14 +4354,14 @@
     "href": "PreProcessing/PreProcessing_Part1.slides.html#read-the-dataset",
     "title": "Data preprocessing: Part I",
     "section": "Read the dataset",
-    "text": "Read the dataset\n\nWe read the dataset and set the variable CHAS and RAD as categorical.\n\nBoston_data = pd.read_excel('BostonHousing.xlsx')\n\nBoston_data['CHAS'] = pd.Categorical(Boston_data['CHAS'])\nBoston_data['RAD'] = pd.Categorical(Boston_data['RAD'], \n                                      categories=[\"Low\", \"Medium\", \"High\"], \n                                      ordered=True)"
+    "text": "Read the dataset\nWe read the dataset.\n\nBoston_data = pd.read_excel('BostonHousing.xlsx')\n\n\nThe variables CHAS and RAD are categorical variables. Therefore, we turn tthem into categorical using .Categorical() function from pandas.\n\nBoston_data['CHAS'] = pd.Categorical(Boston_data['CHAS'])\nBoston_data['RAD'] = pd.Categorical(Boston_data['RAD'], \n                                      categories=[\"Low\", \"Medium\", \"High\"], \n                                      ordered=True)"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-3",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-3",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "Boston_data.head()\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n0\n0.00632\n18.0\n2.31\nNo\n0.538\n6.575\n65.2\n4.0900\nLow\n296\n15.3\n4.98\n24.0\n\n\n1\n0.02731\n0.0\n7.07\nNo\n0.469\n6.421\n78.9\n4.9671\nLow\n242\n17.8\n9.14\n21.6\n\n\n2\n0.02729\n0.0\n7.07\nNo\n0.469\n7.185\n61.1\n4.9671\nLow\n242\n17.8\n4.03\n34.7\n\n\n3\n0.03237\n0.0\n2.18\nNo\n0.458\n6.998\n45.8\n6.0622\nLow\n222\n18.7\n2.94\n33.4\n\n\n4\n0.06905\n0.0\n2.18\nNo\n0.458\n7.147\n54.2\n6.0622\nLow\n222\n18.7\n5.33\n36.2"
+    "text": "For large data sets, removal of observations based on missing values is not a problem, assuming that the type of missing data is completely at random.\n\nIn a smaller data sets, there is a high price in removing observations. To overcome this issue, we can use methods of imputation, which try to estimate the missing values of a predictor variable using the other predictors’ values.\n\nHere, we will introduce some simple methods for imputing missing values in categorical and numerical variables."
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#how-do-we-generate-validation-data",
@@ -4394,16 +4394,16 @@
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-4",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-4",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n428\n7.36711\n0.0\n18.10\nNo\n0.679\n6.193\n78.1\n1.9356\nHigh\n666\n20.2\n21.52\n11.0\n\n\n170\n1.20742\n0.0\n19.58\nNo\n0.605\n5.875\n94.6\n2.4259\nMedium\n403\n14.7\n14.43\n17.4\n\n\n206\n0.22969\n0.0\n10.59\nNo\n0.489\n6.326\n52.5\n4.3549\nMedium\n277\n18.6\n10.97\n24.4\n\n\n41\n0.12744\n0.0\n6.91\nNo\n0.448\n6.770\n2.9\n5.7209\nLow\n233\n17.9\n4.84\n26.6"
+    "text": "Let’s check if the dataset has missing observations using the function .info() from pandas.\n\nX_p.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nRangeIndex: 344 entries, 0 to 343\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype   \n---  ------             --------------  -----   \n 0   bill_length_mm     342 non-null    float64 \n 1   bill_depth_mm      342 non-null    float64 \n 2   flipper_length_mm  342 non-null    float64 \n 3   body_mass_g        342 non-null    float64 \n 4   sex                333 non-null    category\ndtypes: category(1), float64(4)\nmemory usage: 11.3 KB"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-5",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-5",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n358\n5.20177\n0.0\n18.10\nYes\n0.770\n6.127\n83.4\n2.7227\nHigh\n666\n20.2\n11.48\n22.7\n\n\n387\n22.59710\n0.0\n18.10\nNo\n0.700\n5.000\n89.5\n1.5184\nHigh\n666\n20.2\n31.99\n7.4\n\n\n297\n0.14103\n0.0\n13.92\nNo\n0.437\n5.790\n58.0\n6.3200\nMedium\n289\n16.0\n15.84\n20.3\n\n\n161\n1.46336\n0.0\n19.58\nNo\n0.605\n7.489\n90.8\n1.9709\nMedium\n403\n14.7\n1.73\n50.0\n\n\n503\n0.06076\n0.0\n11.93\nNo\n0.573\n6.976\n91.0\n2.1675\nLow\n273\n21.0\n5.64\n23.9"
+    "text": "In the output of the function, “non-null” refers to the number of entries in a column that have actual values. That is, the number of entries where there are not NaN.\n\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nRangeIndex: 344 entries, 0 to 343\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype   \n---  ------             --------------  -----   \n 0   bill_length_mm     342 non-null    float64 \n 1   bill_depth_mm      342 non-null    float64 \n 2   flipper_length_mm  342 non-null    float64 \n 3   body_mass_g        342 non-null    float64 \n 4   sex                333 non-null    category\ndtypes: category(1), float64(4)\nmemory usage: 11.3 KB\n\n\nThe “Index” section shows the number of observations in the dataset."
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#work-on-your-training-dataset",
@@ -4415,156 +4415,156 @@
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#missing-values",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#missing-values",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "Missing values",
     "text": "Missing values\nIn many cases, some predictors have no values for a given observation. It is important to understand why the values are missing.\n\n\nThere four main types of missing data:\n\nStructurally missing data is data that is missing for a logical reason or because it should not exist.\nMissing completely at random assumes that the fact that the data is missing is unrelated to the other information in the data."
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-6",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-6",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "Missing at random assumes that we can predict the value that is missing based on the other available data.\nMissing not at random assumes that there is a mechanism that generates the missing values, which may include observed and unobserved predictors."
+    "text": "The output below shows that there are 240 entries but bill_length_mm has 238 that are “non-null”. Therefore, this column has two missing observations.\n\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nRangeIndex: 344 entries, 0 to 343\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype   \n---  ------             --------------  -----   \n 0   bill_length_mm     342 non-null    float64 \n 1   bill_depth_mm      342 non-null    float64 \n 2   flipper_length_mm  342 non-null    float64 \n 3   body_mass_g        342 non-null    float64 \n 4   sex                333 non-null    category\ndtypes: category(1), float64(4)\nmemory usage: 11.3 KB\n\n\nThe same is true for the other predictors except for sex that has eight missing values."
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-7",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-7",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "For large data sets, removal of observations based on missing values is not a problem, assuming that the type of missing data is completely at random.\n\nIn a smaller data sets, there is a high price in removing observations. To overcome this issue, we can use methods of imputation, which try to estimate the missing values of a predictor variable using the other predictors’ values.\n\nHere, we will introduce some simple methods for imputing missing values in categorical and numerical variables."
+    "text": "Alternatively, we can use the function .isnull() together with sum() to determine the number of missing values for each column in the dataset.\n\n\nmissing_values = X_p.isnull().sum()\nmissing_values\n\nbill_length_mm        2\nbill_depth_mm         2\nflipper_length_mm     2\nbody_mass_g           2\nsex                  11\ndtype: int64"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#example-2",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#example-2",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "Example 2",
-    "text": "Example 2\n\nLet’s use the penguins dataset available in the file “penguins.xlsx”.\n\n# Load the Excel file into a pandas DataFrame.\npenguins_data = pd.read_excel(\"penguins.xlsx\")\n\n# Set categorical variables.\npenguins_data['sex'] = pd.Categorical(penguins_data['sex'])\npenguins_data['species'] = pd.Categorical(penguins_data['species'])\npenguins_data['island'] = pd.Categorical(penguins_data['island'])"
+    "text": "Example 2\nA market analyst is studying quality characteristics of cars. Specifically, the analyst is investigating the miles per gallon (mpg) of cars can be predicted using:\n\n\\(X_1:\\) cylinders. Number of cylinders between 4 and 8\n\\(X_2:\\) displacement. Engine displacement (cu. inches)\n\\(X_3:\\) horsepower. Engine horsepower\n\\(X_4:\\) weight. Vehicle weight (lbs.)\n\\(X_5:\\) acceleration. Time to accelerate from 0 to 60 mph (sec.)\n\\(X_6:\\) origin. Origin of car (American, European, Japanese)"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#training-and-validation-datasets",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#training-and-validation-datasets",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "Training and validation datasets",
-    "text": "Training and validation datasets\nFor illustrative purposes, we assume that we want to predict the species (in the column species) of a penguin using the predictors bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, and sex.\n\nWe create the predictor matrix and response column.\n\n# Set full matrix of predictors.\nX_full_p = (penguins_data\n           .filter(['bill_length_mm', 'bill_depth_mm', \n           'flipper_length_mm', 'body_mass_g', 'sex']))\n\n# Set full matrix of responses.\nY_full_p = penguins_data.filter(['species'])"
+    "text": "Training and validation datasets\n\nFor illustrative purposes, we assume that we want to predict the miles per gallon of a car using the six predictors, \\(X_1, \\ldots, X_6\\).\nWe create the predictor matrix and response column.\n\n# Set full matrix of predictors.\nX_full_c = (auto_data\n           .filter(['cylinders', 'displacement', \n           'horsepower', 'weight', 'acceleration', 'origin']))\n\n# Set full matrix of responses.\nY_full_c = auto_data.filter(['mpg'])"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-8",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-8",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "We use a validation dataset with 30% of the observations in penguins_data. The other 70% will be in the training dataset.\n\n# Split the dataset into training and validation.\nX_train_p, X_valid_p, Y_train_p, Y_valid_p = train_test_split(X_full_p, Y_full_p, \n                                                      test_size = 0.3,\n                                                      random_state = 59227)\n\n\nIn train_test_split, we use the input random_state to set a random seed. Essentially, this allows you to obtain the same training and validation datasets every time you run the code. The advice is setting random_state to a big integer number generated at random."
+    "text": "complete_predictors.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nIndex: 333 entries, 0 to 343\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype   \n---  ------             --------------  -----   \n 0   bill_length_mm     333 non-null    float64 \n 1   bill_depth_mm      333 non-null    float64 \n 2   flipper_length_mm  333 non-null    float64 \n 3   body_mass_g        333 non-null    float64 \n 4   sex                333 non-null    category\ndtypes: category(1), float64(4)\nmemory usage: 13.5 KB\n\n\nThe new data is complete because each column has 232 “non-null” values; the total number of observations in complete_predictors.\nHowever, note that we have lost eight of the original observations in X_train_p!"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-9",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-9",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "Since preprocessing techniques are meant for the predictors, we will work on the X_train_p data frame.\n\n\n\n\n\n\n\n\n\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\n\n\n\n\n31\n37.2\n18.1\n178.0\n3900.0\nmale\n\n\n46\n41.1\n19.0\n182.0\n3425.0\nmale\n\n\n195\n49.6\n15.0\n216.0\n4750.0\nmale\n\n\n43\n44.1\n19.7\n196.0\n4400.0\nmale\n\n\n196\n50.5\n15.9\n222.0\n5550.0\nmale"
+    "text": "Using SimpleImputer(), we set the method to impute missing values using the mean.\nWe also use the function fit_transform() to apply the imputation method to the variable.\n\n# Imputation for numerical variables (using the mean)\nnum_imputer = SimpleImputer(strategy = 'mean')\n\n# Replace the original variable with new version.\nX_p['bill_length_mm'] = num_imputer.fit_transform(X_p[ ['bill_length_mm'] ] )"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-10",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-10",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "Let’s check if the dataset has missing observations using the function .info() from pandas.\n\nX_train_p.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nIndex: 240 entries, 31 to 293\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype   \n---  ------             --------------  -----   \n 0   bill_length_mm     238 non-null    float64 \n 1   bill_depth_mm      238 non-null    float64 \n 2   flipper_length_mm  238 non-null    float64 \n 3   body_mass_g        238 non-null    float64 \n 4   sex                232 non-null    category\ndtypes: category(1), float64(4)\nmemory usage: 9.7 KB"
+    "text": "After imputation, the information of the predictors in the dataset looks like this.\n\nX_p.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nRangeIndex: 344 entries, 0 to 343\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype   \n---  ------             --------------  -----   \n 0   bill_length_mm     344 non-null    float64 \n 1   bill_depth_mm      342 non-null    float64 \n 2   flipper_length_mm  342 non-null    float64 \n 3   body_mass_g        342 non-null    float64 \n 4   sex                333 non-null    category\ndtypes: category(1), float64(4)\nmemory usage: 11.3 KB\n\n\nNow, bill_length_mm has 240 complete values."
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-11",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-11",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "In the output of the function, “non-null” refers to the number of entries in a column that have actual values. That is, the number of entries where there are not NaN.\n\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nIndex: 240 entries, 31 to 293\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype   \n---  ------             --------------  -----   \n 0   bill_length_mm     238 non-null    float64 \n 1   bill_depth_mm      238 non-null    float64 \n 2   flipper_length_mm  238 non-null    float64 \n 3   body_mass_g        238 non-null    float64 \n 4   sex                232 non-null    category\ndtypes: category(1), float64(4)\nmemory usage: 9.7 KB\n\n\nThe “Index” section shows the number of observations in the dataset."
+    "text": "To impute the missing values using the median, we simply set this method in SimpleImputer(). For example, let’s impute the missing values of bill_depth_mm.\n\n# Imputation for numerical variables (using the mean)\nnum_imputer = SimpleImputer(strategy = 'median')\n\n# Replace the original variable with new version.\nX_p['bill_depth_mm'] = num_imputer.fit_transform(X_p[ ['bill_depth_mm'] ] )\n\n# Show the information of the predictor.\nX_p['bill_depth_mm'].info()\n\n&lt;class 'pandas.core.series.Series'&gt;\nRangeIndex: 344 entries, 0 to 343\nSeries name: bill_depth_mm\nNon-Null Count  Dtype  \n--------------  -----  \n344 non-null    float64\ndtypes: float64(1)\nmemory usage: 2.8 KB"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-12",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-12",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "The output below shows that there are 240 entries but bill_length_mm has 238 that are “non-null”. Therefore, this column has two missing observations.\n\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nIndex: 240 entries, 31 to 293\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype   \n---  ------             --------------  -----   \n 0   bill_length_mm     238 non-null    float64 \n 1   bill_depth_mm      238 non-null    float64 \n 2   flipper_length_mm  238 non-null    float64 \n 3   body_mass_g        238 non-null    float64 \n 4   sex                232 non-null    category\ndtypes: category(1), float64(4)\nmemory usage: 9.7 KB\n\n\nThe same is true for the other predictors except for sex that has eight missing values."
+    "text": "We use the sample median when the data is skewed (e.g., incomes, prices).\n\nPros: Less sensitive to outliers; robust for skewed distributions.\nCons: May reduce variability in the data."
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-13",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-13",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "Alternatively, we can use the function .isnull() together with sum() to determine the number of missing values for each column in the dataset.\n\n\nmissing_values = X_train_p.isnull().sum()\nmissing_values\n\nbill_length_mm       2\nbill_depth_mm        2\nflipper_length_mm    2\nbody_mass_g          2\nsex                  8\ndtype: int64"
+    "text": "Let’s now have a look at the information of the dataset.\n\n# Apply imputation strategy for categorical variables.\nX_p.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nRangeIndex: 344 entries, 0 to 343\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype  \n---  ------             --------------  -----  \n 0   bill_length_mm     344 non-null    float64\n 1   bill_depth_mm      344 non-null    float64\n 2   flipper_length_mm  342 non-null    float64\n 3   body_mass_g        342 non-null    float64\n 4   sex                344 non-null    object \ndtypes: float64(4), object(1)\nmemory usage: 13.6+ KB\n\n\nThe columns bill_length_mm, bill_depth_mm, and sex have 240 complete values."
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#removing-missing-values",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#removing-missing-values",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "Removing missing values",
-    "text": "Removing missing values\nIf we want to remove all rows in the dataset that have at least one missing value, we use the function .dropna().\n\ncomplete_predictors = X_train_p.dropna()\ncomplete_predictors.head()\n\n\n\n\n\n\n\n\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\n\n\n\n\n31\n37.2\n18.1\n178.0\n3900.0\nmale\n\n\n46\n41.1\n19.0\n182.0\n3425.0\nmale\n\n\n195\n49.6\n15.0\n216.0\n4750.0\nmale\n\n\n43\n44.1\n19.7\n196.0\n4400.0\nmale\n\n\n196\n50.5\n15.9\n222.0\n5550.0\nmale"
+    "text": "Removing missing values\nIf we want to remove all rows in the dataset that have at least one missing value, we use the function .dropna().\n\ncomplete_predictors = X_p.dropna()\ncomplete_predictors.head()\n\n\n\n\n\n\n\n\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\n\n\n\n\n0\n39.1\n18.7\n181.0\n3750.0\nmale\n\n\n1\n39.5\n17.4\n186.0\n3800.0\nfemale\n\n\n2\n40.3\n18.0\n195.0\n3250.0\nfemale\n\n\n4\n36.7\n19.3\n193.0\n3450.0\nfemale\n\n\n5\n39.3\n20.6\n190.0\n3650.0\nmale"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-14",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-14",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "complete_predictors.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nIndex: 232 entries, 31 to 293\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype   \n---  ------             --------------  -----   \n 0   bill_length_mm     232 non-null    float64 \n 1   bill_depth_mm      232 non-null    float64 \n 2   flipper_length_mm  232 non-null    float64 \n 3   body_mass_g        232 non-null    float64 \n 4   sex                232 non-null    category\ndtypes: category(1), float64(4)\nmemory usage: 9.4 KB\n\n\nThe new data is complete because each column has 232 “non-null” values; the total number of observations in complete_predictors.\nHowever, note that we have lost eight of the original observations in X_train_p!"
+    "text": "Unfortunately, after applying cat_imputer to the dataset, the variable sex is an object. To change it to categorical, we use the function pd.Categorical again.\n\n# Apply imputation strategy for categorical variables.\nX_p['sex'] = pd.Categorical(X_p['sex'])\nX_p.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nRangeIndex: 344 entries, 0 to 343\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype   \n---  ------             --------------  -----   \n 0   bill_length_mm     344 non-null    float64 \n 1   bill_depth_mm      344 non-null    float64 \n 2   flipper_length_mm  342 non-null    float64 \n 3   body_mass_g        342 non-null    float64 \n 4   sex                344 non-null    category\ndtypes: category(1), float64(4)\nmemory usage: 11.3 KB"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#imputation-using-the-mean",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#imputation-using-the-mean",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "Imputation using the mean",
-    "text": "Imputation using the mean\nWe can impute the missing values of a numeric variable using the mean or median of its available values. For example, consider the variable bill_length_mm that has two missing values.\n\nX_train_p['bill_length_mm'].info()\n\n&lt;class 'pandas.core.series.Series'&gt;\nIndex: 240 entries, 31 to 293\nSeries name: bill_length_mm\nNon-Null Count  Dtype  \n--------------  -----  \n238 non-null    float64\ndtypes: float64(1)\nmemory usage: 3.8 KB\n\n\nIn scikit-learn, we use the function SimpleImputer() to define the method of imputation of missing values."
+    "text": "Imputation using the mean\nWe can impute the missing values of a numeric variable using the mean or median of its available values. For example, consider the variable bill_length_mm that has two missing values.\n\nX_p['bill_length_mm'].info()\n\n&lt;class 'pandas.core.series.Series'&gt;\nRangeIndex: 344 entries, 0 to 343\nSeries name: bill_length_mm\nNon-Null Count  Dtype  \n--------------  -----  \n342 non-null    float64\ndtypes: float64(1)\nmemory usage: 2.8 KB\n\n\nIn scikit-learn, we use the function SimpleImputer() to define the method of imputation of missing values."
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-15",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-15",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "Using SimpleImputer(), we set the method to impute missing values using the mean.\nWe also use the function fit_transform() to apply the imputation method to the variable.\n\n# Imputation for numerical variables (using the mean)\nnum_imputer = SimpleImputer(strategy = 'mean')\n\n# Replace the original variable with new version.\nX_train_p['bill_length_mm'] = num_imputer.fit_transform(X_train_p[ ['bill_length_mm'] ] )"
+    "text": "The dataset is in the file “auto.xlsx”. Let’s read the data using pandas.\n\n# Load the Excel file into a pandas DataFrame.\nauto_data = pd.read_excel(\"auto.xlsx\")\n\n# Set categorical variables.\nauto_data['origin'] = pd.Categorical(auto_data['origin'])"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-16",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-16",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "After imputation, the information of the predictors in the dataset looks like this.\n\nX_train_p.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nIndex: 240 entries, 31 to 293\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype   \n---  ------             --------------  -----   \n 0   bill_length_mm     240 non-null    float64 \n 1   bill_depth_mm      238 non-null    float64 \n 2   flipper_length_mm  238 non-null    float64 \n 3   body_mass_g        238 non-null    float64 \n 4   sex                232 non-null    category\ndtypes: category(1), float64(4)\nmemory usage: 9.7 KB\n\n\nNow, bill_length_mm has 240 complete values."
+    "text": "The variable Origin would then be replaced by the three dummy variables\n\n\n\nOrigin (\\(X\\))\n\\(d_1\\)\n\\(d_2\\)\n\\(d_3\\)\n\n\n\n\nAmerican\n1\n0\n0\n\n\nAmerican\n1\n0\n0\n\n\nEuropean\n0\n1\n0\n\n\nEuropean\n0\n1\n0\n\n\nAmerican\n1\n0\n0\n\n\nJapanese\n0\n0\n1\n\n\n\\(\\vdots\\)\n\\(\\vdots\\)\n\\(\\vdots\\)\n\\(\\vdots\\)"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-17",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-17",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "To impute the missing values using the median, we simply set this method in SimpleImputer(). For example, let’s impute the missing values of bill_depth_mm.\n\n# Imputation for numerical variables (using the mean)\nnum_imputer = SimpleImputer(strategy = 'median')\n\n# Replace the original variable with new version.\nX_train_p['bill_depth_mm'] = num_imputer.fit_transform(X_train_p[ ['bill_depth_mm'] ] )\n\n# Show the information of the predictor.\nX_train_p['bill_depth_mm'].info()\n\n&lt;class 'pandas.core.series.Series'&gt;\nIndex: 240 entries, 31 to 293\nSeries name: bill_depth_mm\nNon-Null Count  Dtype  \n--------------  -----  \n240 non-null    float64\ndtypes: float64(1)\nmemory usage: 3.8 KB"
+    "text": "The variable Origin would then be replaced by the three dummy variables.\n\n\n\nOrigin (\\(X\\))\n\\(d_2\\)\n\\(d_3\\)\n\n\n\n\nAmerican\n0\n0\n\n\nAmerican\n0\n0\n\n\nEuropean\n1\n0\n\n\nEuropean\n1\n0\n\n\nAmerican\n0\n0\n\n\nJapanese\n0\n1\n\n\n\\(\\vdots\\)\n\\(\\vdots\\)\n\\(\\vdots\\)"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#using-the-mean-or-the-median",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#using-the-mean-or-the-median",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "Using the mean or the median?",
     "text": "Using the mean or the median?\n\nWe use the sample mean when the data distribution is roughly symmetrical.\n\nPros: Simple and easy to implement.\nCons: Sensitive to outliers; may not be accurate for skewed distributions"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-18",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-18",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "We use the sample median when the data is skewed (e.g., incomes, prices).\n\nPros: Less sensitive to outliers; robust for skewed distributions.\nCons: May reduce variability in the data."
+    "text": "dummy_data.head()\n\n\n\n\n\n\n\n\nEuropean\nJapanese\n\n\n\n\n0\n0\n0\n\n\n1\n0\n0\n\n\n2\n0\n0\n\n\n3\n0\n0\n\n\n4\n0\n0"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#imputation-method-for-a-categorical-variable",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#imputation-method-for-a-categorical-variable",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "Imputation method for a categorical variable",
-    "text": "Imputation method for a categorical variable\nIf a categorical variable has missing values, we can use the most frequent of the available values to replace the missing values. To this end, we use similar commands as before.\nFor example, let’s impute the missing values of sex using this strategy.\n\n# Imputation for categorical variables (using the most frequent value)\ncat_imputer = SimpleImputer(strategy = 'most_frequent')\n\n# Apply imputation strategy for categorical variables.\nX_train_p['sex'] = cat_imputer.fit_transform(X_train_p[ ['sex'] ]).ravel()"
+    "text": "Imputation method for a categorical variable\nIf a categorical variable has missing values, we can use the most frequent of the available values to replace the missing values. To this end, we use similar commands as before.\nFor example, let’s impute the missing values of sex using this strategy.\n\n# Imputation for categorical variables (using the most frequent value)\ncat_imputer = SimpleImputer(strategy = 'most_frequent')\n\n# Apply imputation strategy for categorical variables.\nX_p['sex'] = cat_imputer.fit_transform(X_p[ ['sex'] ]).ravel()"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-19",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-19",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "Let’s now have a look at the information of the dataset.\n\n# Apply imputation strategy for categorical variables.\nX_train_p.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nIndex: 240 entries, 31 to 293\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype  \n---  ------             --------------  -----  \n 0   bill_length_mm     240 non-null    float64\n 1   bill_depth_mm      240 non-null    float64\n 2   flipper_length_mm  238 non-null    float64\n 3   body_mass_g        238 non-null    float64\n 4   sex                240 non-null    object \ndtypes: float64(4), object(1)\nmemory usage: 11.2+ KB\n\n\nThe columns bill_length_mm, bill_depth_mm, and sex have 240 complete values."
+    "text": "Now, to add the dummy variables to the dataset, we use the function concat() from pandas.\n\naugmented_auto = pd.concat([complete_Auto, dummy_data], axis = 1)\naugmented_auto.head()\n\n\n\n\n\n\n\n\ncylinders\ndisplacement\nhorsepower\nweight\nacceleration\norigin\nEuropean\nJapanese\n\n\n\n\n0\n8\n307.0\n130\n3504\n12.0\nAmerican\n0\n0\n\n\n1\n8\n350.0\n165\n3693\n11.5\nAmerican\n0\n0\n\n\n2\n8\n318.0\n150\n3436\n11.0\nAmerican\n0\n0\n\n\n3\n8\n304.0\n150\n3433\n12.0\nAmerican\n0\n0\n\n\n4\n8\n302.0\n140\n3449\n10.5\nAmerican\n0\n0"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-20",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-20",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "Unfortunately, after applying cat_imputer to the dataset, the variable sex is an object. To change it to categorical, we use the function pd.Categorical again.\n\n# Apply imputation strategy for categorical variables.\nX_train_p['sex'] = pd.Categorical(X_train_p['sex'])\nX_train_p.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nIndex: 240 entries, 31 to 293\nData columns (total 5 columns):\n #   Column             Non-Null Count  Dtype   \n---  ------             --------------  -----   \n 0   bill_length_mm     240 non-null    float64 \n 1   bill_depth_mm      240 non-null    float64 \n 2   flipper_length_mm  238 non-null    float64 \n 3   body_mass_g        238 non-null    float64 \n 4   sex                240 non-null    category\ndtypes: category(1), float64(4)\nmemory usage: 9.7 KB"
+    "text": "Next, we plot the correlation matrix using the function heatmap() from seaborn. The argument annot shows the actual value of the pair-wise correlations, and cmap shows a nice color theme.\n\nplt.figure(figsize=(3,3))\nsns.heatmap(correlation_matrix, cmap='coolwarm', annot = True)"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#multivariate-imputation-using-k-nearest-neighbours",
@@ -4592,14 +4592,14 @@
     "href": "PreProcessing/PreProcessing_Part1.slides.html#in-python",
     "title": "Data preprocessing: Part I",
     "section": "In Python",
-    "text": "In Python\nYou can use KNN using the function KNNImputer(). Its main input is the number of nearest neighbours to use. You set this value using the parameter n_neighbors.\n\n# Set the KNN imputer using two neighbours.\nKNN_imputer = KNNImputer(n_neighbors = 2)\n\n# Select numeric predictors.\nX_train_num_p = X_train_p.drop(columns = ['sex']) \n\n# Apply imputer and store the rulst in a pandas data frame.\nX_train_num_p = pd.DataFrame(KNN_imputer.fit_transform(X_train_num_p), \n                            columns = X_train_num_p.columns)"
+    "text": "In Python\nWe apply the Box-Cox transformation using the PowerTransformer and fit_transform functions of the scikit-learn library.\n\npt = PowerTransformer(method='box-cox', standardize = False)\nDIS_transform = pt.fit_transform(Boston_training[['DIS']])\n\n\nIn the PowerTransformer, the input standardize specifies if we wish to standardize the resulting transformed predictor to have a mean of zero and a standard deviation of one. We do not standardize the predictor yet."
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-21",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-21",
-    "title": "Data preprocessing: Part I",
+    "title": "Data preprocessing",
     "section": "",
-    "text": "Let’s look at the new dataset.\n\nX_train_num_p.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nRangeIndex: 240 entries, 0 to 239\nData columns (total 4 columns):\n #   Column             Non-Null Count  Dtype  \n---  ------             --------------  -----  \n 0   bill_length_mm     240 non-null    float64\n 1   bill_depth_mm      240 non-null    float64\n 2   flipper_length_mm  240 non-null    float64\n 3   body_mass_g        240 non-null    float64\ndtypes: float64(4)\nmemory usage: 7.6 KB\n\n\nAll predictors have 240 complete entries."
+    "text": "The predictors cylinders and displacement are highly correlated. In fact, their correlation is 0.95."
   },
   {
     "objectID": "Tools/Tools1.slides.html#chaining-operations-with-pandas",
@@ -4740,5 +4740,362 @@
     "title": "Introduction to Python and Pandas",
     "section": "More on pandas",
     "text": "More on pandas\n\n\nhttps://wesmckinney.com/book/"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#categorical-predictors",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#categorical-predictors",
+    "title": "Data preprocessing",
+    "section": "Categorical predictors",
+    "text": "Categorical predictors\nA categorical predictor takes on values that are categories or groups.\n\nFor example:\n\nType of school: Public or private.\nTreatment: New or placebo.\nGrade: Passed or not passed.\n\n\n\nThe categories can be represented by names, labels or even numbers. Their use in regression requires dummy variables, which are numeric."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#dummy-variables",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#dummy-variables",
+    "title": "Data preprocessing",
+    "section": "Dummy variables",
+    "text": "Dummy variables\n\n\nThe traditional choice for a dummy variable is a binary variable, which can only take the values 0 and 1.\n\n\nInitially, a categorical variable with \\(k\\) categories requires \\(k\\) dummy variables."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#training-and-validation-datasets-1",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#training-and-validation-datasets-1",
+    "title": "Data preprocessing",
+    "section": "Training and validation datasets",
+    "text": "Training and validation datasets\nLet’s create a training and validation dataset. To this end, we will consider the variable Type as the response and the other numeric variables as the predictors. We will use 80% of the observations for the training dataset. The other 20% of the observations will go to the validation dataset.\n\n# Set full matrix of predictors.\nX_full_g = glass_data.drop(columns = ['Type']) \n\n# Set full matrix of responses.\nY_full_g = glass_data.filter(['Type'])\n\n# Split the dataset into training and validation.\nX_train_g, X_valid_g, Y_train_g, Y_valid_g = train_test_split(X_full_g, \n                                                      Y_full_g, \n                                                      test_size = 0.2,\n                                                      random_state = 59227)"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#dealing-with-missing-values-1",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#dealing-with-missing-values-1",
+    "title": "Data preprocessing",
+    "section": "Dealing with missing values",
+    "text": "Dealing with missing values\n\nThe dataset has missing values. In this example, we remove each row with at least one missing value.\n\n\n# Remove rows with missing values.\ncomplete_Auto = X_c.dropna()"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#example-1-cont.",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#example-1-cont.",
+    "title": "Data preprocessing",
+    "section": "Example 1 (cont.)",
+    "text": "Example 1 (cont.)\nWe use on the five numerical predictors in the complete_sbAuto dataset.\n\ncomplete_sbAuto.head()\n\n\n\n\n\n\n\n\ncylinders\ndisplacement\nhorsepower\nweight\nacceleration\n\n\n\n\n0\n8\n307.0\n130\n3504\n12.0\n\n\n1\n8\n350.0\n165\n3693\n11.5\n\n\n2\n8\n318.0\n150\n3436\n11.0\n\n\n3\n8\n304.0\n150\n3433\n12.0\n\n\n4\n8\n302.0\n140\n3449\n10.5"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#a-drawback",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#a-drawback",
+    "title": "Data preprocessing",
+    "section": "A drawback",
+    "text": "A drawback\n\n\nA drawback with the initial dummy variables is that they are linearly dependent. That is, \\(d_1 + d_2 + d_3 = 1\\).\nTherefore, we can determine the value of \\(d_1 = 1- d_2 - d_3.\\)\nPredictive models such as linear regression are sensitive to linear dependencies among predictors.\nThe solution is to drop one of the predictor, say, \\(d_1\\), from the data."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#dummy-variables-in-python",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#dummy-variables-in-python",
+    "title": "Data preprocessing",
+    "section": "Dummy variables in Python",
+    "text": "Dummy variables in Python\n\nWe can get the dummy variables of a categorical variable using the function pd.get_dummies() from pandas.\nThe input of the function is the categorical variable.\nThe function has an extra argument called drop_first to drop the first dummy variable. It also has the argument dtype to show the values as integers.\n\ndummy_data = pd.get_dummies(complete_Auto['origin'], drop_first = True, \n                            dtype = 'int')"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-22",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#section-22",
+    "title": "Data preprocessing",
+    "section": "",
+    "text": "In a nutshell, some predictors will have a higher impact in the model due to its unit and not its information provided to it."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-23",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#section-23",
+    "title": "Data preprocessing",
+    "section": "",
+    "text": "To scale a predictor, each of its value is divided by its standard deviation.\nScaling the data coerce the values to have a common standard deviation of one.\nIn mathematical terms, we standardize a predictor as:\n\\[{\\color{blue} \\tilde{X}_{i}} = \\frac{{ X_{i} - \\bar{X}}}{ \\sqrt{\\frac{1}{n -1} \\sum_{i=1}^{n} (X_{i} - \\bar{X})^2}},\\]\nwith \\(\\bar{X} = \\sum_{i=1}^n \\frac{x_i}{n}\\)."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#transforming-numerical-predictors",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#transforming-numerical-predictors",
+    "title": "Data preprocessing: Part I",
+    "section": "Transforming numerical predictors",
+    "text": "Transforming numerical predictors\n\nA common problem with a predictor is that it may have a skewed distribution. That is, a distribution that accumulates many observations in smaller or larger values of the predictor.\n\nFor example, consider the distribution of the predictor DIS (weighted mean of distances to five Boston employment centers) in the “BostonHousing.xlsx” dataset."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#example-2-1",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#example-2-1",
+    "title": "Data preprocessing: Part I",
+    "section": "Example 2",
+    "text": "Example 2\n\nWe revisit the “BostonHousing.xlsx” dataset that contains data of houses in Boston, Massachusetts.\n\nThe goal is to predict the median house price in new tracts based on information such as crime rate, pollution, and number of rooms.\n\nThe response is the median value of owner-occupied homes in $1000s, contained in the column MEDV."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-24",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#section-24",
+    "title": "Data preprocessing",
+    "section": "",
+    "text": "Unfortunately, the resulting object is not a pandas data frame. We then convert this object to this format. \n\nscaled_df = pd.DataFrame(Xs, columns = complete_sbAuto.columns)\nscaled_df.head()\n\n\n\n\n\n\n\n\ncylinders\ndisplacement\nhorsepower\nweight\nacceleration\n\n\n\n\n0\n1.483947\n1.077290\n0.664133\n0.620540\n-1.285258\n\n\n1\n1.483947\n1.488732\n1.574594\n0.843334\n-1.466724\n\n\n2\n1.483947\n1.182542\n1.184397\n0.540382\n-1.648189\n\n\n3\n1.483947\n1.048584\n1.184397\n0.536845\n-1.285258\n\n\n4\n1.483947\n1.029447\n0.924265\n0.555706\n-1.829655"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-25",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#section-25",
+    "title": "Data preprocessing",
+    "section": "",
+    "text": "To scale a predictor, each of its value is divided by its standard deviation.\nScaling the data coerce the values to have a common standard deviation of one.\nIn mathematical terms, we standardize a predictor as:\n\\[{\\color{blue} \\tilde{X}_{i}} = \\frac{{ X_{i} - \\bar{X}}}{ \\sqrt{\\frac{1}{n -1} \\sum_{i=1}^{n} (X_{i} - \\bar{X})^2}},\\]\nwith \\(\\bar{X} = \\sum_{i=1}^n \\frac{x_i}{n}\\)."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#distribution-of-dis",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#distribution-of-dis",
+    "title": "Data preprocessing: Part I",
+    "section": "Distribution of DIS",
+    "text": "Distribution of DIS\nA right-skewed distribution is characterized by the right tail (or the side with higher values) being longer and more extended than the left tail.\n\n\nCode\nplt.figure(figsize=(8,3.5)) # Create space for figure.\nsns.histplot(data = Boston_training, x = 'DIS') # Create the histogram.\nplt.title(\"Histogram of DIS\") # Plot title.\nplt.xlabel(\"DIS\") # X label\nplt.show() # Display the plot"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#problems-with-strong-skewness",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#problems-with-strong-skewness",
+    "title": "Data preprocessing: Part I",
+    "section": "Problems with strong skewness",
+    "text": "Problems with strong skewness\n\nStrong (right or left) skewness in a predictor can:\n\nDistort the relationship with the response.\nViolate the assumptions of the linear regression model (e.g., linearity, homoscedasticity).\nLead to influential outliers or poor model fit.\n\nTo correct the skewness of a predictor’s distribution, we can transform the predictor using the Box-Cox transformation"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#box-cox-transformation",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#box-cox-transformation",
+    "title": "Data preprocessing: Part I",
+    "section": "Box-Cox Transformation",
+    "text": "Box-Cox Transformation\n\n\nThe Box-Cox transformation uses a family of power transformations on a predictor \\(X\\) such that \\(X' = X^{\\lambda}\\), where \\(\\lambda\\) is a parameter to be determined using the data. When \\(\\lambda = 0,\\) this means \\(X' = \\ln(X)\\), where \\(\\ln(\\cdot)\\) is the natural logarithm.\nThe Box-Cox transformation is the element of this family that results in a transformed variable that follows a normal distribution (approximately).\nThe variable \\(X\\) must be strictly positive!"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-26",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#section-26",
+    "title": "Data preprocessing",
+    "section": "",
+    "text": "Unfortunately, the resulting object is not a pandas data frame. We then convert this object to this format. \n\nscaled_df = pd.DataFrame(Xs, columns = complete_sbAuto.columns)\nscaled_df.head()\n\n\n\n\n\n\n\n\ncylinders\ndisplacement\nhorsepower\nweight\nacceleration\n\n\n\n\n0\n0.370463\n0.574266\n-0.089095\n0.426617\n-0.205840\n\n\n1\n1.564660\n1.118000\n0.685890\n1.410503\n-0.561901\n\n\n2\n-0.823735\n-0.522741\n-0.502421\n-0.763451\n-1.416449\n\n\n3\n-0.823735\n-0.952004\n-0.734916\n-0.988925\n-0.027809\n\n\n4\n1.564660\n1.432793\n1.460876\n0.820895\n-2.698270"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-27",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#section-27",
+    "title": "Data preprocessing",
+    "section": "",
+    "text": "To scale a predictor, each of its value is divided by its standard deviation.\nScaling the data coerce the values to have a common standard deviation of one.\nIn mathematical terms, we standardize a predictor as:\n\\[{\\color{blue} \\tilde{X}_{i}} = \\frac{{ X_{i} - \\bar{X}}}{ \\sqrt{\\frac{1}{n -1} \\sum_{i=1}^{n} (X_{i} - \\bar{X})^2}},\\]\nwith \\(\\bar{X} = \\sum_{i=1}^n \\frac{x_i}{n}\\)."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#value-of-lambda",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#value-of-lambda",
+    "title": "Data preprocessing: Part I",
+    "section": "Value of \\(\\lambda\\)",
+    "text": "Value of \\(\\lambda\\)\n\nRecall that the Box-Cox transformation finds the best value of \\(\\lambda\\) that makes the transformed predictor \\(X^\\lambda\\) to follow a normal distribution.\nWe can obtain the value of \\(\\lambda\\) actually used in the transformation using the following code.\n\n# Retrieve the lambda value\nprint(pt.lambdas_)\n\n[-0.12343575]\n\n\nThis means that the transformed predictor is \\(X' = X^{-0.123}\\)."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#discussion",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#discussion",
+    "title": "Data preprocessing",
+    "section": "Discussion",
+    "text": "Discussion\n\nStandardized predictors are generally used to improve the numerical stability of some calculations.\nIt is generally recommended to always standardize numeric predictors. Perhaps the only exception would be if we consider a linear regression model.\nA drawback of these transformations is the loss of interpretability since the data are no longer in the original units.\nStandardizing the predictors does not affect their correlation."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#removing-predictors",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#removing-predictors",
+    "title": "Data preprocessing",
+    "section": "Removing predictors",
+    "text": "Removing predictors\n\nThere are potential advantages to removing predictors prior to modeling:\n\nFewer predictors means decreased computational time and complexity.\nIf two predictors are highly-correlated, they are measuring the same underlying information. So, removing one should not compromise the performance of the model.\n\n\nHere, we will see a popular technique to remove predictors."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#near-zero-variance-predictors",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#near-zero-variance-predictors",
+    "title": "Data preprocessing: Part I",
+    "section": "Near-Zero variance predictors",
+    "text": "Near-Zero variance predictors\n\nA near-zero variance predictor variable is one that has only a handful of unique values that occur with very low frequencies.\n\n\nIf the predictor has a single unique value, then it is called a zero-variance predictor variable.\n\n\n\nSince the values of this predictor variable do not vary or change at all, this predictor does not provide any information to the model and must be discarded."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#example-3",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#example-3",
+    "title": "Data preprocessing",
+    "section": "Example 3",
+    "text": "Example 3\n\nWe consider a data set related to Glass identification. The data has 214 glass samples labeled as one of seven glass categories. There are nine predictors including the refractive index (RI) and percentages of eight elements: Na, Mg, Al, Si, K, Ca, Ba, and Fe.\nLet’s read the data set.\n\n# Load Excel file (make sure the file is in your Colab)\nglass_data = pd.read_excel('glass.xlsx')"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#training-and-validation-datasets-2",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#training-and-validation-datasets-2",
+    "title": "Data preprocessing",
+    "section": "Training and validation datasets",
+    "text": "Training and validation datasets\nLet’s create a training and validation dataset. To this end, we will consider the variable Type as the response and the other numeric variables as the predictors. We will use 80% of the observations for the training dataset. The other 20% of the observations will go to the validation dataset.\n\n# Set full matrix of predictors.\nX_full_g = glass_data.drop(columns = ['Type']) \n\n# Set full matrix of responses.\nY_full_g = glass_data.filter(['Type'])\n\n# Split the dataset into training and validation.\nX_train_g, X_valid_g, Y_train_g, Y_valid_g = train_test_split(X_full_g, \n                                                      Y_full_g, \n                                                      test_size = 0.2,\n                                                      random_state = 59227)"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#in-python-1",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#in-python-1",
+    "title": "Data preprocessing: Part I",
+    "section": "In Python",
+    "text": "In Python\nWe use the function VarianceThreshold() to set the threshold for determining a low sample variance. We also use other functions such as .fit() and .get_support().\n\n# Set threshold\nselector = VarianceThreshold(threshold=0.01)\n\n# Apply threshold.\nselector.fit(X_train_g)\n\n# Identify predictors with low variance.\nlow_variance_cols = X_train_g.columns[~selector.get_support()]\n\n# Print the list of predictors.\nprint(f\"Low variance columns: {low_variance_cols}\")\n\nLow variance columns: Index(['RI', 'Fe'], dtype='object')"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-28",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#section-28",
+    "title": "Data preprocessing",
+    "section": "",
+    "text": "Unfortunately, the resulting object is not a pandas data frame. We then convert this object to this format. \n\nscaled_df = pd.DataFrame(Xs, columns = complete_sbAuto.columns)\nscaled_df.head()\n\n\n\n\n\n\n\n\ncylinders\ndisplacement\nhorsepower\nweight\nacceleration\n\n\n\n\n0\n0.370463\n0.574266\n-0.089095\n0.426617\n-0.205840\n\n\n1\n1.564660\n1.118000\n0.685890\n1.410503\n-0.561901\n\n\n2\n-0.823735\n-0.522741\n-0.502421\n-0.763451\n-1.416449\n\n\n3\n-0.823735\n-0.952004\n-0.734916\n-0.988925\n-0.027809\n\n\n4\n1.564660\n1.432793\n1.460876\n0.820895\n-2.698270"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#between-predictor-correlation",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#between-predictor-correlation",
+    "title": "Data preprocessing",
+    "section": "Between-predictor correlation",
+    "text": "Between-predictor correlation\n\nCollinearity is the technical term for the situation where two predictors have a substantial correlation with each other.\n\nIf two or more predictors are highly correlated (either negatively or positively), then methods such as the linear regression model will not work!\n\nTo visualize the severity of collinearity between predictors, we calculate and visualize the correlation matrix."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#example-1-cont.-1",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#example-1-cont.-1",
+    "title": "Data preprocessing",
+    "section": "Example 1 (cont.)",
+    "text": "Example 1 (cont.)\n\nWe concentrate on the five numerical predictors in the complete_Auto dataset.\n\n# Select specific variables.\ncomplete_sbAuto = complete_Auto[['cylinders', 'displacement', \n                                 'horsepower', 'weight', \n                                 'acceleration']]"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#correlation-matrix",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#correlation-matrix",
+    "title": "Data preprocessing",
+    "section": "Correlation matrix",
+    "text": "Correlation matrix\n\nIn Python, we calculate the correlation matrix using the command below.\n\ncorrelation_matrix = complete_sbAuto.corr()\nprint(correlation_matrix)\n\n              cylinders  displacement  horsepower    weight  acceleration\ncylinders      1.000000      0.950823    0.842983  0.897527     -0.504683\ndisplacement   0.950823      1.000000    0.897257  0.932994     -0.543800\nhorsepower     0.842983      0.897257    1.000000  0.864538     -0.689196\nweight         0.897527      0.932994    0.864538  1.000000     -0.416839\nacceleration  -0.504683     -0.543800   -0.689196 -0.416839      1.000000"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-29",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#section-29",
+    "title": "Data preprocessing: Part I",
+    "section": "",
+    "text": "Next, we plot the correlation matrix using the function heatmap() from seaborn. The argument annot shows the actual value of the pair-wise correlations, and cmap shows a nice color theme.\n\nplt.figure(figsize=(3,3))\nsns.heatmap(correlation_matrix, cmap='coolwarm', annot = True)"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-30",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#section-30",
+    "title": "Data preprocessing: Part I",
+    "section": "",
+    "text": "The predictors cylinders and displacement are highly correlated. In fact, their correlation is 0.95."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#in-practice",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#in-practice",
+    "title": "Data preprocessing",
+    "section": "In practice",
+    "text": "In practice\n\nWe deal with collinearity by removing the minimum number of predictors to ensure that all pairwise correlations are below a certain threshold, say, 0.75.\n\nWe can identify the variables that are highly correlated using quite complex code. However, here we will do it manually using the correlation map.\n\n# Dataset without highly correlated predictors.\nreduced_auto = complete_sbAuto[ ['weight', 'acceleration']]"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#predictors-with-different-units",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#predictors-with-different-units",
+    "title": "Data preprocessing",
+    "section": "Predictors with different units",
+    "text": "Predictors with different units\nMany good predictive models have issues with numeric predictors with different units:\n\nMethods such as K-nearest neighbors are based on the distance between observations. If the predictors are on different units or scales, then some predictors will have a larger weight for computing the distance.\nOther methods such as LASSO use the variances of the predictors in their calculations. Predictors with different scales will have different variances and so, those with a higher variance will play a bigger role in the calculations."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-31",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#section-31",
+    "title": "Data preprocessing: Part I",
+    "section": "",
+    "text": "In a nutshell, some predictors will have a higher impact in the model due to its unit and not its information provided to it."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#standarization-1",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#standarization-1",
+    "title": "Data preprocessing",
+    "section": "Standarization",
+    "text": "Standarization\n\nStandardization refers to centering and scaling each numeric predictor individually. It puts every predictor on the same scale.\nTo center a predictor variable, the average predictor value is subtracted from all the values.\nTherefore, the centered predictor has a zero mean (that is, its average value is zero)."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-32",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#section-32",
+    "title": "Data preprocessing: Part I",
+    "section": "",
+    "text": "To scale a predictor, each of its value is divided by its standard deviation.\nScaling the data coerce the values to have a common standard deviation of one.\nIn mathematical terms, we standardize a predictor as:\n\\[{\\color{blue} \\tilde{X}_{i}} = \\frac{{ X_{i} - \\bar{X}}}{ \\sqrt{\\frac{1}{n -1} \\sum_{i=1}^{n} (X_{i} - \\bar{X})^2}},\\]\nwith \\(\\bar{X} = \\sum_{i=1}^n \\frac{x_i}{n}\\)."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#example-1-cont.-2",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#example-1-cont.-2",
+    "title": "Data preprocessing",
+    "section": "Example 1 (cont.)",
+    "text": "Example 1 (cont.)\nWe use on the five numerical predictors in the complete_sbAuto dataset.\n\ncomplete_sbAuto.head()\n\n\n\n\n\n\n\n\ncylinders\ndisplacement\nhorsepower\nweight\nacceleration\n\n\n\n\n46\n6\n250.0\n100\n3282\n15.0\n\n\n72\n8\n307.0\n130\n4098\n14.0\n\n\n389\n4\n135.0\n84\n2295\n11.6\n\n\n145\n4\n90.0\n75\n2108\n15.5\n\n\n11\n8\n340.0\n160\n3609\n8.0"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#two-predictors-in-original-units",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#two-predictors-in-original-units",
+    "title": "Data preprocessing",
+    "section": "Two predictors in original units",
+    "text": "Two predictors in original units\nConsider the complete_sbAuto dataset created previously. Consider two points in the plot: \\((175, 5140)\\) and \\((69, 1613)\\).\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe distance between these points is \\(\\sqrt{(69 - 175)^2 + (1613-5140)^2}\\) \\(= \\sqrt{11236 + 12439729}\\) \\(= 3528.592\\)."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#standarization-in-python",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#standarization-in-python",
+    "title": "Data preprocessing",
+    "section": "Standarization in Python",
+    "text": "Standarization in Python\n\nTo standardize numerical predictors, we use the function StandardScaler(). Moreover, we apply the function to the variables using the function fit_transform().\n\n\nscaler = StandardScaler()\nXs = scaler.fit_transform(complete_sbAuto)"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-33",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#section-33",
+    "title": "Data preprocessing: Part I",
+    "section": "",
+    "text": "Unfortunately, the resulting object is not a pandas data frame. We then convert this object to this format. \n\nscaled_df = pd.DataFrame(Xs, columns = complete_sbAuto.columns)\nscaled_df.head()\n\n\n\n\n\n\n\n\ncylinders\ndisplacement\nhorsepower\nweight\nacceleration\n\n\n\n\n0\n0.370463\n0.574266\n-0.089095\n0.426617\n-0.205840\n\n\n1\n1.564660\n1.118000\n0.685890\n1.410503\n-0.561901\n\n\n2\n-0.823735\n-0.522741\n-0.502421\n-0.763451\n-1.416449\n\n\n3\n-0.823735\n-0.952004\n-0.734916\n-0.988925\n-0.027809\n\n\n4\n1.564660\n1.432793\n1.460876\n0.820895\n-2.698270"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#two-predictors-in-standardized-units",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#two-predictors-in-standardized-units",
+    "title": "Data preprocessing",
+    "section": "Two predictors in standardized units",
+    "text": "Two predictors in standardized units\nIn the new scale, the two points are now: \\((1.82, 2.53)\\) and \\((-0.91, -1.60)\\).\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe distance between these points is \\(\\sqrt{(-0.91 - 1.82)^2 + (-1.60-2.53)^2}\\) \\(= \\sqrt{7.45 + 17.05} = 4.95\\)."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#discussion-1",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#discussion-1",
+    "title": "Data preprocessing: Part I",
+    "section": "Discussion",
+    "text": "Discussion\n\nStandardized predictors are generally used to improve the numerical stability of some calculations.\nIt is generally recommended to always standardize numeric predictors. Perhaps the only exception would be if we consider a linear regression model.\nA drawback of these transformations is the loss of interpretability since the data are no longer in the original units.\nStandardizing the predictors does not affect their correlation."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#selecting-data",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#selecting-data",
+    "title": "Data preprocessing",
+    "section": "Selecting data",
+    "text": "Selecting data\nFor illustrative purposes, we will use the predictors bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, and sex.\n\nWe create the predictor matrix.\n\n# Set full matrix of predictors.\nX_p = (penguins_data\n      .filter(['bill_length_mm', 'bill_depth_mm', \n           'flipper_length_mm', 'body_mass_g', 'sex']))"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#example-1-1",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#example-1-1",
+    "title": "Data preprocessing",
+    "section": "Example 1",
+    "text": "Example 1\nA market analyst is studying quality characteristics of cars. Specifically, the analyst is investigating the miles per gallon (mpg) of cars can be predicted using:\n\n\\(X_1:\\) cylinders. Number of cylinders between 4 and 8\n\\(X_2:\\) displacement. Engine displacement (cu. inches)\n\\(X_3:\\) horsepower. Engine horsepower\n\\(X_4:\\) weight. Vehicle weight (lbs.)\n\\(X_5:\\) acceleration. Time to accelerate from 0 to 60 mph (sec.)\n\\(X_6:\\) origin. Origin of car (American, European, Japanese)"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#predictor-datasets",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#predictor-datasets",
+    "title": "Data preprocessing",
+    "section": "Predictor datasets",
+    "text": "Predictor datasets\nFor illustrative purposes, we use the six predictors, \\(X_1, \\ldots, X_6\\). We create the predictor matrix.\n\n# Set full matrix of predictors.\nX_c = (auto_data\n      .filter(['cylinders', 'displacement', \n              'horsepower', 'weight', 'acceleration', 'origin']))\n# Preview first rows.\nX_c.head(3)\n\n\n\n\n\n\n\n\ncylinders\ndisplacement\nhorsepower\nweight\nacceleration\norigin\n\n\n\n\n0\n8\n307.0\n130\n3504\n12.0\nAmerican\n\n\n1\n8\n350.0\n165\n3693\n11.5\nAmerican\n\n\n2\n8\n318.0\n150\n3436\n11.0\nAmerican"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#example-2-cont.",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#example-2-cont.",
+    "title": "Data preprocessing",
+    "section": "Example 2 (cont.)",
+    "text": "Example 2 (cont.)\nCategorical predictor: Origin of a car. Three categories: American, European and Japanese.\nInitially, 3 dummy variables are required:\n\\[d_1 =\n\\begin{cases}\n1 \\text{ if observation is from an American car}\\\\\n0 \\text{ otherwise}\n\\end{cases}\\] \\[d_2 =\n\\begin{cases}\n1 \\text{ if observation is from an European car}\\\\\n0 \\text{ otherwise}\n\\end{cases}\\] \\[d_3 =\n\\begin{cases}\n1 \\text{ if observation is from a Japanese car}\\\\\n0 \\text{ otherwise}\n\\end{cases}\\]"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#example-2-cont.-1",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#example-2-cont.-1",
+    "title": "Data preprocessing",
+    "section": "Example 2 (cont.)",
+    "text": "Example 2 (cont.)\n\nWe concentrate on the five numerical predictors in the complete_Auto dataset.\n\n# Select specific variables.\ncomplete_sbAuto = complete_Auto[['cylinders', 'displacement', \n                                 'horsepower', 'weight', \n                                 'acceleration']]"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#predictor-data",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#predictor-data",
+    "title": "Data preprocessing",
+    "section": "Predictor data",
+    "text": "Predictor data\nFor illustrative purposes, we will use the predictors bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, and sex. We create the predictor matrix.\n\n# Set full matrix of predictors.\nX_p = (penguins_data\n      .filter(['bill_length_mm', 'bill_depth_mm', \n           'flipper_length_mm', 'body_mass_g', 'sex']))\n# Preview dataset.\nX_p.head(3)\n\n\n\n\n\n\n\n\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\n\n\n\n\n0\n39.1\n18.7\n181.0\n3750.0\nmale\n\n\n1\n39.5\n17.4\n186.0\n3800.0\nfemale\n\n\n2\n40.3\n18.0\n195.0\n3250.0\nfemale"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#predictor-data-1",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#predictor-data-1",
+    "title": "Data preprocessing",
+    "section": "Predictor data",
+    "text": "Predictor data\nFor illustrative purposes, we use the six predictors, \\(X_1, \\ldots, X_6\\). We create the predictor matrix.\n\n# Set full matrix of predictors.\nX_c = (auto_data\n      .filter(['cylinders', 'displacement', \n              'horsepower', 'weight', 'acceleration', 'origin']))\n# Preview first rows.\nX_c.head(3)\n\n\n\n\n\n\n\n\ncylinders\ndisplacement\nhorsepower\nweight\nacceleration\norigin\n\n\n\n\n0\n8\n307.0\n130\n3504\n12.0\nAmerican\n\n\n1\n8\n350.0\n165\n3693\n11.5\nAmerican\n\n\n2\n8\n318.0\n150\n3436\n11.0\nAmerican"
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#standarization",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#standarization",
+    "title": "Data preprocessing",
+    "section": "Standarization",
+    "text": "Standarization\n\nStandardization refers to centering and scaling each numeric predictor individually. It puts every predictor on the same scale.\nTo center a predictor variable, the average predictor value is subtracted from all the values.\nTherefore, the centered predictor has a zero mean (that is, its average value is zero)."
+  },
+  {
+    "objectID": "PreProcessing/PreProcessing_Part1.slides.html#example-2-cont.-2",
+    "href": "PreProcessing/PreProcessing_Part1.slides.html#example-2-cont.-2",
+    "title": "Data preprocessing",
+    "section": "Example 2 (cont.)",
+    "text": "Example 2 (cont.)\nWe use on the five numerical predictors in the complete_sbAuto dataset.\n\ncomplete_sbAuto.head()\n\n\n\n\n\n\n\n\ncylinders\ndisplacement\nhorsepower\nweight\nacceleration\n\n\n\n\n0\n8\n307.0\n130\n3504\n12.0\n\n\n1\n8\n350.0\n165\n3693\n11.5\n\n\n2\n8\n318.0\n150\n3436\n11.0\n\n\n3\n8\n304.0\n150\n3433\n12.0\n\n\n4\n8\n302.0\n140\n3449\n10.5"
   }
 ]
