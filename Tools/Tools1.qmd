@@ -24,6 +24,7 @@ jupyter: python3
 
 1.  Introduction to Python
 2.  Reading data with Python
+3.  Data manipulation with pandas
 
 # Introduction to Python
 
@@ -661,5 +662,293 @@ Using `loc`, we can also retrieve a subset from the dataset by selecting specifi
 sub_rows_pdata = penguins_data.loc[2:5, ['bill_length_mm',  'species', 'island'] ]
 sub_rows_pdata
 ```
+
+# Data manipulation with pandas
+
+## Chaining operations with pandas
+
+One of the most important techniques in **pandas** is [**chaining**]{style="color:brown;"}, which allows for cleaner and more readable data manipulation.
+
+The general structure of chaining looks like this:
+
+![](images/chaining_pandas.png){fig-align="center"}
+
+## Key pandas methods
+
+**pandas** provides methods or functions to solve common data manipulation tasks:
+
+::: incremental
+-   `.filter()` selects specific columns or rows.
+
+-   `.query()` filters observations based on conditions.
+
+-   `.assign()` adds new variables that are functions of existing variables.
+
+-   `.sort_values()` changes the order of rows.
+
+-   `.agg()` reduces multiple values to a single numerical summary.
+:::
+
+## 
+
+![](images/pandas_manipulation.png){fig-align="center"}
+
+To practice, we will use the dataset `penguins_data`.
+
+## Example 1
+
+Let's load the dataset and the **pandas** library.
+
+```{python}
+#| echo: true
+
+import pandas as pd
+
+# Load the Excel file into a pandas DataFrame.
+penguins_data = pd.read_excel("penguins.xlsx")
+
+# Preview the dataset.
+penguins_data.head(4)
+```
+
+## Selecting columns with `.filter()`
+
+Select the columns `species`, `body_mass_g` and `sex`.
+
+```{python}
+#| eval: true
+#| echo: true
+
+(penguins_data
+  .filter(["species", "body_mass_g", "sex"], axis = 1)
+).head()
+```
+
+## 
+
+</br>
+
+The `axis` argument tells `.filter()` whether to select rows (`0`) or columns (`1`) from the dataframe.
+
+```{python}
+#| output: false
+#| echo: true
+
+(penguins_data
+  .filter(["species", "body_mass_g", "sex"], axis = 1)
+).head()
+```
+
+</br>
+
+> The `.head()` command allows us to print the first six rows of the newly produced dataframe. We **must** remove it to have the entire new dataframe.
+
+## 
+
+</br>
+
+We can also use `.filter()` to select rows too. To this end, we set `axis = 1`. We can select specific rows, such as 0 and 10.
+
+```{python}
+#| output: true
+#| echo: true
+
+(penguins_data
+  .filter([0, 10], axis = 0)
+)
+```
+
+## 
+
+Or, we can select a set of rows using the function `range()`. For example, let's select the first 5 rows.
+
+```{python}
+#| output: true
+#| echo: true
+
+(penguins_data
+  .filter(range(5), axis = 0)
+)
+```
+
+## Filtering rows with `.query()`
+
+</br>
+
+An alternative way of selecting rows is `.query()`. Compared to `.filter()`, `.query()` allows us to filter the data using statements or *queries* involving the variables.
+
+</br>
+
+For example, let's filter the data for the species "Gentoo."
+
+```{python}
+#| output: false
+#| echo: true
+
+(penguins_data
+  .query("species == 'Gentoo'")
+)
+```
+
+## 
+
+</br>
+
+```{python}
+#| output: true
+#| echo: true
+
+(penguins_data
+  .query("species == 'Gentoo'")
+).head()
+```
+
+## 
+
+We can also filter the data to get penguins with a body mass greater than 5000g.
+
+```{python}
+#| eval: true
+#| echo: true
+
+(penguins_data
+  .query("body_mass_g > 5000")
+).head()
+```
+
+## 
+
+We can even **combine** `.filter()` and `.query()`. For example, let's select the columns `species`, `body_mass_g` and `sex`, then filter the data for the "Gentoo" species.
+
+```{python}
+#| eval: true
+#| echo: true
+
+(penguins_data
+  .filter(["species", "body_mass_g", "sex"], axis = 1)
+  .query("species == 'Gentoo'")
+).head(4)
+```
+
+## Create new columns with `.assign()`
+
+</br>
+
+With `.assign()`, we can create new columns (variables) that are functions of existing ones. This function uses a special Python keyword called `lambda`. Technically, this keyword defines an *anonymous* function.
+
+</br>
+
+For example, we create a new variable `LDRatio` equaling the ratio of `bill_length_mm` and `bill_depth_mm`.
+
+```{python}
+#| output: false
+#| echo: true
+
+(penguins_data
+  .assign(LDRatio = lambda df: df["bill_length_mm"] / df["bill_depth_mm"])
+)
+```
+
+## 
+
+</br></br>
+
+In this code, the `df` after `lambda` indicates that the dataframe (`penguins_data`) will be referred to as `df` inside the function. The colon `:` sets the start of the function.
+
+```{python}
+#| output: false
+#| echo: true
+
+(penguins_data
+  .assign(LDRatio = lambda df: df["bill_length_mm"] / df["bill_depth_mm"])
+)
+```
+
+The code appends the new variable to the end of the resulting dataframe.
+
+## 
+
+We can see the new variable using `.filter()`.
+
+```{python}
+#| output: true
+#| echo: true
+
+(penguins_data
+  .assign(LDRatio = lambda df: df["bill_length_mm"] / df["bill_depth_mm"])
+  .filter(["bill_length_mm", "bill_depth_mm", "LDRatio"], axis = 1)
+).head()
+```
+
+## Sorting with `.sort_values()`
+
+We can sort the data based on a column like `bill_length_mm`.
+
+```{python}
+#| eval: true
+#| echo: true
+
+(penguins_data
+  .sort_values("bill_length_mm")
+).head(4)
+```
+
+## 
+
+To sort in descending order, use `ascending=False` inside `sort_values()`.
+
+```{python}
+#| eval: true
+#| echo: true
+
+(penguins_data
+  .sort_values("bill_length_mm", ascending=False)
+).head()
+```
+
+## Summarizing with `.agg()`
+
+We can calculate summary statistics of the columns `bill_length_mm`, `bill_depth_mm`, and `body_mass_g`.
+
+```{python}
+#| eval: true
+#| echo: true
+
+(penguins_data
+  .filter(["bill_length_mm", "bill_depth_mm", "body_mass_g"], axis = 1)
+  .agg(["mean"])
+)
+```
+
+</br>
+
+> By default, `agg()` ignores missing values.
+
+## Saving results in new objects
+
+</br>
+
+After performing operations on our data, we can save the modified dataset as a new object.
+
+```{python}
+#| eval: true
+#| echo: true
+
+mean_penguins_data = (penguins_data
+  .filter(["bill_length_mm", "bill_depth_mm", "body_mass_g"], axis = 1)
+  .agg(["mean"])
+)
+
+mean_penguins_data
+```
+
+## More on pandas
+
+![](images/python_book.jpg){fig-align="center"}
+
+::: {style="font-size: 50%;"}
+<https://wesmckinney.com/book/>
+:::
+
 
 # [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

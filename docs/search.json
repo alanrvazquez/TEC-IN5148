@@ -2786,7 +2786,7 @@
     "href": "Tools/Tools1.slides.html#agenda",
     "title": "Introduction to Python and Pandas",
     "section": "Agenda",
-    "text": "Agenda\n\n\nIntroduction to Python\nReading data with Python"
+    "text": "Agenda\n\n\nIntroduction to Python\nReading data with Python\nData manipulation with pandas"
   },
   {
     "objectID": "Tools/Tools1.slides.html#python",
@@ -2842,7 +2842,7 @@
     "href": "Tools/Tools1.slides.html#python-is-strict",
     "title": "Introduction to Python and Pandas",
     "section": "Python is strict",
-    "text": "Python is strict\nPython, like all programming languages, is very strict. For example, if you write\n\nsum([1, 100])\n\n101\n\n\nit will tell you the answer, 101.\n\nBut if you write\n\nSum([1, 100])\n\n\n---------------------------------------------------------------------------\nNameError                                 Traceback (most recent call last)\nCell In[161], line 1\n----&gt; 1 Sum([1, 100])\n\nNameError: name 'Sum' is not defined\n\n\n\nwith the “s” capitalized, he will act like he has no idea what we are talking about!\n\nlo mismo si olvidas incluir un parentesis"
+    "text": "Python is strict\nPython, like all programming languages, is very strict. For example, if you write\n\nsum([1, 100])\n\n101\n\n\nit will tell you the answer, 101.\n\nBut if you write\n\nSum([1, 100])\n\n\n---------------------------------------------------------------------------\nNameError                                 Traceback (most recent call last)\nCell In[11], line 1\n----&gt; 1 Sum([1, 100])\n\nNameError: name 'Sum' is not defined\n\n\n\nwith the “s” capitalized, he will act like he has no idea what we are talking about!\n\nlo mismo si olvidas incluir un parentesis"
   },
   {
     "objectID": "Tools/Tools1.slides.html#save-your-work-in-python-objects",
@@ -4396,14 +4396,14 @@
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-4",
     "title": "Data preprocessing: Part I",
     "section": "",
-    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n354\n0.04301\n80.0\n1.91\nNo\n0.413\n5.663\n21.9\n10.5857\nMedium\n334\n22.0\n8.05\n18.2\n\n\n356\n8.98296\n0.0\n18.10\nYes\n0.770\n6.212\n97.4\n2.1222\nHigh\n666\n20.2\n17.60\n17.8\n\n\n277\n0.06127\n40.0\n6.41\nYes\n0.447\n6.826\n27.6\n4.8628\nMedium\n254\n17.6\n4.16\n33.1\n\n\n187\n0.07875\n45.0\n3.44\nNo\n0.437\n6.782\n41.1\n3.7886\nMedium\n398\n15.2\n6.68\n32.0"
+    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n428\n7.36711\n0.0\n18.10\nNo\n0.679\n6.193\n78.1\n1.9356\nHigh\n666\n20.2\n21.52\n11.0\n\n\n170\n1.20742\n0.0\n19.58\nNo\n0.605\n5.875\n94.6\n2.4259\nMedium\n403\n14.7\n14.43\n17.4\n\n\n206\n0.22969\n0.0\n10.59\nNo\n0.489\n6.326\n52.5\n4.3549\nMedium\n277\n18.6\n10.97\n24.4\n\n\n41\n0.12744\n0.0\n6.91\nNo\n0.448\n6.770\n2.9\n5.7209\nLow\n233\n17.9\n4.84\n26.6"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#section-5",
     "href": "PreProcessing/PreProcessing_Part1.slides.html#section-5",
     "title": "Data preprocessing: Part I",
     "section": "",
-    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n189\n0.08370\n45.0\n3.44\nNo\n0.437\n7.185\n38.9\n4.5667\nMedium\n398\n15.2\n5.39\n34.9\n\n\n28\n0.77299\n0.0\n8.14\nNo\n0.538\n6.495\n94.4\n4.4547\nMedium\n307\n21.0\n12.80\n18.4\n\n\n71\n0.15876\n0.0\n10.81\nNo\n0.413\n5.961\n17.5\n5.2873\nMedium\n305\n19.2\n9.88\n21.7\n\n\n72\n0.09164\n0.0\n10.81\nNo\n0.413\n6.065\n7.8\n5.2873\nMedium\n305\n19.2\n5.52\n22.8\n\n\n150\n1.65660\n0.0\n19.58\nNo\n0.871\n6.122\n97.3\n1.6180\nMedium\n403\n14.7\n14.10\n21.5"
+    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n358\n5.20177\n0.0\n18.10\nYes\n0.770\n6.127\n83.4\n2.7227\nHigh\n666\n20.2\n11.48\n22.7\n\n\n387\n22.59710\n0.0\n18.10\nNo\n0.700\n5.000\n89.5\n1.5184\nHigh\n666\n20.2\n31.99\n7.4\n\n\n297\n0.14103\n0.0\n13.92\nNo\n0.437\n5.790\n58.0\n6.3200\nMedium\n289\n16.0\n15.84\n20.3\n\n\n161\n1.46336\n0.0\n19.58\nNo\n0.605\n7.489\n90.8\n1.9709\nMedium\n403\n14.7\n1.73\n50.0\n\n\n503\n0.06076\n0.0\n11.93\nNo\n0.573\n6.976\n91.0\n2.1675\nLow\n273\n21.0\n5.64\n23.9"
   },
   {
     "objectID": "PreProcessing/PreProcessing_Part1.slides.html#work-on-your-training-dataset",
@@ -4600,5 +4600,145 @@
     "title": "Data preprocessing: Part I",
     "section": "",
     "text": "Let’s look at the new dataset.\n\nX_train_num_p.info()\n\n&lt;class 'pandas.core.frame.DataFrame'&gt;\nRangeIndex: 240 entries, 0 to 239\nData columns (total 4 columns):\n #   Column             Non-Null Count  Dtype  \n---  ------             --------------  -----  \n 0   bill_length_mm     240 non-null    float64\n 1   bill_depth_mm      240 non-null    float64\n 2   flipper_length_mm  240 non-null    float64\n 3   body_mass_g        240 non-null    float64\ndtypes: float64(4)\nmemory usage: 7.6 KB\n\n\nAll predictors have 240 complete entries."
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#chaining-operations-with-pandas",
+    "href": "Tools/Tools1.slides.html#chaining-operations-with-pandas",
+    "title": "Introduction to Python and Pandas",
+    "section": "Chaining operations with pandas",
+    "text": "Chaining operations with pandas\nOne of the most important techniques in pandas is chaining, which allows for cleaner and more readable data manipulation.\nThe general structure of chaining looks like this:"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#key-pandas-methods",
+    "href": "Tools/Tools1.slides.html#key-pandas-methods",
+    "title": "Introduction to Python and Pandas",
+    "section": "Key pandas methods",
+    "text": "Key pandas methods\npandas provides methods or functions to solve common data manipulation tasks:\n\n.filter() selects specific columns or rows.\n.query() filters observations based on conditions.\n.assign() adds new variables that are functions of existing variables.\n.sort_values() changes the order of rows.\n.agg() reduces multiple values to a single numerical summary."
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#section-5",
+    "href": "Tools/Tools1.slides.html#section-5",
+    "title": "Introduction to Python and Pandas",
+    "section": "",
+    "text": "To practice, we will use the dataset penguins_data."
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#example-1",
+    "href": "Tools/Tools1.slides.html#example-1",
+    "title": "Introduction to Python and Pandas",
+    "section": "Example 1",
+    "text": "Example 1\nLet’s load the dataset and the pandas library.\n\nimport pandas as pd\n\n# Load the Excel file into a pandas DataFrame.\npenguins_data = pd.read_excel(\"penguins.xlsx\")\n\n# Preview the dataset.\npenguins_data.head(4)\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n0\nAdelie\nTorgersen\n39.1\n18.7\n181.0\n3750.0\nmale\n2007\n\n\n1\nAdelie\nTorgersen\n39.5\n17.4\n186.0\n3800.0\nfemale\n2007\n\n\n2\nAdelie\nTorgersen\n40.3\n18.0\n195.0\n3250.0\nfemale\n2007\n\n\n3\nAdelie\nTorgersen\nNaN\nNaN\nNaN\nNaN\nNaN\n2007"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#selecting-columns-with-.filter",
+    "href": "Tools/Tools1.slides.html#selecting-columns-with-.filter",
+    "title": "Introduction to Python and Pandas",
+    "section": "Selecting columns with .filter()",
+    "text": "Selecting columns with .filter()\nSelect the columns species, body_mass_g and sex.\n\n(penguins_data\n  .filter([\"species\", \"body_mass_g\", \"sex\"], axis = 1)\n).head()\n\n\n\n\n\n\n\n\nspecies\nbody_mass_g\nsex\n\n\n\n\n0\nAdelie\n3750.0\nmale\n\n\n1\nAdelie\n3800.0\nfemale\n\n\n2\nAdelie\n3250.0\nfemale\n\n\n3\nAdelie\nNaN\nNaN\n\n\n4\nAdelie\n3450.0\nfemale"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#section-6",
+    "href": "Tools/Tools1.slides.html#section-6",
+    "title": "Introduction to Python and Pandas",
+    "section": "",
+    "text": "The axis argument tells .filter() whether to select rows (0) or columns (1) from the dataframe.\n\n(penguins_data\n  .filter([\"species\", \"body_mass_g\", \"sex\"], axis = 1)\n).head()\n\n\n\nThe .head() command allows us to print the first six rows of the newly produced dataframe. We must remove it to have the entire new dataframe."
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#section-7",
+    "href": "Tools/Tools1.slides.html#section-7",
+    "title": "Introduction to Python and Pandas",
+    "section": "",
+    "text": "We can also use .filter() to select rows too. To this end, we set axis = 1. We can select specific rows, such as 0 and 10.\n\n(penguins_data\n  .filter([0, 10], axis = 0)\n)\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n0\nAdelie\nTorgersen\n39.1\n18.7\n181.0\n3750.0\nmale\n2007\n\n\n10\nAdelie\nTorgersen\n37.8\n17.1\n186.0\n3300.0\nNaN\n2007"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#section-8",
+    "href": "Tools/Tools1.slides.html#section-8",
+    "title": "Introduction to Python and Pandas",
+    "section": "",
+    "text": "Or, we can select a set of rows using the function range(). For example, let’s select the first 5 rows.\n\n(penguins_data\n  .filter(range(5), axis = 0)\n)\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n0\nAdelie\nTorgersen\n39.1\n18.7\n181.0\n3750.0\nmale\n2007\n\n\n1\nAdelie\nTorgersen\n39.5\n17.4\n186.0\n3800.0\nfemale\n2007\n\n\n2\nAdelie\nTorgersen\n40.3\n18.0\n195.0\n3250.0\nfemale\n2007\n\n\n3\nAdelie\nTorgersen\nNaN\nNaN\nNaN\nNaN\nNaN\n2007\n\n\n4\nAdelie\nTorgersen\n36.7\n19.3\n193.0\n3450.0\nfemale\n2007"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#filtering-rows-with-.query",
+    "href": "Tools/Tools1.slides.html#filtering-rows-with-.query",
+    "title": "Introduction to Python and Pandas",
+    "section": "Filtering rows with .query()",
+    "text": "Filtering rows with .query()\n\nAn alternative way of selecting rows is .query(). Compared to .filter(), .query() allows us to filter the data using statements or queries involving the variables.\n\nFor example, let’s filter the data for the species “Gentoo.”\n\n(penguins_data\n  .query(\"species == 'Gentoo'\")\n)"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#section-9",
+    "href": "Tools/Tools1.slides.html#section-9",
+    "title": "Introduction to Python and Pandas",
+    "section": "",
+    "text": "(penguins_data\n  .query(\"species == 'Gentoo'\")\n).head()\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n152\nGentoo\nBiscoe\n46.1\n13.2\n211.0\n4500.0\nfemale\n2007\n\n\n153\nGentoo\nBiscoe\n50.0\n16.3\n230.0\n5700.0\nmale\n2007\n\n\n154\nGentoo\nBiscoe\n48.7\n14.1\n210.0\n4450.0\nfemale\n2007\n\n\n155\nGentoo\nBiscoe\n50.0\n15.2\n218.0\n5700.0\nmale\n2007\n\n\n156\nGentoo\nBiscoe\n47.6\n14.5\n215.0\n5400.0\nmale\n2007"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#section-10",
+    "href": "Tools/Tools1.slides.html#section-10",
+    "title": "Introduction to Python and Pandas",
+    "section": "",
+    "text": "We can also filter the data to get penguins with a body mass greater than 5000g.\n\n(penguins_data\n  .query(\"body_mass_g &gt; 5000\")\n).head()\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n153\nGentoo\nBiscoe\n50.0\n16.3\n230.0\n5700.0\nmale\n2007\n\n\n155\nGentoo\nBiscoe\n50.0\n15.2\n218.0\n5700.0\nmale\n2007\n\n\n156\nGentoo\nBiscoe\n47.6\n14.5\n215.0\n5400.0\nmale\n2007\n\n\n159\nGentoo\nBiscoe\n46.7\n15.3\n219.0\n5200.0\nmale\n2007\n\n\n161\nGentoo\nBiscoe\n46.8\n15.4\n215.0\n5150.0\nmale\n2007"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#section-11",
+    "href": "Tools/Tools1.slides.html#section-11",
+    "title": "Introduction to Python and Pandas",
+    "section": "",
+    "text": "We can even combine .filter() and .query(). For example, let’s select the columns species, body_mass_g and sex, then filter the data for the “Gentoo” species.\n\n(penguins_data\n  .filter([\"species\", \"body_mass_g\", \"sex\"], axis = 1)\n  .query(\"species == 'Gentoo'\")\n).head(4)\n\n\n\n\n\n\n\n\nspecies\nbody_mass_g\nsex\n\n\n\n\n152\nGentoo\n4500.0\nfemale\n\n\n153\nGentoo\n5700.0\nmale\n\n\n154\nGentoo\n4450.0\nfemale\n\n\n155\nGentoo\n5700.0\nmale"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#create-new-columns-with-.assign",
+    "href": "Tools/Tools1.slides.html#create-new-columns-with-.assign",
+    "title": "Introduction to Python and Pandas",
+    "section": "Create new columns with .assign()",
+    "text": "Create new columns with .assign()\n\nWith .assign(), we can create new columns (variables) that are functions of existing ones. This function uses a special Python keyword called lambda. Technically, this keyword defines an anonymous function.\n\nFor example, we create a new variable LDRatio equaling the ratio of bill_length_mm and bill_depth_mm.\n\n(penguins_data\n  .assign(LDRatio = lambda df: df[\"bill_length_mm\"] / df[\"bill_depth_mm\"])\n)"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#section-12",
+    "href": "Tools/Tools1.slides.html#section-12",
+    "title": "Introduction to Python and Pandas",
+    "section": "",
+    "text": "In this code, the df after lambda indicates that the dataframe (penguins_data) will be referred to as df inside the function. The colon : sets the start of the function.\n\n(penguins_data\n  .assign(LDRatio = lambda df: df[\"bill_length_mm\"] / df[\"bill_depth_mm\"])\n)\n\nThe code appends the new variable to the end of the resulting dataframe."
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#section-13",
+    "href": "Tools/Tools1.slides.html#section-13",
+    "title": "Introduction to Python and Pandas",
+    "section": "",
+    "text": "We can see the new variable using .filter().\n\n(penguins_data\n  .assign(LDRatio = lambda df: df[\"bill_length_mm\"] / df[\"bill_depth_mm\"])\n  .filter([\"bill_length_mm\", \"bill_depth_mm\", \"LDRatio\"], axis = 1)\n).head()\n\n\n\n\n\n\n\n\nbill_length_mm\nbill_depth_mm\nLDRatio\n\n\n\n\n0\n39.1\n18.7\n2.090909\n\n\n1\n39.5\n17.4\n2.270115\n\n\n2\n40.3\n18.0\n2.238889\n\n\n3\nNaN\nNaN\nNaN\n\n\n4\n36.7\n19.3\n1.901554"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#sorting-with-.sort_values",
+    "href": "Tools/Tools1.slides.html#sorting-with-.sort_values",
+    "title": "Introduction to Python and Pandas",
+    "section": "Sorting with .sort_values()",
+    "text": "Sorting with .sort_values()\nWe can sort the data based on a column like bill_length_mm.\n\n(penguins_data\n  .sort_values(\"bill_length_mm\")\n).head(4)\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n142\nAdelie\nDream\n32.1\n15.5\n188.0\n3050.0\nfemale\n2009\n\n\n98\nAdelie\nDream\n33.1\n16.1\n178.0\n2900.0\nfemale\n2008\n\n\n70\nAdelie\nTorgersen\n33.5\n19.0\n190.0\n3600.0\nfemale\n2008\n\n\n92\nAdelie\nDream\n34.0\n17.1\n185.0\n3400.0\nfemale\n2008"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#section-14",
+    "href": "Tools/Tools1.slides.html#section-14",
+    "title": "Introduction to Python and Pandas",
+    "section": "",
+    "text": "To sort in descending order, use ascending=False inside sort_values().\n\n(penguins_data\n  .sort_values(\"bill_length_mm\", ascending=False)\n).head()\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n185\nGentoo\nBiscoe\n59.6\n17.0\n230.0\n6050.0\nmale\n2007\n\n\n293\nChinstrap\nDream\n58.0\n17.8\n181.0\n3700.0\nfemale\n2007\n\n\n253\nGentoo\nBiscoe\n55.9\n17.0\n228.0\n5600.0\nmale\n2009\n\n\n339\nChinstrap\nDream\n55.8\n19.8\n207.0\n4000.0\nmale\n2009\n\n\n267\nGentoo\nBiscoe\n55.1\n16.0\n230.0\n5850.0\nmale\n2009"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#summarizing-with-.agg",
+    "href": "Tools/Tools1.slides.html#summarizing-with-.agg",
+    "title": "Introduction to Python and Pandas",
+    "section": "Summarizing with .agg()",
+    "text": "Summarizing with .agg()\nWe can calculate summary statistics of the columns bill_length_mm, bill_depth_mm, and body_mass_g.\n\n(penguins_data\n  .filter([\"bill_length_mm\", \"bill_depth_mm\", \"body_mass_g\"], axis = 1)\n  .agg([\"mean\"])\n)\n\n\n\n\n\n\n\n\nbill_length_mm\nbill_depth_mm\nbody_mass_g\n\n\n\n\nmean\n43.92193\n17.15117\n4201.754386\n\n\n\n\n\n\n\n\n\nBy default, agg() ignores missing values."
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#saving-results-in-new-objects",
+    "href": "Tools/Tools1.slides.html#saving-results-in-new-objects",
+    "title": "Introduction to Python and Pandas",
+    "section": "Saving results in new objects",
+    "text": "Saving results in new objects\n\nAfter performing operations on our data, we can save the modified dataset as a new object.\n\nmean_penguins_data = (penguins_data\n  .filter([\"bill_length_mm\", \"bill_depth_mm\", \"body_mass_g\"], axis = 1)\n  .agg([\"mean\"])\n)\n\nmean_penguins_data\n\n\n\n\n\n\n\n\nbill_length_mm\nbill_depth_mm\nbody_mass_g\n\n\n\n\nmean\n43.92193\n17.15117\n4201.754386"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#more-on-pandas",
+    "href": "Tools/Tools1.slides.html#more-on-pandas",
+    "title": "Introduction to Python and Pandas",
+    "section": "More on pandas",
+    "text": "More on pandas\n\n\nhttps://wesmckinney.com/book/"
   }
 ]

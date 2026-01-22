@@ -13,8 +13,7 @@ author:
 
 1.  Introduction to Data Science ([slides](/IntroductionDS/Introduction.slides.html))
 2.  Introduction to Python and Pandas ([slides](/Tools/Tools1.slides.html)) ([colab](https://colab.research.google.com/drive/1ZVHxntozaf-EfpkmWY-eQffP0YnvDYCz?usp=sharing))
-3.  Data Manipulation and Wrangling ([slides](/Tools/Tools2.slides.html)) ([colab](https://colab.research.google.com/drive/1OaMc_Lv2HTTWy5QBTy7DALupUkr6sq--?usp=sharing))
-4.  Data Types and Visualization ([slides](/Tools/Tools3.slides.html)) ([colab](https://colab.research.google.com/drive/13x9jhRrD7gPZWbWeK4aoxbbNebauCr4p?usp=sharing))
+3.  Data Types and Visualization ([slides](/Tools/Tools3.slides.html)) ([colab](https://colab.research.google.com/drive/13x9jhRrD7gPZWbWeK4aoxbbNebauCr4p?usp=sharing))
 
 ### B. Data Preprocessing 
 
