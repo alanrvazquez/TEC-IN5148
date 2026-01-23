@@ -260,7 +260,7 @@ The predictors ($\boldsymbol{X}$) can be qualitative or quantitative.
 
 </br></br>
 
-What factors explain the presence of Type II diabetes on a person?
+What variables predict the presence of Type II diabetes on a person?
 
 -   $Y$ is a 1 if a person has Type II diabetes, a 0 if not.
 
