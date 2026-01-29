@@ -14,7 +14,7 @@ author:
 1.  Introduction to Data Science ([slides](/IntroductionDS/Introduction.slides.html))
 2.  Introduction to Python and Pandas ([slides](/Tools/Tools1.slides.html)) ([colab](https://colab.research.google.com/drive/1ZVHxntozaf-EfpkmWY-eQffP0YnvDYCz?usp=sharing))
 3.  Data Types and Visualization ([slides](/Tools/Tools3.slides.html)) ([colab](https://colab.research.google.com/drive/13x9jhRrD7gPZWbWeK4aoxbbNebauCr4p?usp=sharing))
-4. Preprocessing ([slides](/PreProcessing/PreProcessing.slides.html)) ([colab](https://colab.research.google.com/drive/1B_-6JX5XXwer3Jt-D6qPFW5W_wWdRYiW?usp=sharing))
+4.  Preprocessing ([slides](/PreProcessing/PreProcessing.slides.html)) ([colab](https://colab.research.google.com/drive/1B_-6JX5XXwer3Jt-D6qPFW5W_wWdRYiW?usp=sharing))
 
 ### B. Unsupervised Learning
 
@@ -23,7 +23,7 @@ author:
 
 ### C. Supervised Learning for Regression
 
-1. Supervised Learning and Linear Regression ([slides](/LinearRegression/Intro_and_LinearRegression.slides.html)) ([colab](https://colab.research.google.com/drive/1VnU6PtxQIb6A0AmD79n-BmS8T3xBu5iV?usp=sharing))  ([colab](https://colab.research.google.com/drive/1RnI9499Tzn3B8qihdsUKgeUQPH1ns2v3?usp=sharing))
+1.  Supervised Learning and Linear Regression ([slides](/LinearRegression/Intro_and_LinearRegression.slides.html)) ([colab](https://colab.research.google.com/drive/1VnU6PtxQIb6A0AmD79n-BmS8T3xBu5iV?usp=sharing)) ([colab](https://colab.research.google.com/drive/1RnI9499Tzn3B8qihdsUKgeUQPH1ns2v3?usp=sharing))
 2.  Model Inference and Evaluation ([slides](/ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html)) ([colab](https://colab.research.google.com/drive/14s_BBjptHmEpg_zk3Vl_wAUTpDD0RrYJ?usp=sharing))
 3.  Additional Topics ([slides](/AdditionalTopics/AdditionalTopics.slides.html)) ([colab](https://colab.research.google.com/drive/1KxT0uWXH6E-8RTsw1-KXlAvt-rUXkPcr?usp=sharing))
 
@@ -38,4 +38,4 @@ Alan R. Vazquez ([website](https://alanrvazquez.netlify.app/)) is an assistant p
 
 ### License
 
-<a href="https://alanrvazquez.github.io/TEC-IN5148/">IN5148: Statistics and Data Science with Applications in Engineering</a> © 2026 by <a href="https://alanrvazquez.netlify.app/">Alan R. Vazquez</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+<a href="https://alanrvazquez.github.io/TEC-IN5148/">IN5148: Statistics and Data Science with Applications in Engineering</a> © 2026 by <a href="https://alanrvazquez.netlify.app/">Alan R. Vazquez</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" style="max-width: 1em;max-height:1em;margin-left: .2em;"/><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" style="max-width: 1em;max-height:1em;margin-left: .2em;"/><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" style="max-width: 1em;max-height:1em;margin-left: .2em;"/><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" style="max-width: 1em;max-height:1em;margin-left: .2em;"/>
