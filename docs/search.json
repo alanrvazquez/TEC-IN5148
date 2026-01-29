@@ -3227,7 +3227,7 @@
     "href": "Tools/Tools1.slides.html#python-is-strict",
     "title": "Introduction to Python and Pandas",
     "section": "Python is strict",
-    "text": "Python is strict\nPython, like all programming languages, is very strict. For example, if you write\n\nsum([1, 100])\n\n101\n\n\nit will tell you the answer, 101.\n\nBut if you write\n\nSum([1, 100])\n\n\n---------------------------------------------------------------------------\nNameError                                 Traceback (most recent call last)\nCell In[11], line 1\n----&gt; 1 Sum([1, 100])\n\nNameError: name 'Sum' is not defined\n\n\n\nwith the “s” capitalized, he will act like he has no idea what we are talking about!\n\nlo mismo si olvidas incluir un parentesis"
+    "text": "Python is strict\nPython, like all programming languages, is very strict. For example, if you write\n\nsum([1, 100])\n\n101\n\n\nit will tell you the answer, 101.\n\nBut if you write\n\nSum([1, 100])\n\n\n---------------------------------------------------------------------------\nNameError                                 Traceback (most recent call last)\nCell In[57], line 1\n----&gt; 1 Sum([1, 100])\n\nNameError: name 'Sum' is not defined\n\n\n\nwith the “s” capitalized, he will act like he has no idea what we are talking about!\n\nlo mismo si olvidas incluir un parentesis"
   },
   {
     "objectID": "Tools/Tools1.slides.html#save-your-work-in-python-objects",
@@ -6175,5 +6175,19 @@
     "title": "Train, Test, and Validation Datasets",
     "section": "Return to main page",
     "text": "Return to main page"
+  },
+  {
+    "objectID": "Tools/Tools2.slides.html#example",
+    "href": "Tools/Tools2.slides.html#example",
+    "title": "Data Manipulation and Wrangling",
+    "section": "Example",
+    "text": "Example\nLet’s load the dataset and the pandas library.\n\nimport pandas as pd\n\n# Load the Excel file into a pandas DataFrame.\npenguins_data = pd.read_excel(\"penguins.xlsx\")\n\n# Preview the dataset.\npenguins_data.head(4)\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n0\nAdelie\nTorgersen\n39.1\n18.7\n181.0\n3750.0\nmale\n2007\n\n\n1\nAdelie\nTorgersen\n39.5\n17.4\n186.0\n3800.0\nfemale\n2007\n\n\n2\nAdelie\nTorgersen\n40.3\n18.0\n195.0\n3250.0\nfemale\n2007\n\n\n3\nAdelie\nTorgersen\nNaN\nNaN\nNaN\nNaN\nNaN\n2007"
+  },
+  {
+    "objectID": "Tools/Tools1.slides.html#example",
+    "href": "Tools/Tools1.slides.html#example",
+    "title": "Introduction to Python and Pandas",
+    "section": "Example",
+    "text": "Example\nLet’s load the dataset and the pandas library.\n\nimport pandas as pd\n\n# Load the Excel file into a pandas DataFrame.\npenguins_data = pd.read_excel(\"penguins.xlsx\")\n\n# Preview the dataset.\npenguins_data.head(4)\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n0\nAdelie\nTorgersen\n39.1\n18.7\n181.0\n3750.0\nmale\n2007\n\n\n1\nAdelie\nTorgersen\n39.5\n17.4\n186.0\n3800.0\nfemale\n2007\n\n\n2\nAdelie\nTorgersen\n40.3\n18.0\n195.0\n3250.0\nfemale\n2007\n\n\n3\nAdelie\nTorgersen\nNaN\nNaN\nNaN\nNaN\nNaN\n2007"
   }
 ]

@@ -695,7 +695,7 @@ The general structure of chaining looks like this:
 
 To practice, we will use the dataset `penguins_data`.
 
-## Example 1
+## Example
 
 Let's load the dataset and the **pandas** library.
 
@@ -949,6 +949,5 @@ mean_penguins_data
 ::: {style="font-size: 50%;"}
 <https://wesmckinney.com/book/>
 :::
-
 
 # [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)
