@@ -38,11 +38,10 @@ Before we start, let's import the data science libraries into Python.
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error, root_mean_squared_error
+from sklearn.metrics import r2_score
 ```
 
 Here, we use specific functions from the **pandas**, **matplotlib**, **seaborn** and **sklearn** libraries in Python.
@@ -167,7 +166,7 @@ $$\hat{Y}_i = \hat{f}(\boldsymbol{X}_i) = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} +
 
 -   Where $i = 1, \ldots, n_t$ is the index of the $n_t$ training data.
 
--   $\hat{Y}_i$ is the prediction of the actual value of the response $Y_i$ associated with  values of $p$ predictors denoted by $\boldsymbol{X}_i = (X_{i1}, \ldots, X_{ip})$.
+-   $\hat{Y}_i$ is the prediction of the actual value of the response $Y_i$ associated with values of $p$ predictors denoted by $\boldsymbol{X}_i = (X_{i1}, \ldots, X_{ip})$.
 
 -   The values $\hat{\beta}_0$, $\hat{\beta}_1$, ..., $\hat{\beta}_p$ are the [*coefficients*]{style="color:lightblue;"} of the model.
 
@@ -295,7 +294,6 @@ The estimated model thus is
 
 $$\hat{Y}_i = 6.69 + 0.051 X_i.$$
 
-
 ## Prediction error
 
 After estimating and validating the linear regression model, we can check the quality of its predictions on [**unobserved**]{style="color:darkred;"} data. That is, on the data in the validation set.
@@ -347,7 +345,7 @@ Y_pred = LRmodel.predict(X_valid)
 
 </br>
 
-To evaluate the model, we use the *mean squared error* in the Python `mse()` function. Recall that the responses from the validation dataset are in `Y_valid`, and the model predictions are in `Y_pred`.
+To evaluate the model, we use the function `mean_squared_error()` from **scikit-learn**. Recall that the responses from the validation dataset are in `Y_valid`, and the model predictions are in `Y_pred`.
 
 ```{python}
 #| echo: true
@@ -361,7 +359,7 @@ print(round(mse, 2))
 
 </br>
 
-To obtain the **root mean squared error (RMSE)**, we simply take the square root of the MSE.
+To obtain the **root mean squared error (RMSE)**, we use `root_mean_squared_error()` instead.
 
 ```{python}
 #| echo: true
@@ -369,7 +367,8 @@ To obtain the **root mean squared error (RMSE)**, we simply take the square root
 #| fig-align: center
 #| code-fold: false
 
-print(round(mse**(1/2), 2))
+rmse = root_mean_squared_error(Y_valid, Y_pred)
+print(round(rmse, 2))
 ```
 
 ## Another Metric: $R^2$
@@ -406,7 +405,223 @@ print(round(rtwo_sc, 2))
 
 # K-fold Cross Validation
 
-## Alan
+## Limitations of a validation set
+
+</br>
+
+::: incremental
+- By using a training data set that is much smaller than our actual data, the estimated model $\hat{f}(\boldsymbol{X})$ will be less good than if we used the full training data. That is, more likely for predictions to be far from actual values.
+
+- Thus, the validation MSE is likely to be bigger than had we (a) used the full data set and (b) fit the correct model.
+
+- In other words, using less than all data results in a $\text{MSE}_v$ that is not a good representation of the predictive performance of $\hat{f}(\boldsymbol{X})$.
+:::
+
+## $K$-fold Cross-Validation
+
+</br>
+
+**Basic Idea:** Divide the training data into $K$ equally-sized divisions or folds.
+
+:::::: center
+::::: columns
+::: {.column width="30%"}
+![](images/CV_0.png){fig-align="center" width="304"}
+:::
+
+::: {.column width="70%"}
+:::
+:::::
+::::::
+
+## $K$-fold Cross-Validation
+
+</br>
+
+**Basic Idea:** Divide the training data into $K$ equally-sized divisions or folds ($K = 5$ here).
+
+:::::: center
+::::: columns
+::: {.column width="30%"}
+![](images/CV_1.png){fig-align="center"  width="304"}
+:::
+
+::: {.column width="70%"}
+:::
+:::::
+::::::
+
+## $K$-fold Cross-Validation
+
+</br>
+
+**Basic Idea:** Divide the training data into $K$ equally-sized divisions or folds ($K = 5$ here).
+
+::::::: center
+:::::: columns
+::: {.column width="30%"}
+![](images/CV_2.png){fig-align="center"  width="304"}
+:::
+
+:::: {.column width="70%"}
+::: incremental
+-   Using training, construct $\hat{f}^{(-1)}$.
+-   Using validation, calculate $CV_1(\hat{f}^{(-1)}) = \frac{1}{n_1} \sum_{i \in F_1} (Y_i - \hat{f}^{(-1)}(\boldsymbol{X}_i))^2$
+-   Call it the [**Fold-Based Error Estimate**]{style="color:orange;"}
+:::
+::::
+::::::
+:::::::
+
+## $K$-fold Cross-Validation
+
+</br>
+
+**Basic Idea:** Divide the training data into $K$ equally-sized divisions or folds ($K = 5$ here).
+
+::::::: center
+:::::: columns
+::: {.column width="30%"}
+![](images/CV_3.png){fig-align="center"  width="304"}
+:::
+
+:::: {.column width="70%"}
+-   Using training, construct $\hat{f}^{(-2)}$.
+-   Using validation, calculate $CV_1(\hat{f}^{(-2)}) = \frac{1}{n_2} \sum_{i \in F_2} (Y_i - \hat{f}^{(-2)}(\boldsymbol{X}_i))^2$
+::::
+::::::
+:::::::
+
+## $K$-fold Cross-Validation
+
+</br>
+
+**Basic Idea:** Divide the training data into $K$ equally-sized divisions or folds ($K = 5$ here).
+
+::::::: center
+:::::: columns
+::: {.column width="30%"}
+![](images/CV_4.png){fig-align="center"  width="304"}
+:::
+:::: {.column width="70%"}
+-   Using training, construct $\hat{f}^{(-5)}$.
+-   Using validation, calculate $CV_1(\hat{f}^{(-5)}) = \frac{1}{n_5} \sum_{i \in F_5} (Y_i - \hat{f}^{(-5)}(\boldsymbol{X}_i))^2$
+::::
+::::::
+:::::::
+
+## 
+
+</br></br>
+
+We average these fold-based error estimates to yield an evaluation metric:
+                     
+$$CV(\hat{f}) = \frac{1}{K} \sum^{K}_{k=1} CV_k (\hat{f}^{(-k)}).$$
+
+- Called the **$K$-fold cross-validation estimate**. 
+
+- Here, we used $K = 5$ but another popular choice is $K = 10$.
+
+## $K$-fold CV in Python
+
+In Python, we apply $K$-fold cross validation (CV) using the function `cross_val_score()` from **scikit-learn**. The argument `cv` sets the number of folds to use, and `scoring` sets the evaluation metric to compute on the folds.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: false
+
+# 1. Define a new linear regression model
+LRmodel_cv = LinearRegression()
+
+# 2. Apply 5-fold CV
+neg_cv_MSEs = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5, 
+                        scoring = "neg_mean_squared_error")
+
+# 3. Show scores
+print(neg_cv_MSEs)
+```
+
+##
+
+</br>
+
+Unfortunately, `cross_val_score()` outputs negative scores. We simply turn them into positive by multiplying them by -1 or adding a `-` symbol.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: false
+
+cv_MSEs = -neg_cv_MSEs
+```
+
+</br>
+
+After that, we average the values using `.mean()` to obtain a the $5$-fold CV estimate.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: false
+
+MSE_cv = cv_MSEs.mean()
+print(round(MSE_cv, 3))
+```
+
+##
+
+</br></br>
+
+Note that we can compute a $K$-fold CV estimate for any evaluation metric including the $R^2$. To this end, we set `scoring = "r2"`.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: false
+
+# 1. Define a new linear regression model
+LRmodel_cv = LinearRegression()
+
+# 2. Apply 5-fold CV
+cv_Rsq = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5, 
+                        scoring = "r2")
+
+# 3. Compute CV estimate
+Rsq_cv = cv_Rsq.mean()
+print(round(Rsq_cv, 3))
+```
+
+##
+
+</br></br>
+
+We can also compute a $K$-fold CV estimate for the root mean squared error (RMSE).
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: false
+
+LRmodel_cv = LinearRegression()
+neg_cv_RMSEs = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5, 
+                        scoring = "neg_root_mean_squared_error")
+cv_RMSEs = -neg_cv_RMSEs
+RMSE_cv = cv_RMSEs.mean()
+print(round(RMSE_cv, 3))
+```
+
+## Final remarks
+
+- $K$-fold CV provides a robust estimate of prediction error by averaging performance across multiple data splits.  
+- It improves data efficiency by allowing all observations to be used for both training and validation.  
+- It is widely used for **model comparison** and **hyperparameter tuning**.
+- It can be extended to *generalized* K-fold cross-validation (e.g., stratified, grouped, or time-series folds) to respect data structure.
 
 
 # [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

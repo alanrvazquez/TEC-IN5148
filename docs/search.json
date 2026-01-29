@@ -5257,14 +5257,14 @@
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#agenda",
     "title": "Supervised Learning and Linear Regression",
     "section": "Agenda",
-    "text": "Agenda\n\n\nIntroduction to Supervised Learning\nLinear Regression Model\nParameter estimation"
+    "text": "Agenda\n\n\nIntroduction to Supervised Learning\nLinear Regression Model\nK-fold Cross Validation"
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#load-the-libraries",
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#load-the-libraries",
     "title": "Supervised Learning and Linear Regression",
     "section": "Load the libraries",
-    "text": "Load the libraries\n\nBefore we start, let’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_squared_error, r2_score\n\nHere, we use specific functions from the pandas, matplotlib, seaborn and sklearn libraries in Python."
+    "text": "Load the libraries\n\nBefore we start, let’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split, cross_val_score\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_squared_error, root_mean_squared_error\nfrom sklearn.metrics import r2_score\n\nHere, we use specific functions from the pandas, matplotlib, seaborn and sklearn libraries in Python."
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#supervised-learning",
@@ -5418,14 +5418,14 @@
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#prediction-error",
     "title": "Supervised Learning and Linear Regression",
     "section": "Prediction error",
-    "text": "Prediction error\nAfter estimating and validating the linear regression model, we can check the quality of its predictions on unobserved data. That is, on the data in the validation set.\nOne metric for this is the mean prediction error (MSE\\(_v\\)):\n\n\\[\\text{MSE}_v = \\frac{\\sum_{i=1}^{n_v} (Y_i - (\\hat{\\beta}_0 + \\hat{\\beta}_1 X_1 + \\cdots + \\hat{\\beta}_p X_p))^2}{n_v}\\]\n\n\nFor \\(n_v\\), the validation data!\n\nThe smaller \\(\\text{MSE}_v\\), the better the predictions."
+    "text": "Prediction error\nAfter estimating and validating the linear regression model, we can check the quality of its predictions on unobserved data. That is, on the data in the validation set.\nOne metric for this is the mean prediction error (MSE\\(_v\\)):\n\n\\[\\text{MSE}_v = \\frac{\\sum_{i=1}^{n_v} (Y_i - (\\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\cdots + \\hat{\\beta}_p X_{ip}))^2}{n_v}\\]\n\n\nFor \\(n_v\\), the validation data!\n\nThe smaller \\(\\text{MSE}_v\\), the better the predictions."
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-6",
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-6",
     "title": "Supervised Learning and Linear Regression",
     "section": "",
-    "text": "To evaluate the model, we use the mean squared error in the Python mse() function. Recall that the responses from the validation dataset are in Y_valid, and the model predictions are in Y_pred.\n\nmse = mean_squared_error(Y_valid, Y_pred)  # Mean Squared Error (MSE)\nprint(round(mse, 2))\n\n15.49\n\n\n\nTo obtain the root mean squared error (RMSE), we simply take the square root of the MSE.\n\nprint(round(mse**(1/2), 2))\n\n3.94"
+    "text": "To evaluate the model, we use the function mean_squared_error() from scikit-learn. Recall that the responses from the validation dataset are in Y_valid, and the model predictions are in Y_pred.\n\nmse = mean_squared_error(Y_valid, Y_pred)  # Mean Squared Error (MSE)\nprint(round(mse, 2))\n\n15.49\n\n\n\nTo obtain the root mean squared error (RMSE), we use root_mean_squared_error() instead.\n\nrmse = root_mean_squared_error(Y_valid, Y_pred)\nprint(round(rmse, 2))\n\n3.94"
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#in-python-1",
@@ -5439,7 +5439,7 @@
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-7",
     "title": "Supervised Learning and Linear Regression",
     "section": "",
-    "text": "To evaluate the model, we use the mean squared error in the Python mse() function. Recall that the responses from the validation dataset are in Y_valid, and the model predictions are in Y_pred.\n\nmse = mean_squared_error(Y_valid, Y_pred)  # Mean Squared Error (MSE)\nprint(round(mse, 2))\n\n15.49\n\n\n\nTo obtain the root mean squared error (RMSE), we simply take the square root of the MSE.\n\nprint(round(mse**(1/2), 2))\n\n3.94"
+    "text": "We average these fold-based error estimates to yield an evaluation metric:\n\\[CV(\\hat{f}) = \\frac{1}{K} \\sum^{K}_{k=1} CV_k (\\hat{f}^{(-k)}).\\]\n\nCalled the \\(K\\)-fold cross-validation estimate.\nHere, we used \\(K = 5\\) but another popular choice is \\(K = 10\\)."
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#another-metric-r2",
@@ -5482,5 +5482,89 @@
     "title": "Supervised Learning and Linear Regression",
     "section": "The idea with one predictor and one response",
     "text": "The idea with one predictor and one response"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#limitations-of-the-validation-set-approach",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#limitations-of-the-validation-set-approach",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Limitations of the validation set approach",
+    "text": "Limitations of the validation set approach\nBy using a training data set that is much smaller than our actual data, the estimated model \\(\\hat{f}(\\boldsymbol{X})\\) will be less good than if we used the full training data.\n“Less good” means more likely for predictions to be far from actual values.\nThus, the validation MSE is likely to be bigger than had we (a) used the full data set and (b) fit the correct model.\nIn other words, using less than all data results in a \\(\\text{MSE}_v\\) that is not a good representation of the predictive performance of \\(\\hat{f}(\\boldsymbol{X})\\)."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#k-fold-cross-validation-1",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#k-fold-cross-validation-1",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "\\(K\\)-fold Cross-Validation",
+    "text": "\\(K\\)-fold Cross-Validation\n\nBasic Idea: Divide the training data into \\(K\\) equally-sized divisions or folds."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#k-fold-cross-validation-2",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#k-fold-cross-validation-2",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "\\(K\\)-fold Cross-Validation",
+    "text": "\\(K\\)-fold Cross-Validation\n\nBasic Idea: Divide the training data into \\(K\\) equally-sized divisions or folds (\\(K = 5\\) here)."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#k-fold-cross-validation-3",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#k-fold-cross-validation-3",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "\\(K\\)-fold Cross-Validation",
+    "text": "\\(K\\)-fold Cross-Validation\n\nBasic Idea: Divide the training data into \\(K\\) equally-sized divisions or folds (\\(K = 5\\) here).\n\n\n\n\n\n\n\n\n\n\nUsing training, construct \\(\\hat{f}^{(-1)}\\).\nUsing validation, calculate \\(CV_1(\\hat{f}^{(-1)}) = \\frac{1}{n_1} \\sum_{i \\in F_1} (Y_i - \\hat{f}^{(-1)}(\\boldsymbol{X}_i))^2\\)\nCall it the Fold-Based Error Estimate"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#k-fold-cross-validation-4",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#k-fold-cross-validation-4",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "\\(K\\)-fold Cross-Validation",
+    "text": "\\(K\\)-fold Cross-Validation\n\nBasic Idea: Divide the training data into \\(K\\) equally-sized divisions or folds (\\(K = 5\\) here).\n\n\n\n\n\n\n\n\n\n\nUsing training, construct \\(\\hat{f}^{(-2)}\\).\nUsing validation, calculate \\(CV_1(\\hat{f}^{(-2)}) = \\frac{1}{n_2} \\sum_{i \\in F_2} (Y_i - \\hat{f}^{(-2)}(\\boldsymbol{X}_i))^2\\)"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#k-fold-cross-validation-5",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#k-fold-cross-validation-5",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "\\(K\\)-fold Cross-Validation",
+    "text": "\\(K\\)-fold Cross-Validation\n\nBasic Idea: Divide the training data into \\(K\\) equally-sized divisions or folds (\\(K = 5\\) here).\n\n\n\n\n\n\n\n\n\n\nUsing training, construct \\(\\hat{f}^{(-5)}\\).\nUsing validation, calculate \\(CV_1(\\hat{f}^{(-5)}) = \\frac{1}{n_5} \\sum_{i \\in F_5} (Y_i - \\hat{f}^{(-5)}(\\boldsymbol{X}_i))^2\\)"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#limitations-of-a-validation-set",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#limitations-of-a-validation-set",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Limitations of a validation set",
+    "text": "Limitations of a validation set\n\n\nBy using a training data set that is much smaller than our actual data, the estimated model \\(\\hat{f}(\\boldsymbol{X})\\) will be less good than if we used the full training data. That is, more likely for predictions to be far from actual values.\nThus, the validation MSE is likely to be bigger than had we (a) used the full data set and (b) fit the correct model.\nIn other words, using less than all data results in a \\(\\text{MSE}_v\\) that is not a good representation of the predictive performance of \\(\\hat{f}(\\boldsymbol{X})\\)."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#k-fold-cv-in-python",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#k-fold-cv-in-python",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "\\(K\\)-fold CV in Python",
+    "text": "\\(K\\)-fold CV in Python\nIn Python, we apply \\(K\\)-fold cross validation (CV) using the function cross_val_score() from scikit-learn. The argument cv sets the number of folds to use, and scoring sets the evaluation metric to compute on the folds.\n\n# 1. Define a new linear regression model\nLRmodel_cv = LinearRegression()\n\n# 2. Apply 5-fold CV\nneg_cv_MSEs = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5, \n                        scoring = \"neg_mean_squared_error\")\n\n# 3. Show scores\nprint(neg_cv_MSEs)\n\n[-10.49682074  -9.19992376  -9.67254119 -10.47448349 -14.12876134]"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-8",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-8",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "",
+    "text": "Unfortunately, cross_val_score() outputs negative scores. We simply turn them into positive by multiplying them by -1 or adding a - symbol.\n\ncv_MSEs = -neg_cv_MSEs\n\n\nAfter that, we average the values using .mean() to obtain a the \\(5\\)-fold CV estimate.\n\nMSE_cv = cv_MSEs.mean()\nprint(round(MSE_cv, 3))\n\n10.795"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-9",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-9",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "",
+    "text": "Note that we can compute a \\(K\\)-fold CV estimate for any evaluation metric including the \\(R^2\\). To this end, we set scoring = \"r2\".\n\n# 1. Define a new linear regression model\nLRmodel_cv = LinearRegression()\n\n# 2. Apply 5-fold CV\ncv_Rsq = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5, \n                        scoring = \"r2\")\n\n# 3. Compute CV estimate\nRsq_cv = cv_Rsq.mean()\nprint(round(Rsq_cv, 3))\n\n0.593"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-10",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-10",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "",
+    "text": "We can also compute a \\(K\\)-fold CV estimate for the root mean squared error (RMSE).\n\nLRmodel_cv = LinearRegression()\nneg_cv_RMSEs = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5, \n                        scoring = \"neg_root_mean_squared_error\")\ncv_RMSEs = -neg_cv_RMSEs\nRMSE_cv = cv_RMSEs.mean()\nprint(round(RMSE_cv, 3))\n\n3.276"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#final-remarks",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#final-remarks",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Final remarks",
+    "text": "Final remarks\n\n\\(K\\)-fold CV provides a robust estimate of prediction error by averaging performance across multiple data splits.\n\nIt improves data efficiency by allowing all observations to be used for both training and validation.\n\nIt is widely used for model comparison and hyperparameter tuning.\nIt can be extended to generalized K-fold cross-validation (e.g., stratified, grouped, or time-series folds) to respect data structure."
   }
 ]
