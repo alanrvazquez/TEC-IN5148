@@ -225,7 +225,7 @@ Alan R. Vazquez
 <h2>Load the libraries</h2>
 <p><br></p>
 <p>Before we start, let’s import the data science libraries into Python.</p>
-<div id="4d179fa4" class="cell" data-execution_count="1">
+<div id="893a23a9" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, cross_val_score</span>
@@ -372,7 +372,7 @@ Alan R. Vazquez
 <li>Sales: Sales generated from the product ($).</li>
 <li>200 markets</li>
 </ul>
-<div id="8182c62d" class="cell" data-execution_count="2">
+<div id="1641669d" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="co"># Load the data into Python</span></span>
 <span id="cb2-2"><a></a>Ads_data <span class="op">=</span> pd.read_excel(<span class="st">'Advertising.xlsx'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -380,9 +380,9 @@ Alan R. Vazquez
 <section id="section-2" class="slide level2">
 <h2></h2>
 <p><br></p>
-<div id="b1c39ea4" class="cell" data-execution_count="3">
+<div id="2e6b474c" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>Ads_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="69">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -455,7 +455,7 @@ Alan R. Vazquez
 <h2></h2>
 <p><br><br></p>
 <p>Now, let’s choose our predictor and response. In the definition of <code>X_full</code>, the double bracket in <code>[]</code> is important because it allows us to have a pandas DataFrame as output. This makes it easier to fit the linear regression model with <strong>scikit-learn</strong>.</p>
-<div id="9dd74868" class="cell" data-execution_count="4">
+<div id="8fbbd273" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># Chose the predictor.</span></span>
 <span id="cb4-2"><a></a>X_full <span class="op">=</span> Ads_data.<span class="bu">filter</span>([<span class="st">'TV'</span>])</span>
 <span id="cb4-3"><a></a></span>
@@ -467,7 +467,7 @@ Alan R. Vazquez
 <h2>Create training and validation data</h2>
 <p><br></p>
 <p>To evaluate a model’s performance on unobserved data, we split the current dataset into a training dataset and a validation dataset. To do this, we use the scikit-learn <code>train_test_split()</code> function.</p>
-<div id="412571d8" class="cell" data-execution_count="5">
+<div id="a80bf558" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>X_train, X_valid, Y_train, Y_valid <span class="op">=</span> train_test_split(X_full, Y_full, </span>
 <span id="cb5-2"><a></a>                                                      test_size <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span id="cb5-3"><a></a>                                                      random_state <span class="op">=</span> <span class="dv">301655</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -478,7 +478,7 @@ Alan R. Vazquez
 <h2>Fit a linear regression model in Python</h2>
 <p><br></p>
 <p>In Python, we use the <code>LinearRegression()</code> and <code>fit()</code> functions from the <strong>scikit-learn</strong> to fit a linear regression model.</p>
-<div id="06cdfa1a" class="cell" data-execution_count="6">
+<div id="624f40e2" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="co"># 1. Create the linear regression model</span></span>
 <span id="cb6-2"><a></a>LRmodel <span class="op">=</span> LinearRegression()</span>
 <span id="cb6-3"><a></a></span>
@@ -489,14 +489,14 @@ Alan R. Vazquez
 <section id="section-4" class="slide level2">
 <h2></h2>
 <p>The following commands allow you to show the estimated coefficients of the model.</p>
-<div id="478f8bd3" class="cell" data-execution_count="7">
+<div id="8494eae5" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="bu">print</span>(<span class="st">"Coefficients:"</span>, LRmodel.coef_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Coefficients: [[0.05185463]]</code></pre>
 </div>
 </div>
 <p>We can also show the estimated intercept.</p>
-<div id="fdde4f31" class="cell" data-execution_count="8">
+<div id="0f377abf" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a><span class="bu">print</span>(<span class="st">"Intercept:"</span>, LRmodel.intercept_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Intercept: [6.69303889]</code></pre>
@@ -535,7 +535,7 @@ Alan R. Vazquez
 <p>To evaluate the model’s performance, we use the validation dataset. Specifically, we use the predictor matrix stored in <code>X_valid</code>.</p>
 <p><br></p>
 <p>In Python, we make the prediction using the pre-trained <code>LRmodel</code>.</p>
-<div id="4b41fdab" class="cell" data-execution_count="9">
+<div id="777698fb" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>Y_pred <span class="op">=</span> LRmodel.predict(X_valid)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
@@ -543,7 +543,7 @@ Alan R. Vazquez
 <h2></h2>
 <p><br></p>
 <p>To evaluate the model, we use the function <code>mean_squared_error()</code> from <strong>scikit-learn</strong>. Recall that the responses from the validation dataset are in <code>Y_valid</code>, and the model predictions are in <code>Y_pred</code>.</p>
-<div id="a7d3eb43" class="cell" data-execution_count="10">
+<div id="df98ba89" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>mse <span class="op">=</span> mean_squared_error(Y_valid, Y_pred)  <span class="co"># Mean Squared Error (MSE)</span></span>
 <span id="cb12-2"><a></a><span class="bu">print</span>(<span class="bu">round</span>(mse, <span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -552,7 +552,7 @@ Alan R. Vazquez
 </div>
 <p><br></p>
 <p>To obtain the <strong>root mean squared error (RMSE)</strong>, we use <code>root_mean_squared_error()</code> instead.</p>
-<div id="828b1dc3" class="cell" data-execution_count="11">
+<div id="d0572878" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>rmse <span class="op">=</span> root_mean_squared_error(Y_valid, Y_pred)</span>
 <span id="cb14-2"><a></a><span class="bu">print</span>(<span class="bu">round</span>(rmse, <span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -568,7 +568,7 @@ Alan R. Vazquez
 </ul>
 <p><br></p>
 <p>We compute <span class="math inline">\(R^2\)</span> in Python as follows:</p>
-<div id="8c586380" class="cell" data-execution_count="12">
+<div id="29936788" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>rtwo_sc <span class="op">=</span> r2_score(Y_valid, Y_pred)  <span class="co"># Rsquared</span></span>
 <span id="cb16-2"><a></a><span class="bu">print</span>(<span class="bu">round</span>(rtwo_sc, <span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -708,7 +708,7 @@ Alan R. Vazquez
 <section id="k-fold-cv-in-python" class="slide level2">
 <h2><span class="math inline">\(K\)</span>-fold CV in Python</h2>
 <p>In Python, we apply <span class="math inline">\(K\)</span>-fold cross validation (CV) using the function <code>cross_val_score()</code> from <strong>scikit-learn</strong>. The argument <code>cv</code> sets the number of folds to use, and <code>scoring</code> sets the evaluation metric to compute on the folds.</p>
-<div id="31fc24a0" class="cell" data-execution_count="13">
+<div id="3244fbf5" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a><span class="co"># 1. Define a new linear regression model</span></span>
 <span id="cb18-2"><a></a>LRmodel_cv <span class="op">=</span> LinearRegression()</span>
 <span id="cb18-3"><a></a></span>
@@ -727,12 +727,12 @@ Alan R. Vazquez
 <h2></h2>
 <p><br></p>
 <p>Unfortunately, <code>cross_val_score()</code> outputs negative scores. We simply turn them into positive by multiplying them by -1 or adding a <code>-</code> symbol.</p>
-<div id="40890b43" class="cell" data-execution_count="14">
+<div id="0d98bc43" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a>cv_MSEs <span class="op">=</span> <span class="op">-</span>neg_cv_MSEs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <p>After that, we average the values using <code>.mean()</code> to obtain a the <span class="math inline">\(5\)</span>-fold CV estimate.</p>
-<div id="75131d1b" class="cell" data-execution_count="15">
+<div id="f35e9cb3" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>MSE_cv <span class="op">=</span> cv_MSEs.mean()</span>
 <span id="cb21-2"><a></a><span class="bu">print</span>(<span class="bu">round</span>(MSE_cv, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -744,7 +744,7 @@ Alan R. Vazquez
 <h2></h2>
 <p><br><br></p>
 <p>Note that we can compute a <span class="math inline">\(K\)</span>-fold CV estimate for any evaluation metric including the <span class="math inline">\(R^2\)</span>. To this end, we set <code>scoring = "r2"</code>.</p>
-<div id="e4b02706" class="cell" data-execution_count="16">
+<div id="2831be54" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a><span class="co"># 1. Define a new linear regression model</span></span>
 <span id="cb23-2"><a></a>LRmodel_cv <span class="op">=</span> LinearRegression()</span>
 <span id="cb23-3"><a></a></span>
@@ -764,7 +764,7 @@ Alan R. Vazquez
 <h2></h2>
 <p><br><br></p>
 <p>We can also compute a <span class="math inline">\(K\)</span>-fold CV estimate for the root mean squared error (RMSE).</p>
-<div id="d5fb7624" class="cell" data-execution_count="17">
+<div id="ff5112bf" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a></a>LRmodel_cv <span class="op">=</span> LinearRegression()</span>
 <span id="cb25-2"><a></a>neg_cv_RMSEs <span class="op">=</span> cross_val_score(LRmodel_cv, X_full, Y_full, cv <span class="op">=</span> <span class="dv">5</span>, </span>
 <span id="cb25-3"><a></a>                        scoring <span class="op">=</span> <span class="st">"neg_root_mean_squared_error"</span>)</span>
