@@ -249,5 +249,4 @@ We will now discuss preprocessing techniques applied to the predictor columns in
 
 Note that all preprocessing techniques will also be applied to the [**validation dataset**]{style="color:orange;"} and [**test dataset**]{style="color:green;"} to prepare it for your model!
 
-
 # [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)
