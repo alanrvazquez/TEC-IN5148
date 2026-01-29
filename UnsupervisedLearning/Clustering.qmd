@@ -86,6 +86,10 @@ Unsupervised learning is more challenging than supervised learning because it is
 
 It is also known as *exploratory data analysis*.
 
+## 
+
+![](images/clipboard-2622609818.png){fig-align="center"}
+
 ## Examples of Unsupervised Learning
 
 </br>

@@ -1,0 +1,412 @@
+---
+title: "Supervised Learning and Linear Regression"
+subtitle: "IN5148: Statistics and Data Science with Applications in Engineering"
+author: 
+  - name: Alan R. Vazquez
+    affiliations:
+      - name: Department of Industrial Engineering
+format: 
+  revealjs:
+    chalkboard: false
+    multiplex: False
+    footer: "Tecnologico de Monterrey"
+    logo: IN5148_logo.png
+    css: style.css
+    slide-number: True
+    html-math-method: mathjax
+editor: visual
+jupyter: python3
+---
+
+## Agenda
+
+</br>
+
+1.  Introduction to Supervised Learning
+2.  Linear Regression Model
+3.  K-fold Cross Validation
+
+## Load the libraries
+
+</br>
+
+Before we start, let's import the data science libraries into Python.
+
+```{python}
+#| echo: true
+#| output: false
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+```
+
+Here, we use specific functions from the **pandas**, **matplotlib**, **seaborn** and **sklearn** libraries in Python.
+
+# Introduction to Supervised Learning
+
+## Supervised Learning
+
+Includes algorithms that learn by example. The user provides the supervised algorithm with a known data set that includes the corresponding known inputs and outputs. The algorithm must find a method to determine how to reach those inputs and outputs.
+
+While the user knows the correct answers to the problem, the algorithm identifies patterns in the data, learns from observations, and makes predictions.
+
+The algorithm makes predictions that can be corrected by the user, and this process continues until the algorithm reaches a high level of accuracy and performance.
+
+## 
+
+![](images/clipboard-2564234206.png)
+
+## Supervised learning problems
+
+</br>
+
+[**Regression Problems**]{style="color:green;"}. The response is numerical. For example, a person's income, the value of a house, or a patient's blood pressure.
+
+[**Classification Problems**]{style="color:blue;"}. The response is categorical and involves *K* different categories. For example, the brand of a product purchased (A, B, C) or whether a person defaults on a debt (yes or no).
+
+The predictors ($\boldsymbol{X}$) can be *numerical* or *categorical*.
+
+## Supervised learning problems
+
+</br>
+
+[**Regression Problems**]{style="color:green;"}. The response is numerical. For example, a person's income, the value of a house, or a patient's blood pressure.
+
+[**Classification Problems**. The response is categorical and involves *K* different categories. For example, the brand of a product purchased (A, B, C) or whether a person defaults on a debt (yes or no).]{style="color:gray;"}
+
+The predictors ($\boldsymbol{X}$) can be *numerical* or *categorical*.
+
+## Regression problem
+
+</br>
+
+**Goal**: Find the best function $f(\boldsymbol{X})$ of the predictors $\boldsymbol{X} = (X_1, \ldots, X_p)$ that describes the response $Y$.
+
+In mathematical terms, we want to establish the following relationship:
+
+$$Y = f(\mathbf{X}) + \epsilon$$
+
+-   Where $\epsilon$ is a natural (random) error.
+
+## How to find the shape of $f(X)$?
+
+</br>
+
+Using training data. ![](images/TrainVal1.png){fig-align="center"}
+
+## How to find the shape of $f(X)$?
+
+</br>
+
+Using training data.
+
+![](images/TrainVal2.png){fig-align="center"}
+
+## How to evaluate the quality of the candidate function $\hat{f}(X)$?
+
+:::::: center
+::::: columns
+::: {.column width="40%"}
+Using validation data.
+:::
+
+::: {.column width="60%"}
+![](images/TrainVal3.png){fig-align="center"}
+:::
+:::::
+::::::
+
+## How to evaluate the quality of the candidate function $\hat{f}(X)$?
+
+:::::: center
+::::: columns
+::: {.column width="40%"}
+Using validation data.
+:::
+
+::: {.column width="60%"}
+![](images/TrainVal4.png){fig-align="center"}
+:::
+:::::
+::::::
+
+## Moreover...
+
+</br>
+
+:::::: center
+::::: columns
+::: {.column width="40%"}
+We can use [***test data***]{style="color:darkgreen;"} for a final evaluation of the model.
+
+Test data is data obtained from the process that generated the training data.
+
+Test data is independent of the training data.
+:::
+
+::: {.column width="60%"}
+</br>
+
+![](images/TrainVal5.png){fig-align="center"}
+:::
+:::::
+::::::
+
+# Linear Regression Model
+
+## Linear Regression Model
+
+A common candidate function for predicting a response is the linear regression model. It has the mathematical form:
+
+$$\hat{Y}_i = \hat{f}(\boldsymbol{X}_i) = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \cdots + \hat{\beta}_p X_{ip}.$$
+
+-   Where $i = 1, \ldots, n_t$ is the index of the $n_t$ training data.
+
+-   $\hat{Y}_i$ is the prediction of the actual value of the response $Y_i$ associated with  values of $p$ predictors denoted by $\boldsymbol{X}_i = (X_{i1}, \ldots, X_{ip})$.
+
+-   The values $\hat{\beta}_0$, $\hat{\beta}_1$, ..., $\hat{\beta}_p$ are the [*coefficients*]{style="color:lightblue;"} of the model.
+
+## 
+
+</br>
+
+The values of $\hat{\beta}_0$, $\hat{\beta}_1$, ..., $\hat{\beta}_p$ are obtained from the training data using method of **least squares**.
+
+This method finds the coefficient values that minimize the error made by the model $\hat{f}(X_i)$ when trying to predict the responses in the training set:
+
+::: {style="font-size: 100%;"}
+$$RSS = \sum_{i=1}^{n_t} (Y_i - (\hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \cdots + \hat{\beta}_p X_{ip} ))^2  $$
+:::
+
+where $RSS$ means [*residual sum of squares*]{style="color:green;"}.
+
+## The idea in two dimensions
+
+![](images/Modulo%203%20-%20Modelos%20predictivos%20y%20series%20de%20tiempo%20copy.012.jpeg){fig-align="center"}
+
+## Example 1
+
+</br>
+
+We used the dataset called "Advertising.xlsx" in Canvas.
+
+-   TV: Money spent on TV ads for a product (\$).
+-   Sales: Sales generated from the product (\$).
+-   200 markets
+
+```{python}
+#| echo: true
+#| output: true
+
+# Load the data into Python
+Ads_data = pd.read_excel('Advertising.xlsx')
+```
+
+## 
+
+</br>
+
+```{python}
+#| echo: true
+#| output: true
+
+Ads_data.head()
+```
+
+## 
+
+</br></br>
+
+Now, let's choose our predictor and response. In the definition of `X_full`, the double bracket in `[]` is important because it allows us to have a pandas DataFrame as output. This makes it easier to fit the linear regression model with **scikit-learn**.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Chose the predictor.
+X_full = Ads_data.filter(['TV'])
+
+# Set the response.
+Y_full = Ads_data.filter(['Sales'])
+```
+
+## Create training and validation data
+
+</br>
+
+To evaluate a model's performance on unobserved data, we split the current dataset into a training dataset and a validation dataset. To do this, we use the scikit-learn `train_test_split()` function.
+
+```{python}
+#| echo: true
+#| output: true
+
+X_train, X_valid, Y_train, Y_valid = train_test_split(X_full, Y_full, 
+                                                      test_size = 0.25,
+                                                      random_state = 301655)
+```
+
+We use 75% of the data for training and the rest for validation.
+
+## Fit a linear regression model in Python
+
+</br>
+
+In Python, we use the `LinearRegression()` and `fit()` functions from the **scikit-learn** to fit a linear regression model.
+
+```{python}
+#| echo: true
+#| output: false
+
+# 1. Create the linear regression model
+LRmodel = LinearRegression()
+
+# 2. Fit the model.
+LRmodel.fit(X_train, Y_train)
+```
+
+## 
+
+The following commands allow you to show the estimated coefficients of the model.
+
+```{python}
+#| echo: true
+#| output: true
+
+print("Coefficients:", LRmodel.coef_)
+```
+
+We can also show the estimated intercept.
+
+```{python}
+#| echo: true
+#| output: true
+
+print("Intercept:", LRmodel.intercept_)
+```
+
+</br>
+
+The estimated model thus is
+
+$$\hat{Y}_i = 6.69 + 0.051 X_i.$$
+
+
+## Prediction error
+
+After estimating and validating the linear regression model, we can check the quality of its predictions on [**unobserved**]{style="color:darkred;"} data. That is, on the data in the validation set.
+
+One metric for this is the **mean prediction error** (MSE$_v$):
+
+::: {style="font-size: 75%;"}
+$$\text{MSE}_v = \frac{\sum_{i=1}^{n_v} (Y_i - (\hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \cdots + \hat{\beta}_p X_{ip}))^2}{n_v}$$
+:::
+
+-   For $n_v$, the validation data!
+
+The smaller $\text{MSE}_v$, the better the predictions.
+
+## 
+
+</br>
+
+In practice, the square root of the mean prediction error is used:
+
+$$\text{RMSE}_v = \sqrt{\text{MSE}_v}.$$
+
+The advantage of $\text{RMSE}_v$ is that it can be interpreted as:
+
+> The average variability of a model prediction.
+
+For example, if $\text{RMSE}_v = 1$, then a prediction of $\hat{Y} = 5$ will have an (average) error rate of $\pm 1$.
+
+## In Python
+
+</br>
+
+To evaluate the model's performance, we use the validation dataset. Specifically, we use the predictor matrix stored in `X_valid`.
+
+</br>
+
+In Python, we make the prediction using the pre-trained `LRmodel`.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: false
+
+Y_pred = LRmodel.predict(X_valid)
+```
+
+## 
+
+</br>
+
+To evaluate the model, we use the *mean squared error* in the Python `mse()` function. Recall that the responses from the validation dataset are in `Y_valid`, and the model predictions are in `Y_pred`.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: false
+
+mse = mean_squared_error(Y_valid, Y_pred)  # Mean Squared Error (MSE)
+print(round(mse, 2))
+```
+
+</br>
+
+To obtain the **root mean squared error (RMSE)**, we simply take the square root of the MSE.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: false
+
+print(round(mse**(1/2), 2))
+```
+
+## Another Metric: $R^2$
+
+-   In the context of Data Science, $R^2$ can be interpreted as the *squared* correlation between the actual responses and those predicted by the model.
+
+-   The higher the correlation, the better the agreement between the predicted and actual responses.
+
+</br>
+
+We compute $R^2$ in Python as follows:
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+#| code-fold: false
+
+rtwo_sc = r2_score(Y_valid, Y_pred)  # Rsquared
+print(round(rtwo_sc, 2))
+```
+
+## Mini-Activity (cooperative mode)
+
+</br></br>
+
+1.  Consider the Advertising.xlsx dataset in Canvas.
+
+2.  Use a model to predict Sales that includes the Radio predictor (money spent on radio ads for a product (\$)). What is the $\text{RMSE}_v$?
+
+3.  Now, use a model to predict Sales that includes two predictors: TV and Radio. What is the $\text{RMSE}_v$?
+
+4.  Which model do you prefer?
+
+# K-fold Cross Validation
+
+## Alan
+
+
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

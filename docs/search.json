@@ -3689,7 +3689,7 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#section-1",
     "title": "Clustering Methods",
     "section": "",
-    "text": "We can extend the Euclidean distance to measure the distance between observations when we have more predictors. For example, with 3 predictors we have\n\n\n\nObservation\n\\(X_1\\)\n\\(X_2\\)\n\\(X_3\\)\n\n\n\n\n1\n\\(X_{1,1}\\)\n\\(X_{1,2}\\)\n\\(X_{1,3}\\)\n\n\n2\n\\(X_{2,1}\\)\n\\(X_{2,2}\\)\n\\(X_{2,3}\\)\n\n\n\n\nWhere the Euclidean distance is\n\\[d = \\sqrt{(X_{1,1} - X_{2,1})^2 + (X_{1,2} - X_{2,2})^2 + (X_{1,3} - X_{2,3})^2 }\\]"
+    "text": "For this, the method requires two elements:\n\nA measure of “closeness” between observations.\nAn algorithm that groups observations that are close to each other.\n\n\nGood clustering is one in which observations within a group are close together and observations in different groups are far apart."
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#problem-with-euclidean-distance",
@@ -3724,28 +3724,28 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#section-2",
     "title": "Clustering Methods",
     "section": "",
-    "text": "In Python, we use the KMeans() function of sklearn to apply K-means clustering. KMeans() tells Python we want to train a K-means clustering algorithm and .fit_predict() actually trains it using the data.\n\n# Fit KMeans with 3 clusters\nkmeans = KMeans(n_clusters = 3, random_state = 301655)\nclusters = kmeans.fit_predict(Xs_penguins)\n\nThe argument n_clusters sets the desired number of clusters and random_state allows us to reproduce the analysis."
+    "text": "We can extend the Euclidean distance to measure the distance between observations when we have more predictors. For example, with 3 predictors we have\n\n\n\nObservation\n\\(X_1\\)\n\\(X_2\\)\n\\(X_3\\)\n\n\n\n\n1\n\\(X_{1,1}\\)\n\\(X_{1,2}\\)\n\\(X_{1,3}\\)\n\n\n2\n\\(X_{2,1}\\)\n\\(X_{2,2}\\)\n\\(X_{2,3}\\)\n\n\n\n\nWhere the Euclidean distance is\n\\[d = \\sqrt{(X_{1,1} - X_{2,1})^2 + (X_{1,2} - X_{2,2})^2 + (X_{1,3} - X_{2,3})^2 }\\]"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#section-3",
     "href": "UnsupervisedLearning/Clustering.slides.html#section-3",
     "title": "Clustering Methods",
     "section": "",
-    "text": "The clusters created are contained in the clusters object.\n\n\nCode\nclusters\n\n\narray([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1,\n       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1,\n       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,\n       1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,\n       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,\n       2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,\n       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0,\n       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,\n       0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,\n       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0,\n       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0,\n       2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,\n       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,\n       2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2,\n       2, 0, 2, 2, 0, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 1, 2,\n       0, 2, 2, 2, 2, 0, 0, 2, 1, 2, 2, 2], dtype=int32)"
+    "text": "In Python, we use the KMeans() function of sklearn to apply K-means clustering. KMeans() tells Python we want to train a K-means clustering algorithm and .fit_predict() actually trains it using the data.\n\n# Fit KMeans with 3 clusters\nkmeans = KMeans(n_clusters = 3, random_state = 301655)\nclusters = kmeans.fit_predict(Xs_penguins)\n\nThe argument n_clusters sets the desired number of clusters and random_state allows us to reproduce the analysis."
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#section-4",
     "href": "UnsupervisedLearning/Clustering.slides.html#section-4",
     "title": "Clustering Methods",
     "section": "",
-    "text": "To visualize the clusters, we augment the original dataset X_penguins (without standarization) with the clusters object. usign the code below.\n\nclustered_penguins = (X_penguins\n              .assign(Cluster = clusters)\n              )\n\nclustered_penguins.head()\n\n\n\n\n\n\n\n\nbill_depth_mm\nbill_length_mm\nCluster\n\n\n\n\n0\n18.7\n39.1\n1\n\n\n1\n17.4\n39.5\n1\n\n\n2\n18.0\n40.3\n1\n\n\n3\n19.3\n36.7\n1\n\n\n4\n20.6\n39.3\n1"
+    "text": "The clusters created are contained in the clusters object.\n\n\nCode\nclusters\n\n\narray([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1,\n       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1,\n       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,\n       1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,\n       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,\n       2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,\n       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0,\n       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,\n       0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,\n       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0,\n       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0,\n       2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,\n       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,\n       2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2,\n       2, 0, 2, 2, 0, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 1, 2,\n       0, 2, 2, 2, 2, 0, 0, 2, 1, 2, 2, 2], dtype=int32)"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#section-5",
     "href": "UnsupervisedLearning/Clustering.slides.html#section-5",
     "title": "Clustering Methods",
     "section": "",
-    "text": "Code\nplt.figure(figsize=(9, 6))\nsns.scatterplot(data = clustered_penguins, x = 'bill_length_mm', y = 'bill_depth_mm', \n                hue = 'Cluster', palette = 'Set1')\nplt.title('K-means Clustering of Penguins')\nplt.xlabel('Bill Length (mm)')\nplt.ylabel('Bill Depth (mm)')\nplt.tight_layout()\nplt.show()"
+    "text": "To visualize the clusters, we augment the original dataset X_penguins (without standarization) with the clusters object. usign the code below.\n\nclustered_penguins = (X_penguins\n              .assign(Cluster = clusters)\n              )\n\nclustered_penguins.head()\n\n\n\n\n\n\n\n\nbill_depth_mm\nbill_length_mm\nCluster\n\n\n\n\n0\n18.7\n39.1\n1\n\n\n1\n17.4\n39.5\n1\n\n\n2\n18.0\n40.3\n1\n\n\n3\n19.3\n36.7\n1\n\n\n4\n20.6\n39.3\n1"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#the-truth-3-groups-of-penguins",
@@ -3787,7 +3787,7 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#section-9",
     "title": "Clustering Methods",
     "section": "",
-    "text": "Next, we plot the intertias and look for the elbow in the plot.\nThe elbow represents a number of clusters for which there is no significant improvement in the quality of the clustering.\nIn this case, the number of clusters recommended by this elbow method is 3.\n\n\n\nCode\nplt.figure(figsize=(6, 6))\nplt.plot(range(1,11), inertias, marker='o')\nplt.title('Elbow method')\nplt.xlabel('Number of clusters')\nplt.ylabel('Inertia')\nplt.show()"
+    "text": "To record the intertias for different numbers of clusters, we use the code below.\n\ninertias = []\n\nfor i in range(1,11):\n    kmeans = KMeans(n_clusters=i)\n    kmeans.fit(Xs_penguins)\n    inertias.append(kmeans.inertia_)"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#comments",
@@ -3850,7 +3850,7 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#section-10",
     "title": "Clustering Methods",
     "section": "",
-    "text": "Here, we will restrict to 7 numeric predictors.\n\nX_cereal = cereal_data.filter(['calories', 'protein', 'fat', 'sodium', 'fiber',\n                              'carbo', 'sugars', 'potass', 'vitamins'])\nX_cereal.head()\n\n\n\n\n\n\n\n\ncalories\nprotein\nfat\nsodium\nfiber\ncarbo\nsugars\npotass\nvitamins\n\n\n\n\n0\n70\n4\n1\n130\n10.0\n5.0\n6\n280\n25\n\n\n1\n120\n3\n5\n15\n2.0\n8.0\n8\n135\n0\n\n\n2\n70\n4\n1\n260\n9.0\n7.0\n5\n320\n25\n\n\n3\n50\n4\n0\n140\n14.0\n8.0\n0\n330\n25\n\n\n4\n110\n2\n2\n200\n1.0\n14.0\n8\n-1\n25"
+    "text": "Next, we plot the intertias and look for the elbow in the plot.\nThe elbow represents a number of clusters for which there is no significant improvement in the quality of the clustering.\nIn this case, the number of clusters recommended by this elbow method is 3.\n\n\n\nCode\nplt.figure(figsize=(6, 6))\nplt.plot(range(1,11), inertias, marker='o')\nplt.title('Elbow method')\nplt.xlabel('Number of clusters')\nplt.ylabel('Inertia')\nplt.show()"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#do-not-forget-to-standardize",
@@ -3864,7 +3864,7 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#section-11",
     "title": "Clustering Methods",
     "section": "",
-    "text": "Unfortunately, the Agglomerative() function in sklearn is not as user friendly compared to other available functions in Python. In particular, the scipy library has a function called linkage() for hierarchical clustering that works as follows.\n\nClust_Cereal = linkage(Xs_cereal, method = 'complete')\n\nThe argument method sets the type of linkage to be used."
+    "text": "Here, we will restrict to 7 numeric predictors.\n\nX_cereal = cereal_data.filter(['calories', 'protein', 'fat', 'sodium', 'fiber',\n                              'carbo', 'sugars', 'potass', 'vitamins'])\nX_cereal.head()\n\n\n\n\n\n\n\n\ncalories\nprotein\nfat\nsodium\nfiber\ncarbo\nsugars\npotass\nvitamins\n\n\n\n\n0\n70\n4\n1\n130\n10.0\n5.0\n6\n280\n25\n\n\n1\n120\n3\n5\n15\n2.0\n8.0\n8\n135\n0\n\n\n2\n70\n4\n1\n260\n9.0\n7.0\n5\n320\n25\n\n\n3\n50\n4\n0\n140\n14.0\n8.0\n0\n330\n25\n\n\n4\n110\n2\n2\n200\n1.0\n14.0\n8\n-1\n25"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#results-dendrogram",
@@ -3885,7 +3885,7 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#section-12",
     "title": "Clustering Methods",
     "section": "",
-    "text": "This line defines 5 groups."
+    "text": "Unfortunately, the Agglomerative() function in sklearn is not as user friendly compared to other available functions in Python. In particular, the scipy library has a function called linkage() for hierarchical clustering that works as follows.\n\nClust_Cereal = linkage(Xs_cereal, method = 'complete')\n\nThe argument method sets the type of linkage to be used."
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#dendrogram-in-python",
@@ -3906,7 +3906,7 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#section-13",
     "title": "Clustering Methods",
     "section": "",
-    "text": "With these methods, there is no single correct answer; any solution that exposes some interesting aspect of the data should be considered.\n\nJames et al. (2017)"
+    "text": "This line defines 5 groups."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#agenda",
@@ -5237,5 +5237,250 @@
     "title": "Train, Test, and Validation Datasets",
     "section": "Work on your training dataset",
     "text": "Work on your training dataset\nAfter we have partitioned the data, we work on the training data to develop our predictive pipeline.\nThe pipeline has two main steps:\n\nData preprocessing.\nModel development.\n\nWe will now discuss preprocessing techniques applied to the predictor columns in the training dataset.\nNote that all preprocessing techniques will also be applied to the validation dataset and test dataset to prepare it for your model!"
+  },
+  {
+    "objectID": "UnsupervisedLearning/Clustering.slides.html#section-6",
+    "href": "UnsupervisedLearning/Clustering.slides.html#section-6",
+    "title": "Clustering Methods",
+    "section": "",
+    "text": "Code\nplt.figure(figsize=(9, 6))\nsns.scatterplot(data = clustered_penguins, x = 'bill_length_mm', y = 'bill_depth_mm', \n                hue = 'Cluster', palette = 'Set1')\nplt.title('K-means Clustering of Penguins')\nplt.xlabel('Bill Length (mm)')\nplt.ylabel('Bill Depth (mm)')\nplt.tight_layout()\nplt.show()"
+  },
+  {
+    "objectID": "UnsupervisedLearning/Clustering.slides.html#section-14",
+    "href": "UnsupervisedLearning/Clustering.slides.html#section-14",
+    "title": "Clustering Methods",
+    "section": "",
+    "text": "With these methods, there is no single correct answer; any solution that exposes some interesting aspect of the data should be considered.\n\nJames et al. (2017)"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#agenda",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#agenda",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Agenda",
+    "text": "Agenda\n\n\nIntroduction to Supervised Learning\nLinear Regression Model\nParameter estimation"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#load-the-libraries",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#load-the-libraries",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Load the libraries",
+    "text": "Load the libraries\n\nBefore we start, let’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_squared_error, r2_score\n\nHere, we use specific functions from the pandas, matplotlib, seaborn and sklearn libraries in Python."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#supervised-learning",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#supervised-learning",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Supervised Learning",
+    "text": "Supervised Learning\nIncludes algorithms that learn by example. The user provides the supervised algorithm with a known data set that includes the corresponding known inputs and outputs. The algorithm must find a method to determine how to reach those inputs and outputs.\nWhile the user knows the correct answers to the problem, the algorithm identifies patterns in the data, learns from observations, and makes predictions.\nThe algorithm makes predictions that can be corrected by the user, and this process continues until the algorithm reaches a high level of accuracy and performance."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#main-data-science-problems",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#main-data-science-problems",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Main data science problems",
+    "text": "Main data science problems\n\nRegression Problems. The response is numerical. For example, a person’s income, the value of a house, or a patient’s blood pressure.\nClassification Problems. The response is categorical and involves K different categories. For example, the brand of a product purchased (A, B, C) or whether a person defaults on a debt (yes or no).\nThe predictors (\\(\\boldsymbol{X}\\)) can be numerical or categorical."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#main-data-science-problems-1",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#main-data-science-problems-1",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Main data science problems",
+    "text": "Main data science problems\n\nRegression Problems. The response is numerical. For example, a person’s income, the value of a house, or a patient’s blood pressure.\nClassification Problems. The response is categorical and involves K different categories. For example, the brand of a product purchased (A, B, C) or whether a person defaults on a debt (yes or no).\nThe predictors (\\(\\boldsymbol{X}\\)) can be numerical or categorical."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#regression-problem",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#regression-problem",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Regression problem",
+    "text": "Regression problem\n\nGoal: Find the best function \\(f(\\boldsymbol{X})\\) of the predictors \\(\\boldsymbol{X} = (X_1, \\ldots, X_p)\\) that describes the response \\(Y\\).\nIn mathematical terms, we want to establish the following relationship:\n\\[Y = f(\\mathbf{X}) + \\epsilon\\]\n\nWhere \\(\\epsilon\\) is a natural (random) error."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#how-to-find-the-shape-of-fx",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#how-to-find-the-shape-of-fx",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "How to find the shape of \\(f(X)\\)?",
+    "text": "How to find the shape of \\(f(X)\\)?\n\nUsing training data."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#how-to-find-the-shape-of-fx-1",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#how-to-find-the-shape-of-fx-1",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "How to find the shape of \\(f(X)\\)?",
+    "text": "How to find the shape of \\(f(X)\\)?\n\nUsing training data."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#how-to-evaluate-the-quality-of-the-candidate-function-hatfx",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#how-to-evaluate-the-quality-of-the-candidate-function-hatfx",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "How to evaluate the quality of the candidate function \\(\\hat{f}(X)\\)?",
+    "text": "How to evaluate the quality of the candidate function \\(\\hat{f}(X)\\)?\n\n\n\nUsing validation data."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#how-to-evaluate-the-quality-of-the-candidate-function-hatfx-1",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#how-to-evaluate-the-quality-of-the-candidate-function-hatfx-1",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "How to evaluate the quality of the candidate function \\(\\hat{f}(X)\\)?",
+    "text": "How to evaluate the quality of the candidate function \\(\\hat{f}(X)\\)?\n\n\n\nUsing validation data."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#moreover",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#moreover",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Moreover…",
+    "text": "Moreover…\n\n\n\n\nWe can use test data for a final evaluation of the model.\nTest data is data obtained from the process that generated the training data.\nTest data is independent of the training data."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#linear-regression-model",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#linear-regression-model",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Linear Regression Model",
+    "text": "Linear Regression Model\nA common candidate function for predicting a response is the linear regression model. It has the mathematical form:\n\\[\\hat{Y}_i = \\hat{f}(X_i) = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_i.\\]\n\nWhere \\(i = 1, \\ldots, n_t\\) is the index of the \\(n_t\\) training data.\n\\(\\hat{Y}_i\\) is the prediction of the actual value of the response \\(Y_i\\) associated with a predictor value equal to \\(X_i\\).\nThe values \\(\\hat{\\beta}_0\\) and \\(\\hat{\\beta}_1\\) are called the coefficients of the model."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-1",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-1",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "",
+    "text": "The values of \\(\\hat{\\beta}_0\\), \\(\\hat{\\beta}_1\\), …, \\(\\hat{\\beta}_p\\) are obtained from the training data using method of least squares.\nThis method finds the coefficient values that minimize the error made by the model \\(\\hat{f}(X_i)\\) when trying to predict the responses in the training set:\n\n\\[RSS = \\sum_{i=1}^{n_t} (Y_i - (\\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\cdots + \\hat{\\beta}_p X_{ip} ))^2  \\]\n\nwhere \\(RSS\\) means residual sum of squares."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#the-idea-in-two-dimensions",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#the-idea-in-two-dimensions",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "The idea in two dimensions",
+    "text": "The idea in two dimensions"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#example-1",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#example-1",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Example 1",
+    "text": "Example 1\n\nWe used the dataset called “Advertising.xlsx” in Canvas.\n\nTV: Money spent on TV ads for a product ($).\nSales: Sales generated from the product ($).\n200 markets\n\n\n# Load the data into Python\nAds_data = pd.read_excel('Advertising.xlsx')"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-2",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-2",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "",
+    "text": "Ads_data.head()\n\n\n\n\n\n\n\n\nTV\nRadio\nNewspaper\nSales\n\n\n\n\n0\n230.1\n37.8\n69.2\n22.1\n\n\n1\n44.5\n39.3\n45.1\n10.4\n\n\n2\n17.2\n45.9\n69.3\n9.3\n\n\n3\n151.5\n41.3\n58.5\n18.5\n\n\n4\n180.8\n10.8\n58.4\n12.9"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-3",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-3",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "",
+    "text": "Now, let’s choose our predictor and response. In the definition of X_full, the double bracket in [] is important because it allows us to have a pandas DataFrame as output. This makes it easier to fit the linear regression model with scikit-learn.\n\n# Chose the predictor.\nX_full = Ads_data.filter(['TV'])\n\n# Set the response.\nY_full = Ads_data.filter(['Sales'])"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#create-training-and-validation-data",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#create-training-and-validation-data",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Create training and validation data",
+    "text": "Create training and validation data\n\nTo evaluate a model’s performance on unobserved data, we split the current dataset into a training dataset and a validation dataset. To do this, we use the scikit-learn train_test_split() function.\n\nX_train, X_valid, Y_train, Y_valid = train_test_split(X_full, Y_full, \n                                                      test_size = 0.25,\n                                                      random_state = 301655)\n\nWe use 75% of the data for training and the rest for validation."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#fit-a-linear-regression-model-in-python",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#fit-a-linear-regression-model-in-python",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Fit a linear regression model in Python",
+    "text": "Fit a linear regression model in Python\n\nIn Python, we use the LinearRegression() and fit() functions from the scikit-learn to fit a linear regression model.\n\n# 1. Create the linear regression model\nLRmodel = LinearRegression()\n\n# 2. Fit the model.\nLRmodel.fit(X_train, Y_train)"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-4",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-4",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "",
+    "text": "The following commands allow you to show the estimated coefficients of the model.\n\nprint(\"Coefficients:\", LRmodel.coef_)\n\nCoefficients: [[0.05185463]]\n\n\nWe can also show the estimated intercept.\n\nprint(\"Intercept:\", LRmodel.intercept_)\n\nIntercept: [6.69303889]\n\n\n\nThe estimated model thus is\n\\[\\hat{Y}_i = 6.69 + 0.051 X_i.\\]"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#linear-regression-model-assumptions",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#linear-regression-model-assumptions",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Linear regression model assumptions",
+    "text": "Linear regression model assumptions\n\nTo use the regression model, the model errors \\(e_i = Y_i - \\hat{Y}_i\\) obtained on the training data must meet three conditions:\n\nOn average, they must be equal to 0.\nThey must have the same dispersion or variability.\nThey must be independent of each other.\n\nThese assumptions are evaluated using a graphical analysis of residuals (model errors)."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#in-python",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#in-python",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "In Python",
+    "text": "In Python\n\nTo evaluate the model’s performance, we use the validation dataset. Specifically, we use the predictor matrix stored in X_valid.\n\nIn Python, we make the prediction using the pre-trained LRmodel.\n\nY_pred = LRmodel.predict(X_valid)"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-5",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-5",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "",
+    "text": "In practice, the square root of the mean prediction error is used:\n\\[\\text{RMSE}_v = \\sqrt{\\text{MSE}_v}.\\]\nThe advantage of \\(\\text{RMSE}_v\\) is that it can be interpreted as:\n\nThe average variability of a model prediction.\n\nFor example, if \\(\\text{RMSE}_v = 1\\), then a prediction of \\(\\hat{Y} = 5\\) will have an (average) error rate of \\(\\pm 1\\)."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#prediction-error",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#prediction-error",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Prediction error",
+    "text": "Prediction error\nAfter estimating and validating the linear regression model, we can check the quality of its predictions on unobserved data. That is, on the data in the validation set.\nOne metric for this is the mean prediction error (MSE\\(_v\\)):\n\n\\[\\text{MSE}_v = \\frac{\\sum_{i=1}^{n_v} (Y_i - (\\hat{\\beta}_0 + \\hat{\\beta}_1 X_1 + \\cdots + \\hat{\\beta}_p X_p))^2}{n_v}\\]\n\n\nFor \\(n_v\\), the validation data!\n\nThe smaller \\(\\text{MSE}_v\\), the better the predictions."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-6",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-6",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "",
+    "text": "To evaluate the model, we use the mean squared error in the Python mse() function. Recall that the responses from the validation dataset are in Y_valid, and the model predictions are in Y_pred.\n\nmse = mean_squared_error(Y_valid, Y_pred)  # Mean Squared Error (MSE)\nprint(round(mse, 2))\n\n15.49\n\n\n\nTo obtain the root mean squared error (RMSE), we simply take the square root of the MSE.\n\nprint(round(mse**(1/2), 2))\n\n3.94"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#in-python-1",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#in-python-1",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "In Python",
+    "text": "In Python\n\nTo evaluate the model’s performance, we use the validation dataset. Specifically, we use the predictor matrix stored in X_valid.\n\nIn Python, we make the prediction using the pre-trained LRmodel.\n\nY_pred = LRmodel.predict(X_valid)"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-7",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-7",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "",
+    "text": "To evaluate the model, we use the mean squared error in the Python mse() function. Recall that the responses from the validation dataset are in Y_valid, and the model predictions are in Y_pred.\n\nmse = mean_squared_error(Y_valid, Y_pred)  # Mean Squared Error (MSE)\nprint(round(mse, 2))\n\n15.49\n\n\n\nTo obtain the root mean squared error (RMSE), we simply take the square root of the MSE.\n\nprint(round(mse**(1/2), 2))\n\n3.94"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#another-metric-r2",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#another-metric-r2",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Another Metric: \\(R^2\\)",
+    "text": "Another Metric: \\(R^2\\)\n\nIn the context of Data Science, \\(R^2\\) can be interpreted as the squared correlation between the actual responses and those predicted by the model.\nThe higher the correlation, the better the agreement between the predicted and actual responses.\n\n\nWe compute \\(R^2\\) in Python as follows:\n\nrtwo_sc = r2_score(Y_valid, Y_pred)  # Rsquared\nprint(round(rtwo_sc, 2))\n\n0.33"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#mini-activity-cooperative-mode",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#mini-activity-cooperative-mode",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Mini-Activity (cooperative mode)",
+    "text": "Mini-Activity (cooperative mode)\n\n\nConsider the Advertising.xlsx dataset in Canvas.\nUse a model to predict Sales that includes the Radio predictor (money spent on radio ads for a product ($)). What is the \\(\\text{RMSE}_v\\)?\nNow, use a model to predict Sales that includes two predictors: TV and Radio. What is the \\(\\text{RMSE}_v\\)?\nWhich model do you prefer?"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#supervised-learning-problems",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#supervised-learning-problems",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Supervised learning problems",
+    "text": "Supervised learning problems\n\nRegression Problems. The response is numerical. For example, a person’s income, the value of a house, or a patient’s blood pressure.\nClassification Problems. The response is categorical and involves K different categories. For example, the brand of a product purchased (A, B, C) or whether a person defaults on a debt (yes or no).\nThe predictors (\\(\\boldsymbol{X}\\)) can be numerical or categorical."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#supervised-learning-problems-1",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#supervised-learning-problems-1",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Supervised learning problems",
+    "text": "Supervised learning problems\n\nRegression Problems. The response is numerical. For example, a person’s income, the value of a house, or a patient’s blood pressure.\nClassification Problems. The response is categorical and involves K different categories. For example, the brand of a product purchased (A, B, C) or whether a person defaults on a debt (yes or no).\nThe predictors (\\(\\boldsymbol{X}\\)) can be numerical or categorical."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#linear-regression-model-1",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#linear-regression-model-1",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Linear Regression Model",
+    "text": "Linear Regression Model\nA common candidate function for predicting a response is the linear regression model. It has the mathematical form:\n\\[\\hat{Y}_i = \\hat{f}(\\boldsymbol{X}_i) = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\cdots + \\hat{\\beta}_p X_{ip}.\\]\n\nWhere \\(i = 1, \\ldots, n_t\\) is the index of the \\(n_t\\) training data.\n\\(\\hat{Y}_i\\) is the prediction of the actual value of the response \\(Y_i\\) associated with values of \\(p\\) predictors denoted by \\(\\boldsymbol{X}_i = (X_{i1}, \\ldots, X_{ip})\\).\nThe values \\(\\hat{\\beta}_0\\), \\(\\hat{\\beta}_1\\), …, \\(\\hat{\\beta}_p\\) are the coefficients of the model."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#the-idea-with-one-predictor-and-one-response",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#the-idea-with-one-predictor-and-one-response",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "The idea with one predictor and one response",
+    "text": "The idea with one predictor and one response"
   }
 ]
