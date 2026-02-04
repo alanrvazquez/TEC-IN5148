@@ -88,7 +88,7 @@ The predictors ($\boldsymbol{X}$) can be *numerical* or *categorical*.
 
 In mathematical terms, we want to establish the following relationship:
 
-$$Y = f(\mathbf{X}) + \epsilon$$
+$$Y = f(\boldsymbol{X}) + \epsilon$$
 
 -   Where $\epsilon$ is a natural (random) error.
 
@@ -410,11 +410,11 @@ print(round(rtwo_sc, 2))
 </br>
 
 ::: incremental
-- By using a training data set that is much smaller than our actual data, the estimated model $\hat{f}(\boldsymbol{X})$ will be less good than if we used the full training data. That is, more likely for predictions to be far from actual values.
+-   By using a training data set that is much smaller than our actual data, the estimated model $\hat{f}(\boldsymbol{X})$ will be less good than if we used the full training data. That is, more likely for predictions to be far from actual values.
 
-- Thus, the validation MSE is likely to be bigger than had we (a) used the full data set and (b) fit the correct model.
+-   Thus, the validation MSE is likely to be bigger than had we (a) used the full data set and (b) fit the correct model.
 
-- In other words, using less than all data results in a $\text{MSE}_v$ that is not a good representation of the predictive performance of $\hat{f}(\boldsymbol{X})$.
+-   In other words, using less than all data results in a $\text{MSE}_v$ that is not a good representation of the predictive performance of $\hat{f}(\boldsymbol{X})$.
 :::
 
 ## $K$-fold Cross-Validation
@@ -443,7 +443,7 @@ print(round(rtwo_sc, 2))
 :::::: center
 ::::: columns
 ::: {.column width="30%"}
-![](images/CV_1.png){fig-align="center"  width="304"}
+![](images/CV_1.png){fig-align="center" width="304"}
 :::
 
 ::: {.column width="70%"}
@@ -460,7 +460,7 @@ print(round(rtwo_sc, 2))
 ::::::: center
 :::::: columns
 ::: {.column width="30%"}
-![](images/CV_2.png){fig-align="center"  width="304"}
+![](images/CV_2.png){fig-align="center" width="304"}
 :::
 
 :::: {.column width="70%"}
@@ -479,18 +479,18 @@ print(round(rtwo_sc, 2))
 
 **Basic Idea:** Divide the training data into $K$ equally-sized divisions or folds ($K = 5$ here).
 
-::::::: center
-:::::: columns
+:::::: center
+::::: columns
 ::: {.column width="30%"}
-![](images/CV_3.png){fig-align="center"  width="304"}
+![](images/CV_3.png){fig-align="center" width="304"}
 :::
 
-:::: {.column width="70%"}
+::: {.column width="70%"}
 -   Using training, construct $\hat{f}^{(-2)}$.
 -   Using validation, calculate $CV_1(\hat{f}^{(-2)}) = \frac{1}{n_2} \sum_{i \in F_2} (Y_i - \hat{f}^{(-2)}(\boldsymbol{X}_i))^2$
-::::
+:::
+:::::
 ::::::
-:::::::
 
 ## $K$-fold Cross-Validation
 
@@ -498,29 +498,30 @@ print(round(rtwo_sc, 2))
 
 **Basic Idea:** Divide the training data into $K$ equally-sized divisions or folds ($K = 5$ here).
 
-::::::: center
-:::::: columns
+:::::: center
+::::: columns
 ::: {.column width="30%"}
-![](images/CV_4.png){fig-align="center"  width="304"}
+![](images/CV_4.png){fig-align="center" width="304"}
 :::
-:::: {.column width="70%"}
+
+::: {.column width="70%"}
 -   Using training, construct $\hat{f}^{(-5)}$.
 -   Using validation, calculate $CV_1(\hat{f}^{(-5)}) = \frac{1}{n_5} \sum_{i \in F_5} (Y_i - \hat{f}^{(-5)}(\boldsymbol{X}_i))^2$
-::::
+:::
+:::::
 ::::::
-:::::::
 
 ## 
 
 </br></br>
 
 We average these fold-based error estimates to yield an evaluation metric:
-                     
+
 $$CV(\hat{f}) = \frac{1}{K} \sum^{K}_{k=1} CV_k (\hat{f}^{(-k)}).$$
 
-- Called the **$K$-fold cross-validation estimate**. 
+-   Called the $K$-fold cross-validation estimate.
 
-- Here, we used $K = 5$ but another popular choice is $K = 10$.
+-   Here, we used $K = 5$ but another popular choice is $K = 10$.
 
 ## $K$-fold CV in Python
 
@@ -543,7 +544,7 @@ neg_cv_MSEs = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5,
 print(neg_cv_MSEs)
 ```
 
-##
+## 
 
 </br>
 
@@ -572,7 +573,7 @@ MSE_cv = cv_MSEs.mean()
 print(round(MSE_cv, 3))
 ```
 
-##
+## 
 
 </br></br>
 
@@ -596,7 +597,7 @@ Rsq_cv = cv_Rsq.mean()
 print(round(Rsq_cv, 3))
 ```
 
-##
+## 
 
 </br></br>
 
@@ -618,10 +619,9 @@ print(round(RMSE_cv, 3))
 
 ## Final remarks
 
-- $K$-fold CV provides a robust estimate of prediction error by averaging performance across multiple data splits.  
-- It improves data efficiency by allowing all observations to be used for both training and validation.  
-- It is widely used for **model comparison** and **hyperparameter tuning**.
-- It can be extended to *generalized* K-fold cross-validation (e.g., stratified, grouped, or time-series folds) to respect data structure.
-
+-   $K$-fold CV provides a robust estimate of prediction error by averaging performance across multiple data splits.\
+-   It improves data efficiency by allowing all observations to be used for both training and validation.\
+-   It is widely used for **model comparison** and **hyperparameter tuning**.
+-   It can be extended to *generalized* K-fold cross-validation (e.g., stratified, grouped, or time-series folds) to respect data structure.
 
 # [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.25">
 
   <meta name="author" content="Alan R. Vazquez">
-  <title>IN5148 Statistics and Data Science with Applications in Engineering – Multiple Linear Regression</title>
+  <title>IN5148 Statistics and Data Science with Applications in Engineering – Model Evaluation and Inference</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -197,7 +197,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Multiple Linear Regression</h1>
+  <h1 class="title">Model Evaluation and Inference</h1>
   <p class="subtitle">IN5148: Statistics and Data Science with Applications in Engineering</p>
 
 <div class="quarto-title-authors">
@@ -216,168 +216,72 @@ Alan R. Vazquez
 <h2>Agenda</h2>
 <p><br></p>
 <ol type="1">
-<li>Introduction</li>
-<li>Multiple linear regression model</li>
-<li>Parameter estimation</li>
+<li>Residual analysis</li>
+<li>Inference about individual <span class="math inline">\(\beta\)</span>’s using t-tests</li>
 </ol>
 </section>
-<section id="statsmodels-library" class="slide level2">
-<h2>statsmodels library</h2>
-<ul>
-<li><strong>statsmodels</strong> is a powerful Python library for statistical modeling, data analysis, and hypothesis testing.</li>
-<li>It provides classes and functions for estimating statistical models.</li>
-<li>It is built on top of libraries such as <strong>NumPy</strong>, <strong>SciPy</strong>, and <strong>pandas</strong></li>
-<li><a href="https://www.statsmodels.org/stable/index.html" class="uri">https://www.statsmodels.org/stable/index.html</a></li>
-</ul>
-
-<img data-src="images/statsmodels-logo-v2-horizontal-dark.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="load-the-libraries" class="slide level2">
 <h2>Load the libraries</h2>
 <p><br><br></p>
-<p>Let’s import <strong>statsmodels</strong> into Python together with the other relevant libraries.</p>
-<div id="9eba8b1a" class="cell" data-execution_count="1">
+<p>Let’s import <strong>statsmodels</strong> into Python together with other relevant libraries.</p>
+<div id="22517544" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="co"># Importing necessary libraries</span></span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-3"><a></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-3"><a></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-4"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section>
-<section id="multiple-linear-regression-model" class="title-slide slide level1 center">
-<h1>Multiple linear regression model</h1>
+<section id="residual-analysis" class="title-slide slide level1 center">
+<h1>Residual analysis</h1>
 
 </section>
-<section id="example" class="slide level2">
-<h2>Example</h2>
+<section id="questions" class="slide level2">
+<h2>Questions</h2>
 <p><br></p>
-<p>A group of engineers conducted an experiment to determine the influence of five factors on an appropriate measure of the whiteness of rayon (<span class="math inline">\(Y\)</span>). The factors (predictors) are</p>
-<ul>
-<li><span class="math inline">\(X_1\)</span>: acid bath temperature.</li>
-<li><span class="math inline">\(X_2\)</span>: cascade acid concentration.</li>
-<li><span class="math inline">\(X_3\)</span>: water temperature.</li>
-<li><span class="math inline">\(X_4\)</span>: sulfide concentration.</li>
-<li><span class="math inline">\(X_5\)</span>: amount of chlorine bleach.</li>
-</ul>
-</section>
-<section id="the-dataset" class="slide level2">
-<h2>The dataset</h2>
-<p>The dataset for the file is in “rayon.xlsx”. It has 26 observations.</p>
-<div id="abd71ea1" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>rayon_data <span class="op">=</span> pd.read_excel(<span class="st">"rayon.xlsx"</span>)</span>
-<span id="cb2-2"><a></a>rayon_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">X1</th>
-<th data-quarto-table-cell-role="th">X2</th>
-<th data-quarto-table-cell-role="th">X3</th>
-<th data-quarto-table-cell-role="th">X4</th>
-<th data-quarto-table-cell-role="th">X5</th>
-<th data-quarto-table-cell-role="th">Y</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>35</td>
-<td>0.3</td>
-<td>82</td>
-<td>0.2</td>
-<td>0.3</td>
-<td>76.5</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
-<td>35</td>
-<td>0.3</td>
-<td>82</td>
-<td>0.3</td>
-<td>0.5</td>
-<td>76.0</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
-<td>35</td>
-<td>0.3</td>
-<td>88</td>
-<td>0.2</td>
-<td>0.5</td>
-<td>79.9</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
-<td>35</td>
-<td>0.3</td>
-<td>88</td>
-<td>0.3</td>
-<td>0.3</td>
-<td>83.5</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
-<td>35</td>
-<td>0.7</td>
-<td>82</td>
-<td>0.2</td>
-<td>0.5</td>
-<td>89.5</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<p>Here, we will consider it as the <span style="color:blue;">training</span> dataset.</p>
-</section>
-<section id="multiple-linear-regression-model-1" class="slide level2">
-<h2>Multiple linear regression model</h2>
-<p><span class="math display">\[Y = f(\boldsymbol{X}) + \epsilon\]</span></p>
-<ul>
-<li class="fragment"><span class="math inline">\(f(\boldsymbol{X}) = \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p\)</span> (constant).</li>
-<li class="fragment"><span class="math inline">\(p\)</span> is the number of predictors.</li>
-<li class="fragment"><span class="math inline">\(\epsilon\)</span> is a random variable describing everything that is not captured by our model.</li>
-</ul>
-<div class="fragment">
-<p>Assumptions:</p>
 <ol type="1">
-<li>The expected or average value of <span class="math inline">\(\epsilon\)</span> is zero.</li>
-<li>The dispersion or variance of <span class="math inline">\(\epsilon\)</span> is <span class="math inline">\(\sigma^2\)</span> (unknown constant).</li>
+<li><p>How can we estimate <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_p\)</span> and <span class="math inline">\(\sigma^2\)</span>?</p></li>
+<li><p><span style="color:blue;">How can we validate the model and all its assumptions?</span></p></li>
+<li><p>How can we make inferences about <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_p\)</span>?</p></li>
+<li><p>If some assumptions are not met, can we do something about it?</p></li>
+<li><p>How can we make predictions of future responses using the multiple linear regression model?</p></li>
 </ol>
-</div>
 </section>
-<section id="in-our-example" class="slide level2">
-<h2>In our example</h2>
-<p><span class="math display">\[Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \beta_4 X_4 + \beta_5 X_5 + \epsilon\]</span></p>
-<div style="font-size: 90%;">
+<section id="multiple-linear-regression-model" class="slide level2">
+<h2>Multiple linear regression model</h2>
+<p><br></p>
+<p><span class="math display">\[Y_i = \beta_0 + \beta_1 X_{i1} + \cdots + \beta_p X_{ip} + \epsilon_i\]</span></p>
 <ul>
-<li><p><span class="math inline">\(X_1\)</span>: acid bath temperature.</p></li>
-<li><p><span class="math inline">\(X_2\)</span>: cascade acid concentration.</p></li>
-<li><p><span class="math inline">\(X_3\)</span>: water temperature.</p></li>
-<li><p><span class="math inline">\(X_4\)</span>: sulfide concentration.</p></li>
-<li><p><span class="math inline">\(X_5\)</span>: amount of chlorine bleach.</p></li>
-<li><p><span class="math inline">\(Y\)</span>: whiteness of rayon.</p></li>
-<li><p><span class="math inline">\(p = 5\)</span> and <span class="math inline">\(\epsilon\)</span> is the error of the model assumed to be 0 and of constant dispersion <span class="math inline">\(\sigma^2\)</span>.</p></li>
+<li><span class="math inline">\(p\)</span> is the number of predictors.</li>
+<li><span class="math inline">\(n\)</span> is the number of observations.</li>
+<li><span class="math inline">\(X_{ij}\)</span> is the i-th observation of the j-th predictor.</li>
+<li><span class="math inline">\(Y_{i}\)</span> is the i-th observation of the response.</li>
+<li><span class="math inline">\(\epsilon_i\)</span> is the i-th random error.</li>
 </ul>
+</section>
+<section id="assumptions" class="slide level2">
+<h2>Assumptions</h2>
+<p><br></p>
+<p>The error <span class="math inline">\(\epsilon_i\)</span>’s must then satisfy the following assumptions:</p>
+<ol type="1">
+<li class="fragment">On average, they are close to zero for any value of the predictors <span class="math inline">\(X_j\)</span>.</li>
+<li class="fragment">For any value of the predictor <span class="math inline">\(X_j\)</span>, the dispersion or variance is constant and equal to <span class="math inline">\(\sigma^2\)</span>.</li>
+<li class="fragment">The <span class="math inline">\(\epsilon_i\)</span>’s are all independent from each other.</li>
+<li class="fragment"><span style="color:gray;">The <span class="math inline">\(\epsilon_i\)</span>’s follow normal distribution with mean 0 and variance <span class="math inline">\(\sigma^2\)</span>.</span></li>
+</ol>
+</section>
+<section id="residuals" class="slide level2">
+<h2>Residuals</h2>
+<p><br></p>
+<p>The errors <span class="math inline">\(\epsilon_1, \ldots, \epsilon_n\)</span> are not observed. To overcome this issue, we use the <span style="color:purple;"><strong>residuals</strong></span> of our model.</p>
+<div class="fragment">
+<p>Suppose that the multiple linear regression model is correct and consider the fitted responses <span class="math inline">\(\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \cdots + \hat{\beta}_p X_{ip}\)</span>, where <span class="math inline">\(\hat{\beta}_{j}\)</span> is the least squares estimator for the j-th predictor.</p>
 </div>
+<div class="fragment">
+<p>We define the <span style="color:purple;"><strong>residuals</strong></span> <span class="math inline">\(\hat{\epsilon}_i = Y_i - \hat{Y}_i\)</span>, <span class="math inline">\(i = 1, \ldots, n.\)</span></p>
 <aside class="notes">
-<p>That is, the dispersion does not change in terms of the predictors or other variables not in the model.</p>
+<p>The residuals <span class="math inline">\(\hat{\epsilon}_i\)</span> are the estimates of the random errors <span class="math inline">\(\epsilon_i\)</span>.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -389,37 +293,44 @@ Alan R. Vazquez
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</section>
-<section id="interpretation-of-coefficients" class="slide level2">
-<h2>Interpretation of coefficients</h2>
-<p><br></p>
-<p><span class="math display">\[f(\boldsymbol{X}) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p,\]</span></p>
-<p>where the unknown parameter <span class="math inline">\(\beta_0\)</span> is called the “intercept,” and <span class="math inline">\(\beta_j\)</span> is the “coefficient” of the j-th predictor.</p>
-<div class="fragment">
-<p>For the j-th predictor, we have that:</p>
-<ul>
-<li class="fragment"><span class="math inline">\(\beta_j = 0\)</span> implies no dependence.</li>
-<li class="fragment"><span class="math inline">\(\beta_j &gt; 0\)</span> implies positive dependence.</li>
-<li class="fragment"><span class="math inline">\(\beta_j &lt; 0\)</span> implies negative dependence.</li>
-</ul>
 </div>
 </section>
 <section id="section" class="slide level2">
 <h2></h2>
 <p><br></p>
-<p><span class="math display">\[f(\boldsymbol{X}) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p,\]</span></p>
-<p><strong>Interpretation</strong>:</p>
-<ul>
-<li><span class="math inline">\(\beta_0\)</span> is the <span style="color:blue;">average response</span> when all predictors <span class="math inline">\(X_j\)</span> equal 0.</li>
-<li><span class="math inline">\(\beta_j\)</span> is the <span style="color:blue;">amount of increase in the average response</span> by a 1 unit increase in the predictor <span class="math inline">\(X_j\)</span>, <em>when all other predictors are fixed to an arbitrary value</em>.</li>
-</ul>
+<p>If the model structure is correctly specified and assuming that the least-squares estimates <span class="math inline">\(\hat{\beta}_j\)</span>’s are close to the true <span class="math inline">\(\beta_j\)</span>’s, respectively, we have that</p>
+<p><span class="math display">\[\hat{\epsilon}_i = Y_i - \hat{Y}_i = Y_i - \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \cdots + \hat{\beta}_p X_{ip} \approx \epsilon_i\]</span></p>
+<p>So, the residuals <span class="math inline">\(\hat{\epsilon}_i\)</span> should resemble the random errors <span class="math inline">\(\epsilon\)</span>.</p>
+<div class="fragment">
+<p>To evaluate the assumption of a multiple linear regression model, we use a <span style="color:green;"><strong>Residual analysis</strong></span>.</p>
+</div>
 </section>
-<section id="training-data" class="slide level2">
-<h2>Training Data</h2>
+<section id="residual-analysis-1" class="slide level2">
+<h2>Residual Analysis</h2>
 <p><br></p>
-<p>The parameters <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_p\)</span> and <span class="math inline">\(\sigma^2\)</span> are unknown. To learn about them, we use our <span style="color:blue;"><strong>training</strong></span> data.</p>
-<div id="31d5c483" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-display" data-execution_count="3">
+<p>To check the validity of these assumptions, we will follow a graphical approach. Specifically, we will construct three informative plots of the residuals.</p>
+<ol type="1">
+<li class="fragment"><p><strong>Residuals vs Fitted Values</strong> Plot. To assess the structure of the model and check for constant variance</p></li>
+<li class="fragment"><p><strong>Residuals Vs Time</strong> Plot. To check independence.</p></li>
+<li class="fragment"><p><strong>Normal Quantile-Quantile</strong> Plot. To assess if the residuals follow a normal distribution</p></li>
+</ol>
+</section>
+<section id="example-1" class="slide level2">
+<h2>Example 1</h2>
+<p><br></p>
+<ul>
+<li><p>This example is inspired by Foster, Stine and Waterman (1997, pages 191–199).</p></li>
+<li><p>The data are in the form of the time taken (in minutes) for a production run, <span class="math inline">\(Y\)</span>, and the number of items produced, <span class="math inline">\(X\)</span>, for 20 randomly selected orders as supervised by a manager.</p></li>
+<li><p>We wish to develop an equation to model the relationship between the run time (<span class="math inline">\(Y\)</span>) and the run size (<span class="math inline">\(X\)</span>).</p></li>
+</ul>
+</section>
+<section id="dataset" class="slide level2">
+<h2>Dataset</h2>
+<p>The dataset is in the file “production.xlsx”.</p>
+<div id="b17be5d6" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>production_data <span class="op">=</span> pd.read_excel(<span class="st">'production.xlsx'</span>)</span>
+<span id="cb2-2"><a></a>production_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -439,59 +350,41 @@ Alan R. Vazquez
 <thead>
 <tr class="header" style="text-align: right;">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">X1</th>
-<th data-quarto-table-cell-role="th">X2</th>
-<th data-quarto-table-cell-role="th">X3</th>
-<th data-quarto-table-cell-role="th">X4</th>
-<th data-quarto-table-cell-role="th">X5</th>
-<th data-quarto-table-cell-role="th">Y</th>
+<th data-quarto-table-cell-role="th">Case</th>
+<th data-quarto-table-cell-role="th">RunTime</th>
+<th data-quarto-table-cell-role="th">RunSize</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>35</td>
-<td>0.3</td>
-<td>82</td>
-<td>0.2</td>
-<td>0.3</td>
-<td>76.5</td>
+<td>1</td>
+<td>195</td>
+<td>175</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
-<td>35</td>
-<td>0.3</td>
-<td>82</td>
-<td>0.3</td>
-<td>0.5</td>
-<td>76.0</td>
+<td>2</td>
+<td>215</td>
+<td>189</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
-<td>35</td>
-<td>0.3</td>
-<td>88</td>
-<td>0.2</td>
-<td>0.5</td>
-<td>79.9</td>
+<td>3</td>
+<td>243</td>
+<td>344</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
-<td>35</td>
-<td>0.3</td>
+<td>4</td>
+<td>162</td>
 <td>88</td>
-<td>0.3</td>
-<td>0.3</td>
-<td>83.5</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
-<td>35</td>
-<td>0.7</td>
-<td>82</td>
-<td>0.2</td>
-<td>0.5</td>
-<td>89.5</td>
+<td>5</td>
+<td>185</td>
+<td>114</td>
 </tr>
 </tbody>
 </table>
@@ -500,451 +393,812 @@ Alan R. Vazquez
 </div>
 </div>
 </section>
-<section id="notation" class="slide level2">
-<h2>Notation</h2>
+<section id="linear-regression-model" class="slide level2">
+<h2>Linear regression model</h2>
+<p><span class="math display">\[
+Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
+\]</span></p>
+<p>where <span class="math inline">\(X_i\)</span> is the run size and <span class="math inline">\(Y_i\)</span> is the run time for the <span class="math inline">\(i\)</span>-th observation, <span class="math inline">\(i = 1, \ldots, 20\)</span>.</p>
+<div class="fragment">
+<p>We fit the model in Python as follows.</p>
+<div id="ee8ef163" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="co"># Defining the predictor (X) and the response variable (Y).</span></span>
+<span id="cb3-2"><a></a>prod_Y_train <span class="op">=</span> production_data[<span class="st">'RunTime'</span>]</span>
+<span id="cb3-3"><a></a>prod_X_pred <span class="op">=</span> production_data[<span class="st">'RunSize'</span>]</span>
+<span id="cb3-4"><a></a>prod_X_train <span class="op">=</span> sm.add_constant(prod_X_pred)</span>
+<span id="cb3-5"><a></a></span>
+<span id="cb3-6"><a></a><span class="co"># Fitting the simple linear regression model.</span></span>
+<span id="cb3-7"><a></a>regr <span class="op">=</span> sm.OLS(prod_Y_train, prod_X_train)</span>
+<span id="cb3-8"><a></a>linear_model <span class="op">=</span> regr.fit()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+<section id="estimated-model" class="slide level2">
+<h2>Estimated model</h2>
+<p><br></p>
+<p><span class="math display">\[
+\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i = 149.75 + 0.26 X_i,
+\]</span></p>
+<p>where <span class="math inline">\(\hat{Y}_i\)</span> is the <em>predicted</em> or <em>fitted</em> value of run time for the <span class="math inline">\(i\)</span>-th observation, <span class="math inline">\(i = 1, \ldots, 20\)</span>.</p>
+<p>The residuals of this estimated model are <span class="math inline">\(\hat{\epsilon}_i = Y_i - \hat{Y}_i\)</span>.</p>
+</section>
+<section id="calculation-of-fitted-values-and-residuals" class="slide level2">
+<h2>Calculation of fitted values and residuals</h2>
+<p><br></p>
+<p>Recall that we can calculate the predicted values and residuals using commands from <strong>statsmodels</strong>.</p>
+<div id="eb3b6dff" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># Make predictions using the the model</span></span>
+<span id="cb4-2"><a></a>prod_Y_pred <span class="op">=</span> linear_model.fittedvalues</span>
+<span id="cb4-3"><a></a></span>
+<span id="cb4-4"><a></a><span class="co"># Calculate residuals.</span></span>
+<span id="cb4-5"><a></a>residuals <span class="op">=</span> linear_model.resid</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section></section>
+<section>
+<section id="residuals-vs-fitted-values-plot" class="title-slide slide level1 center">
+<h1>Residuals vs Fitted Values Plot</h1>
+
+</section>
+<section id="intuition-behind" class="slide level2">
+<h2>Intuition behind …</h2>
+<p>the Residuals versus Fitted Values plot.</p>
+<div id="aa454486" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="LinearRegression_files/figure-revealjs/cell-6-output-1.png" class="quarto-figure quarto-figure-center" width="599" height="455"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="residuals-vs-fitted-values" class="slide level2">
+<h2>Residuals vs Fitted Values</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="8db85fea" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb5-2"><a></a>sns.scatterplot(x<span class="op">=</span><span class="st">'RunSize'</span>, y<span class="op">=</span><span class="st">'RunTime'</span>, data<span class="op">=</span>production_data, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb5-3"><a></a>plt.plot(production_data[<span class="st">'RunSize'</span>], lr_model.fittedvalues, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, linewidth<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb5-4"><a></a>plt.title(<span class="st">"Fitted Regression Line"</span>)</span>
+<span id="cb5-5"><a></a>plt.xlabel(<span class="st">"Run size"</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
+<span id="cb5-6"><a></a>plt.ylabel(<span class="st">"Run time"</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
+<span id="cb5-7"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="LinearRegression_files/figure-revealjs/cell-7-output-1.png" class="quarto-figure quarto-figure-center" width="453" height="455"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div id="ce583122" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="co"># Residual vs Fitted Values Plot</span></span>
+<span id="cb6-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb6-3"><a></a>sns.scatterplot(x <span class="op">=</span> prod_Y_pred, y <span class="op">=</span> residuals)</span>
+<span id="cb6-4"><a></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb6-5"><a></a>plt.title(<span class="st">'Residuals vs Fitted Values'</span>)</span>
+<span id="cb6-6"><a></a>plt.xlabel(<span class="st">'Fitted (predicted) Values'</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
+<span id="cb6-7"><a></a>plt.ylabel(<span class="st">'Residuals'</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
+<span id="cb6-8"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="LinearRegression_files/figure-revealjs/cell-8-output-1.png" class="quarto-figure quarto-figure-center" width="453" height="455"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="residuals-vs-fitted-values-1" class="slide level2">
+<h2>Residuals vs Fitted Values</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p><br></p>
 <ul>
-<li><span class="math inline">\(X_{ij}\)</span> denotes the i-th observed value of predictor <span class="math inline">\(X_j\)</span>.</li>
-<li><span class="math inline">\(Y_i\)</span> denotes the i-th observed value of response <span class="math inline">\(Y\)</span>.</li>
+<li>If there is a trend, the model is misspecified.</li>
+<li>A “funnel” shape indicates that the assumption of constant variance is not met.</li>
 </ul>
-<div id="d7f5e51a" class="cell" data-execution_count="4">
-<div class="cell-output cell-output-display" data-execution_count="4">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">X1</th>
-<th data-quarto-table-cell-role="th">X2</th>
-<th data-quarto-table-cell-role="th">X3</th>
-<th data-quarto-table-cell-role="th">X4</th>
-<th data-quarto-table-cell-role="th">X5</th>
-<th data-quarto-table-cell-role="th">Y</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>35</td>
-<td>0.3</td>
-<td>82</td>
-<td>0.2</td>
-<td>0.3</td>
-<td>76.5</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
-<td>35</td>
-<td>0.3</td>
-<td>82</td>
-<td>0.3</td>
-<td>0.5</td>
-<td>76.0</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
-<td>35</td>
-<td>0.3</td>
-<td>88</td>
-<td>0.2</td>
-<td>0.5</td>
-<td>79.9</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
-<td>35</td>
-<td>0.3</td>
-<td>88</td>
-<td>0.3</td>
-<td>0.3</td>
-<td>83.5</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
-<td>35</td>
-<td>0.7</td>
-<td>82</td>
-<td>0.2</td>
-<td>0.5</td>
-<td>89.5</td>
-</tr>
-</tbody>
-</table>
-
+</div><div class="column" style="width:60%;">
+<p><br></p>
+<div id="261ae247" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="LinearRegression_files/figure-revealjs/cell-9-output-1.png" class="quarto-figure quarto-figure-center" width="448" height="449"></p>
+</figure>
 </div>
 </div>
 </div>
+</div></div>
 </section>
 <section id="section-1" class="slide level2">
 <h2></h2>
-<p><br></p>
-<p>Since we believe in the multiple linear regression model, then the observations in the data set must comply with</p>
-<p><span class="math display">\[Y_i= \beta_0+\beta_1 X_{i1} + \beta_2 X_{i2} + \cdots + \beta_p X_{ip} + \epsilon_i.\]</span></p>
-<p>where:</p>
-<ul>
-<li><p><span class="math inline">\(i=1, \ldots, n.\)</span></p></li>
-<li><p><span class="math inline">\(n\)</span> is the number of observations. In our example, <span class="math inline">\(n = 26\)</span>.</p></li>
-<li><p>The <span class="math inline">\(\epsilon_1, \epsilon_2, \ldots, \epsilon_n\)</span> are random errors.</p></li>
-</ul>
-</section>
-<section id="assumptions-of-the-errors" class="slide level2">
-<h2>Assumptions of the errors</h2>
-<p><span class="math display">\[Y_i= \beta_0+\beta_1 X_{i1} + \beta_2 X_{i2} + \cdots + \beta_p X_{ip} + \epsilon_i \]</span></p>
-<p>The error <span class="math inline">\(\epsilon_i\)</span>’s must satisfy the following assumptions:</p>
-<ol type="1">
-<li class="fragment">On average, they are close to zero for any values of the predictors <span class="math inline">\(X_j\)</span>.</li>
-<li class="fragment">For any value of a predictor <span class="math inline">\(X_i\)</span>, the dispersion or variance is constant and equal to <span class="math inline">\(\sigma^2\)</span>.</li>
-<li class="fragment">The <span class="math inline">\(\epsilon_i\)</span>’s are all independent from each other.</li>
-<li class="fragment"><span style="color:gray;">The <span class="math inline">\(\epsilon_i\)</span>’s follow normal distribution with mean 0 and variance <span class="math inline">\(\sigma^2\)</span>.</span></li>
-</ol>
-</section>
-<section id="questions" class="slide level2">
-<h2>Questions</h2>
-<p><br></p>
-<ol type="1">
-<li class="fragment"><p>How can we estimate <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_p\)</span> and <span class="math inline">\(\sigma^2\)</span>?</p></li>
-<li class="fragment"><p>How can we validate the model and all its assumptions?</p></li>
-<li class="fragment"><p>How can we make inferences about <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_p\)</span>?</p></li>
-<li class="fragment"><p>If some assumptions are not met, can we do something about it?</p></li>
-<li class="fragment"><p>How can we make predictions of future responses using the multiple linear regression model?</p></li>
-</ol>
-</section>
-<section id="matrix-notation" class="slide level2">
-<h2>Matrix notation</h2>
-<p>In what follows, it is useful to denote the multiple linear regression model using matrix notation:</p>
-<p><span class="math inline">\(\mathbf{Y} = \begin{pmatrix} Y_1 \\ Y_2 \\ \vdots \\ Y_n \end{pmatrix}\)</span> and <span class="math inline">\(\mathbf{X} = \begin{pmatrix}
-1&amp; X_{11} &amp; X_{12} &amp; \cdots &amp; X_{1p} \\
-1&amp; X_{21} &amp; X_{22} &amp; \cdots &amp; X_{2p} \\
-\vdots &amp;\vdots &amp; \vdots &amp; \cdots &amp; \vdots \\
-1&amp; X_{n1} &amp; X_{n2} &amp; \cdots &amp; X_{np} \\
-\end{pmatrix}\)</span>, where</p>
-<ul>
-<li><span class="math inline">\(\mathbf{Y}\)</span> is an <span class="math inline">\(n \times 1\)</span> vector.</li>
-<li><span class="math inline">\(\mathbf{X}\)</span> is a <span class="math inline">\(n \times (p+1)\)</span> matrix.</li>
-</ul>
-</section>
+<p>Examples of plots that do not support the conclusion of constant variance.</p>
+
+<img data-src="images/clipboard-513958775.png" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="section-2" class="slide level2">
 <h2></h2>
-<p><br></p>
-<p>And,</p>
-<p><span class="math inline">\(\boldsymbol{\beta} = \begin{pmatrix}\beta_0 \\ \beta_1 \\ \vdots \\ \beta_p \end{pmatrix}\)</span> and <span class="math inline">\(\boldsymbol{\epsilon} = \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \vdots \\ \epsilon_n \end{pmatrix}\)</span>, where</p>
+<p>Another example.</p>
+
+<img data-src="images/clipboard-890785179.png" class="quarto-figure quarto-figure-center r-stretch"><p>The phenomenon of non-constant variance is called <span style="color:red;"><strong>heteroscedasticity</strong></span>.</p>
+</section></section>
+<section>
+<section id="residuals-vs-time-plot" class="title-slide slide level1 center">
+<h1>Residuals vs Time Plot</h1>
+
+</section>
+<section id="residuals-vs-time-plot-1" class="slide level2">
+<h2>Residuals vs Time Plot</h2>
 <ul>
-<li><span class="math inline">\(\boldsymbol{\beta}\)</span> is an <span class="math inline">\((p+1) \times 1\)</span> vector.</li>
-<li><span class="math inline">\(\boldsymbol{\epsilon}\)</span> is an <span class="math inline">\(n \times 1\)</span> vector.</li>
+<li class="fragment"><p>By “time,” we mean that time the observation was taken or the order in which it was taken. The plot should not show any structure or pattern in the residuals.</p></li>
+<li class="fragment"><p>Dependence on time is a common source of lack of independence, but other plots might also detect lack of independence.</p></li>
+<li class="fragment"><p>Ideally, we plot the residuals versus each variable of interest we could think of, either included or excluded in the model.</p></li>
+<li class="fragment"><p>Assessing the assumption of independence is hard in practice.</p></li>
 </ul>
 </section>
 <section id="section-3" class="slide level2">
 <h2></h2>
 <p><br></p>
-<p>The multiple linear regression model then is</p>
-<p><span class="math display">\[\mathbf{Y} =  \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}.\]</span> This expression means</p>
-<p><span class="math inline">\(\begin{pmatrix} Y_1 \\ Y_2 \\ \vdots \\ Y_n \end{pmatrix} = \begin{pmatrix}
-\beta_0 + \beta_1 X_{11} + \beta_2 X_{12} + \cdots + \beta_p X_{1p} \\
-\beta_0 + \beta_1 X_{21} + \beta_2 X_{22} + \cdots + \beta_p X_{2p} \\
-\vdots  \\
-\beta_0 + \beta_1 X_{n1} + \beta_2 X_{n2} + \cdots + \beta_p X_{np} \\
-\end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \vdots \\ \epsilon_n \end{pmatrix}\)</span></p>
+<div id="d6f1baa7" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="co"># Residuals vs Time (Case) Plot</span></span>
+<span id="cb7-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">5</span>))</span>
+<span id="cb7-3"><a></a>sns.scatterplot(x <span class="op">=</span> production_data[<span class="st">'Case'</span>], y <span class="op">=</span> residuals)</span>
+<span id="cb7-4"><a></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb7-5"><a></a>plt.title(<span class="st">'Residuals vs Time (Case)'</span>)</span>
+<span id="cb7-6"><a></a>plt.xlabel(<span class="st">'Case'</span>)</span>
+<span id="cb7-7"><a></a>plt.xticks(production_data[<span class="st">'Case'</span>])</span>
+<span id="cb7-8"><a></a>plt.ylabel(<span class="st">'Residuals'</span>)</span>
+<span id="cb7-9"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="LinearRegression_files/figure-revealjs/cell-10-output-1.png" class="quarto-figure quarto-figure-center" width="596" height="449"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><br><br></p>
+<p>Examples of plots that do and do not support the independence assumption.</p>
+</div><div class="column" style="width:70%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/clipboard-2835904055.png" class="quarto-figure quarto-figure-center" width="411"></p>
+</figure>
+</div>
+</div></div>
 </section></section>
 <section>
-<section id="parameter-estimation" class="title-slide slide level1 center">
-<h1>Parameter Estimation</h1>
+<section id="normal-quantile-quantile-plot" class="title-slide slide level1 center">
+<h1>Normal Quantile-Quantile Plot</h1>
+
+</section>
+<section id="checking-for-normality" class="slide level2">
+<h2>Checking for normality</h2>
+<p><br></p>
+<p>This assumption is generally checked by looking at the distribution of the residuals.</p>
+<p>Two plots:</p>
+<ul>
+<li><p>Histogram.</p></li>
+<li><p>Normal Quantile-Quantile Plot (also called normal probability plot).</p></li>
+</ul>
+</section>
+<section id="histogram" class="slide level2">
+<h2>Histogram</h2>
+<p>Ideally, the histogram resembles a normal distribution around 0. If the number of observations is small, the histogram may not be an effective visualization.</p>
+<div id="c4d13b2a" class="cell" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a><span class="co"># Histogram of residuals</span></span>
+<span id="cb8-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">3</span>))</span>
+<span id="cb8-3"><a></a>sns.histplot(residuals)</span>
+<span id="cb8-4"><a></a>plt.title(<span class="st">'Histogram of Residuals'</span>)</span>
+<span id="cb8-5"><a></a>plt.xlabel(<span class="st">'Residuals'</span>)</span>
+<span id="cb8-6"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="LinearRegression_files/figure-revealjs/cell-11-output-1.png" class="quarto-figure quarto-figure-center" width="427" height="302"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="normal-quantile-quantile-qq-plot" class="slide level2">
+<h2>Normal Quantile-Quantile (QQ) Plot</h2>
+<p><br></p>
+<p>A normal QQ plot is helpful for deciding whether a sample was drawn from a distribution that is approximately normal.</p>
+<div class="fragment">
+<ol type="1">
+<li>First, let <span class="math inline">\(\hat{\epsilon}_{[1]}, \hat{\epsilon}_{[2]}, \ldots, \hat{\epsilon}_{[n]}\)</span> be the residuals ranked in an increasing order, where <span class="math inline">\(\hat{\epsilon}_{[1]}\)</span> is the minimum and <span class="math inline">\(\hat{\epsilon}_{[n]}\)</span> is the maximum. These points define the <span style="color:lightblue;"><strong>sample</strong></span> percentiles (or quantiles) of the distribution of the residuals.</li>
+</ol>
+</div>
+<div class="fragment">
+<ol start="2" type="1">
+<li>Next, calculate the <span style="color:pink;"><strong>theoretical</strong></span> percentiles of a (standard) Normal distribution calculated using Python.</li>
+</ol>
+</div>
+</section>
+<section id="section-5" class="slide level2">
+<h2></h2>
+<p><br><br></p>
+<ul>
+<li><p>The normal QQ plot displays the (sample) percentiles of the residuals versus the percentiles of a normal distribution.</p></li>
+<li><p>If these percentiles agree with each other, then they would approximate a straight line.</p></li>
+<li><p>The straight line is usually determined visually, with emphasis on the central values rather than the extremes.</p></li>
+<li><p>For a nice explanation, see this <a href="https://www.youtube.com/watch?v=okjYjClSjOg&amp;ab_channel=StatQuestwithJoshStarmer">YouTube video</a>.</p></li>
+</ul>
+</section>
+<section id="qq-plot-in-python" class="slide level2">
+<h2>QQ plot in Python</h2>
+<p><br><br><br></p>
+<p>To construct a QQ plot, we use the function <code>qqplot()</code> <strong>statsmodels</strong> library.</p>
+<div id="b0008b60" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a><span class="co"># QQ plot to assess normality of residuals</span></span>
+<span id="cb9-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">3</span>))</span>
+<span id="cb9-3"><a></a>sm.qqplot(residuals, fit <span class="op">=</span> <span class="va">True</span>, line <span class="op">=</span> <span class="st">'45'</span>)</span>
+<span id="cb9-4"><a></a>plt.title(<span class="st">'QQ Plot of Residuals'</span>)</span>
+<span id="cb9-5"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-6" class="slide level2">
+<h2></h2>
+<p>Substantial departures from a straight line indicate that the distribution is not normal.</p>
+<div id="7cc00618" class="cell" data-execution_count="12">
+<div class="cell-output cell-output-display">
+<pre><code>&lt;Figure size 672x384 with 0 Axes&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="LinearRegression_files/figure-revealjs/cell-13-output-2.png" class="quarto-figure quarto-figure-center" width="823" height="449"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="section-7" class="slide level2">
+<h2></h2>
+<p>This plot suggests that the residuals are consistent with a Normal curve.</p>
+<div id="55d163f6" class="cell" data-execution_count="13">
+<div class="cell-output cell-output-display">
+<pre><code>&lt;Figure size 672x384 with 0 Axes&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="LinearRegression_files/figure-revealjs/cell-14-output-2.png" class="quarto-figure quarto-figure-center" width="823" height="449"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="comments" class="slide level2">
+<h2>Comments</h2>
+<p>These data are truly Normally distributed. But note that we still see deviations. These are entirely due to chance.</p>
+
+<img data-src="images/clipboard-191119898.png" class="quarto-figure quarto-figure-center r-stretch"><p>When <span class="math inline">\(n\)</span> is relatively small, you tend to see deviations, particularly in the tails.</p>
+</section>
+<section id="section-8" class="slide level2">
+<h2></h2>
+<p><strong>Normal probability plots for data sets following various distributions.</strong> 100 observations in each data set.</p>
+
+<img data-src="images/clipboard-1290062732.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="consequences-of-faulty-assumptions" class="slide level2">
+<h2>Consequences of faulty assumptions</h2>
+<p><br></p>
+<ol type="1">
+<li><span style="color:red;">If the model structure is incorrect</span>, the estimated coefficients <span class="math inline">\(\hat{\beta}_j\)</span> will be biased and the predictions <span class="math inline">\(\hat{Y}_i\)</span> will be inaccurate.</li>
+</ol>
+<div class="fragment">
+<ol start="2" type="1">
+<li><span style="color:red;">If the residuals do not follow a normal distribution</span>, we have two cases:</li>
+</ol>
+<ul>
+<li>If sample size is large, we still get accurate p-values for the t-tests (discussed later) for the coefficients thanks to the <em>Central Limit Theorem</em>.</li>
+<li>However, the t-tests and all inference tools are invalidated.</li>
+</ul>
+</div>
+</section>
+<section id="section-9" class="slide level2">
+<h2></h2>
+<p><br><br><br></p>
+<ol start="3" type="1">
+<li><p><span style="color:red;">If the residuals do not have constant variance</span>, then the linear model is incorrect and everything falls apart!</p></li>
+<li><p><span style="color:red;">If the residuals are dependent</span>, then the linear model is incorrect and everything falls apart!</p></li>
+</ol>
+</section></section>
+<section>
+<section id="inference-about-individual-betas-using-t-tests" class="title-slide slide level1 center">
+<h1>Inference about individual <span class="math inline">\(\beta\)</span>’s using t-tests</h1>
 
 </section>
 <section id="questions-1" class="slide level2">
 <h2>Questions</h2>
 <p><br></p>
 <ol type="1">
-<li><p><span style="color:blue;">How can we estimate <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_p\)</span> and <span class="math inline">\(\sigma^2\)</span>?</span></p></li>
+<li><p>How can we estimate <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_p\)</span> and <span class="math inline">\(\sigma^2\)</span>?</p></li>
 <li><p>How can we validate the model and all its assumptions?</p></li>
-<li><p>How can we make inferences about <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_p\)</span>?</p></li>
+<li><p><span style="color:blue;">How can we make inferences about <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_p\)</span>?</span></p></li>
 <li><p>If some assumptions are not met, can we do something about it?</p></li>
 <li><p>How can we make predictions of future responses using the multiple linear regression model?</p></li>
 </ol>
 </section>
-<section id="an-estimator-for-boldsymbolbeta" class="slide level2">
-<h2>An estimator for <span class="math inline">\(\boldsymbol{\beta}\)</span></h2>
-<p>Our <strong>goal</strong> is to find an estimator for the vector <span class="math inline">\(\boldsymbol{\beta}\)</span> (and all its components). For the moment, let’s assume that we have one:</p>
-<p><span class="math inline">\(\hat{\boldsymbol{\beta}} = \begin{pmatrix} \hat{\beta}_0 \\ \hat{\beta}_1 \\ \vdots\\ \hat{\beta}_p \end{pmatrix}\)</span>, where <span class="math inline">\(\hat{\beta}_j\)</span> is an estimator for <span class="math inline">\(\beta_j\)</span>, <span class="math inline">\(j = 0, \ldots, p\)</span>.</p>
+<section id="example-2" class="slide level2">
+<h2>Example 2</h2>
+<p><br></p>
+<p>Let’s consider the “auto.xlsx” dataset.</p>
+<div id="5399c4ec" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>auto_data <span class="op">=</span> pd.read_excel(<span class="st">'auto.xlsx'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><br></p>
+<p>Let’s assume that we want to study the following model.</p>
+<p><span class="math display">\[
+Y_i = \beta_0 + \beta_1 X_{i1}+ \beta_2 X_{i2}+ \epsilon_i,
+\]</span></p>
+<p>where <span class="math inline">\(Y_i\)</span> is the mpg, <span class="math inline">\(X_{i1}\)</span> is the weight, and <span class="math inline">\(X_{i2}\)</span> is the acceleration of the <span class="math inline">\(i\)</span>-th car, <span class="math inline">\(i = 1, \ldots, 392\)</span>.</p>
+</section>
+<section id="research-question" class="slide level2">
+<h2>Research question</h2>
+<p><br><br><br></p>
+<blockquote>
+<p>Do the weight and acceleration have a significant association with the mpg of a car?</p>
+</blockquote>
+</section>
+<section id="the-two-cultures-of-statistical-models" class="slide level2">
+<h2>The two cultures of statistical models</h2>
+<p><br></p>
+<ul>
+<li class="fragment"><p><span style="color:darkblue;"><strong>Inference</strong></span>: develop a model that fits the data well. Then make inferences about the data-generating process based on the structure of such model.</p></li>
+<li class="fragment"><p><span style="color:darkgreen;"><strong>Prediction</strong></span>: Silent about the underlying mechanism generating the data and allow for many predictive algorithms, which only care about accuracy of predictions.</p></li>
+</ul>
 <div class="fragment">
-<p>Using this estimator, we can compute the predicted responses of our model <span class="math inline">\(\hat{\mathbf{Y}} = \mathbf{X}\hat{\boldsymbol{\beta}}\)</span>, where <span class="math inline">\(\hat{\mathbf{Y}} = (\hat{Y}_1, \hat{Y}_2, \ldots, \hat{Y}_n)^{T}\)</span> and <span class="math inline">\(\hat{Y}_i\)</span> is the i-th predicted response.</p>
+<p>They overlap very often.</p>
 </div>
 </section>
-<section id="section-4" class="slide level2">
-<h2></h2>
-<p><br></p>
-<p>The expression <span class="math inline">\(\hat{\mathbf{Y}} = \mathbf{X}\hat{\boldsymbol{\beta}}\)</span> means</p>
-<p><span class="math display">\[\begin{pmatrix} \hat{Y}_1 \\ \hat{Y}_2 \\ \vdots \\ \hat{Y}_n \end{pmatrix}  = \begin{pmatrix}
-\hat{\beta}_0 + X_{11} \hat{\beta}_1 + X_{12} \hat{\beta}_2 + \cdots + X_{1p} \hat{\beta}_p\\
-\hat{\beta}_0 + X_{21} \hat{\beta}_1 + X_{22}\hat{\beta}_2 + \cdots + X_{2p}\hat{\beta}_p \\
-\vdots  \\
-\hat{\beta}_0 + X_{n1} \hat{\beta}_1 + X_{n2}\hat{\beta}_2 + \cdots + X_{np} \hat{\beta}_p \\
-\end{pmatrix}\]</span></p>
-</section>
-<section id="section-5" class="slide level2">
-<h2></h2>
-<p><br> <br></p>
-<p>This means that the residuals of the estimated model are</p>
-<p><span class="math display">\[\hat{\boldsymbol{\epsilon}} = \mathbf{Y} - \hat{\mathbf{Y}} = \mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}},\]</span></p>
-<p>where <span class="math inline">\(\hat{\boldsymbol{\epsilon}} = (\hat{\epsilon}_1, \hat{\epsilon}_2, \ldots, \hat{\epsilon}_n)^{T}\)</span> and <span class="math inline">\(\hat{\epsilon}_i = Y_i - \hat{Y}_i\)</span> is the i-th residual.</p>
-</section>
-<section id="least-squares-estimator" class="slide level2">
-<h2>Least squares estimator</h2>
-<p>To find the best estimator for <span class="math inline">\(\boldsymbol{\beta}\)</span> (and all its elements), we use the method of least squares. This method finds the best <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> that minimizes the residual sum of squares (RSS):</p>
-<p><span class="math display">\[RSS = \left(\mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}}\right)^{T} \left(\mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}}\right) = \sum_{i=1}^{n} \hat{\epsilon}^2_i = \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2.\]</span></p>
-<div class="fragment">
-<p>The estimator that minimizes the expression above is called the <span style="color:brown;"><strong>least squares estimator</strong></span>:</p>
-<p><span class="math display">\[\hat{\boldsymbol{\beta}} = (\mathbf{X}^{T}\mathbf{X})^{-1} \mathbf{X}^{T}\mathbf{Y}\]</span></p>
-</div>
-</section>
-<section id="computation-of-hatboldsymbolbeta-mathbfxtmathbfx-1-mathbfxtmathbfy" class="slide level2">
-<h2>Computation of <span class="math inline">\(\hat{\boldsymbol{\beta}} = (\mathbf{X}^{T}\mathbf{X})^{-1} \mathbf{X}^{T}\mathbf{Y}\)</span></h2>
-<p><br></p>
-<ol type="1">
-<li class="fragment">Compute the transpose of a matrix: <span class="math inline">\(\mathbf{X}^{T}\)</span>.</li>
-<li class="fragment">Compute the product of a matrix and a vector: <span class="math inline">\(\mathbf{X}^{T}\mathbf{Y}\)</span>.</li>
-<li class="fragment">Compute the product of two matrices: <span class="math inline">\(\mathbf{X}^{T} \mathbf{X}\)</span>.</li>
-<li class="fragment">Compute the <span style="color:red;"><strong>inverse</strong></span> of a matrix: <span class="math inline">\((\mathbf{X}^{T} \mathbf{X})^{-1}\)</span>.</li>
-</ol>
-</section>
-<section id="remarks" class="slide level2">
-<h2>Remarks</h2>
-<ol start="4" type="1">
-<li>Compute the <span style="color:red;"><strong>inverse</strong></span> of a matrix: <span class="math inline">\((\mathbf{X}^{T} \mathbf{X})^{-1}\)</span>.</li>
-</ol>
-<ul>
-<li>Not all matrices have an inverse.</li>
-<li>If it does not have an inverse then the matrix is called <span style="color:darkblue;"><strong>singular</strong></span>. Otherwise, it is called <strong>non-singular</strong>.</li>
-<li>For the inverse to exist, the columns in <span class="math inline">\(\mathbf{X}\)</span> must be <em>linearly independent</em>.</li>
-<li>Or, equivalently, the determinant <span class="math inline">\(|\mathbf{X}^{T} \mathbf{X}| &gt; 0\)</span>.</li>
-</ul>
-</section>
-<section id="computation-in-python" class="slide level2">
-<h2>Computation in Python</h2>
-<p><br></p>
-<p>To compute the least squares estimates, we first split the data set into a matrix with the values of the predictors only, and a matrix with the response values.</p>
-<div id="0b33f5ff" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="co"># Matrix with predictors.</span></span>
-<span id="cb3-2"><a></a>rayon_predictors <span class="op">=</span> rayon_data.drop(columns<span class="op">=</span>[<span class="st">'Y'</span>])</span>
-<span id="cb3-3"><a></a></span>
-<span id="cb3-4"><a></a><span class="co"># Add intercept.</span></span>
-<span id="cb3-5"><a></a>rayon_X_train <span class="op">=</span> sm.add_constant(rayon_predictors)</span>
-<span id="cb3-6"><a></a></span>
-<span id="cb3-7"><a></a><span class="co"># Matrix with response.</span></span>
-<span id="cb3-8"><a></a>rayon_Y_train <span class="op">=</span> rayon_data[<span class="st">'Y'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="section-6" class="slide level2">
-<h2></h2>
-<p><br><br></p>
-<p>Next, we use the functions <code>OLS()</code> and <code>fit()</code> from <strong>statsmodels</strong>.</p>
-<div id="9c227ed8" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># Create linear regression object</span></span>
-<span id="cb4-2"><a></a>regr <span class="op">=</span> sm.OLS(rayon_Y_train, rayon_X_train)</span>
-<span id="cb4-3"><a></a></span>
-<span id="cb4-4"><a></a><span class="co"># Train the model using the training sets</span></span>
-<span id="cb4-5"><a></a>linear_model <span class="op">=</span> regr.fit()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="section-7" class="slide level2">
-<h2></h2>
-<p><br></p>
-<p>To show the estimated coefficients, we use the argument <code>params</code> of the <code>linear_model</code> object created previously.</p>
-<div id="333c0bbd" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="co"># The estimated coefficients.</span></span>
-<span id="cb5-2"><a></a><span class="bu">print</span>(linear_model.params)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>const   -35.262607
-X1        0.745417
-X2       20.229167
-X3        0.793056
-X4       25.583333
-X5       17.208333
-dtype: float64</code></pre>
-</div>
-</div>
-<p>The elements in the vector above are the estimates <span class="math inline">\(\hat{\beta}_0\)</span>, <span class="math inline">\(\hat{\beta}_1\)</span>, <span class="math inline">\(\hat{\beta}_2\)</span>, <span class="math inline">\(\hat{\beta}_3\)</span>, <span class="math inline">\(\hat{\beta}_4\)</span>, and <span class="math inline">\(\hat{\beta}_5\)</span>.</p>
-</section>
-<section id="interpretation-of-estimated-coefficients" class="slide level2">
-<h2>Interpretation of estimated coefficients</h2>
-<ul>
-<li class="fragment"><p>The average whiteness of a rayon is <span class="math inline">\(\hat{\beta}_0 = -35.26\)</span> when all predictors are equal to 0.</p></li>
-<li class="fragment"><p>Increasing the acid bath temperature by 1 unit increases the average whiteness of a rayon by <span class="math inline">\(\hat{\beta}_1 = 0.745\)</span> units.</p></li>
-<li class="fragment"><p>Increasing the cascade acid concentration by 1 unit increases the average whiteness of a rayon by <span class="math inline">\(\hat{\beta}_2 = 20.23\)</span> units.</p></li>
-</ul>
-</section>
-<section id="section-8" class="slide level2">
-<h2></h2>
-<p><br><br></p>
-<ul>
-<li><p>Increasing the water temperature by 1 unit increases the average whiteness of a rayon by <span class="math inline">\(\hat{\beta}_3 = 0.793\)</span> units.</p></li>
-<li><p>Increasing the sulfide concentration by 1 unit increases the average whiteness of a rayon by <span class="math inline">\(\hat{\beta}_4 = 25.583\)</span> units.</p></li>
-<li><p>Increasing the amount of chlorine bleach by 1 unit increases the average whiteness of a rayon by <span class="math inline">\(\hat{\beta}_5 = 17.208\)</span> units.</p></li>
-</ul>
-</section>
-<section id="section-9" class="slide level2">
-<h2></h2>
-
-<img data-src="images/example_SLR.jpeg" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="section-10" class="slide level2">
 <h2></h2>
-
-<img data-src="images/clipboard-2523519923.png" class="quarto-figure quarto-figure-center r-stretch"></section>
-<section id="properties-of-least-squares-estimators" class="slide level2">
-<h2>Properties of least squares estimators</h2>
-<p><br></p>
-<p>If all the assumptions of the linear regression model are met, the least squares estimators have some attractive properties.</p>
-<div class="fragment">
-<p>For example:</p>
-<ol type="1">
-<li>On average, the estimate <span class="math inline">\(\hat{\beta}_{j}\)</span> equals the true coefficient value <span class="math inline">\(\beta_{j}\)</span> for the predictor <span class="math inline">\(X_j\)</span>.</li>
-<li>Each estimate <span class="math inline">\(\hat{\beta}_{j}\)</span> follows a normal distribution with a specific mean and variance.</li>
-</ol>
-</div>
+<p><br><br><br></p>
+<p>The least squares estimators <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p\)</span> are subject to uncertainty, since they are calculated based on a random sample of data.</p>
+<p>Therefore, assessing the amount of the uncertainty in these estimators is important. To this end, we use <span style="color:blue;">hypothesis</span> tests on individual coefficients.</p>
 </section>
-<section id="predictions" class="slide level2">
-<h2>Predictions</h2>
+<section id="hypothesis-test" class="slide level2">
+<h2>Hypothesis test</h2>
 <p><br></p>
-<p>Once we estimate the intercept and model coefficients, we make predictions as follows:</p>
-<p><span class="math display">\[\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \hat{\beta}_2 X_{i2} + \cdots + \hat{\beta}_p X_{ip}\]</span></p>
-<p>where <span class="math inline">\(\hat{Y}_i\)</span> is the i-th <span style="color:orange;"><strong>fitted</strong></span> or <span style="color:orange;"><strong>predicted</strong></span> response.</p>
-<p>In Python, we use the argument <code>fittedvalues</code> to show the predicted responses of the estimated model.</p>
-<div id="f3a6f350" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="co"># Make predictions using the the model</span></span>
-<span id="cb7-2"><a></a>rayon_Y_pred <span class="op">=</span> linear_model.fittedvalues</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<blockquote>
+<p>A statistical hypothesis is a statement about the coefficients of a model.</p>
+</blockquote>
+<div class="fragment">
+<p>In our case, we are interested in testing:</p>
+<div class="r-stack">
+<p><span class="math inline">\(H_0: \beta_j = 0\)</span> v.s. <span class="math inline">\(H_1: \beta_j \neq 0\)</span> (Two-tailed Test)</p>
+</div>
+<ul>
+<li class="fragment">Rejecting <span class="math inline">\(H_0\)</span> (in favor of <span class="math inline">\(H_1\)</span>) implies that the predictor has a significant association with the response.</li>
+<li class="fragment">Not rejecting <span class="math inline">\(H_0\)</span> implies that the predictor does not have a significant association with the response.</li>
+</ul>
 </div>
 </section>
 <section id="section-11" class="slide level2">
 <h2></h2>
-<p><br></p>
-<p>Predictions of the 26 observations in the training dataset.</p>
-<div id="c776f116" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a><span class="bu">print</span>(rayon_Y_pred)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>0      72.205449
-1      78.205449
-2      80.405449
-3      79.522115
-4      83.738782
-5      82.855449
-6      85.055449
-7      91.055449
-8      90.555449
-9      89.672115
-10     91.872115
-11     97.872115
-12     95.205449
-13    101.205449
-14    103.405449
-15    102.522115
-16     74.176282
-17    103.992949
-18     80.992949
-19     97.176282
-20     84.326282
-21     93.842949
-22     86.526282
-23     91.642949
-24     85.642949
-25     92.526282
-dtype: float64</code></pre>
+<p><br><br></p>
+<div class="r-stack">
+<p><span class="math inline">\(H_0: \beta_j = 0\)</span> v.s. <span class="math inline">\(H_1: \beta_j \neq 0\)</span> (Two-tailed Test)</p>
 </div>
+<p><br></p>
+<p>Testing this hypothesis consists of the following steps:</p>
+<ol type="1">
+<li class="fragment">Take a random sample.</li>
+<li class="fragment">Compute the appropriate test statistic.</li>
+<li class="fragment">Reject or fail to reject the null hypothesis based on a computed p-value.</li>
+</ol>
+</section>
+<section id="step-1.-random-sample" class="slide level2">
+<h2>Step 1. Random sample</h2>
+<p><br><br></p>
+<p>The random sample is the data we use to train or fit the model.</p>
+<div id="ccc99543" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a><span class="co"># Dataset with predictors.</span></span>
+<span id="cb13-2"><a></a>pred_auto <span class="op">=</span> auto_data[[<span class="st">'weight'</span>, <span class="st">'acceleration'</span>]]</span>
+<span id="cb13-3"><a></a></span>
+<span id="cb13-4"><a></a><span class="co"># Add the column for the intercept.</span></span>
+<span id="cb13-5"><a></a>auto_X_train <span class="op">=</span> sm.add_constant(pred_auto)</span>
+<span id="cb13-6"><a></a></span>
+<span id="cb13-7"><a></a><span class="co"># Dataset with the response only.</span></span>
+<span id="cb13-8"><a></a>auto_Y_train <span class="op">=</span> auto_data[<span class="st">'mpg'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="residuals" class="slide level2">
-<h2>Residuals</h2>
+<section id="step-2.-test-statistic" class="slide level2">
+<h2>Step 2. Test statistic</h2>
 <p><br></p>
-<p>Now that we have introduced the estimator <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p\)</span>, we can be more specific in our terminology of the linear model.</p>
-<p><br></p>
-<p>The errors of the estimated model are called <span style="color:purple;"><strong>residuals</strong></span> <span class="math inline">\(\hat{\epsilon}_i = Y_i - \hat{Y}_i\)</span>, <span class="math inline">\(i = 1, \ldots, n.\)</span></p>
-<p><br></p>
-<p>If the model is correct, the residuals <span class="math inline">\(\hat{\epsilon}_1, \hat{\epsilon}_2, \ldots, \hat{\epsilon}_n\)</span> give us a good idea of the errors <span class="math inline">\(\epsilon_1, \epsilon_2, \ldots, \epsilon_n\)</span>.</p>
+<p>The test statistic is</p>
+<p><span class="math display">\[t_0 = \frac{\hat{\beta}_{j}}{\sqrt{ \hat{v}_{jj}} }\]</span></p>
+<ul>
+<li><span class="math inline">\(\hat{\beta}_j\)</span> is the least squares estimate of the true coefficient <span class="math inline">\(\beta_j\)</span>.</li>
+<li><span class="math inline">\(\sqrt{\hat{v}_{jj}}\)</span> is the <em>standard error</em> of the estimate <span class="math inline">\(\hat{\beta}_j\)</span> calculated using Python.</li>
+</ul>
 </section>
 <section id="section-12" class="slide level2">
 <h2></h2>
-<p>In Python, we compute the residuals using the following command.</p>
-<div id="45469ebd" class="cell" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>residuals <span class="op">=</span> linear_model.resid</span>
-<span id="cb10-2"><a></a></span>
-<span id="cb10-3"><a></a><span class="bu">print</span>(residuals)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>0      4.294551
-1     -2.205449
-2     -0.505449
-3      3.977885
-4      5.761218
-5      1.344551
-6      0.644551
-7      8.444551
-8     -1.155449
-9      7.827885
-10    11.327885
-11    10.827885
-12    19.994551
-13    10.294551
-14    -1.105449
-15     5.577885
-16     6.023718
-17   -14.892949
-18    -3.792949
-19   -12.076282
-20   -12.826282
-21    -9.342949
-22    -9.026282
-23   -12.442949
-24   -14.642949
-25    -2.326282
+<p><br></p>
+<p>Recall that we obtain the least squares estimates (<span class="math inline">\(\hat{\beta}_{j}\)</span>) in Python using:</p>
+<div id="85578e47" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a><span class="co"># Fitting the simple linear regression model.</span></span>
+<span id="cb14-2"><a></a>regr <span class="op">=</span> sm.OLS(auto_Y_train, auto_X_train)</span>
+<span id="cb14-3"><a></a>linear_model <span class="op">=</span> regr.fit()</span>
+<span id="cb14-4"><a></a>linear_model.params</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="52">
+<pre><code>const           41.095329
+weight          -0.007293
+acceleration     0.261650
 dtype: float64</code></pre>
 </div>
 </div>
-</section>
-<section id="estimation-of-variance" class="slide level2">
-<h2>Estimation of variance</h2>
-<p><br></p>
-<p>The variance <span class="math inline">\(\sigma^2\)</span> of the errors is estimated by</p>
-<p><span class="math display">\[\hat{\sigma}^2=\frac{1}{n-p-1}\sum_{i=1}^{n} \hat{\epsilon}_i^{2},\]</span></p>
-<p>where <span class="math inline">\(n\)</span> and <span class="math inline">\(p\)</span> are the numbers of observations and predictors, respectively. In Python, we compute <span class="math inline">\(\hat{\sigma}^2\)</span> as follows:</p>
-<div id="00ce1650" class="cell" data-execution_count="11">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>error_variance <span class="op">=</span> linear_model.scale</span>
-<span id="cb12-2"><a></a></span>
-<span id="cb12-3"><a></a><span class="bu">print</span>( <span class="bu">round</span>(error_variance, <span class="dv">3</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>105.931</code></pre>
-</div>
-</div>
+<p>Later, we will see how to obtain the <em>standard error</em> of the estimate <span class="math inline">\(\hat{\beta}_j\)</span>.</p>
 </section>
 <section id="section-13" class="slide level2">
 <h2></h2>
 <p><br></p>
-<p>The smaller the value of <span class="math inline">\(\hat{\sigma}^2\)</span>, the closer our predictions are to the actual responses.</p>
-<p>In practice, it is better to use the standard deviation of the errors. That is,</p>
-<p><span class="math display">\[\hat{\sigma}=\left(\frac{1}{n-p-1}\sum_{i=1}^{n} \hat{\epsilon}_i^{2}\right)^{1/2}.\]</span> In Python, we compute <span class="math inline">\(\hat{\sigma}\)</span> as follows:</p>
-<div id="8674f487" class="cell" data-execution_count="12">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a><span class="bu">print</span>( <span class="bu">round</span>(error_variance<span class="op">**</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>), <span class="dv">3</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><br></p>
+<p><span class="math display">\[t_0 = \frac{\hat{\beta}_{j}}{\sqrt{ \hat{v}_{jj}} }\]</span></p>
+</div><div class="column" style="width:70%;">
+<ul>
+<li><p>We like this statistic because it follows a well-known distribution.</p></li>
+<li><p>If the null hypothesis (<span class="math inline">\(H_0: \beta_j = 0\)</span>) is true, the statistic <span class="math inline">\(t_0\)</span> follows a <span style="color:purple;"><span class="math inline">\(t\)</span> distribution</span> with <span class="math inline">\(n-p-1\)</span> degrees of freedom</p></li>
+<li><p>Remember that <span class="math inline">\(n\)</span> is the number of observations and <span class="math inline">\(p\)</span> the number of predictors.</p></li>
+</ul>
+</div></div>
+</section>
+<section id="t-distribution" class="slide level2">
+<h2>t distribution</h2>
+<p><br></p>
+<div class="columns">
+<div class="column" style="width:70%;">
+<p>This distribution is also known as the student’s t-distribution.</p>
+<p>It was invented by <a href="https://en.wikipedia.org/wiki/William_Sealy_Gosset">William Gosset</a> when he worked at the Guinness Brewery in Ireland.</p>
+<p>It has one parameter <span class="math inline">\(\nu\)</span> which generally equals a number of degrees of freedom.</p>
+<p>The parameter <span class="math inline">\(\nu\)</span> controls the shape of the distribution.</p>
+</div><div class="column" style="width:30%;">
+<p><img data-src="images/William_Sealy_Gosset.jpg" width="478"> <a href="https://en.wikipedia.org/wiki/William_Sealy_Gosset">William Gosset</a></p>
+</div></div>
+</section>
+<section id="section-14" class="slide level2">
+<h2></h2>
+<p>The t-distribution resembles a standard normal distribution when <span class="math inline">\(\nu\)</span> goes to infinity.</p>
+
+<img data-src="images/clipboard-309922779.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="step-3.-calculate-the-p-value" class="slide level2">
+<h2>Step 3. Calculate the p-value</h2>
+<p><br><br><br></p>
+<p>The <span style="color:pink;"><strong>p-value</strong></span> is the probability that the <span style="color:darkgreen;"><span class="math inline">\(t\)</span> test statistic</span> will get a value that is at least as extreme as the observed <span class="math inline">\(t_0\)</span> value when the null hypothesis (<span class="math inline">\(H_0\)</span>) is true.</p>
+</section>
+<section id="section-15" class="slide level2">
+<h2></h2>
+<p>For <span class="math inline">\(H_0: \beta_j = 0\)</span> v.s. <span class="math inline">\(H_1: \beta_j \neq 0\)</span>, the p-value is calculated using both tails of the <span class="math inline">\(t\)</span> distribution. It is the blue area under the curve below.</p>
+
+<img data-src="images/critical_region2.png" class="quarto-figure quarto-figure-center r-stretch"><p>We use the two tails because <span class="math inline">\(H_1\)</span> includes the possibility that the value of <span class="math inline">\(\beta_j\)</span> is positive or negative.</p>
+</section>
+<section id="the-p-value-is-not-the-probability-that-h_0-is-true" class="slide level2">
+<h2>The p-value is not the probability that <span class="math inline">\(H_0\)</span> is true</h2>
+<p>Since the p-value is a probability, and since small p-values indicate that <span class="math inline">\(H_0\)</span> is unlikely to be true, it is tempting to think that the p-value represents the probability that <span class="math inline">\(H_0\)</span> is true.</p>
+<p><br></p>
+<div class="r-stack">
+<div style="font-size: 110%;">
+<p><span style="color:red;">This is not the case!</span></p>
+</div>
+</div>
+<p><br></p>
+<p>Remember that the <strong>p-value</strong> is the probability that the <span class="math inline">\(t\)</span> test statistic will get a value that is at least as extreme as the observed <span class="math inline">\(t_0\)</span> value <strong>when</strong> <span class="math inline">\(H_0\)</span> is true.</p>
+</section>
+<section id="how-small-must-the-p-value-be-to-reject-h_0" class="slide level2">
+<h2>How small must the p-value be to reject <span class="math inline">\(H_0\)</span>?</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<ul>
+<li class="fragment"><p><strong>Answer</strong>: Very small!</p></li>
+<li class="fragment"><p>But, how small?</p></li>
+<li class="fragment"><p><strong>Answer</strong>: Very small!</p></li>
+<li class="fragment"><p>But, tell me, how small?</p></li>
+<li class="fragment"><p><strong>Answer</strong>: Okay, it must be less than a value called <span class="math inline">\(\alpha\)</span> which is usually 0.1, 0.05, or 0.01.</p></li>
+<li class="fragment"><p>Thank you!</p></li>
+</ul>
+</div><div class="column" style="width:40%;">
+<p><img data-src="images/clipboard-2242705857.png" width="478"> <a href="https://en.wikipedia.org/wiki/Ronald_Fisher">Sir Ronald Fisher</a></p>
+</div></div>
+</section>
+<section id="decision" class="slide level2">
+<h2>Decision</h2>
+<p><br></p>
+<p>For a significance level of <span class="math inline">\(\alpha = 0.05\)</span>:</p>
+<ul>
+<li><p>If the p-value is smaller than <span class="math inline">\(\alpha\)</span>, we reject <span class="math inline">\(H_0: \beta_j = 0\)</span> in favor of <span class="math inline">\(H_1: \beta_j \neq 0\)</span>.</p></li>
+<li><p>If the p-value is larger than <span class="math inline">\(\alpha\)</span>, we do not reject <span class="math inline">\(H_0: \beta_j = 0\)</span>.</p></li>
+</ul>
+<p>No scientific basis for this advice. In practice, report the p-value and explore the data using descriptive statistics.</p>
+</section>
+<section id="section-16" class="slide level2">
+<h2></h2>
+
+<img data-src="images/clipboard-1571120222.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="t-tests-in-python" class="slide level2">
+<h2>t-tests in Python</h2>
+<p>We obtain the t-tests of the coefficients using the function <code>summary()</code> together with the <code>linear_model</code> object.</p>
+<div id="38d3b4ad" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>model_summary <span class="op">=</span> linear_model.summary()</span>
+<span id="cb16-2"><a></a><span class="bu">print</span>(model_summary)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>10.292</code></pre>
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                    mpg   R-squared:                       0.700
+Model:                            OLS   Adj. R-squared:                  0.698
+Method:                 Least Squares   F-statistic:                     453.2
+Date:                Wed, 04 Feb 2026   Prob (F-statistic):          2.43e-102
+Time:                        09:54:42   Log-Likelihood:                -1125.4
+No. Observations:                 392   AIC:                             2257.
+Df Residuals:                     389   BIC:                             2269.
+Df Model:                           2                                         
+Covariance Type:            nonrobust                                         
+================================================================================
+                   coef    std err          t      P&gt;|t|      [0.025      0.975]
+--------------------------------------------------------------------------------
+const           41.0953      1.868     21.999      0.000      37.423      44.768
+weight          -0.0073      0.000    -25.966      0.000      -0.008      -0.007
+acceleration     0.2617      0.086      3.026      0.003       0.092       0.432
+==============================================================================
+Omnibus:                       31.397   Durbin-Watson:                   0.818
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               39.962
+Skew:                           0.632   Prob(JB):                     2.10e-09
+Kurtosis:                       3.922   Cond. No.                     2.67e+04
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 2.67e+04. This might indicate that there are
+strong multicollinearity or other numerical problems.</code></pre>
 </div>
 </div>
 </section>
-<section id="interpretation-of-hatsigma" class="slide level2">
-<h2>Interpretation of <span class="math inline">\(\hat{\sigma}\)</span></h2>
-<p><br><br><br></p>
-<ul>
-<li>The smaller the <span class="math inline">\(\hat{\sigma}\)</span>, the closer our predictions are to the actual responses in the <span style="color:blue;">training</span> dataset.</li>
-<li>The <span class="math inline">\(\hat{\sigma} = 10.292\)</span> implies that, on average, the predictions of our model are off or incorrect by 10.292 units.</li>
-</ul>
+<section id="table-of-t-tests" class="slide level2">
+<h2>Table of t-tests</h2>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>coef</th>
+<th>std err</th>
+<th>t</th>
+<th>P&gt;<span class="math inline">\(|t|\)</span></th>
+<th><span class="math inline">\([0.025\)</span></th>
+<th><span class="math inline">\(0.975 ]\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>const</td>
+<td>41.0953</td>
+<td>1.868</td>
+<td>21.999</td>
+<td>0.000</td>
+<td>37.423</td>
+<td>44.768</td>
+</tr>
+<tr class="even">
+<td>weight</td>
+<td>-0.0073</td>
+<td>0.000</td>
+<td>-25.966</td>
+<td>0.000</td>
+<td>-0.008</td>
+<td>-0.007</td>
+</tr>
+<tr class="odd">
+<td>acceleration</td>
+<td>0.2617</td>
+<td>0.086</td>
+<td>3.026</td>
+<td>0.003</td>
+<td>0.092</td>
+<td>0.432</td>
+</tr>
+</tbody>
+</table>
+<p>The column <span style="color:darkblue;"><strong>std err</strong></span> contains the values of the <span style="color:darkblue;">estimated standard error</span> (<span class="math inline">\(\sqrt{ \hat{v}_{jj}}\)</span>) of the estimates <span class="math inline">\(\hat{\beta}_j\)</span>. They represent the variability in the estimates.</p>
+</section>
+<section id="section-17" class="slide level2">
+<h2></h2>
+<p><br></p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>coef</th>
+<th>std err</th>
+<th>t</th>
+<th>P&gt;<span class="math inline">\(|t|\)</span></th>
+<th><span class="math inline">\([0.025\)</span></th>
+<th><span class="math inline">\(0.975 ]\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>const</td>
+<td>41.0953</td>
+<td>1.868</td>
+<td>21.999</td>
+<td>0.000</td>
+<td>37.423</td>
+<td>44.768</td>
+</tr>
+<tr class="even">
+<td>weight</td>
+<td>-0.0073</td>
+<td>0.000</td>
+<td>-25.966</td>
+<td>0.000</td>
+<td>-0.008</td>
+<td>-0.007</td>
+</tr>
+<tr class="odd">
+<td>acceleration</td>
+<td>0.2617</td>
+<td>0.086</td>
+<td>3.026</td>
+<td>0.003</td>
+<td>0.092</td>
+<td>0.432</td>
+</tr>
+</tbody>
+</table>
+<p>The column <span style="color:darkgreen;"><strong>t</strong></span> contains the values of the <span style="color:darkgreen;">observed statistic <span class="math inline">\(t_0\)</span></span> for the hypothesis tests.</p>
+</section>
+<section id="section-18" class="slide level2">
+<h2></h2>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>coef</th>
+<th>std err</th>
+<th>t</th>
+<th>P&gt;<span class="math inline">\(|t|\)</span></th>
+<th><span class="math inline">\([0.025\)</span></th>
+<th><span class="math inline">\(0.975 ]\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>const</td>
+<td>41.0953</td>
+<td>1.868</td>
+<td>21.999</td>
+<td>0.000</td>
+<td>37.423</td>
+<td>44.768</td>
+</tr>
+<tr class="even">
+<td>weight</td>
+<td>-0.0073</td>
+<td>0.000</td>
+<td>-25.966</td>
+<td>0.000</td>
+<td>-0.008</td>
+<td>-0.007</td>
+</tr>
+<tr class="odd">
+<td>acceleration</td>
+<td>0.2617</td>
+<td>0.086</td>
+<td>3.026</td>
+<td>0.003</td>
+<td>0.092</td>
+<td>0.432</td>
+</tr>
+</tbody>
+</table>
+<p>The column <span style="color:pink;"><strong>P&gt;|t|</strong></span> contains the <span style="color:pink;">p-values</span> for the hypothesis tests.</p>
+<p>Since the p-value is smaller than <span class="math inline">\(\alpha = 0.05\)</span>, we reject <span class="math inline">\(H_0\)</span> for acceleration and weight. Therefore, <strong>weight and acceleration have a significant association with the mpg of a car</strong>.</p>
+</section>
+<section id="section-19" class="slide level2">
+<h2></h2>
+<p><br></p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>coef</th>
+<th>std err</th>
+<th>t</th>
+<th>P&gt;<span class="math inline">\(|t|\)</span></th>
+<th><span class="math inline">\([0.025\)</span></th>
+<th><span class="math inline">\(0.975 ]\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>const</td>
+<td>41.0953</td>
+<td>1.868</td>
+<td>21.999</td>
+<td>0.000</td>
+<td>37.423</td>
+<td>44.768</td>
+</tr>
+<tr class="even">
+<td>weight</td>
+<td>-0.0073</td>
+<td>0.000</td>
+<td>-25.966</td>
+<td>0.000</td>
+<td>-0.008</td>
+<td>-0.007</td>
+</tr>
+<tr class="odd">
+<td>acceleration</td>
+<td>0.2617</td>
+<td>0.086</td>
+<td>3.026</td>
+<td>0.003</td>
+<td>0.092</td>
+<td>0.432</td>
+</tr>
+</tbody>
+</table>
+<p>The columns <span class="math inline">\([0.025\)</span> and <span class="math inline">\(0.975]\)</span> show the limits of a 95% confidence interval on each true coefficient <span class="math inline">\(\beta_j\)</span>. This interval <em>contains</em> the true parameter value with a confidence of 95%.</p>
 </section></section>
 <section id="return-to-main-page" class="title-slide slide level1 center">
 <h1><a href="https://alanrvazquez.github.io/TEC-IN5148/">Return to main page</a></h1>

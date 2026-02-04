@@ -24,7 +24,6 @@ jupyter: python3
 
 1.  Residual analysis
 2.  Inference about individual $\beta$'s using t-tests
-3.  Multiple and adjusted $R^2$ statistics
 
 ## Load the libraries
 
@@ -40,24 +39,336 @@ Let's import **statsmodels** into Python together with other relevant libraries.
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-import statsmodels.api as sm
+from sklearn.linear_model import LinearRegression
+from sklearn.feature_selection import f_regression
 ```
 
-# Residual analysis
+# Inference about individual $\beta$’s using t-tests
 
-## Questions
+## Linear Regression Model
+
+Recall that the linear regression model is a common candidate function for predicting a response:
+
+$$\hat{Y}_i = \hat{f}(\boldsymbol{X}_i) = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \cdots + \hat{\beta}_p X_{ip}.$$
+
+-   Where $i = 1, \ldots, n_t$ is the index of the $n_t$ training data.
+
+-   $\hat{Y}_i$ is the prediction of the actual value of the response $Y_i$ associated with values of $p$ predictors denoted by $\boldsymbol{X}_i = (X_{i1}, \ldots, X_{ip})$.
+
+-   The values $\hat{\beta}_0$, $\hat{\beta}_1$, ..., $\hat{\beta}_p$ are the [*coefficients*]{style="color:lightblue;"} of the model.
+
+## Example 1
 
 </br>
 
-1.  How can we estimate $\beta_0, \beta_1, \ldots, \beta_p$ and $\sigma^2$?
+Let's consider the "auto.xlsx" dataset.
 
-2.  [How can we validate the model and all its assumptions?]{style="color:blue;"}
+```{python}
+#| echo: true
+auto_data = pd.read_excel('auto.xlsx')
+```
 
-3.  How can we make inferences about $\beta_0, \beta_1, \ldots, \beta_p$?
+</br>
 
-4.  If some assumptions are not met, can we do something about it?
+Let's assume that we want to build the following model.
 
-5.  How can we make predictions of future responses using the multiple linear regression model?
+$$
+\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1}+ \hat{\beta}_2 X_{i2},
+$$
+
+where $\hat{Y}_i$ is the predicted mpg, $X_{i1}$ is the weight, and $X_{i2}$ is the acceleration of the $i$-th car, $i = 1, \ldots, 392$. [Here, we will use the entire dataset for training and ignore $K$-fold cross-validation to illustrate the concepts.]{style="color:darkred;"} 
+
+## Research question
+
+</br></br></br>
+
+> Do the weight and acceleration have a significant association with the mpg of a car?
+
+## The two cultures of statistical models
+
+</br>
+
+::: incremental
+-   [**Inference**]{style="color:darkblue;"}: develop a model that fits the data well. Then make inferences about the data-generating process based on the structure of such model.
+
+-   [**Prediction**]{style="color:darkgreen;"}: Silent about the underlying mechanism generating the data and allow for many predictive algorithms, which only care about accuracy of predictions.
+:::
+
+. . .
+
+They overlap very often.
+
+## 
+
+</br></br></br>
+
+The least squares estimators $\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p$ are subject to uncertainty, since they are calculated based on a random sample of data.
+
+Therefore, assessing the amount of the uncertainty in these estimators is important. To this end, we use [hypothesis]{style="color:blue;"} tests on individual coefficients.
+
+## Hypothesis test
+
+</br>
+
+> A statistical hypothesis is a statement about the coefficients of a model.
+
+. . .
+
+In our case, we are interested in testing:
+
+::: r-stack
+$H_0: \beta_j = 0$ v.s. $H_1: \beta_j \neq 0$ (Two-tailed Test)
+:::
+
+::: incremental
+-   Rejecting $H_0$ (in favor of $H_1$) implies that the predictor has a significant association with the response.
+-   Not rejecting $H_0$ implies that the predictor does not have a significant association with the response.
+:::
+
+## 
+
+</br></br>
+
+::: r-stack
+$H_0: \beta_j = 0$ v.s. $H_1: \beta_j \neq 0$ (Two-tailed Test)
+:::
+
+</br>
+
+Testing this hypothesis consists of the following steps:
+
+::: incremental
+1.  Take a random sample.
+2.  Compute the appropriate test statistic.
+3.  Reject or fail to reject the null hypothesis based on a computed p-value.
+:::
+
+## Step 1. Random sample
+
+</br></br>
+
+The random sample is the training data we use to train or fit the model. As an illustration, we will use the entire dataset for training here.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Dataset with predictors.
+auto_X_train = auto_data[['weight', 'acceleration']]
+
+# Dataset with the response only.
+auto_Y_train = auto_data['mpg']
+```
+
+
+## Step 2. Test statistic
+
+</br>
+
+The test statistic is
+
+$$t_0 = \frac{\hat{\beta}_{j}}{\sqrt{ \hat{v}_{jj}} }$$
+
+-   $\hat{\beta}_j$ is the least squares estimate of the true coefficient $\beta_j$.
+-   $\sqrt{\hat{v}_{jj}}$ is the *standard error* of the estimate $\hat{\beta}_j$ calculated using Python.
+
+## 
+
+</br>
+
+Recall that we obtain the least squares estimates ($\hat{\beta}_{j}$) in Python using:
+
+```{python}
+#| echo: true
+#| output: true
+
+# 1. Create the linear regression model
+LRmodel = LinearRegression()
+
+# 2. Fit the model.
+LRmodel.fit(auto_X_train, auto_Y_train)
+
+# 3. Show estimated coefficients.
+print("Intercept:", LRmodel.intercept_)
+print("Coefficients:", LRmodel.coef_)
+```
+
+Later, we will see how to obtain the *standard error* of the estimate $\hat{\beta}_j$.
+
+## 
+
+</br>
+
+::::: columns
+::: {.column width="30%"}
+</br>
+
+$$t_0 = \frac{\hat{\beta}_{j}}{\sqrt{ \hat{v}_{jj}} }$$
+:::
+
+::: {.column width="70%"}
+-   We like this statistic because it follows a well-known distribution.
+
+-   If the null hypothesis ($H_0: \beta_j = 0$) is true, the statistic $t_0$ follows a [$t$ distribution]{style="color:purple;"} with $n-p-1$ degrees of freedom
+
+-   Remember that $n$ is the number of observations and $p$ the number of predictors.
+:::
+:::::
+
+## t distribution
+
+</br>
+
+::::: columns
+::: {.column width="70%"}
+This distribution is also known as the student’s t-distribution.
+
+It was invented by [William Gosset](https://en.wikipedia.org/wiki/William_Sealy_Gosset) when he worked at the Guinness Brewery in Ireland.
+
+It has one parameter $\nu$ which generally equals a number of degrees of freedom.
+
+The parameter $\nu$ controls the shape of the distribution.
+:::
+
+::: {.column width="30%"}
+![](images/William_Sealy_Gosset.jpg){width="478"} [William Gosset](https://en.wikipedia.org/wiki/William_Sealy_Gosset)
+:::
+:::::
+
+## 
+
+The t-distribution resembles a standard normal distribution when $\nu$ goes to infinity.
+
+![](images/clipboard-309922779.png){fig-align="center"}
+
+## Step 3. Calculate the p-value
+
+</br></br></br>
+
+The [**p-value**]{style="color:pink;"} is the probability that the [$t$ test statistic]{style="color:darkgreen;"} will get a value that is at least as extreme as the observed $t_0$ value when the null hypothesis ($H_0$) is true.
+
+## 
+
+For $H_0: \beta_j = 0$ v.s. $H_1: \beta_j \neq 0$, the p-value is calculated using both tails of the $t$ distribution. It is the blue area under the curve below.
+
+![](images/critical_region2.png){fig-align="center"}
+
+We use the two tails because $H_1$ includes the possibility that the value of $\beta_j$ is positive or negative.
+
+## The p-value is not the probability that $H_0$ is true
+
+Since the p-value is a probability, and since small p-values indicate that $H_0$ is unlikely to be true, it is tempting to think that the p-value represents the probability that $H_0$ is true.
+
+</br>
+
+:::: r-stack
+::: {style="font-size: 110%;"}
+[This is not the case!]{style="color:red;"}
+:::
+::::
+
+</br>
+
+Remember that the **p-value** is the probability that the $t$ test statistic will get a value that is at least as extreme as the observed $t_0$ value **when** $H_0$ is true.
+
+## How small must the p-value be to reject $H_0$?
+
+:::::: columns
+:::: {.column width="60%"}
+::: incremental
+-   **Answer**: Very small!
+
+-   But, how small?
+
+-   **Answer**: Very small!
+
+-   But, tell me, how small?
+
+-   **Answer**: Okay, it must be less than a value called $\alpha$ which is usually 0.1, 0.05, or 0.01.
+
+-   Thank you!
+:::
+::::
+
+::: {.column width="40%"}
+![](images/clipboard-2242705857.png){width="478"} [Sir Ronald Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher)
+:::
+::::::
+
+## Decision
+
+</br>
+
+For a significance level of $\alpha = 0.05$:
+
+-   If the p-value is smaller than $\alpha$, we reject $H_0: \beta_j = 0$ in favor of $H_1: \beta_j \neq 0$.
+
+-   If the p-value is larger than $\alpha$, we do not reject $H_0: \beta_j = 0$.
+
+No scientific basis for this advice. In practice, report the p-value and explore the data using descriptive statistics.
+
+## 
+
+![](images/clipboard-1571120222.png){fig-align="center"}
+
+## p-values for t-tests in Python
+
+Unfortunately, there is no native function in **scikit-learn** to compute all elements of t-tests for a linear regression model. The best thing we can do is to use its function `f_regression()`, which computes the p-values of the t-tests for the coefficients of the predictors.
+
+```{python}
+#| echo: true
+
+f_statistic, p_values = f_regression(auto_X_train, auto_Y_train)
+print("P-values of predictor coefficients:", p_values)
+```
+
+## Table of t-tests
+
+|              | coef    | std err | t       | P\>$|t|$ | $[0.025$ | $0.975 ]$ |
+|--------------|---------|---------|---------|----------|----------|-----------|
+| const        | 41.0953 | 1.868   | 21.999  | 0.000    | 37.423   | 44.768    |
+| weight       | -0.0073 | 0.000   | -25.966 | 0.000    | -0.008   | -0.007    |
+| acceleration | 0.2617  | 0.086   | 3.026   | 0.003    | 0.092    | 0.432     |
+
+The column [**std err**]{style="color:darkblue;"} contains the values of the [estimated standard error]{style="color:darkblue;"} ($\sqrt{ \hat{v}_{jj}}$) of the estimates $\hat{\beta}_j$. They represent the variability in the estimates.
+
+## 
+
+</br>
+
+|              | coef    | std err | t       | P\>$|t|$ | $[0.025$ | $0.975 ]$ |
+|--------------|---------|---------|---------|----------|----------|-----------|
+| const        | 41.0953 | 1.868   | 21.999  | 0.000    | 37.423   | 44.768    |
+| weight       | -0.0073 | 0.000   | -25.966 | 0.000    | -0.008   | -0.007    |
+| acceleration | 0.2617  | 0.086   | 3.026   | 0.003    | 0.092    | 0.432     |
+
+The column [**t**]{style="color:darkgreen;"} contains the values of the [observed statistic $t_0$]{style="color:darkgreen;"} for the hypothesis tests.
+
+## 
+
+|              | coef    | std err | t       | P\>$|t|$ | $[0.025$ | $0.975 ]$ |
+|--------------|---------|---------|---------|----------|----------|-----------|
+| const        | 41.0953 | 1.868   | 21.999  | 0.000    | 37.423   | 44.768    |
+| weight       | -0.0073 | 0.000   | -25.966 | 0.000    | -0.008   | -0.007    |
+| acceleration | 0.2617  | 0.086   | 3.026   | 0.003    | 0.092    | 0.432     |
+
+The column [**P\>\|t\|**]{style="color:pink;"} contains the [p-values]{style="color:pink;"} for the hypothesis tests.
+
+Since the p-value is smaller than $\alpha = 0.05$, we reject $H_0$ for acceleration and weight. Therefore, **weight and acceleration have a significant association with the mpg of a car**.
+
+## 
+
+</br>
+
+|              | coef    | std err | t       | P\>$|t|$ | $[0.025$ | $0.975 ]$ |
+|--------------|---------|---------|---------|----------|----------|-----------|
+| const        | 41.0953 | 1.868   | 21.999  | 0.000    | 37.423   | 44.768    |
+| weight       | -0.0073 | 0.000   | -25.966 | 0.000    | -0.008   | -0.007    |
+| acceleration | 0.2617  | 0.086   | 3.026   | 0.003    | 0.092    | 0.432     |
+
+The columns $[0.025$ and $0.975]$ show the limits of a 95% confidence interval on each true coefficient $\beta_j$. This interval *contains* the true parameter value with a confidence of 95%.
+
+# Residual analysis
 
 ## Multiple linear regression model
 
@@ -170,12 +481,11 @@ We fit the model in Python as follows.
 
 # Defining the predictor (X) and the response variable (Y).
 prod_Y_train = production_data['RunTime']
-prod_X_pred = production_data['RunSize']
-prod_X_train = sm.add_constant(prod_X_pred)
+prod_X_train = production_data[['RunSize']]
 
 # Fitting the simple linear regression model.
-regr = sm.OLS(prod_Y_train, prod_X_train)
-linear_model = regr.fit()
+LRmodelProd = LinearRegression()
+LRmodelProd.fit(prod_X_train, prod_Y_train)
 ```
 
 ## Estimated model
@@ -194,17 +504,17 @@ The residuals of this estimated model are $\hat{\epsilon}_i = Y_i - \hat{Y}_i$.
 
 </br>
 
-Recall that we can calculate the predicted values and residuals using commands from **statsmodels**.
+Recall that we can calculate the predicted values and residuals.
 
 ```{python}
 #| echo: true
 #| output: true
 
 # Make predictions using the the model
-prod_Y_pred = linear_model.fittedvalues
+prod_Y_pred = LRmodelProd.predict(prod_X_train)
 
 # Calculate residuals.
-residuals = linear_model.resid
+residuals = prod_Y_train - prod_Y_pred
 ```
 
 # Residuals vs Fitted Values Plot
@@ -218,20 +528,10 @@ the Residuals versus Fitted Values plot.
 #| output: true
 #| fig-align: center
 
-# Defining the predictor (X) and the response variable (Y)
-X_pred = production_data['RunSize'] 
-y = production_data['RunTime']
-
-# Add intercept.
-X = sm.add_constant(X_pred)
-
-# Fitting the simple linear regression model
-regr = sm.OLS(y, X)
-lr_model = regr.fit()
 
 plt.figure(figsize=(7, 5))
 sns.scatterplot(x='RunSize', y='RunTime', data=production_data, color='blue')
-plt.plot(production_data['RunSize'], lr_model.fittedvalues, color='red', linestyle='--', linewidth=2)
+plt.plot(production_data['RunSize'], prod_Y_pred, color='red', linestyle='--', linewidth=2)
 plt.title("Fitted Regression Line")
 plt.xlabel("Run size", fontsize = 14)
 plt.ylabel("Run time", fontsize = 14)
@@ -250,7 +550,7 @@ plt.show()
 
 plt.figure(figsize=(5, 5))
 sns.scatterplot(x='RunSize', y='RunTime', data=production_data, color='blue')
-plt.plot(production_data['RunSize'], lr_model.fittedvalues, color='red', linestyle='--', linewidth=2)
+plt.plot(production_data['RunSize'], prod_Y_pred, color='red', linestyle='--', linewidth=2)
 plt.title("Fitted Regression Line")
 plt.xlabel("Run size", fontsize = 14)
 plt.ylabel("Run time", fontsize = 14)
@@ -441,10 +741,10 @@ To construct a QQ plot, we use the function `qqplot()` **statsmodels** library.
 #| fig-align: center
 
 # QQ plot to assess normality of residuals
-plt.figure(figsize=(5, 3))
-sm.qqplot(residuals, fit = True, line = '45')
-plt.title('QQ Plot of Residuals')
-plt.show()
+#plt.figure(figsize=(5, 3))
+#sm.qqplot(residuals, fit = True, line = '45')
+#plt.title('QQ Plot of Residuals')
+#plt.show()
 ```
 
 ## 
@@ -458,10 +758,10 @@ Substantial departures from a straight line indicate that the distribution is no
 #| fig-align: center
 
 # QQ plot to assess normality of residuals
-plt.figure(figsize=(7, 4))
-sm.qqplot(residuals, fit = True, line = '45')
-plt.title('QQ Plot of Residuals')
-plt.show()
+#plt.figure(figsize=(7, 4))
+#sm.qqplot(residuals, fit = True, line = '45')
+#plt.title('QQ Plot of Residuals')
+#plt.show()
 ```
 
 ## 
@@ -475,10 +775,10 @@ This plot suggests that the residuals are consistent with a Normal curve.
 #| fig-align: center
 
 # QQ plot to assess normality of residuals
-plt.figure(figsize=(7, 4))
-sm.qqplot(residuals, fit = True, line = '45')
-plt.title('QQ Plot of Residuals')
-plt.show()
+#plt.figure(figsize=(7, 4))
+#sm.qqplot(residuals, fit = True, line = '45')
+#plt.title('QQ Plot of Residuals')
+#plt.show()
 ```
 
 ## Comments
@@ -516,472 +816,6 @@ When $n$ is relatively small, you tend to see deviations, particularly in the ta
 
 4.  [If the residuals are dependent]{style="color:red;"}, then the linear model is incorrect and everything falls apart!
 
-# Inference about individual $\beta$’s using t-tests
 
-## Questions
-
-</br>
-
-1.  How can we estimate $\beta_0, \beta_1, \ldots, \beta_p$ and $\sigma^2$?
-
-2.  How can we validate the model and all its assumptions?
-
-3.  [How can we make inferences about $\beta_0, \beta_1, \ldots, \beta_p$?]{style="color:blue;"}
-
-4.  If some assumptions are not met, can we do something about it?
-
-5.  How can we make predictions of future responses using the multiple linear regression model?
-
-## Example 2
-
-</br>
-
-Let's consider the "auto.xlsx" dataset.
-
-```{python}
-#| echo: true
-auto_data = pd.read_excel('auto.xlsx')
-```
-
-</br>
-
-Let's assume that we want to study the following model.
-
-$$
-Y_i = \beta_0 + \beta_1 X_{i1}+ \beta_2 X_{i2}+ \epsilon_i,
-$$
-
-where $Y_i$ is the mpg, $X_{i1}$ is the weight, and $X_{i2}$ is the acceleration of the $i$-th car, $i = 1, \ldots, 392$.
-
-## Research question
-
-</br></br></br>
-
-> Do the weight and acceleration have a significant association with the mpg of a car?
-
-## The two cultures of statistical models
-
-</br>
-
-::: incremental
--   [**Inference**]{style="color:darkblue;"}: develop a model that fits the data well. Then make inferences about the data-generating process based on the structure of such model.
-
--   [**Prediction**]{style="color:darkgreen;"}: Silent about the underlying mechanism generating the data and allow for many predictive algorithms, which only care about accuracy of predictions.
-:::
-
-. . .
-
-They overlap very often.
-
-## 
-
-</br></br></br>
-
-The least squares estimators $\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p$ are subject to uncertainty, since they are calculated based on a random sample of data.
-
-Therefore, assessing the amount of the uncertainty in these estimators is important. To this end, we use [hypothesis]{style="color:blue;"} tests on individual coefficients.
-
-## Hypothesis test
-
-</br>
-
-> A statistical hypothesis is a statement about the coefficients of a model.
-
-. . .
-
-In our case, we are interested in testing:
-
-::: r-stack
-$H_0: \beta_j = 0$ v.s. $H_1: \beta_j \neq 0$ (Two-tailed Test)
-:::
-
-::: incremental
--   Rejecting $H_0$ (in favor of $H_1$) implies that the predictor has a significant association with the response.
--   Not rejecting $H_0$ implies that the predictor does not have a significant association with the response.
-:::
-
-## 
-
-</br></br>
-
-::: r-stack
-$H_0: \beta_j = 0$ v.s. $H_1: \beta_j \neq 0$ (Two-tailed Test)
-:::
-
-</br>
-
-Testing this hypothesis consists of the following steps:
-
-::: incremental
-1.  Take a random sample.
-2.  Compute the appropriate test statistic.
-3.  Reject or fail to reject the null hypothesis based on a computed p-value.
-:::
-
-## Step 1. Random sample
-
-</br></br>
-
-The random sample is the data we use to train or fit the model.
-
-```{python}
-#| echo: true
-#| output: true
-
-# Dataset with predictors.
-pred_auto = auto_data[['weight', 'acceleration']]
-
-# Add the column for the intercept.
-auto_X_train = sm.add_constant(pred_auto)
-
-# Dataset with the response only.
-auto_Y_train = auto_data['mpg']
-```
-
-## Step 2. Test statistic
-
-</br>
-
-The test statistic is
-
-$$t_0 = \frac{\hat{\beta}_{j}}{\sqrt{ \hat{v}_{jj}} }$$
-
--   $\hat{\beta}_j$ is the least squares estimate of the true coefficient $\beta_j$.
--   $\sqrt{\hat{v}_{jj}}$ is the *standard error* of the estimate $\hat{\beta}_j$ calculated using Python.
-
-## 
-
-</br>
-
-Recall that we obtain the least squares estimates ($\hat{\beta}_{j}$) in Python using:
-
-```{python}
-#| echo: true
-#| output: true
-
-# Fitting the simple linear regression model.
-regr = sm.OLS(auto_Y_train, auto_X_train)
-linear_model = regr.fit()
-linear_model.params
-```
-
-Later, we will see how to obtain the *standard error* of the estimate $\hat{\beta}_j$.
-
-## 
-
-</br>
-
-::::: columns
-::: {.column width="30%"}
-</br>
-
-$$t_0 = \frac{\hat{\beta}_{j}}{\sqrt{ \hat{v}_{jj}} }$$
-:::
-
-::: {.column width="70%"}
--   We like this statistic because it follows a well-known distribution.
-
--   If the null hypothesis ($H_0: \beta_j = 0$) is true, the statistic $t_0$ follows a [$t$ distribution]{style="color:purple;"} with $n-p-1$ degrees of freedom
-
--   Remember that $n$ is the number of observations and $p$ the number of predictors.
-:::
-:::::
-
-## t distribution
-
-</br>
-
-::::: columns
-::: {.column width="70%"}
-This distribution is also known as the student’s t-distribution.
-
-It was invented by [William Gosset](https://en.wikipedia.org/wiki/William_Sealy_Gosset) when he worked at the Guinness Brewery in Ireland.
-
-It has one parameter $\nu$ which generally equals a number of degrees of freedom.
-
-The parameter $\nu$ controls the shape of the distribution.
-:::
-
-::: {.column width="30%"}
-![](images/William_Sealy_Gosset.jpg){width="478"} [William Gosset](https://en.wikipedia.org/wiki/William_Sealy_Gosset)
-:::
-:::::
-
-## 
-
-The t-distribution resembles a standard normal distribution when $\nu$ goes to infinity.
-
-![](images/clipboard-309922779.png){fig-align="center"}
-
-## Step 3. Calculate the p-value
-
-</br></br></br>
-
-The [**p-value**]{style="color:pink;"} is the probability that the [$t$ test statistic]{style="color:darkgreen;"} will get a value that is at least as extreme as the observed $t_0$ value when the null hypothesis ($H_0$) is true.
-
-## 
-
-For $H_0: \beta_j = 0$ v.s. $H_1: \beta_j \neq 0$, the p-value is calculated using both tails of the $t$ distribution. It is the blue area under the curve below.
-
-![](images/critical_region2.png){fig-align="center"}
-
-We use the two tails because $H_1$ includes the possibility that the value of $\beta_j$ is positive or negative.
-
-## The p-value is not the probability that $H_0$ is true
-
-Since the p-value is a probability, and since small p-values indicate that $H_0$ is unlikely to be true, it is tempting to think that the p-value represents the probability that $H_0$ is true.
-
-</br>
-
-:::: r-stack
-::: {style="font-size: 110%;"}
-[This is not the case!]{style="color:red;"}
-:::
-::::
-
-</br>
-
-Remember that the **p-value** is the probability that the $t$ test statistic will get a value that is at least as extreme as the observed $t_0$ value **when** $H_0$ is true.
-
-## How small must the p-value be to reject $H_0$?
-
-:::::: columns
-:::: {.column width="60%"}
-::: incremental
--   **Answer**: Very small!
-
--   But, how small?
-
--   **Answer**: Very small!
-
--   But, tell me, how small?
-
--   **Answer**: Okay, it must be less than a value called $\alpha$ which is usually 0.1, 0.05, or 0.01.
-
--   Thank you!
-:::
-::::
-
-::: {.column width="40%"}
-![](images/clipboard-2242705857.png){width="478"} [Sir Ronald Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher)
-:::
-::::::
-
-## Decision
-
-</br>
-
-For a significance level of $\alpha = 0.05$:
-
--   If the p-value is smaller than $\alpha$, we reject $H_0: \beta_j = 0$ in favor of $H_1: \beta_j \neq 0$.
-
--   If the p-value is larger than $\alpha$, we do not reject $H_0: \beta_j = 0$.
-
-No scientific basis for this advice. In practice, report the p-value and explore the data using descriptive statistics.
-
-## 
-
-![](images/clipboard-1571120222.png){fig-align="center"}
-
-## t-tests in Python
-
-We obtain the t-tests of the coefficients using the function `summary()` together with the `linear_model` object.
-
-```{python}
-#| echo: true
-
-model_summary = linear_model.summary()
-print(model_summary)
-```
-
-## Table of t-tests
-
-|              | coef    | std err | t       | P\>$|t|$ | $[0.025$ | $0.975 ]$ |
-|--------------|---------|---------|---------|----------|----------|-----------|
-| const        | 41.0953 | 1.868   | 21.999  | 0.000    | 37.423   | 44.768    |
-| weight       | -0.0073 | 0.000   | -25.966 | 0.000    | -0.008   | -0.007    |
-| acceleration | 0.2617  | 0.086   | 3.026   | 0.003    | 0.092    | 0.432     |
-
-The column [**std err**]{style="color:darkblue;"} contains the values of the [estimated standard error]{style="color:darkblue;"} ($\sqrt{ \hat{v}_{jj}}$) of the estimates $\hat{\beta}_j$. They represent the variability in the estimates.
-
-## 
-
-</br>
-
-|              | coef    | std err | t       | P\>$|t|$ | $[0.025$ | $0.975 ]$ |
-|--------------|---------|---------|---------|----------|----------|-----------|
-| const        | 41.0953 | 1.868   | 21.999  | 0.000    | 37.423   | 44.768    |
-| weight       | -0.0073 | 0.000   | -25.966 | 0.000    | -0.008   | -0.007    |
-| acceleration | 0.2617  | 0.086   | 3.026   | 0.003    | 0.092    | 0.432     |
-
-The column [**t**]{style="color:darkgreen;"} contains the values of the [observed statistic $t_0$]{style="color:darkgreen;"} for the hypothesis tests.
-
-## 
-
-|              | coef    | std err | t       | P\>$|t|$ | $[0.025$ | $0.975 ]$ |
-|--------------|---------|---------|---------|----------|----------|-----------|
-| const        | 41.0953 | 1.868   | 21.999  | 0.000    | 37.423   | 44.768    |
-| weight       | -0.0073 | 0.000   | -25.966 | 0.000    | -0.008   | -0.007    |
-| acceleration | 0.2617  | 0.086   | 3.026   | 0.003    | 0.092    | 0.432     |
-
-The column [**P\>\|t\|**]{style="color:pink;"} contains the [p-values]{style="color:pink;"} for the hypothesis tests.
-
-Since the p-value is smaller than $\alpha = 0.05$, we reject $H_0$ for acceleration and weight. Therefore, **weight and acceleration have a significant association with the mpg of a car**.
-
-## 
-
-</br>
-
-|              | coef    | std err | t       | P\>$|t|$ | $[0.025$ | $0.975 ]$ |
-|--------------|---------|---------|---------|----------|----------|-----------|
-| const        | 41.0953 | 1.868   | 21.999  | 0.000    | 37.423   | 44.768    |
-| weight       | -0.0073 | 0.000   | -25.966 | 0.000    | -0.008   | -0.007    |
-| acceleration | 0.2617  | 0.086   | 3.026   | 0.003    | 0.092    | 0.432     |
-
-The columns $[0.025$ and $0.975]$ show the limits of a 95% confidence interval on each true coefficient $\beta_j$. This interval *contains* the true parameter value with a confidence of 95%.
-
-# Multiple and adjusted $R^2$ statistics
-
-## Total Sum of Squares
-
-</br>
-
-Let’s consider the total sum of squares
-
-$$SS_{Total} = \sum_{i=1}^{n} (Y_i - \bar{Y})^2 \text{ where } \bar{Y} = \sum_{i=1}^{n} \frac{Y_i}{n}.$$
-
-This quantity measures the total variation of the response.
-
-In other words, it is the amount of variability inherent in the response before we fit a regression model.
-
-## Residual Sum of Squares
-
-Let’s also consider the residual sum of squares
-
-$$RSS = \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2.$$
-
-RSS is the sum of squares due to residuals of the linear regression model; or, residual variation left unexplained by this model.
-
-The better the predictions of the model, the smaller the RSS value.
-
-## Coefficient of determination
-
-$$R^2 = 1 - \frac{RSS}{SS_{total}}$$
-
-$R^2$ measures the “proportion of variation in the response explained by the full regression model.”
-
-![](images/example_R-01.png)
-
-## 
-
-</br>
-
-$$R^2 = 1 - \frac{RSS}{SS_{total}}$$
-
-What would you conclude about RSS if $R^2 = 1$?
-
-::: incremental
--   In this case, $RSS = 0$ and the model fits the data perfectly.
-
--   If $R^2$ is small, then large RSS: lots of scatter and the model’s fit is not good.
-
--   It turns out that $R^2$ is the square of the correlation between the observed ($Y_i$) and predicted ($\hat{Y}_i$) responses.
-:::
-
-## Remarks on $R^2$
-
-</br>
-
--   The statistic $R^2$ should be used with caution because it is always possible to make it unity by simply adding more and more predictors.
-
--   If $R^2$ is large, it does not necessarily imply that the full model will provide accurate predictions of future observations.
-
-## 
-
-</br>
-
-![](images/Figures.004.jpeg){fig-align="center"}
-
-## Adjusted $R^2$ statistic
-
-Adjusted $R^2$ is a better measure to decide whether to add a new variable into the model or not. It is:
-
-$$R_{adj}^2=1-\frac{RSS/(n-k-1)}{SS_{total}/(n-1)},$$
-
-where $k$ is the number of variables in the model. For the full model, $k = p$.
-
-::: incremental
--   If adjusted $R^2$ goes down or stays the same, then new variable is not important.
--   If adjusted $R^2$ goes up, then it is probably useful.
-:::
-
-## 
-
-</br>
-
-![](images/Figures.005.jpeg){fig-align="center"}
-
-## 
-
-Why is adjusted $R^2$ more useful than $R^2$ for adding new variables?
-
-$$R_{adj}^2=1-\frac{RSS/(n-k-1)}{SS_{total}/(n-1)}$$
-
-::: incremental
--   As we explain more variability, the numerator gets smaller and adjusted $R^2$ gets closer to 1. So, we want to make the numerator small.
--   If we add a “good” variable to the model, RSS will go down. However, $n - k - 1$ will decrease a little bit (because $k$ is now bigger by 1.) So the numerator does not go down by as much as it does in ‘plain’ $R^2$.
-:::
-
-## 
-
-</br>
-
-$$R_{adj}^2=1-\frac{RSS/(n-k-1)}{SS_{total}/(n-1)}$$
-
--   If we add a useless predictor, RSS goes down a tiny bit, but because we divide by $n - k - 1$, the numerator might actually get bigger or change very little.
-
--   So, adjusted $R^2$ is a better measure of whether adding a new predictor is an improvement. If adjusted $R^2$ goes down or stays the same, the new predictor is irrelevant. If it goes up, then it is probably useful.
-
-## In Python
-
-</br>
-
-To show the $R^2$ value, we use the `rsquared` argument of the `linear_model` object.
-
-```{python}
-#| echo: true
-#| output: true
-
-print( round(linear_model.rsquared, 3) )
-```
-
-To show the adjusted $R^2$ value, we use the `rsquared` argument of the `linear_model` object.
-
-```{python}
-#| echo: true
-#| output: true
-
-print( round(linear_model.rsquared_adj, 3) )
-```
-
-## Model building
-
-</br>
-
--   Model building refers to a set of techniques to reduce the full model to one that only includes significant predictors.
-
--   It is more a deconstruction than building an actual model, since the full model must be a valid one to begin with. Specifically, the full model must provide residuals that satisfy all the assumptions (1)-(4).
-
--   After we have obtained a satisfactory full model, we can start the model building process.
-
-## Two model building techniques
-
-</br>
-
-::: incremental
-1.  Adjusted $R^2$ statistic. We add one variable at a time and see the change in adjusted $R^2$ statistic. If the value decreases, then we stop and evaluate the resulting model.
-
-2.  T-tests on the individual coefficients. If $H_0$ is not rejected, this indicates that the predictor $X_j$ can be deleted from the model. We can then delete the predictor and refit the model. We can repeat this process several times until we reach a model in which all variables are significant.
-:::
 
 # [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

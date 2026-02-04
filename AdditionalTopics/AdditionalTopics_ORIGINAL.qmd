@@ -24,7 +24,8 @@ jupyter: python3
 
 1.  Linear models with categorical variables
 2.  Linear models with standardized numerical predictors
-3.  Predicting future observations
+3.  Remedies for faulty assumptions
+4.  Predicting future observations
 
 ## Load the libraries
 
@@ -467,6 +468,332 @@ Standardization does not affect the correlation between two predictors. So, it h
 
 Ideally, the dummy variables for the categorical predictors are standardized too.
 
+# Remedies for faulty assumptions
+
+## Questions
+
+</br>
+
+1.  How can we estimate $\beta_0, \beta_1, \ldots, \beta_p$ and $\sigma^2$?
+
+2.  How can we validate the model and all its assumptions?
+
+3.  How can we make inferences about $\beta_0, \beta_1, \ldots, \beta_p$?
+
+4.  [If some assumptions are not met, can we do something about it?]{style="color:blue;"}
+
+5.  How can we make predictions of future responses using the multiple linear regression model?
+
+## Incorrect model
+
+</br></br>
+
+A model is incorrect if
+
+::: incremental
+-   The assumed model structure is incorrect. That is, $Y \neq \beta_0 + \beta_1 X + \epsilon$.
+-   The residuals do not have constant variance.
+-   The residuals are not independent.
+:::
+
+## Example 3
+
+Consider the fitting the following model to the `auto_data`:
+
+$$Y_i = \beta_0 + \beta_1 X_{i} + \epsilon_i$$ where:
+
+-   $Y_i$ is the mpg of the i-th car.
+-   $X_i$ is the horsepower of the i-th car.
+
+We fit the model:
+
+```{python}
+#| echo: true
+#| output: true
+
+X_train = sm.add_constant(auto_data['horsepower'])
+regr = sm.OLS(auto_data['mpg'], X_train)
+linear_model = regr.fit()
+```
+
+## Residual analysis
+
+```{python}
+#| echo: false
+#| output: false
+
+
+Y_pred = linear_model.fittedvalues
+residuals = linear_model.resid
+```
+
+::::: columns
+::: {.column width="50%"}
+```{python}
+#| echo: false
+#| output: true
+
+# Residual vs Fitted Values Plot
+plt.figure(figsize=(5, 5))
+sns.scatterplot(x = Y_pred, y = residuals)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.title('Residuals vs Fitted Values')
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.show()
+```
+:::
+
+::: {.column width="50%"}
+```{python}
+#| echo: false
+#| output: true
+
+# Residual vs Time Plot
+plt.figure(figsize=(5, 5))
+order = range(residuals.shape[0])
+sns.scatterplot(x = order, y = residuals)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.title('Residuals vs Time')
+plt.xlabel('Time')
+plt.ylabel('Residuals')
+plt.show()
+```
+:::
+:::::
+
+## Problems and remedies
+
+</br></br>
+
+[The assumed model structure is incorrect.]{style="color:red;"} That is, $Y \neq \beta_0 + \beta_1 X + \epsilon$.
+
+. . .
+
+**Remedies**: Add high powers of the predictor variable to the model or transform the response (or predictor).
+
+## 
+
+</br></br>
+
+The [residuals]{style="color:red;"} of the fitted model [do not have constant variance]{style="color:red;"}.
+
+. . .
+
+**Remedies**: Transform the response or predictor variable.
+
+-   Logarithm transformation
+-   Square root transformation
+-   Box-Cox transformation.
+
+## Transformations
+
+Two commonly used transformations are:
+
+**Natural logarithm** (ln) $$\ln(Y) = \beta_0 + \beta_1 X + \epsilon$$ $$\ln(Y) = \beta_0 + \beta_1 \ln(X) + \epsilon$$
+
+**Squared root** (sqrt)
+
+$$\sqrt{Y} = \beta_0 + \beta_1 X + \epsilon$$ $$\sqrt{Y} = \beta_0 + \beta_1 \sqrt{X} + \epsilon$$
+
+## Effect of transformations
+
+</br>
+
+::: incremental
+-   In many cases, the $\ln{(\cdot)}$ transformation Improves the relationship between predictor and response.
+-   Produces residuals that have constant variance (variance-stabilizing transformation).
+-   The $\sqrt{\cdot}$ transformation provides similar benefits, except that it is useful for response variables that are counts or follow a Poisson distribution.
+:::
+
+## NumPy library
+
+::::: columns
+::: {.column width="60%"}
+-   **numpy** is a powerful, open-source data manipulation and analysis library for Python
+-   It is the backbone for **scikit-learn** and **pandas**
+-   <https://numpy.org/>
+:::
+
+::: {.column width="40%"}
+![](images/NumPy_logo_2020.png){fig-align="center"}
+:::
+:::::
+
+Load it using:
+
+```{python}
+#| echo: true
+
+import numpy as np
+```
+
+## Continuation of Example 3
+
+To transform the response ($Y$) using $\ln{(Y)}$ or $\sqrt{Y}$ we use the functions `log()` and `sqrt()`, respectively, from **numpy**.
+
+```{python}
+#| echo: true
+#| output: false
+
+sqrt_Y = np.sqrt( auto_data['mpg'] )
+log_Y = np.log( auto_data['mpg'] )
+```
+
+Let's consider the logarithm transformation. The model then is:
+
+$$\log{(Y_i)} = \beta_0 + \beta_1 X_i +\epsilon_i,$$
+
+which we fit using the code below.
+
+```{python}
+#| echo: true
+#| output: false
+
+log_regr = sm.OLS(log_Y, X_train)
+log_linear_model = log_regr.fit()
+```
+
+## New residual analysis
+
+```{python}
+#| echo: false
+#| output: false
+
+Y_pred = log_linear_model.fittedvalues
+residuals = log_linear_model.resid
+```
+
+::::: columns
+::: {.column width="50%"}
+```{python}
+#| echo: false
+#| output: true
+
+# Residual vs Fitted Values Plot
+plt.figure(figsize=(5, 5))
+sns.scatterplot(x = Y_pred, y = residuals)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.title('Residuals vs Fitted Values')
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.show()
+```
+:::
+
+::: {.column width="50%"}
+```{python}
+#| echo: false
+#| output: true
+
+# Residual vs Time Plot
+plt.figure(figsize=(5, 5))
+order = range(residuals.shape[0])
+sns.scatterplot(x = order, y = residuals)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.title('Residuals vs Time')
+plt.xlabel('Time')
+plt.ylabel('Residuals')
+plt.show()
+```
+:::
+:::::
+
+## Quadratic model
+
+</br>
+
+Although there is an improvement in the **Residuals vs Fitted Values** plot when using the logarithm. The two plots suggests that we are missing a term in the model.
+
+</br>
+
+. . .
+
+In fact, a better model for the data is a quadratic model with the logarithm of the response:
+
+$$\log{(Y_i)} = \beta_0 + \beta_1 X_i + \beta_2 X_i^2 +\epsilon_i.$$
+
+## 
+
+</br>
+
+To fit this model to the data, we construct a new predictor matrix.
+
+```{python}
+#| echo: true
+#| output: true
+
+X_quad = pd.concat([X_train, auto_data['horsepower']**2], axis = 1)
+```
+
+Next, we fit the model as before.
+
+```{python}
+#| echo: true
+#| output: true
+
+quad_regr = sm.OLS(log_Y, X_quad)
+quadratic_model = quad_regr.fit()
+```
+
+And calculate the residuals and predicted values.
+
+```{python}
+#| echo: true
+#| output: false
+
+Y_pred = quadratic_model.fittedvalues
+residuals = quadratic_model.resid
+```
+
+## Residual analysis of quadratic model
+
+::::: columns
+::: {.column width="50%"}
+```{python}
+#| echo: true
+#| output: true
+#| code-fold: true
+
+# Residual vs Fitted Values Plot
+plt.figure(figsize=(5, 5))
+sns.scatterplot(x = Y_pred, y = residuals)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.title('Residuals vs Fitted Values')
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.show()
+```
+:::
+
+::: {.column width="50%"}
+```{python}
+#| echo: true
+#| output: true
+#| code-fold: true
+
+# Residual vs Time Plot
+plt.figure(figsize=(5, 5))
+order = range(residuals.shape[0])
+sns.scatterplot(x = order, y = residuals)
+plt.axhline(y=0, color='red', linestyle='--')
+plt.title('Residuals vs Time')
+plt.xlabel('Time')
+plt.ylabel('Residuals')
+plt.show()
+```
+:::
+:::::
+
+## Conclusions
+
+::: incremental
+-   Transformations may help us to develop models that better approximate the data. However, the interpretation of these models may be too complex. For instance, how can you interpret $\beta_1$ in $\log{(Y)} = \beta_0 + \beta_1\ X + \epsilon$?
+
+-   Therefore, transformations are more useful to build good predictive models. That is, models whose goal is to give accurate predictions of future observations.
+
+-   Note that, we need to transform back our response predictions to the original scale. For example, if $Y' = \ln{Y}$ is the transformed response, then our final prediction is $Y^\star = e^{{Y'}^\star}$.
+:::
 
 # Predicting future observations
 
