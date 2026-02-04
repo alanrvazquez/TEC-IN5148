@@ -22,9 +22,9 @@ jupyter: python3
 
 </br>
 
-1.  Linear models with categorical variables
-2.  Linear models with standardized numerical predictors
-3.  Predicting future observations
+1.  Linear Models with Categorical Predictors
+2.  Linear Models with Standardized Numerical Predictors
+3.  Putting All Together
 
 ## Load the libraries
 
@@ -41,14 +41,15 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
+from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import root_mean_squared_error
 ```
 
 We will not use all the functions from the **scikit-learn** library. Instead, we will use specific functions from the sub-libraries **preprocessing**, **model_selection**, and **metrics**.
 
-# Linear models with categorical predictors
+# Linear Models with Categorical Predictors
 
 ## Categorical predictors
 
@@ -134,13 +135,13 @@ The dataset with the dummy variables looks like this:
 | Japanese | 0        | 1        |
 | $\vdots$ | $\vdots$ | $\vdots$ |
 
-## The multiple linear regression model
+## Linear regression model
 
 </br>
 
-$$Y_i= \beta_0+\beta_1 d_{1i} +\beta_2 d_{2i} +\epsilon_i \ \text{for} \ i=1,\ldots,n.$$
+$$\hat{Y}_i= \hat{\beta}_0 + \hat{\beta}_1 d_{1i} + \hat{\beta}_2 d_{2i}  \ \text{for} \ i=1,\ldots,n.$$
 
--   $Y_i$ is the i-th response.
+-   $\hat{Y}_i$ is the i-th predicted response.
 -   $d_{1i}$ is 1 if the i-th observation is from a European car, and 0 otherwise.
 -   $d_{2i}$ is 1 if the i-th observation is from a Japanese car, and 0 otherwise.
 
@@ -148,34 +149,37 @@ $$Y_i= \beta_0+\beta_1 d_{1i} +\beta_2 d_{2i} +\epsilon_i \ \text{for} \ i=1,\ld
 
 </br>
 
-$$Y_i= \beta_0+\beta_1 d_{1i} +\beta_2 d_{2i} +\epsilon_i \ \text{for} \ i=1,\ldots,n.$$
+$$
+\hat{Y}_i= \hat{\beta}_0 + \hat{\beta}_1 d_{1i} + \hat{\beta}_2 d_{2i} 
+$$
 
 ::: incremental
--   $\beta_0$ is the mean response (mpg) for American cars.
--   $\beta_1$ is the amount of increase in the mean response when changing from an American to a European car.
--   $\beta_2$ is the amount of increase in the mean response when changing from an American to a Japanese car.
--   $\epsilon_i$’s follow the same assumptions as before.
+-   $\hat{\beta}_0$ is the mean response (mpg) for American cars.
+-   $\hat{\beta}_1$ is the amount of increase in the mean response when changing from an American to a European car.
+-   $\hat{\beta}_2$ is the amount of increase in the mean response when changing from an American to a Japanese car.
 :::
 
 ## 
 
 Alternatively, we can write the regression model as:
 
-$$Y_i= \beta_0+\beta_1 d_{1i} +\beta_2 d_{2i} +\epsilon_i = \begin{cases}
-\beta_0+\beta_1 +\epsilon_i \text{ if car is European}\\
-\beta_0+\beta_2 +\epsilon_i \text{ if car is Japanese} \\
-\beta_0 +\epsilon_i\;\;\;\;\;\;\ \text{ if car is American} 
-\end{cases}$$
+$$
+\hat{Y}_i= \hat{\beta}_0+\hat{\beta}_1 d_{1i} +\hat{\beta}_2 d_{2i} = \begin{cases}
+\hat{\beta}_0+\hat{\beta}_1 +\hat{\beta}_i \text{ if car is European}\\
+\hat{\beta}_0+\hat{\beta}_2  \text{ if car is Japanese} \\
+\hat{\beta}_0 \;\;\;\;\;\;\ \text{ if car is American} 
+\end{cases}
+$$
 
 Given this model representation:
 
--   $\beta_0$ is the mean mpg for American cars,
--   $\beta_1$ is the difference in the mean mpg between European and American cars, and
--   $\beta_2$ is the difference in the mean mpg between Japanese and American cars.
+-   $\hat{\beta}_0$ is the mean mpg for American cars,
+-   $\hat{\beta}_1$ is the difference in the mean mpg between European and American cars, and
+-   $\hat{\beta}_2$ is the difference in the mean mpg between Japanese and American cars.
 
 ## In Python
 
-</br>
+</br></br>
 
 We follow three steps to fit a linear model with a categorical predictor. First, we compute the dummy variables.
 
@@ -184,11 +188,11 @@ We follow three steps to fit a linear model with a categorical predictor. First,
 #| output: false
 
 # Create linear regression object
-dummy_data = pd.get_dummies(auto_data['origin'], drop_first = True, 
+dummy_X_train = pd.get_dummies(auto_data['origin'], drop_first = True, 
                             dtype = 'int')
 ```
 
-Next, we construct the response column and matrix of predictors with the intercept.
+Next, we construct the response column.
 
 ```{python}
 #| echo: true
@@ -196,41 +200,29 @@ Next, we construct the response column and matrix of predictors with the interce
 
 # Create response vector
 Y_train = auto_data['mpg']
-
-# Create matrix of predictors with intercept
-dummy_X_train = sm.add_constant(dummy_data)
 ```
 
 ## 
 
 </br></br>
 
-Finally, we fit the model using `OLS()` and `fit()` from **statsmodels**.
+Finally, we fit the model using **scikit-learn**.
 
 ```{python}
 #| echo: true
 #| output: true
 
-# Create linear regression object
-regr = sm.OLS(Y_train, dummy_X_train)
+# 1. Create the linear regression model
+LRmodel = LinearRegression()
 
-# Train the model using the training sets
-linear_model = regr.fit()
+# 2. Fit the model.
+LRmodel.fit(dummy_X_train, Y_train)
 
-# Summary of the models.
-summary_model = linear_model.summary()
+# 3. Show estimated coefficients.
+print("Intercept:", LRmodel.intercept_)
+print("Coefficients:", LRmodel.coef_)
 ```
 
-## 
-
-</br>
-
-```{python}
-#| echo: true
-#| output: true
-
-print(summary_model)
-```
 
 ## Analysis of covariance
 
@@ -240,9 +232,9 @@ Models that mix categorical and numerical predictors are sometimes referred to a
 
 **Example** (cont): Consider the predictor weight ($X$).
 
-$$Y_i= \beta_0+\beta_1 d_{1i} +\beta_2 d_{2i} + \beta_3 X_{i} +\epsilon_i,$$
+$$\hat{Y}_i= \hat{\beta}_0 + \hat{\beta}_1 d_{1i} + \hat{\beta}_2 d_{2i} + \hat{\beta}_3 X_{i},$$
 
-where $X_i$ denotes the i-th observed value of weight and $\beta_3$ is the coefficient of this predictor.
+where $X_i$ denotes the i-th observed value of weight and $\hat{\beta}_3$ is the coefficient of this predictor.
 
 ## ANCOVA model
 
@@ -250,29 +242,28 @@ The components of the ANCOVA model are individual functions of the coefficients.
 
 To gain insight into the model, we write it as follows:
 
+
 $$
 \begin{align}
-Y_i &= \beta_0+\beta_1 d_{1i} +\beta_2 d_{2i} + \beta_3 X_{i} +\epsilon_i \\ &= \begin{cases}
-(\beta_0+\beta_1)  + \beta_3 X_{i} +\epsilon_i \text{ if car is European} \\
-(\beta_0+\beta_2) + \beta_3 X_{i} +\epsilon_i \text{ if car is Japanese} \\
-\beta_0 + \beta_3 X_{i} +\epsilon_i\;\;\;\;\;\;\;\;\  \text{ if car is American}
+\hat{Y}_i &= \hat{\beta}_0+\hat{\beta}_1 d_{1i} +\hat{\beta}_2 d_{2i} + \hat{\beta}_3 X_{i} \\ &= \begin{cases}
+(\hat{\beta}_0+\hat{\beta}_1)  + \hat{\beta}_3 X_{i} & \text{ if car is European} \\
+(\hat{\beta}_0+\hat{\beta}_2) + \hat{\beta}_3 X_{i} & \text{ if car is Japanese} \\
+\hat{\beta}_0 + \hat{\beta}_3 X_{i} \;\;\;\;\;\;\;\;\ & \text{ if car is American} \\
 \end{cases}.
 \end{align}
 $$
 
-Note that these models have different intercepts but the same slope.
+The models have different intercepts but the same slope.
 
 ## 
 
 </br></br></br>
 
--   To estimate $\beta_0$, $\beta_1$, $\beta_2$ and $\beta_3$, we use least squares. To estimate $\sigma^2$, we use the mean squared error (MSE).
--   We could make individual inferences on $\beta_1$ and $\beta_2$ using t-tests and confidence intervals.
+-   To estimate $\hat{\beta}_0$, $\hat{\beta}_1$, $\hat{\beta}_2$ and $\hat{\beta}_3$, we use least squares. 
+-   We could make individual inferences on $\beta_1$ and $\beta_2$ using t-tests in the **statsmodels** library.
 -   However, better tests are possible such as overall and partial F-tests (not discussed here).
 
 ## In Python
-
-</br>
 
 To fit an ANCOVA model, we use similar steps as before. The only extra step is to concatenate the data with the dummy variables and the numerical predictor using the function `concat()` from **pandas**.
 
@@ -283,25 +274,18 @@ To fit an ANCOVA model, we use similar steps as before. The only extra step is t
 # Concatenate the two data sets.
 X_train = pd.concat([dummy_X_train, auto_data['weight']], axis = 1)
 
-# Create linear regression object
-regr = sm.OLS(auto_data['mpg'], X_train)
+# 1. Create the linear regression model
+LRmodel_ancova = LinearRegression()
 
-# Train the model using the training sets
-ancova_model = regr.fit()
+# 2. Fit the model.
+LRmodel_ancova.fit(X_train, Y_train)
+
+# 3. Show estimated coefficients.
+print("Intercept:", LRmodel_ancova.intercept_)
+print("Coefficients:", LRmodel_ancova.coef_)
 ```
 
-## Model summary
-
-```{python}
-#| echo: true
-#| output: true
-
-# Summary of the models.
-summary_ancova = ancova_model.summary()
-print(summary_ancova)
-```
-
-# Linear models with standardized predictors
+# Linear Models with Standardized Numerical Predictors
 
 ## Standardization
 
@@ -344,15 +328,15 @@ Limitations:
 
 ## Interpretation
 
-$$Y = \beta_0 + \beta_1 \tilde{X}_1 + \beta_2 \tilde{X}_2 + \cdots + \beta_p \tilde{X}_p + \epsilon,$$
+$$\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1 \tilde{X}_1 + \hat{\beta}_2 \tilde{X}_2 + \cdots + \hat{\beta}_p \tilde{X}_p,$$
 
 where $\tilde{X}_i$ is the standardized version of the predictor $X_i$.
 
 Interpretation:
 
 ::: incremental
--   $\beta_0$ is the mean response when all [**original**]{style="color:darkblue;"} predictors $X_1, X_2, \ldots, X_p$ are set to their average value.
--   $\beta_j$ is the amount of increase in the mean response by an increase of 1 standard deviation in the [**original**]{style="color:darkblue;"} predictor $X_j,$ *when all other predictors are fixed to an arbitrary value*.
+-   $\hat{\beta}_0$ is the average response when all [**original**]{style="color:darkblue;"} predictors $X_1, X_2, \ldots, X_p$ are set to their average value.
+-   $\hat{\beta}_j$ is the amount of increase in the average response by an increase of 1 standard deviation in the [**original**]{style="color:darkblue;"} predictor $X_j,$ *when all other predictors are fixed to an arbitrary value*.
 :::
 
 ## Example 2
@@ -425,28 +409,18 @@ To fit the model, we follow the same functions as before.
 #| echo: true
 #| output: true
 
-# Set the response.
+# 0. Set the response.
 Yc = catalyst_data['Yield']
 
-# Add the intercept.
-Xs_training_int = sm.add_constant(Xs_training)
+# 1. Create the linear regression model
+Linear_model_sd = LinearRegression()
 
-# Create linear regression object.
-std_regr = sm.OLS(Yc, Xs_training)
+# 2. Fit the model.
+Linear_model_sd.fit(Xs_training, Yc)
 
-# Train the model using the training sets.
-std_linear_model = std_regr.fit()
-
-# Summary of the model.
-std_summary_model = std_linear_model.summary()
-```
-
-## 
-
-```{python}
-#| echo: true
-
-print(std_summary_model)
+# 3. Show estimated coefficients.
+print("Intercept:", Linear_model_sd.intercept_)
+print("Coefficients:", Linear_model_sd.coef_)
 ```
 
 ## Discussion
@@ -454,7 +428,6 @@ print(std_summary_model)
 Standardization of predictors has no impact on the overall quality of the linear regression model.
 
 ::: incremental
--   $R^2$ and adjusted $R^2$ statistics are identical.
 -   Predictions are identical.
 -   Residuals do not change.
 :::
@@ -468,71 +441,9 @@ Standardization does not affect the correlation between two predictors. So, it h
 Ideally, the dummy variables for the categorical predictors are standardized too.
 
 
-# Predicting future observations
+# Putting All Together
 
-## Questions
-
-</br>
-
-1.  How can we estimate $\beta_0, \beta_1, \ldots, \beta_p$ and $\sigma^2$?
-
-2.  How can we validate the model and all its assumptions?
-
-3.  How can we make inferences about $\beta_0, \beta_1, \ldots, \beta_p$?
-
-4.  If some assumptions are not met, can we do something about it?
-
-5.  [How can we make predictions of future responses using the multiple linear regression model?]{style="color:blue;"}
-
-## Two datasets
-
-</br></br>
-
-The application of data science models needs two data sets:
-
-::: incremental
--   [**Training data**]{style="color:blue;"} that we use to train or estimate the linear regression model $\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1 X_1 + \cdots + \hat{\beta}_p X_p$.
-
--   [**Test data**]{style="color:green;"} that we use to evaluate the quality of the predictions $\hat{Y}$ of the response $Y$ using unobserved data.
-:::
-
-## 
-
-::::: columns
-::: {.column width="30%"}
-![](images/training.png){width="256"}
-:::
-
-::: {.column width="70%"}
-</br>
-
-A random sample of $n$ observations.
-
-Use it to **build** the linear regression model $\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1 X_1 + \cdots + \hat{\beta}_p X_p$.
-:::
-:::::
-
-::::: columns
-::: {.column width="30%"}
-![](images/test.png){width="262"}
-:::
-
-::: {.column width="70%"}
-Another random sample of $n_t$ observations, which is independent of the training data.
-
-Use it to **evaluate** the predictions $\hat{Y}$ of the model.
-:::
-:::::
-
-## Validation Dataset
-
-In many practical situations, a test dataset is not available. To overcome this issue, we use a [**validation dataset**]{style="color:orange;"}.
-
-![](images/validation.png){fig-align="center" width="645"}
-
-**Idea**: Apply model to your [**validation dataset**]{style="color:orange;"} to mimic what will happen when you apply it to test dataset.
-
-## Example 4
+## Example 3
 
 </br>
 
@@ -604,40 +515,41 @@ The parameter `test_size` sets the portion of the dataset that will go to the va
 
 </br>
 
-Before we start, let's turn the categorical predictors into dummy variables
+Before we continue, let's turn the categorical predictors into dummy variables
 
 ```{python}
 #| echo: true
 #| output: true
 
 # Transform categorical predictors into dummy variables
-X_train_dummy = pd.get_dummies(X_train, drop_first = True, dtype = 'int')
-X_train_dummy.head(3)
+Boston_X_train = pd.get_dummies(X_train, drop_first = True, dtype = 'int')
+Boston_X_train.head(3)
 ```
 
 ## Fit a model using training data
 
 </br>
 
-We fit a multiple linear regression model to predict the `MEDV` in terms of the 12 predictors using the functions `OLS()` and `fit()` from **statsmodels**.
+We train a linear regression model to predict the `MEDV` in terms of the 12 predictors using functions from **scikit-learn**.
 
 ```{python}
 #| echo: true
 #| output: true
 
-# Add intercept.
-Boston_X_train = sm.add_constant(X_train_dummy)
+# 1. Create the linear regression model
+LRmodel = LinearRegression()
 
-# Create linear regression object
-regr = sm.OLS(Y_train, Boston_X_train)
+# 2. Fit the model.
+LRmodel.fit(Boston_X_train, Y_train)
 
-# Train the model using the training sets
-linear_model = regr.fit()
+# 3. Show estimated coefficients.
+print("Intercept:", LRmodel.intercept_)
+print("Coefficients:", LRmodel.coef_)
 ```
 
 ## Brief Residual Analysis
 
-We evaluate the model using a "Residual versus Fitted Values" plot. The plot does not show concerning patterns in the residuals. So, we assume that the model satisfices the assumption of constant variance.
+We evaluate the model using a "Residual versus Fitted Values" plot. The plot does not show concerning patterns in the residuals. So, we assume that the model satisfies the assumption of constant variance.
 
 ```{python}
 #| echo: false
@@ -645,9 +557,15 @@ We evaluate the model using a "Residual versus Fitted Values" plot. The plot doe
 #| code-fold: true
 #| fig-align: center
 
+# Compute predicted values on the training data.
+Y_predicted = LRmodel.predict(Boston_X_train)
+
+# Compute residuals on the training data.
+residuals = Y_predicted - Y_train
+
 # Residual vs Fitted Values Plot
 plt.figure(figsize=(7, 4))
-sns.scatterplot(x = linear_model.fittedvalues, y = linear_model.resid)
+sns.scatterplot(x = Y_predicted, y = residuals)
 plt.axhline(y=0, color='red', linestyle='--')
 plt.title('Residuals vs Fitted Values')
 plt.xlabel('Predicted Values')
@@ -657,31 +575,21 @@ plt.show()
 
 ## Validation Mean Squared Error
 
-</br>
-
-When the response is numeric, the most common evaluation metric is the validation [**Mean Squared Error**]{style="color:orange;"} ([**MSE**]{style="color:orange;"}):
+When the response is numeric, the most common evaluation metric is the validation [**Root Mean Squared Error**]{style="color:orange;"} ([**RMSE**]{style="color:orange;"}):
 
 $$
-\frac{1}{n_{v}} \sum_{i=1}^{n_{v}} \left( Y_i - \hat{Y}_i \right)^2
+\left(\frac{1}{n_{v}} \sum_{i=1}^{n_{v}} \left( Y_i - \hat{Y}_i \right)^2 \right)^{1/2}
 $$
 
 where $(Y_1, \boldsymbol{X}_1), \ldots, (Y_{n_{v} }, \boldsymbol{X}_{n_{v}} )$ are the $n_{v}$ observations in the validation dataset, and $\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \hat{\beta}_2 X_{i2} + \cdots + \hat{\beta}_p X_{ip}$ is the model prediction of the i-th response.
 
-## 
+## Recall that ...
 
-Another useful metric is the validation [**Root Mean Squared Error**]{style="color:orange;"} ([**RMSE**]{style="color:orange;"}):
+</br></br>
 
-$$
-\sqrt{\frac{1}{n_{v}} \sum_{i=1}^{n_{v}} \left( Y_i - \hat{Y}_i \right)^2}
-$$
-
-Benefits:
-
-::: {style="font-size: 90%;"}
 -   The RMSE is in the same units as the response.
 -   The RMSE value is interpreted as either how far (on average) the residuals are from zero.
 -   It can also be interpreted as the average distance between the observed response values and the model predictions.
-:::
 
 ## In Python
 
@@ -690,37 +598,27 @@ We first compute the predictions of our model on the validation dataset. To this
 ```{python}
 #| echo: true
 
-X_valid_dummy = pd.get_dummies(X_valid, drop_first = True, dtype = 'int')
-X_valid_dummy.head(3)
+Boston_X_val = pd.get_dummies(X_valid, drop_first = True, dtype = 'int')
+Boston_X_val.head(3)
 ```
 
 ## 
-
-</br>
 
 Now, we use the values of the predictors in this dataset and use it as input to our model. Our model then computes the prediction of the response for each combination of values of the predictors.
 
 ```{python}
 #| echo: true
 
-# Add constant to the predictor matrix from the validation set.
-Boston_X_val = sm.add_constant(X_valid_dummy)
-
 # Predict responses using validation data.
-predicted_medv_val = linear_model.predict(Boston_X_val)
+predicted_medv_val = LRmodel.predict(Boston_X_val)
 ```
 
-## 
-
-</br>
-
-We compute the validation RMSE by first computing the validation MSE using a function with the same name of **scikit-learn**.
+We compute the validation RMSE using **scikit-learn**.
 
 ```{python}
 #| echo: true
 
-mse = mean_squared_error(Y_valid, predicted_medv_val)
-rmse = mse**(1/2)
+rmse = root_mean_squared_error(Y_valid, predicted_medv_val)
 print( round(rmse, 3) )
 ```
 

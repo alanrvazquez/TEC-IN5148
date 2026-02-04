@@ -3934,14 +3934,14 @@
     "href": "AdditionalTopics/AdditionalTopics.slides.html#agenda",
     "title": "Additional Topics",
     "section": "Agenda",
-    "text": "Agenda\n\n\nLinear models with categorical variables\nLinear models with standardized numerical predictors\nPredicting future observations"
+    "text": "Agenda\n\n\nLinear Models with Categorical Predictors\nLinear Models with Standardized Numerical Predictors\nPutting All Together"
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#load-the-libraries",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#load-the-libraries",
     "title": "Additional Topics",
     "section": "Load the libraries",
-    "text": "Load the libraries\n\nLet’s import scikit-learn into Python together with the other relevant libraries.\n\n# Importing necessary libraries\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nimport statsmodels.api as sm\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import mean_squared_error\n\nWe will not use all the functions from the scikit-learn library. Instead, we will use specific functions from the sub-libraries preprocessing, model_selection, and metrics."
+    "text": "Load the libraries\n\nLet’s import scikit-learn into Python together with the other relevant libraries.\n\n# Importing necessary libraries\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nimport statsmodels.api as sm\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import root_mean_squared_error\n\nWe will not use all the functions from the scikit-learn library. Instead, we will use specific functions from the sub-libraries preprocessing, model_selection, and metrics."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#categorical-predictors",
@@ -3997,70 +3997,70 @@
     "href": "AdditionalTopics/AdditionalTopics.slides.html#model-coefficients",
     "title": "Additional Topics",
     "section": "Model coefficients",
-    "text": "Model coefficients\n\n\\[Y_i= \\beta_0+\\beta_1 d_{1i} +\\beta_2 d_{2i} +\\epsilon_i \\ \\text{for} \\ i=1,\\ldots,n.\\]\n\n\\(\\beta_0\\) is the mean response (mpg) for American cars.\n\\(\\beta_1\\) is the amount of increase in the mean response when changing from an American to a European car.\n\\(\\beta_2\\) is the amount of increase in the mean response when changing from an American to a Japanese car.\n\\(\\epsilon_i\\)’s follow the same assumptions as before."
+    "text": "Model coefficients\n\n\\[\n\\hat{Y}_i= \\hat{\\beta}_0 + \\hat{\\beta}_1 d_{1i} + \\hat{\\beta}_2 d_{2i}\n\\]\n\n\\(\\hat{\\beta}_0\\) is the mean response (mpg) for American cars.\n\\(\\hat{\\beta}_1\\) is the amount of increase in the mean response when changing from an American to a European car.\n\\(\\hat{\\beta}_2\\) is the amount of increase in the mean response when changing from an American to a Japanese car."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-1",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#section-1",
     "title": "Additional Topics",
     "section": "",
-    "text": "Alternatively, we can write the regression model as:\n\\[Y_i= \\beta_0+\\beta_1 d_{1i} +\\beta_2 d_{2i} +\\epsilon_i = \\begin{cases}\n\\beta_0+\\beta_1 +\\epsilon_i \\text{ if car is European}\\\\\n\\beta_0+\\beta_2 +\\epsilon_i \\text{ if car is Japanese} \\\\\n\\beta_0 +\\epsilon_i\\;\\;\\;\\;\\;\\;\\ \\text{ if car is American}\n\\end{cases}\\]\nGiven this model representation:\n\n\\(\\beta_0\\) is the mean mpg for American cars,\n\\(\\beta_1\\) is the difference in the mean mpg between European and American cars, and\n\\(\\beta_2\\) is the difference in the mean mpg between Japanese and American cars."
+    "text": "Alternatively, we can write the regression model as:\n\\[\n\\hat{Y}_i= \\hat{\\beta}_0+\\hat{\\beta}_1 d_{1i} +\\hat{\\beta}_2 d_{2i} = \\begin{cases}\n\\hat{\\beta}_0+\\hat{\\beta}_1 +\\hat{\\beta}_i \\text{ if car is European}\\\\\n\\hat{\\beta}_0+\\hat{\\beta}_2  \\text{ if car is Japanese} \\\\\n\\hat{\\beta}_0 \\;\\;\\;\\;\\;\\;\\ \\text{ if car is American}\n\\end{cases}\n\\]\nGiven this model representation:\n\n\\(\\hat{\\beta}_0\\) is the mean mpg for American cars,\n\\(\\hat{\\beta}_1\\) is the difference in the mean mpg between European and American cars, and\n\\(\\hat{\\beta}_2\\) is the difference in the mean mpg between Japanese and American cars."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#in-python",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#in-python",
     "title": "Additional Topics",
     "section": "In Python",
-    "text": "In Python\n\nWe follow three steps to fit a linear model with a categorical predictor. First, we compute the dummy variables.\n\n# Create linear regression object\ndummy_data = pd.get_dummies(auto_data['origin'], drop_first = True, \n                            dtype = 'int')\n\nNext, we construct the response column and matrix of predictors with the intercept.\n\n# Create response vector\nY_train = auto_data['mpg']\n\n# Create matrix of predictors with intercept\ndummy_X_train = sm.add_constant(dummy_data)"
+    "text": "In Python\n\nWe follow three steps to fit a linear model with a categorical predictor. First, we compute the dummy variables.\n\n# Create linear regression object\ndummy_X_train = pd.get_dummies(auto_data['origin'], drop_first = True, \n                            dtype = 'int')\n\nNext, we construct the response column.\n\n# Create response vector\nY_train = auto_data['mpg']"
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-2",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#section-2",
     "title": "Additional Topics",
     "section": "",
-    "text": "Finally, we fit the model using OLS() and fit() from statsmodels.\n\n# Create linear regression object\nregr = sm.OLS(Y_train, dummy_X_train)\n\n# Train the model using the training sets\nlinear_model = regr.fit()\n\n# Summary of the models.\nsummary_model = linear_model.summary()"
+    "text": "Finally, we fit the model using scikit-learn.\n\n# 1. Create the linear regression model\nLRmodel = LinearRegression()\n\n# 2. Fit the model.\nLRmodel.fit(dummy_X_train, Y_train)\n\n# 3. Show estimated coefficients.\nprint(\"Intercept:\", LRmodel.intercept_)\nprint(\"Coefficients:\", LRmodel.coef_)\n\nIntercept: 20.033469387755094\nCoefficients: [ 7.56947179 10.41716352]"
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-3",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#section-3",
     "title": "Additional Topics",
     "section": "",
-    "text": "print(summary_model)\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.332\nModel:                            OLS   Adj. R-squared:                  0.328\nMethod:                 Least Squares   F-statistic:                     96.60\nDate:                Wed, 04 Feb 2026   Prob (F-statistic):           8.67e-35\nTime:                        09:58:25   Log-Likelihood:                -1282.2\nNo. Observations:                 392   AIC:                             2570.\nDf Residuals:                     389   BIC:                             2582.\nDf Model:                           2                                         \nCovariance Type:            nonrobust                                         \n==============================================================================\n                 coef    std err          t      P&gt;|t|      [0.025      0.975]\n------------------------------------------------------------------------------\nconst         20.0335      0.409     49.025      0.000      19.230      20.837\nEuropean       7.5695      0.877      8.634      0.000       5.846       9.293\nJapanese      10.4172      0.828     12.588      0.000       8.790      12.044\n==============================================================================\nOmnibus:                       26.330   Durbin-Watson:                   0.763\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               30.217\nSkew:                           0.679   Prob(JB):                     2.74e-07\nKurtosis:                       3.066   Cond. No.                         3.16\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified."
+    "text": "To estimate \\(\\hat{\\beta}_0\\), \\(\\hat{\\beta}_1\\), \\(\\hat{\\beta}_2\\) and \\(\\hat{\\beta}_3\\), we use least squares.\nWe could make individual inferences on \\(\\beta_1\\) and \\(\\beta_2\\) using t-tests in the statsmodels library.\nHowever, better tests are possible such as overall and partial F-tests (not discussed here)."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#analysis-of-covariance",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#analysis-of-covariance",
     "title": "Additional Topics",
     "section": "Analysis of covariance",
-    "text": "Analysis of covariance\n\nModels that mix categorical and numerical predictors are sometimes referred to as analysis of covariance (ANCOVA) models.\nExample (cont): Consider the predictor weight (\\(X\\)).\n\\[Y_i= \\beta_0+\\beta_1 d_{1i} +\\beta_2 d_{2i} + \\beta_3 X_{i} +\\epsilon_i,\\]\nwhere \\(X_i\\) denotes the i-th observed value of weight and \\(\\beta_3\\) is the coefficient of this predictor."
+    "text": "Analysis of covariance\n\nModels that mix categorical and numerical predictors are sometimes referred to as analysis of covariance (ANCOVA) models.\nExample (cont): Consider the predictor weight (\\(X\\)).\n\\[\\hat{Y}_i= \\hat{\\beta}_0 + \\hat{\\beta}_1 d_{1i} + \\hat{\\beta}_2 d_{2i} + \\hat{\\beta}_3 X_{i},\\]\nwhere \\(X_i\\) denotes the i-th observed value of weight and \\(\\hat{\\beta}_3\\) is the coefficient of this predictor."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#ancova-model",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#ancova-model",
     "title": "Additional Topics",
     "section": "ANCOVA model",
-    "text": "ANCOVA model\nThe components of the ANCOVA model are individual functions of the coefficients.\nTo gain insight into the model, we write it as follows:\n\\[\n\\begin{align}\nY_i &= \\beta_0+\\beta_1 d_{1i} +\\beta_2 d_{2i} + \\beta_3 X_{i} +\\epsilon_i \\\\ &= \\begin{cases}\n(\\beta_0+\\beta_1)  + \\beta_3 X_{i} +\\epsilon_i \\text{ if car is European} \\\\\n(\\beta_0+\\beta_2) + \\beta_3 X_{i} +\\epsilon_i \\text{ if car is Japanese} \\\\\n\\beta_0 + \\beta_3 X_{i} +\\epsilon_i\\;\\;\\;\\;\\;\\;\\;\\;\\  \\text{ if car is American}\n\\end{cases}.\n\\end{align}\n\\]\nNote that these models have different intercepts but the same slope."
+    "text": "ANCOVA model\nThe components of the ANCOVA model are individual functions of the coefficients.\nTo gain insight into the model, we write it as follows:\n\\[\n\\begin{align}\n\\hat{Y}_i &= \\hat{\\beta}_0+\\hat{\\beta}_1 d_{1i} +\\hat{\\beta}_2 d_{2i} + \\hat{\\beta}_3 X_{i} \\\\ &= \\begin{cases}\n(\\hat{\\beta}_0+\\hat{\\beta}_1)  + \\hat{\\beta}_3 X_{i} & \\text{ if car is European} \\\\\n(\\hat{\\beta}_0+\\hat{\\beta}_2) + \\hat{\\beta}_3 X_{i} & \\text{ if car is Japanese} \\\\\n\\hat{\\beta}_0 + \\hat{\\beta}_3 X_{i} \\;\\;\\;\\;\\;\\;\\;\\;\\ & \\text{ if car is American} \\\\\n\\end{cases}.\n\\end{align}\n\\]\nThe models have different intercepts but the same slope."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-4",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#section-4",
     "title": "Additional Topics",
     "section": "",
-    "text": "To estimate \\(\\beta_0\\), \\(\\beta_1\\), \\(\\beta_2\\) and \\(\\beta_3\\), we use least squares. To estimate \\(\\sigma^2\\), we use the mean squared error (MSE).\nWe could make individual inferences on \\(\\beta_1\\) and \\(\\beta_2\\) using t-tests and confidence intervals.\nHowever, better tests are possible such as overall and partial F-tests (not discussed here)."
+    "text": "In mathematical terms, we standardize a predictor \\(X\\) as:\n\\[{\\color{blue} \\tilde{X}_{i}} = \\frac{{ X_{i} - \\bar{X}}}{ \\sqrt{\\frac{1}{n -1} \\sum_{i=1}^{n} (X_{i} - \\bar{X})^2 }} \\text{ with } \\bar{X} = \\sum_{i=1}^n \\frac{X_i}{n}.\\]\nThe average value of \\(\\tilde{X}\\) is 0.\nThe standard deviation of \\(\\tilde{X}\\) is 1."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#in-python-1",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#in-python-1",
     "title": "Additional Topics",
     "section": "In Python",
-    "text": "In Python\n\nTo fit an ANCOVA model, we use similar steps as before. The only extra step is to concatenate the data with the dummy variables and the numerical predictor using the function concat() from pandas.\n\n# Concatenate the two data sets.\nX_train = pd.concat([dummy_X_train, auto_data['weight']], axis = 1)\n\n# Create linear regression object\nregr = sm.OLS(auto_data['mpg'], X_train)\n\n# Train the model using the training sets\nancova_model = regr.fit()"
+    "text": "In Python\nTo fit an ANCOVA model, we use similar steps as before. The only extra step is to concatenate the data with the dummy variables and the numerical predictor using the function concat() from pandas.\n\n# Concatenate the two data sets.\nX_train = pd.concat([dummy_X_train, auto_data['weight']], axis = 1)\n\n# 1. Create the linear regression model\nLRmodel_ancova = LinearRegression()\n\n# 2. Fit the model.\nLRmodel_ancova.fit(X_train, Y_train)\n\n# 3. Show estimated coefficients.\nprint(\"Intercept:\", LRmodel_ancova.intercept_)\nprint(\"Coefficients:\", LRmodel_ancova.coef_)"
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#model-summary",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#model-summary",
     "title": "Additional Topics",
     "section": "Model summary",
-    "text": "Model summary\n\n# Summary of the models.\nsummary_ancova = ancova_model.summary()\nprint(summary_ancova)\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.702\nModel:                            OLS   Adj. R-squared:                  0.700\nMethod:                 Least Squares   F-statistic:                     304.7\nDate:                Wed, 04 Feb 2026   Prob (F-statistic):          1.28e-101\nTime:                        09:58:25   Log-Likelihood:                -1123.9\nNo. Observations:                 392   AIC:                             2256.\nDf Residuals:                     388   BIC:                             2272.\nDf Model:                           3                                         \nCovariance Type:            nonrobust                                         \n==============================================================================\n                 coef    std err          t      P&gt;|t|      [0.025      0.975]\n------------------------------------------------------------------------------\nconst         43.7322      1.113     39.277      0.000      41.543      45.921\nEuropean       0.9709      0.659      1.474      0.141      -0.324       2.266\nJapanese       2.3271      0.665      3.501      0.001       1.020       3.634\nweight        -0.0070      0.000    -21.956      0.000      -0.008      -0.006\n==============================================================================\nOmnibus:                       40.731   Durbin-Watson:                   0.832\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               61.938\nSkew:                           0.689   Prob(JB):                     3.55e-14\nKurtosis:                       4.377   Cond. No.                     1.83e+04\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n[2] The condition number is large, 1.83e+04. This might indicate that there are\nstrong multicollinearity or other numerical problems."
+    "text": "Model summary\n\n# Summary of the models.\nsummary_ancova = ancova_model.summary()\nprint(summary_ancova)\n\n                                 OLS Regression Results                                \n=======================================================================================\nDep. Variable:                    mpg   R-squared (uncentered):                   0.852\nModel:                            OLS   Adj. R-squared (uncentered):              0.851\nMethod:                 Least Squares   F-statistic:                              749.0\nDate:                Wed, 04 Feb 2026   Prob (F-statistic):                   3.43e-161\nTime:                        14:56:37   Log-Likelihood:                         -1438.4\nNo. Observations:                 392   AIC:                                      2883.\nDf Residuals:                     389   BIC:                                      2895.\nDf Model:                           3                                                  \nCovariance Type:            nonrobust                                                  \n==============================================================================\n                 coef    std err          t      P&gt;|t|      [0.025      0.975]\n------------------------------------------------------------------------------\nEuropean      15.0478      1.231     12.220      0.000      12.627      17.469\nJapanese      18.9906      1.140     16.654      0.000      16.749      21.232\nweight         0.0052      0.000     29.486      0.000       0.005       0.006\n==============================================================================\nOmnibus:                       15.144   Durbin-Watson:                   0.876\nProb(Omnibus):                  0.001   Jarque-Bera (JB):               16.133\nSkew:                           0.483   Prob(JB):                     0.000314\nKurtosis:                       2.768   Cond. No.                     8.15e+03\n==============================================================================\n\nNotes:\n[1] R² is computed without centering (uncentered) since the model does not contain a constant.\n[2] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n[3] The condition number is large, 8.15e+03. This might indicate that there are\nstrong multicollinearity or other numerical problems."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#standardization",
@@ -4074,7 +4074,7 @@
     "href": "AdditionalTopics/AdditionalTopics.slides.html#section-5",
     "title": "Additional Topics",
     "section": "",
-    "text": "In mathematical terms, we standardize a predictor \\(X\\) as:\n\\[{\\color{blue} \\tilde{X}_{i}} = \\frac{{ X_{i} - \\bar{X}}}{ \\sqrt{\\frac{1}{n -1} \\sum_{i=1}^{n} (X_{i} - \\bar{X})^2 }} \\text{ with } \\bar{X} = \\sum_{i=1}^n \\frac{X_i}{n}.\\]\nThe average value of \\(\\tilde{X}\\) is 0.\nThe standard deviation of \\(\\tilde{X}\\) is 1."
+    "text": "The units of concentration and temperature are percentages and Farenheit degrees, respectively.\n\ncatalyst_data = pd.read_excel(\"catalyst.xlsx\")\ncatalyst_data\n\n\n\n\n\n\n\n\nOrder\nYield\nConcentration\nTemperature\n\n\n\n\n0\n1\n90\n2\n180\n\n\n1\n2\n91\n2\n180\n\n\n2\n3\n84\n2\n150\n\n\n3\n4\n89\n1\n180\n\n\n4\n5\n83\n2\n150\n\n\n5\n6\n79\n1\n150\n\n\n6\n7\n81\n1\n150\n\n\n7\n8\n87\n1\n180"
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#benefits-and-limitations",
@@ -4088,7 +4088,7 @@
     "href": "AdditionalTopics/AdditionalTopics.slides.html#interpretation",
     "title": "Additional Topics",
     "section": "Interpretation",
-    "text": "Interpretation\n\\[Y = \\beta_0 + \\beta_1 \\tilde{X}_1 + \\beta_2 \\tilde{X}_2 + \\cdots + \\beta_p \\tilde{X}_p + \\epsilon,\\]\nwhere \\(\\tilde{X}_i\\) is the standardized version of the predictor \\(X_i\\).\nInterpretation:\n\n\\(\\beta_0\\) is the mean response when all original predictors \\(X_1, X_2, \\ldots, X_p\\) are set to their average value.\n\\(\\beta_j\\) is the amount of increase in the mean response by an increase of 1 standard deviation in the original predictor \\(X_j,\\) when all other predictors are fixed to an arbitrary value."
+    "text": "Interpretation\n\\[\\hat{Y} = \\hat{\\beta}_0 + \\hat{\\beta}_1 \\tilde{X}_1 + \\hat{\\beta}_2 \\tilde{X}_2 + \\cdots + \\hat{\\beta}_p \\tilde{X}_p,\\]\nwhere \\(\\tilde{X}_i\\) is the standardized version of the predictor \\(X_i\\).\nInterpretation:\n\n\\(\\hat{\\beta}_0\\) is the average response when all original predictors \\(X_1, X_2, \\ldots, X_p\\) are set to their average value.\n\\(\\hat{\\beta}_j\\) is the amount of increase in the average response by an increase of 1 standard deviation in the original predictor \\(X_j,\\) when all other predictors are fixed to an arbitrary value."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#example-2",
@@ -4102,7 +4102,7 @@
     "href": "AdditionalTopics/AdditionalTopics.slides.html#section-6",
     "title": "Additional Topics",
     "section": "",
-    "text": "The units of concentration and temperature are percentages and Farenheit degrees, respectively.\n\ncatalyst_data = pd.read_excel(\"catalyst.xlsx\")\ncatalyst_data\n\n\n\n\n\n\n\n\nOrder\nYield\nConcentration\nTemperature\n\n\n\n\n0\n1\n90\n2\n180\n\n\n1\n2\n91\n2\n180\n\n\n2\n3\n84\n2\n150\n\n\n3\n4\n89\n1\n180\n\n\n4\n5\n83\n2\n150\n\n\n5\n6\n79\n1\n150\n\n\n6\n7\n81\n1\n150\n\n\n7\n8\n87\n1\n180"
+    "text": "Now the predictors are on the same scale\n\n\nCode\nXs_training = pd.DataFrame(Xs_training, columns = predictor_data.columns)\nXs_training \n\n\n\n\n\n\n\n\n\nConcentration\nTemperature\n\n\n\n\n0\n1.0\n1.0\n\n\n1\n1.0\n1.0\n\n\n2\n1.0\n-1.0\n\n\n3\n-1.0\n1.0\n\n\n4\n1.0\n-1.0\n\n\n5\n-1.0\n-1.0\n\n\n6\n-1.0\n-1.0\n\n\n7\n-1.0\n1.0"
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#standarization-in-python",
@@ -4116,28 +4116,28 @@
     "href": "AdditionalTopics/AdditionalTopics.slides.html#section-7",
     "title": "Additional Topics",
     "section": "",
-    "text": "Now the predictors are on the same scale\n\n\nCode\nXs_training = pd.DataFrame(Xs_training, columns = predictor_data.columns)\nXs_training \n\n\n\n\n\n\n\n\n\nConcentration\nTemperature\n\n\n\n\n0\n1.0\n1.0\n\n\n1\n1.0\n1.0\n\n\n2\n1.0\n-1.0\n\n\n3\n-1.0\n1.0\n\n\n4\n1.0\n-1.0\n\n\n5\n-1.0\n-1.0\n\n\n6\n-1.0\n-1.0\n\n\n7\n-1.0\n1.0"
+    "text": "To fit the model, we follow the same functions as before.\n\n# 0. Set the response.\nYc = catalyst_data['Yield']\n\n# 1. Create the linear regression model\nLinear_model_sd = LinearRegression()\n\n# 2. Fit the model.\nLinear_model_sd.fit(Xs_training, Yc)\n\n# 3. Show estimated coefficients.\nprint(\"Intercept:\", Linear_model_sd.intercept_)\nprint(\"Coefficients:\", Linear_model_sd.coef_)\n\nIntercept: 85.5\nCoefficients: [1.5  3.75]"
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-8",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#section-8",
     "title": "Additional Topics",
     "section": "",
-    "text": "To fit the model, we follow the same functions as before.\n\n# Set the response.\nYc = catalyst_data['Yield']\n\n# Add the intercept.\nXs_training_int = sm.add_constant(Xs_training)\n\n# Create linear regression object.\nstd_regr = sm.OLS(Yc, Xs_training)\n\n# Train the model using the training sets.\nstd_linear_model = std_regr.fit()\n\n# Summary of the model.\nstd_summary_model = std_linear_model.summary()"
+    "text": "Now, we use the values of the predictors in this dataset and use it as input to our model. Our model then computes the prediction of the response for each combination of values of the predictors.\n\n# Predict responses using validation data.\npredicted_medv_val = LRmodel.predict(Boston_X_val)\n\nWe compute the validation RMSE using scikit-learn.\n\nrmse = root_mean_squared_error(Y_valid, predicted_medv_val)\nprint( round(rmse, 3) )\n\n6.02\n\n\nThe lower the validation RMSE, the more accurate our model.\nInterpretation: On average, our predictions are off by \\(\\pm\\) 5,981 dollars."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-9",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#section-9",
     "title": "Additional Topics",
     "section": "",
-    "text": "print(std_summary_model)\n\n                                 OLS Regression Results                                \n=======================================================================================\nDep. Variable:                  Yield   R-squared (uncentered):                   0.002\nModel:                            OLS   Adj. R-squared (uncentered):             -0.330\nMethod:                 Least Squares   F-statistic:                           0.006694\nDate:                Wed, 04 Feb 2026   Prob (F-statistic):                       0.993\nTime:                        09:58:25   Log-Likelihood:                         -46.940\nNo. Observations:                   8   AIC:                                      97.88\nDf Residuals:                       6   BIC:                                      98.04\nDf Model:                           2                                                  \nCovariance Type:            nonrobust                                                  \n=================================================================================\n                    coef    std err          t      P&gt;|t|      [0.025      0.975]\n---------------------------------------------------------------------------------\nConcentration     1.5000     34.907      0.043      0.967     -83.914      86.914\nTemperature       3.7500     34.907      0.107      0.918     -81.664      89.164\n==============================================================================\nOmnibus:                        2.258   Durbin-Watson:                   0.000\nProb(Omnibus):                  0.323   Jarque-Bera (JB):                0.627\nSkew:                           0.000   Prob(JB):                        0.731\nKurtosis:                       1.628   Cond. No.                         1.00\n==============================================================================\n\nNotes:\n[1] R² is computed without centering (uncentered) since the model does not contain a constant.\n[2] Standard Errors assume that the covariance matrix of the errors is correctly specified."
+    "text": "A random sample of \\(n\\) observations.\nUse it to build the linear regression model \\(\\hat{Y} = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_1 + \\cdots + \\hat{\\beta}_p X_p\\).\n\n\n\n\n\nAnother random sample of \\(n_t\\) observations, which is independent of the training data.\nUse it to evaluate the predictions \\(\\hat{Y}\\) of the model."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#discussion",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#discussion",
     "title": "Additional Topics",
     "section": "Discussion",
-    "text": "Discussion\nStandardization of predictors has no impact on the overall quality of the linear regression model.\n\n\\(R^2\\) and adjusted \\(R^2\\) statistics are identical.\nPredictions are identical.\nResiduals do not change.\n\n\nStandardization does not affect the correlation between two predictors. So, it has not effect on collinearity.\n\n\nIdeally, the dummy variables for the categorical predictors are standardized too."
+    "text": "Discussion\nStandardization of predictors has no impact on the overall quality of the linear regression model.\n\nPredictions are identical.\nResiduals do not change.\n\n\nStandardization does not affect the correlation between two predictors. So, it has not effect on collinearity.\n\n\nIdeally, the dummy variables for the categorical predictors are standardized too."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#questions",
@@ -4158,7 +4158,7 @@
     "href": "AdditionalTopics/AdditionalTopics.slides.html#example-3",
     "title": "Additional Topics",
     "section": "Example 3",
-    "text": "Example 3\nConsider the fitting the following model to the auto_data:\n\\[Y_i = \\beta_0 + \\beta_1 X_{i} + \\epsilon_i\\] where:\n\n\\(Y_i\\) is the mpg of the i-th car.\n\\(X_i\\) is the horsepower of the i-th car.\n\nWe fit the model:\n\nX_train = sm.add_constant(auto_data['horsepower'])\nregr = sm.OLS(auto_data['mpg'], X_train)\nlinear_model = regr.fit()"
+    "text": "Example 3\n\nThe “BostonHousing.xlsx” contains data collected by the US Bureau of the Census concerning housing in the area of Boston, Massachusetts. The dataset includes data on 506 census housing tracts in the Boston area in 1970s.\nThe goal is to predict the median house price in new tracts based on information such as crime rate, pollution, and number of rooms.\nThe response is the median value of owner-occupied homes in $1000s, contained in the column MEDV."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#residual-analysis",
@@ -4179,7 +4179,7 @@
     "href": "AdditionalTopics/AdditionalTopics.slides.html#section-10",
     "title": "Additional Topics",
     "section": "",
-    "text": "A random sample of \\(n\\) observations.\nUse it to build the linear regression model \\(\\hat{Y} = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_1 + \\cdots + \\hat{\\beta}_p X_p\\).\n\n\n\n\n\nAnother random sample of \\(n_t\\) observations, which is independent of the training data.\nUse it to evaluate the predictions \\(\\hat{Y}\\) of the model."
+    "text": "Another useful metric is the validation Root Mean Squared Error (RMSE):\n\\[\n\\sqrt{\\frac{1}{n_{v}} \\sum_{i=1}^{n_{v}} \\left( Y_i - \\hat{Y}_i \\right)^2}\n\\]\nBenefits:\n\n\nThe RMSE is in the same units as the response.\nThe RMSE value is interpreted as either how far (on average) the residuals are from zero.\nIt can also be interpreted as the average distance between the observed response values and the model predictions."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#transformations",
@@ -4228,7 +4228,7 @@
     "href": "AdditionalTopics/AdditionalTopics.slides.html#section-11",
     "title": "Additional Topics",
     "section": "",
-    "text": "Another useful metric is the validation Root Mean Squared Error (RMSE):\n\\[\n\\sqrt{\\frac{1}{n_{v}} \\sum_{i=1}^{n_{v}} \\left( Y_i - \\hat{Y}_i \\right)^2}\n\\]\nBenefits:\n\n\nThe RMSE is in the same units as the response.\nThe RMSE value is interpreted as either how far (on average) the residuals are from zero.\nIt can also be interpreted as the average distance between the observed response values and the model predictions."
+    "text": "Now, we use the values of the predictors in this dataset and use it as input to our model. Our model then computes the prediction of the response for each combination of values of the predictors.\n\n# Add constant to the predictor matrix from the validation set.\nBoston_X_val = sm.add_constant(X_valid_dummy)\n\n# Predict responses using validation data.\npredicted_medv_val = linear_model.predict(Boston_X_val)"
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#residual-analysis-of-quadratic-model",
@@ -4263,7 +4263,7 @@
     "href": "AdditionalTopics/AdditionalTopics.slides.html#section-12",
     "title": "Additional Topics",
     "section": "",
-    "text": "Now, we use the values of the predictors in this dataset and use it as input to our model. Our model then computes the prediction of the response for each combination of values of the predictors.\n\n# Add constant to the predictor matrix from the validation set.\nBoston_X_val = sm.add_constant(X_valid_dummy)\n\n# Predict responses using validation data.\npredicted_medv_val = linear_model.predict(Boston_X_val)"
+    "text": "We compute the validation RMSE by first computing the validation MSE using a function with the same name of scikit-learn.\n\nmse = mean_squared_error(Y_valid, predicted_medv_val)\nrmse = mse**(1/2)\nprint( round(rmse, 3) )\n\n6.02\n\n\nThe lower the validation RMSE, the more accurate our model.\nInterpretation: On average, our predictions are off by \\(\\pm\\) 5,981 dollars."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#validation-dataset",
@@ -4305,28 +4305,28 @@
     "href": "AdditionalTopics/AdditionalTopics.slides.html#transform-the-categorical-predictors",
     "title": "Additional Topics",
     "section": "Transform the categorical predictors",
-    "text": "Transform the categorical predictors\n\nBefore we start, let’s turn the categorical predictors into dummy variables\n\n# Transform categorical predictors into dummy variables\nX_train_dummy = pd.get_dummies(X_train, drop_first = True, dtype = 'int')\nX_train_dummy.head(3)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nNOX\nRM\nAGE\nDIS\nTAX\nPTRATIO\nLSTAT\nCHAS_Yes\nRAD_Low\nRAD_Medium\n\n\n\n\n452\n5.09017\n0.0\n18.10\n0.713\n6.297\n91.8\n2.3682\n666\n20.2\n17.27\n0\n0\n0\n\n\n317\n0.24522\n0.0\n9.90\n0.544\n5.782\n71.7\n4.0317\n304\n18.4\n15.94\n0\n0\n1\n\n\n352\n0.07244\n60.0\n1.69\n0.411\n5.884\n18.5\n10.7103\n411\n18.3\n7.79\n0\n0\n1"
+    "text": "Transform the categorical predictors\n\nBefore we continue, let’s turn the categorical predictors into dummy variables\n\n# Transform categorical predictors into dummy variables\nBoston_X_train = pd.get_dummies(X_train, drop_first = True, dtype = 'int')\nBoston_X_train.head(3)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nNOX\nRM\nAGE\nDIS\nTAX\nPTRATIO\nLSTAT\nCHAS_Yes\nRAD_Low\nRAD_Medium\n\n\n\n\n452\n5.09017\n0.0\n18.10\n0.713\n6.297\n91.8\n2.3682\n666\n20.2\n17.27\n0\n0\n0\n\n\n317\n0.24522\n0.0\n9.90\n0.544\n5.782\n71.7\n4.0317\n304\n18.4\n15.94\n0\n0\n1\n\n\n352\n0.07244\n60.0\n1.69\n0.411\n5.884\n18.5\n10.7103\n411\n18.3\n7.79\n0\n0\n1"
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#fit-a-model-using-training-data",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#fit-a-model-using-training-data",
     "title": "Additional Topics",
     "section": "Fit a model using training data",
-    "text": "Fit a model using training data\n\nWe fit a multiple linear regression model to predict the MEDV in terms of the 12 predictors using the functions OLS() and fit() from statsmodels.\n\n# Add intercept.\nBoston_X_train = sm.add_constant(X_train_dummy)\n\n# Create linear regression object\nregr = sm.OLS(Y_train, Boston_X_train)\n\n# Train the model using the training sets\nlinear_model = regr.fit()"
+    "text": "Fit a model using training data\n\nWe train a linear regression model to predict the MEDV in terms of the 12 predictors using functions from scikit-learn.\n\n# 1. Create the linear regression model\nLRmodel = LinearRegression()\n\n# 2. Fit the model.\nLRmodel.fit(Boston_X_train, Y_train)\n\n# 3. Show estimated coefficients.\nprint(\"Intercept:\", LRmodel.intercept_)\nprint(\"Coefficients:\", LRmodel.coef_)\n\nIntercept: 37.516763561108434\nCoefficients: [-5.31702151e-02  4.42408175e-02  8.46402739e-02 -1.19782458e+01\n  3.82114415e+00  1.77709868e-02 -1.25752076e+00 -7.33041781e-03\n -9.14794029e-01 -7.17544266e-01  5.25221827e+00 -2.04793579e+00\n -2.47739812e+00]"
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#brief-residual-analysis",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#brief-residual-analysis",
     "title": "Additional Topics",
     "section": "Brief Residual Analysis",
-    "text": "Brief Residual Analysis\nWe evaluate the model using a “Residual versus Fitted Values” plot. The plot does not show concerning patterns in the residuals. So, we assume that the model satisfices the assumption of constant variance."
+    "text": "Brief Residual Analysis\nWe evaluate the model using a “Residual versus Fitted Values” plot. The plot does not show concerning patterns in the residuals. So, we assume that the model satisfies the assumption of constant variance."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#validation-mean-squared-error",
     "href": "AdditionalTopics/AdditionalTopics.slides.html#validation-mean-squared-error",
     "title": "Additional Topics",
     "section": "Validation Mean Squared Error",
-    "text": "Validation Mean Squared Error\n\nWhen the response is numeric, the most common evaluation metric is the validation Mean Squared Error (MSE):\n\\[\n\\frac{1}{n_{v}} \\sum_{i=1}^{n_{v}} \\left( Y_i - \\hat{Y}_i \\right)^2\n\\]\nwhere \\((Y_1, \\boldsymbol{X}_1), \\ldots, (Y_{n_{v} }, \\boldsymbol{X}_{n_{v}} )\\) are the \\(n_{v}\\) observations in the validation dataset, and \\(\\hat{Y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\hat{\\beta}_2 X_{i2} + \\cdots + \\hat{\\beta}_p X_{ip}\\) is the model prediction of the i-th response."
+    "text": "Validation Mean Squared Error\nWhen the response is numeric, the most common evaluation metric is the validation Root Mean Squared Error (RMSE):\n\\[\n\\left(\\frac{1}{n_{v}} \\sum_{i=1}^{n_{v}} \\left( Y_i - \\hat{Y}_i \\right)^2 \\right)^{1/2}\n\\]\nwhere \\((Y_1, \\boldsymbol{X}_1), \\ldots, (Y_{n_{v} }, \\boldsymbol{X}_{n_{v}} )\\) are the \\(n_{v}\\) observations in the validation dataset, and \\(\\hat{Y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\hat{\\beta}_2 X_{i2} + \\cdots + \\hat{\\beta}_p X_{ip}\\) is the model prediction of the i-th response."
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-13",
@@ -4340,7 +4340,7 @@
     "href": "AdditionalTopics/AdditionalTopics.slides.html#in-python-2",
     "title": "Additional Topics",
     "section": "In Python",
-    "text": "In Python\nWe first compute the predictions of our model on the validation dataset. To this end, we create the dummy variables of the categorical variables using the validation dataset.\n\nX_valid_dummy = pd.get_dummies(X_valid, drop_first = True, dtype = 'int')\nX_valid_dummy.head(3)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nNOX\nRM\nAGE\nDIS\nTAX\nPTRATIO\nLSTAT\nCHAS_Yes\nRAD_Low\nRAD_Medium\n\n\n\n\n482\n5.73116\n0.0\n18.1\n0.532\n7.061\n77.0\n3.4106\n666\n20.2\n7.01\n0\n0\n0\n\n\n367\n13.52220\n0.0\n18.1\n0.631\n3.863\n100.0\n1.5106\n666\n20.2\n13.33\n0\n0\n0\n\n\n454\n9.51363\n0.0\n18.1\n0.713\n6.728\n94.1\n2.4961\n666\n20.2\n18.71\n0\n0\n0"
+    "text": "In Python\nWe first compute the predictions of our model on the validation dataset. To this end, we create the dummy variables of the categorical variables using the validation dataset.\n\nBoston_X_val = pd.get_dummies(X_valid, drop_first = True, dtype = 'int')\nBoston_X_val.head(3)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nNOX\nRM\nAGE\nDIS\nTAX\nPTRATIO\nLSTAT\nCHAS_Yes\nRAD_Low\nRAD_Medium\n\n\n\n\n482\n5.73116\n0.0\n18.1\n0.532\n7.061\n77.0\n3.4106\n666\n20.2\n7.01\n0\n0\n0\n\n\n367\n13.52220\n0.0\n18.1\n0.631\n3.863\n100.0\n1.5106\n666\n20.2\n13.33\n0\n0\n0\n\n\n454\n9.51363\n0.0\n18.1\n0.713\n6.728\n94.1\n2.4961\n666\n20.2\n18.71\n0\n0\n0"
   },
   {
     "objectID": "AdditionalTopics/AdditionalTopics.slides.html#section-14",
@@ -4852,5 +4852,26 @@
     "title": "Model Evaluation and Inference",
     "section": "",
     "text": "If the residuals do not have constant variance, then the linear model is incorrect and everything falls apart!\nIf the residuals are dependent, then the linear model is incorrect and everything falls apart!"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#linear-regression-model",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#linear-regression-model",
+    "title": "Additional Topics",
+    "section": "Linear regression model",
+    "text": "Linear regression model\n\n\\[\\hat{Y}_i= \\hat{\\beta}_0 + \\hat{\\beta}_1 d_{1i} + \\hat{\\beta}_2 d_{2i}  \\ \\text{for} \\ i=1,\\ldots,n.\\]\n\n\\(\\hat{Y}_i\\) is the i-th predicted response.\n\\(d_{1i}\\) is 1 if the i-th observation is from a European car, and 0 otherwise.\n\\(d_{2i}\\) is 1 if the i-th observation is from a Japanese car, and 0 otherwise."
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#estimated-coefficients",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#estimated-coefficients",
+    "title": "Additional Topics",
+    "section": "Estimated coefficients",
+    "text": "Estimated coefficients\n\nprint(\"Intercept:\", LRmodel_ancova.intercept_)\nprint(\"Coefficients:\", LRmodel_ancova.coef_)\n\nIntercept: 43.732236151632975\nCoefficients: [ 0.97090559  2.3271499  -0.00702708]"
+  },
+  {
+    "objectID": "AdditionalTopics/AdditionalTopics.slides.html#recall-that",
+    "href": "AdditionalTopics/AdditionalTopics.slides.html#recall-that",
+    "title": "Additional Topics",
+    "section": "Recall that …",
+    "text": "Recall that …\n\n\nThe RMSE is in the same units as the response.\nThe RMSE value is interpreted as either how far (on average) the residuals are from zero.\nIt can also be interpreted as the average distance between the observed response values and the model predictions."
   }
 ]
