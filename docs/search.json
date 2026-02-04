@@ -3479,7 +3479,7 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#load-the-libraries",
     "title": "Model Evaluation and Inference",
     "section": "Load the libraries",
-    "text": "Load the libraries\n\nLet’s import statsmodels into Python together with other relevant libraries.\n\n# Importing necessary libraries\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.feature_selection import f_regression"
+    "text": "Load the libraries\n\nLet’s import the required libraries into Python together with other relevant libraries.\n\n# Importing necessary libraries\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.feature_selection import f_regression"
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#questions",
@@ -3514,7 +3514,7 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "The least squares estimators \\(\\hat{\\beta}_0, \\hat{\\beta}_1, \\ldots, \\hat{\\beta}_p\\) are subject to uncertainty, since they are calculated based on a random sample of data.\nTherefore, assessing the amount of the uncertainty in these estimators is important. To this end, we use hypothesis tests on individual coefficients."
+    "text": "The least squares estimates \\(\\hat{\\beta}_0, \\hat{\\beta}_1, \\ldots, \\hat{\\beta}_p\\) are subject to uncertainty, since they are calculated based on a random sample of data. That is, an instance of training data.\nTherefore, assessing the amount of the uncertainty in these estimates is important. To this end, we use hypothesis tests on individual coefficients."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residual-analysis-1",
@@ -3528,7 +3528,7 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#example-1",
     "title": "Model Evaluation and Inference",
     "section": "Example 1",
-    "text": "Example 1\n\nLet’s consider the “auto.xlsx” dataset.\n\nauto_data = pd.read_excel('auto.xlsx')\n\n\nLet’s assume that we want to build the following model.\n\\[\n\\hat{Y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1}+ \\hat{\\beta}_2 X_{i2},\n\\]\nwhere \\(\\hat{Y}_i\\) is the predicted mpg, \\(X_{i1}\\) is the weight, and \\(X_{i2}\\) is the acceleration of the \\(i\\)-th car, \\(i = 1, \\ldots, 392\\). Here, we will use the entire dataset for training and ignore \\(K\\)-fold cross-validation to illustrate the concepts."
+    "text": "Example 1\nLet’s consider the “auto.xlsx” dataset.\n\nauto_data = pd.read_excel('auto.xlsx')\n\n\nLet’s assume that we want to train the following model.\n\\[\n\\hat{Y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1}+ \\hat{\\beta}_2 X_{i2},\n\\]\nwhere \\(\\hat{Y}_i\\) is the predicted mpg, \\(X_{i1}\\) is the weight, and \\(X_{i2}\\) is the acceleration of the \\(i\\)-th car, \\(i = 1, \\ldots, 392\\).\nHere, we will use the entire dataset for training and ignore \\(K\\)-fold cross-validation to illustrate the concepts."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#dataset",
@@ -3584,14 +3584,14 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-1",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "\\(H_0: \\beta_j = 0\\) v.s. \\(H_1: \\beta_j \\neq 0\\) (Two-tailed Test)\n\n\nTesting this hypothesis consists of the following steps:\n\nTake a random sample.\nCompute the appropriate test statistic.\nReject or fail to reject the null hypothesis based on a computed p-value."
+    "text": "\\(H_0: \\beta_j = 0\\) v.s. \\(H_1: \\beta_j \\neq 0\\) (Two-tailed Test)\n\n\nTesting this hypothesis consists of the following steps:\n\nTake a random sample (your training data).\nCompute the appropriate test statistic.\nReject or fail to reject the null hypothesis based on a computed p-value."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-2",
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-2",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "Recall that we obtain the least squares estimates (\\(\\hat{\\beta}_{j}\\)) in Python using:\n\n# 1. Create the linear regression model\nLRmodel = LinearRegression()\n\n# 2. Fit the model.\nLRmodel.fit(auto_X_train, auto_Y_train)\n\n# 3. Show estimated coefficients.\nprint(\"Intercept:\", LRmodel.intercept_)\nprint(\"Coefficients:\", LRmodel.coef_)\n\nIntercept: 41.095328779604216\nCoefficients: [-0.0072931  0.2616504]\n\n\nLater, we will see how to obtain the standard error of the estimate \\(\\hat{\\beta}_j\\)."
+    "text": "Recall that we obtain the least squares estimates (\\(\\hat{\\beta}_{j}\\)) in Python using:\n\n# 1. Create the linear regression model\nLRmodel = LinearRegression()\n\n# 2. Fit the model.\nLRmodel.fit(auto_X_train, auto_Y_train)\n\n# 3. Show estimated coefficients.\nprint(\"Intercept:\", LRmodel.intercept_)\nprint(\"Coefficients:\", LRmodel.coef_)\n\nIntercept: 41.095328779604216\nCoefficients: [-0.0072931  0.2616504]\n\n\n\nLater, we will see how to obtain the standard error of the estimate \\(\\hat{\\beta}_j\\)."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#residuals-vs-time-plot-1",
@@ -3675,7 +3675,7 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-8",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "coef\nstd err\nt\nP&gt;\\(|t|\\)\n\\([0.025\\)\n\\(0.975 ]\\)\n\n\n\n\nconst\n41.0953\n1.868\n21.999\n0.000\n37.423\n44.768\n\n\nweight\n-0.0073\n0.000\n-25.966\n0.000\n-0.008\n-0.007\n\n\nacceleration\n0.2617\n0.086\n3.026\n0.003\n0.092\n0.432\n\n\n\nThe column P&gt;|t| contains the p-values for the hypothesis tests.\nSince the p-value is smaller than \\(\\alpha = 0.05\\), we reject \\(H_0\\) for acceleration and weight. Therefore, weight and acceleration have a significant association with the mpg of a car."
+    "text": "coef\nstd err\nt\nP&gt;\\(|t|\\)\n\\([0.025\\)\n\\(0.975 ]\\)\n\n\n\n\nconst\n41.0953\n1.868\n21.999\n0.000\n37.423\n44.768\n\n\nweight\n-0.0073\n0.000\n-25.966\n0.000\n-0.008\n-0.007\n\n\nacceleration\n0.2617\n0.086\n3.026\n0.003\n0.092\n0.432\n\n\n\nThe column t contains the values of the observed statistic \\(t_0\\) for the hypothesis tests."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#consequences-of-faulty-assumptions",
@@ -3689,7 +3689,7 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-9",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "coef\nstd err\nt\nP&gt;\\(|t|\\)\n\\([0.025\\)\n\\(0.975 ]\\)\n\n\n\n\nconst\n41.0953\n1.868\n21.999\n0.000\n37.423\n44.768\n\n\nweight\n-0.0073\n0.000\n-25.966\n0.000\n-0.008\n-0.007\n\n\nacceleration\n0.2617\n0.086\n3.026\n0.003\n0.092\n0.432\n\n\n\nThe columns \\([0.025\\) and \\(0.975]\\) show the limits of a 95% confidence interval on each true coefficient \\(\\beta_j\\). This interval contains the true parameter value with a confidence of 95%."
+    "text": "coef\nstd err\nt\nP&gt;\\(|t|\\)\n\\([0.025\\)\n\\(0.975 ]\\)\n\n\n\n\nconst\n41.0953\n1.868\n21.999\n0.000\n37.423\n44.768\n\n\nweight\n-0.0073\n0.000\n-25.966\n0.000\n-0.008\n-0.007\n\n\nacceleration\n0.2617\n0.086\n3.026\n0.003\n0.092\n0.432\n\n\n\nThe column P&gt;|t| contains the p-values for the hypothesis tests.\nSince the p-value is smaller than \\(\\alpha = 0.05\\), we reject \\(H_0\\) for acceleration and weight. Therefore, weight and acceleration have a significant association with the mpg of a car."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#questions-1",
@@ -3724,28 +3724,28 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-10",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "If the model structure is correctly specified and assuming that the least-squares estimates \\(\\hat{\\beta}_j\\)’s are close to the true \\(\\beta_j\\)’s, respectively, we have that\n\\[\\hat{\\epsilon}_i = Y_i - \\hat{Y}_i = Y_i - \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\cdots + \\hat{\\beta}_p X_{ip} \\approx \\epsilon_i\\]\nSo, the residuals \\(\\hat{\\epsilon}_i\\) should resemble the random errors \\(\\epsilon\\).\n\nTo evaluate the assumption of a multiple linear regression model, we use a Residual analysis."
+    "text": "coef\nstd err\nt\nP&gt;\\(|t|\\)\n\\([0.025\\)\n\\(0.975 ]\\)\n\n\n\n\nconst\n41.0953\n1.868\n21.999\n0.000\n37.423\n44.768\n\n\nweight\n-0.0073\n0.000\n-25.966\n0.000\n-0.008\n-0.007\n\n\nacceleration\n0.2617\n0.086\n3.026\n0.003\n0.092\n0.432\n\n\n\nThe columns \\([0.025\\) and \\(0.975]\\) show the limits of a 95% confidence interval on each true coefficient \\(\\beta_j\\). This interval contains the true parameter value with a confidence of 95%."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#hypothesis-test",
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#hypothesis-test",
     "title": "Model Evaluation and Inference",
     "section": "Hypothesis test",
-    "text": "Hypothesis test\n\n\nA statistical hypothesis is a statement about the coefficients of a model.\n\n\nIn our case, we are interested in testing:\n\n\\(H_0: \\beta_j = 0\\) v.s. \\(H_1: \\beta_j \\neq 0\\) (Two-tailed Test)\n\n\nRejecting \\(H_0\\) (in favor of \\(H_1\\)) implies that the predictor has a significant association with the response.\nNot rejecting \\(H_0\\) implies that the predictor does not have a significant association with the response."
+    "text": "Hypothesis test\n\nA statistical hypothesis is a statement about the coefficients of a model.\n\n\nIn our case, we are interested in testing:\n\n\\(H_0: \\beta_j = 0\\) v.s. \\(H_1: \\beta_j \\neq 0\\) (Two-tailed Test)\n\n\n\\(\\beta_j\\) is the true (unknown) coefficient of the predictor.\nRejecting \\(H_0\\) (in favor of \\(H_1\\)) implies that the predictor has a significant association with the response.\nNot rejecting \\(H_0\\) implies that the predictor does not have a significant association with the response."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-11",
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-11",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "Examples of plots that do not support the conclusion of constant variance."
+    "text": "If the model structure is correctly specified and assuming that the least-squares estimates \\(\\hat{\\beta}_j\\)’s are close to the true \\(\\beta_j\\)’s, respectively, we have that\n\\[\\hat{\\epsilon}_i = Y_i - \\hat{Y}_i = Y_i - \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\cdots + \\hat{\\beta}_p X_{ip} \\approx \\epsilon_i\\]\nSo, the residuals \\(\\hat{\\epsilon}_i\\) should resemble the random errors \\(\\epsilon\\).\n\nTo evaluate the assumption of a multiple linear regression model, we use a Residual analysis."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#step-1.-random-sample",
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#step-1.-random-sample",
     "title": "Model Evaluation and Inference",
     "section": "Step 1. Random sample",
-    "text": "Step 1. Random sample\n\nThe random sample is the training data we use to train or fit the model. As an illustration, we will use the entire dataset for training here.\n\n# Dataset with predictors.\nauto_X_train = auto_data[['weight', 'acceleration']]\n\n# Dataset with the response only.\nauto_Y_train = auto_data['mpg']"
+    "text": "Step 1. Random sample\n\nThe random sample is the training data we use to train or fit the model.\n\n# Dataset with predictors.\nauto_X_train = auto_data[['weight', 'acceleration']]\n\n# Dataset with the response only.\nauto_Y_train = auto_data['mpg']\n\nAs mentioned before, we will use the entire dataset for training."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#step-2.-test-statistic",
@@ -3759,14 +3759,14 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-12",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "Another example.\n\nThe phenomenon of non-constant variance is called heteroscedasticity."
+    "text": "Examples of plots that do not support the conclusion of constant variance."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-13",
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-13",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "Code\n# Residuals vs Time (Case) Plot\nplt.figure(figsize=(7, 5))\nsns.scatterplot(x = production_data['Case'], y = residuals)\nplt.axhline(y=0, color='red', linestyle='--')\nplt.title('Residuals vs Time (Case)')\nplt.xlabel('Case')\nplt.xticks(production_data['Case'])\nplt.ylabel('Residuals')\nplt.show()"
+    "text": "Another example.\n\nThe phenomenon of non-constant variance is called heteroscedasticity."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#t-distribution",
@@ -3780,7 +3780,7 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-14",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "Examples of plots that do and do not support the independence assumption."
+    "text": "Code\n# Residuals vs Time (Case) Plot\nplt.figure(figsize=(7, 5))\nsns.scatterplot(x = production_data['Case'], y = residuals)\nplt.axhline(y=0, color='red', linestyle='--')\nplt.title('Residuals vs Time (Case)')\nplt.xlabel('Case')\nplt.xticks(production_data['Case'])\nplt.ylabel('Residuals')\nplt.show()"
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#step-3.-calculate-the-p-value",
@@ -3794,7 +3794,7 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-15",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "The normal QQ plot displays the (sample) percentiles of the residuals versus the percentiles of a normal distribution.\nIf these percentiles agree with each other, then they would approximate a straight line.\nThe straight line is usually determined visually, with emphasis on the central values rather than the extremes.\nFor a nice explanation, see this YouTube video."
+    "text": "Examples of plots that do and do not support the independence assumption."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#the-p-value-is-not-the-probability-that-h_0-is-true",
@@ -3836,21 +3836,21 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-17",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "This plot suggests that the residuals are consistent with a Normal curve."
+    "text": "Substantial departures from a straight line indicate that the distribution is not normal."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-18",
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-18",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "Normal probability plots for data sets following various distributions. 100 observations in each data set."
+    "text": "This plot suggests that the residuals are consistent with a Normal curve."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-19",
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-19",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "If the residuals do not have constant variance, then the linear model is incorrect and everything falls apart!\nIf the residuals are dependent, then the linear model is incorrect and everything falls apart!"
+    "text": "Normal probability plots for data sets following various distributions. 100 observations in each data set."
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#total-sum-of-squares",
@@ -3878,7 +3878,7 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-20",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "\\[R^2 = 1 - \\frac{RSS}{SS_{total}}\\]\nWhat would you conclude about RSS if \\(R^2 = 1\\)?\n\nIn this case, \\(RSS = 0\\) and the model fits the data perfectly.\nIf \\(R^2\\) is small, then large RSS: lots of scatter and the model’s fit is not good.\nIt turns out that \\(R^2\\) is the square of the correlation between the observed (\\(Y_i\\)) and predicted (\\(\\hat{Y}_i\\)) responses."
+    "text": "If the residuals do not have constant variance, then the linear model is incorrect and everything falls apart!\nIf the residuals are dependent, then the linear model is incorrect and everything falls apart!"
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#remarks-on-r2",
@@ -4816,7 +4816,7 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#p-values-for-t-tests-in-python",
     "title": "Model Evaluation and Inference",
     "section": "p-values for t-tests in Python",
-    "text": "p-values for t-tests in Python\nUnfortunately, there is no native function in scikit-learn to compute all elements of t-tests for a linear regression model. The best thing we can do is to use its function f_regression(), which computes the p-values of the t-tests for the coefficients of the predictors.\n\nf_statistic, p_values = f_regression(auto_X_train, auto_Y_train)\nprint(\"P-values of predictor coefficients:\", p_values)\n\nP-values of predictor coefficients: [6.01529605e-102 1.77857612e-018]"
+    "text": "p-values for t-tests in Python\n\nUnfortunately, there is no native function in scikit-learn to compute all elements of t-tests for a linear regression model.\n\nThe easiest and safest way to do this is to train a model from scratch using the statsmodels library in Python.\n🙁"
   },
   {
     "objectID": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#example-1-1",
@@ -4837,6 +4837,6 @@
     "href": "ModelInferenceEvaluation/ModelInferenceEvaluation.slides.html#section-16",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "Substantial departures from a straight line indicate that the distribution is not normal."
+    "text": "The normal QQ plot displays the (sample) percentiles of the residuals versus the percentiles of a normal distribution.\nIf these percentiles agree with each other, then they would approximate a straight line.\nThe straight line is usually determined visually, with emphasis on the central values rather than the extremes.\nFor a nice explanation, see this YouTube video."
   }
 ]

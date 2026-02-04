@@ -29,7 +29,7 @@ jupyter: python3
 
 </br></br>
 
-Let's import **statsmodels** into Python together with other relevant libraries.
+Let's import the required libraries into Python together with other relevant libraries.
 
 ```{python}
 #| echo: true
@@ -59,8 +59,6 @@ $$\hat{Y}_i = \hat{f}(\boldsymbol{X}_i) = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} +
 
 ## Example 1
 
-</br>
-
 Let's consider the "auto.xlsx" dataset.
 
 ```{python}
@@ -70,13 +68,15 @@ auto_data = pd.read_excel('auto.xlsx')
 
 </br>
 
-Let's assume that we want to build the following model.
+Let's assume that we want to train the following model.
 
 $$
 \hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1}+ \hat{\beta}_2 X_{i2},
 $$
 
-where $\hat{Y}_i$ is the predicted mpg, $X_{i1}$ is the weight, and $X_{i2}$ is the acceleration of the $i$-th car, $i = 1, \ldots, 392$. [Here, we will use the entire dataset for training and ignore $K$-fold cross-validation to illustrate the concepts.]{style="color:darkred;"} 
+where $\hat{Y}_i$ is the predicted mpg, $X_{i1}$ is the weight, and $X_{i2}$ is the acceleration of the $i$-th car, $i = 1, \ldots, 392$. 
+
+[Here, we will use the entire dataset for training and ignore $K$-fold cross-validation to illustrate the concepts.]{style="color:darkred;"} 
 
 ## Research question
 
@@ -102,13 +102,11 @@ They overlap very often.
 
 </br></br></br>
 
-The least squares estimators $\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p$ are subject to uncertainty, since they are calculated based on a random sample of data.
+The least squares estimates $\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p$ are subject to uncertainty, since they are calculated based on a random sample of data. That is, an *instance* of training data.
 
-Therefore, assessing the amount of the uncertainty in these estimators is important. To this end, we use [hypothesis]{style="color:blue;"} tests on individual coefficients.
+Therefore, assessing the amount of the uncertainty in these estimates is important. To this end, we use [hypothesis]{style="color:blue;"} tests on individual coefficients.
 
 ## Hypothesis test
-
-</br>
 
 > A statistical hypothesis is a statement about the coefficients of a model.
 
@@ -121,6 +119,7 @@ $H_0: \beta_j = 0$ v.s. $H_1: \beta_j \neq 0$ (Two-tailed Test)
 :::
 
 ::: incremental
+-   $\beta_j$ is the [**true (unknown)**]{style="color:darkblue;"} coefficient of the predictor.
 -   Rejecting $H_0$ (in favor of $H_1$) implies that the predictor has a significant association with the response.
 -   Not rejecting $H_0$ implies that the predictor does not have a significant association with the response.
 :::
@@ -138,7 +137,7 @@ $H_0: \beta_j = 0$ v.s. $H_1: \beta_j \neq 0$ (Two-tailed Test)
 Testing this hypothesis consists of the following steps:
 
 ::: incremental
-1.  Take a random sample.
+1.  Take a random sample ([**your training data**]{style="color:darkblue;"}).
 2.  Compute the appropriate test statistic.
 3.  Reject or fail to reject the null hypothesis based on a computed p-value.
 :::
@@ -147,7 +146,7 @@ Testing this hypothesis consists of the following steps:
 
 </br></br>
 
-The random sample is the training data we use to train or fit the model. As an illustration, we will use the entire dataset for training here.
+The random sample is the training data we use to train or fit the model. 
 
 ```{python}
 #| echo: true
@@ -160,6 +159,7 @@ auto_X_train = auto_data[['weight', 'acceleration']]
 auto_Y_train = auto_data['mpg']
 ```
 
+As mentioned before, we will use the entire dataset for training.
 
 ## Step 2. Test statistic
 
@@ -173,8 +173,6 @@ $$t_0 = \frac{\hat{\beta}_{j}}{\sqrt{ \hat{v}_{jj}} }$$
 -   $\sqrt{\hat{v}_{jj}}$ is the *standard error* of the estimate $\hat{\beta}_j$ calculated using Python.
 
 ## 
-
-</br>
 
 Recall that we obtain the least squares estimates ($\hat{\beta}_{j}$) in Python using:
 
@@ -192,6 +190,8 @@ LRmodel.fit(auto_X_train, auto_Y_train)
 print("Intercept:", LRmodel.intercept_)
 print("Coefficients:", LRmodel.coef_)
 ```
+
+</br>
 
 Later, we will see how to obtain the *standard error* of the estimate $\hat{\beta}_j$.
 
@@ -311,16 +311,21 @@ No scientific basis for this advice. In practice, report the p-value and explore
 
 ![](images/clipboard-1571120222.png){fig-align="center"}
 
-## p-values for t-tests in Python
+## t-tests in Python
 
-Unfortunately, there is no native function in **scikit-learn** to compute all elements of t-tests for a linear regression model. The best thing we can do is to use its function `f_regression()`, which computes the p-values of the t-tests for the coefficients of the predictors.
+</br>
 
-```{python}
-#| echo: true
+Unfortunately, there is no native function in **scikit-learn** to compute all elements of t-tests for a linear regression model. 
 
-f_statistic, p_values = f_regression(auto_X_train, auto_Y_train)
-print("P-values of predictor coefficients:", p_values)
-```
+</br>
+
+The easiest and safest way to do this is to train a model from scratch using the **statsmodels** library in Python.
+
+🙁
+
+## statsod
+
+
 
 ## Table of t-tests
 

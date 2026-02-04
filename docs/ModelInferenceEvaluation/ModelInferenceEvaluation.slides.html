@@ -223,8 +223,8 @@ Alan R. Vazquez
 <section id="load-the-libraries" class="slide level2">
 <h2>Load the libraries</h2>
 <p><br><br></p>
-<p>Let’s import <strong>statsmodels</strong> into Python together with other relevant libraries.</p>
-<div id="50f184ef" class="cell" data-execution_count="1">
+<p>Let’s import the required libraries into Python together with other relevant libraries.</p>
+<div id="f938daaa" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="co"># Importing necessary libraries</span></span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
@@ -250,17 +250,17 @@ Alan R. Vazquez
 </section>
 <section id="example-1" class="slide level2">
 <h2>Example 1</h2>
-<p><br></p>
 <p>Let’s consider the “auto.xlsx” dataset.</p>
-<div id="45ec9188" class="cell" data-execution_count="2">
+<div id="9fb179f1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>auto_data <span class="op">=</span> pd.read_excel(<span class="st">'auto.xlsx'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
-<p>Let’s assume that we want to build the following model.</p>
+<p>Let’s assume that we want to train the following model.</p>
 <p><span class="math display">\[
 \hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1}+ \hat{\beta}_2 X_{i2},
 \]</span></p>
-<p>where <span class="math inline">\(\hat{Y}_i\)</span> is the predicted mpg, <span class="math inline">\(X_{i1}\)</span> is the weight, and <span class="math inline">\(X_{i2}\)</span> is the acceleration of the <span class="math inline">\(i\)</span>-th car, <span class="math inline">\(i = 1, \ldots, 392\)</span>. <span style="color:darkred;">Here, we will use the entire dataset for training and ignore <span class="math inline">\(K\)</span>-fold cross-validation to illustrate the concepts.</span></p>
+<p>where <span class="math inline">\(\hat{Y}_i\)</span> is the predicted mpg, <span class="math inline">\(X_{i1}\)</span> is the weight, and <span class="math inline">\(X_{i2}\)</span> is the acceleration of the <span class="math inline">\(i\)</span>-th car, <span class="math inline">\(i = 1, \ldots, 392\)</span>.</p>
+<p><span style="color:darkred;">Here, we will use the entire dataset for training and ignore <span class="math inline">\(K\)</span>-fold cross-validation to illustrate the concepts.</span></p>
 </section>
 <section id="research-question" class="slide level2">
 <h2>Research question</h2>
@@ -283,12 +283,11 @@ Alan R. Vazquez
 <section id="section" class="slide level2">
 <h2></h2>
 <p><br><br><br></p>
-<p>The least squares estimators <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p\)</span> are subject to uncertainty, since they are calculated based on a random sample of data.</p>
-<p>Therefore, assessing the amount of the uncertainty in these estimators is important. To this end, we use <span style="color:blue;">hypothesis</span> tests on individual coefficients.</p>
+<p>The least squares estimates <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p\)</span> are subject to uncertainty, since they are calculated based on a random sample of data. That is, an <em>instance</em> of training data.</p>
+<p>Therefore, assessing the amount of the uncertainty in these estimates is important. To this end, we use <span style="color:blue;">hypothesis</span> tests on individual coefficients.</p>
 </section>
 <section id="hypothesis-test" class="slide level2">
 <h2>Hypothesis test</h2>
-<p><br></p>
 <blockquote>
 <p>A statistical hypothesis is a statement about the coefficients of a model.</p>
 </blockquote>
@@ -298,6 +297,7 @@ Alan R. Vazquez
 <p><span class="math inline">\(H_0: \beta_j = 0\)</span> v.s. <span class="math inline">\(H_1: \beta_j \neq 0\)</span> (Two-tailed Test)</p>
 </div>
 <ul>
+<li class="fragment"><span class="math inline">\(\beta_j\)</span> is the <span style="color:darkblue;"><strong>true (unknown)</strong></span> coefficient of the predictor.</li>
 <li class="fragment">Rejecting <span class="math inline">\(H_0\)</span> (in favor of <span class="math inline">\(H_1\)</span>) implies that the predictor has a significant association with the response.</li>
 <li class="fragment">Not rejecting <span class="math inline">\(H_0\)</span> implies that the predictor does not have a significant association with the response.</li>
 </ul>
@@ -312,7 +312,7 @@ Alan R. Vazquez
 <p><br></p>
 <p>Testing this hypothesis consists of the following steps:</p>
 <ol type="1">
-<li class="fragment">Take a random sample.</li>
+<li class="fragment">Take a random sample (<span style="color:darkblue;"><strong>your training data</strong></span>).</li>
 <li class="fragment">Compute the appropriate test statistic.</li>
 <li class="fragment">Reject or fail to reject the null hypothesis based on a computed p-value.</li>
 </ol>
@@ -320,14 +320,15 @@ Alan R. Vazquez
 <section id="step-1.-random-sample" class="slide level2">
 <h2>Step 1. Random sample</h2>
 <p><br><br></p>
-<p>The random sample is the training data we use to train or fit the model. As an illustration, we will use the entire dataset for training here.</p>
-<div id="4f1f31db" class="cell" data-execution_count="3">
+<p>The random sample is the training data we use to train or fit the model.</p>
+<div id="28290f69" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="co"># Dataset with predictors.</span></span>
 <span id="cb3-2"><a></a>auto_X_train <span class="op">=</span> auto_data[[<span class="st">'weight'</span>, <span class="st">'acceleration'</span>]]</span>
 <span id="cb3-3"><a></a></span>
 <span id="cb3-4"><a></a><span class="co"># Dataset with the response only.</span></span>
 <span id="cb3-5"><a></a>auto_Y_train <span class="op">=</span> auto_data[<span class="st">'mpg'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>As mentioned before, we will use the entire dataset for training.</p>
 </section>
 <section id="step-2.-test-statistic" class="slide level2">
 <h2>Step 2. Test statistic</h2>
@@ -341,9 +342,8 @@ Alan R. Vazquez
 </section>
 <section id="section-2" class="slide level2">
 <h2></h2>
-<p><br></p>
 <p>Recall that we obtain the least squares estimates (<span class="math inline">\(\hat{\beta}_{j}\)</span>) in Python using:</p>
-<div id="7dc1cbe9" class="cell" data-execution_count="4">
+<div id="969a098c" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># 1. Create the linear regression model</span></span>
 <span id="cb4-2"><a></a>LRmodel <span class="op">=</span> LinearRegression()</span>
 <span id="cb4-3"><a></a></span>
@@ -358,6 +358,7 @@ Alan R. Vazquez
 Coefficients: [-0.0072931  0.2616504]</code></pre>
 </div>
 </div>
+<p><br></p>
 <p>Later, we will see how to obtain the <em>standard error</em> of the estimate <span class="math inline">\(\hat{\beta}_j\)</span>.</p>
 </section>
 <section id="section-3" class="slide level2">
@@ -448,14 +449,14 @@ Coefficients: [-0.0072931  0.2616504]</code></pre>
 <img data-src="images/clipboard-1571120222.png" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="p-values-for-t-tests-in-python" class="slide level2">
 <h2>p-values for t-tests in Python</h2>
-<p>Unfortunately, there is no native function in <strong>scikit-learn</strong> to compute all elements of t-tests for a linear regression model. The best thing we can do is to use its function <code>f_regression()</code>, which computes the p-values of the t-tests for the coefficients of the predictors.</p>
-<div id="f002a14a" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>f_statistic, p_values <span class="op">=</span> f_regression(auto_X_train, auto_Y_train)</span>
-<span id="cb6-2"><a></a><span class="bu">print</span>(<span class="st">"P-values of predictor coefficients:"</span>, p_values)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>P-values of predictor coefficients: [6.01529605e-102 1.77857612e-018]</code></pre>
-</div>
-</div>
+<p><br></p>
+<p>Unfortunately, there is no native function in <strong>scikit-learn</strong> to compute all elements of t-tests for a linear regression model.</p>
+<p><br></p>
+<p>The easiest and safest way to do this is to train a model from scratch using the <strong>statsmodels</strong> library in Python.</p>
+<p>🙁</p>
+</section>
+<section id="section-7" class="slide level2">
+<h2></h2>
 </section>
 <section id="table-of-t-tests" class="slide level2">
 <h2>Table of t-tests</h2>
@@ -512,7 +513,7 @@ Coefficients: [-0.0072931  0.2616504]</code></pre>
 </table>
 <p>The column <span style="color:darkblue;"><strong>std err</strong></span> contains the values of the <span style="color:darkblue;">estimated standard error</span> (<span class="math inline">\(\sqrt{ \hat{v}_{jj}}\)</span>) of the estimates <span class="math inline">\(\hat{\beta}_j\)</span>. They represent the variability in the estimates.</p>
 </section>
-<section id="section-7" class="slide level2">
+<section id="section-8" class="slide level2">
 <h2></h2>
 <p><br></p>
 <table class="caption-top" style="width:100%;">
@@ -568,7 +569,7 @@ Coefficients: [-0.0072931  0.2616504]</code></pre>
 </table>
 <p>The column <span style="color:darkgreen;"><strong>t</strong></span> contains the values of the <span style="color:darkgreen;">observed statistic <span class="math inline">\(t_0\)</span></span> for the hypothesis tests.</p>
 </section>
-<section id="section-8" class="slide level2">
+<section id="section-9" class="slide level2">
 <h2></h2>
 <table class="caption-top" style="width:100%;">
 <colgroup>
@@ -624,7 +625,7 @@ Coefficients: [-0.0072931  0.2616504]</code></pre>
 <p>The column <span style="color:pink;"><strong>P&gt;|t|</strong></span> contains the <span style="color:pink;">p-values</span> for the hypothesis tests.</p>
 <p>Since the p-value is smaller than <span class="math inline">\(\alpha = 0.05\)</span>, we reject <span class="math inline">\(H_0\)</span> for acceleration and weight. Therefore, <strong>weight and acceleration have a significant association with the mpg of a car</strong>.</p>
 </section>
-<section id="section-9" class="slide level2">
+<section id="section-10" class="slide level2">
 <h2></h2>
 <p><br></p>
 <table class="caption-top" style="width:100%;">
@@ -732,7 +733,7 @@ Coefficients: [-0.0072931  0.2616504]</code></pre>
       }</style></aside>
 </div>
 </section>
-<section id="section-10" class="slide level2">
+<section id="section-11" class="slide level2">
 <h2></h2>
 <p><br></p>
 <p>If the model structure is correctly specified and assuming that the least-squares estimates <span class="math inline">\(\hat{\beta}_j\)</span>’s are close to the true <span class="math inline">\(\beta_j\)</span>’s, respectively, we have that</p>
@@ -764,10 +765,10 @@ Coefficients: [-0.0072931  0.2616504]</code></pre>
 <section id="dataset" class="slide level2">
 <h2>Dataset</h2>
 <p>The dataset is in the file “production.xlsx”.</p>
-<div id="5b0c00be" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>production_data <span class="op">=</span> pd.read_excel(<span class="st">'production.xlsx'</span>)</span>
-<span id="cb8-2"><a></a>production_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div id="49dbadb9" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>production_data <span class="op">=</span> pd.read_excel(<span class="st">'production.xlsx'</span>)</span>
+<span id="cb6-2"><a></a>production_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="241">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -838,16 +839,16 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
 <p>where <span class="math inline">\(X_i\)</span> is the run size and <span class="math inline">\(Y_i\)</span> is the run time for the <span class="math inline">\(i\)</span>-th observation, <span class="math inline">\(i = 1, \ldots, 20\)</span>.</p>
 <div class="fragment">
 <p>We fit the model in Python as follows.</p>
-<div id="540306e1" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a><span class="co"># Defining the predictor (X) and the response variable (Y).</span></span>
-<span id="cb9-2"><a></a>prod_Y_train <span class="op">=</span> production_data[<span class="st">'RunTime'</span>]</span>
-<span id="cb9-3"><a></a>prod_X_train <span class="op">=</span> production_data[[<span class="st">'RunSize'</span>]]</span>
-<span id="cb9-4"><a></a></span>
-<span id="cb9-5"><a></a><span class="co"># Fitting the simple linear regression model.</span></span>
-<span id="cb9-6"><a></a>LRmodelProd <span class="op">=</span> LinearRegression()</span>
-<span id="cb9-7"><a></a>LRmodelProd.fit(prod_X_train, prod_Y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
-<style>#sk-container-id-3 {
+<div id="6f59cd6f" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="co"># Defining the predictor (X) and the response variable (Y).</span></span>
+<span id="cb7-2"><a></a>prod_Y_train <span class="op">=</span> production_data[<span class="st">'RunTime'</span>]</span>
+<span id="cb7-3"><a></a>prod_X_train <span class="op">=</span> production_data[[<span class="st">'RunSize'</span>]]</span>
+<span id="cb7-4"><a></a></span>
+<span id="cb7-5"><a></a><span class="co"># Fitting the simple linear regression model.</span></span>
+<span id="cb7-6"><a></a>LRmodelProd <span class="op">=</span> LinearRegression()</span>
+<span id="cb7-7"><a></a>LRmodelProd.fit(prod_X_train, prod_Y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="242">
+<style>#sk-container-id-15 {
   /* Definition of color scheme common for light and dark mode */
   --sklearn-color-text: black;
   --sklearn-color-line: gray;
@@ -877,15 +878,15 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
   }
 }
 
-#sk-container-id-3 {
+#sk-container-id-15 {
   color: var(--sklearn-color-text);
 }
 
-#sk-container-id-3 pre {
+#sk-container-id-15 pre {
   padding: 0;
 }
 
-#sk-container-id-3 input.sk-hidden--visually {
+#sk-container-id-15 input.sk-hidden--visually {
   border: 0;
   clip: rect(1px 1px 1px 1px);
   clip: rect(1px, 1px, 1px, 1px);
@@ -897,7 +898,7 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
   width: 1px;
 }
 
-#sk-container-id-3 div.sk-dashed-wrapped {
+#sk-container-id-15 div.sk-dashed-wrapped {
   border: 1px dashed var(--sklearn-color-line);
   margin: 0 0.4em 0.5em 0.4em;
   box-sizing: border-box;
@@ -905,7 +906,7 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
   background-color: var(--sklearn-color-background);
 }
 
-#sk-container-id-3 div.sk-container {
+#sk-container-id-15 div.sk-container {
   /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
      but bootstrap.min.css set `[hidden] { display: none !important; }`
      so we also need the `!important` here to be able to override the
@@ -915,7 +916,7 @@ Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
   position: relative;
 }
 
-#sk-container-id-3 div.sk-text-repr-fallback {
+#sk-container-id-15 div.sk-text-repr-fallback {
   display: none;
 }
 
@@ -931,14 +932,14 @@ div.sk-item {
 
 /* Parallel-specific style estimator block */
 
-#sk-container-id-3 div.sk-parallel-item::after {
+#sk-container-id-15 div.sk-parallel-item::after {
   content: "";
   width: 100%;
   border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
   flex-grow: 1;
 }
 
-#sk-container-id-3 div.sk-parallel {
+#sk-container-id-15 div.sk-parallel {
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -946,28 +947,28 @@ div.sk-item {
   position: relative;
 }
 
-#sk-container-id-3 div.sk-parallel-item {
+#sk-container-id-15 div.sk-parallel-item {
   display: flex;
   flex-direction: column;
 }
 
-#sk-container-id-3 div.sk-parallel-item:first-child::after {
+#sk-container-id-15 div.sk-parallel-item:first-child::after {
   align-self: flex-end;
   width: 50%;
 }
 
-#sk-container-id-3 div.sk-parallel-item:last-child::after {
+#sk-container-id-15 div.sk-parallel-item:last-child::after {
   align-self: flex-start;
   width: 50%;
 }
 
-#sk-container-id-3 div.sk-parallel-item:only-child::after {
+#sk-container-id-15 div.sk-parallel-item:only-child::after {
   width: 0;
 }
 
 /* Serial-specific style estimator block */
 
-#sk-container-id-3 div.sk-serial {
+#sk-container-id-15 div.sk-serial {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -985,14 +986,14 @@ clickable and can be expanded/collapsed.
 
 /* Pipeline and ColumnTransformer style (default) */
 
-#sk-container-id-3 div.sk-toggleable {
+#sk-container-id-15 div.sk-toggleable {
   /* Default theme specific background. It is overwritten whether we have a
   specific estimator or a Pipeline/ColumnTransformer */
   background-color: var(--sklearn-color-background);
 }
 
 /* Toggleable label */
-#sk-container-id-3 label.sk-toggleable__label {
+#sk-container-id-15 label.sk-toggleable__label {
   cursor: pointer;
   display: block;
   width: 100%;
@@ -1002,7 +1003,7 @@ clickable and can be expanded/collapsed.
   text-align: center;
 }
 
-#sk-container-id-3 label.sk-toggleable__label-arrow:before {
+#sk-container-id-15 label.sk-toggleable__label-arrow:before {
   /* Arrow on the left of the label */
   content: "▸";
   float: left;
@@ -1010,13 +1011,13 @@ clickable and can be expanded/collapsed.
   color: var(--sklearn-color-icon);
 }
 
-#sk-container-id-3 label.sk-toggleable__label-arrow:hover:before {
+#sk-container-id-15 label.sk-toggleable__label-arrow:hover:before {
   color: var(--sklearn-color-text);
 }
 
 /* Toggleable content - dropdown */
 
-#sk-container-id-3 div.sk-toggleable__content {
+#sk-container-id-15 div.sk-toggleable__content {
   max-height: 0;
   max-width: 0;
   overflow: hidden;
@@ -1025,12 +1026,12 @@ clickable and can be expanded/collapsed.
   background-color: var(--sklearn-color-unfitted-level-0);
 }
 
-#sk-container-id-3 div.sk-toggleable__content.fitted {
+#sk-container-id-15 div.sk-toggleable__content.fitted {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-0);
 }
 
-#sk-container-id-3 div.sk-toggleable__content pre {
+#sk-container-id-15 div.sk-toggleable__content pre {
   margin: 0.2em;
   border-radius: 0.25em;
   color: var(--sklearn-color-text);
@@ -1038,79 +1039,79 @@ clickable and can be expanded/collapsed.
   background-color: var(--sklearn-color-unfitted-level-0);
 }
 
-#sk-container-id-3 div.sk-toggleable__content.fitted pre {
+#sk-container-id-15 div.sk-toggleable__content.fitted pre {
   /* unfitted */
   background-color: var(--sklearn-color-fitted-level-0);
 }
 
-#sk-container-id-3 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+#sk-container-id-15 input.sk-toggleable__control:checked~div.sk-toggleable__content {
   /* Expand drop-down */
   max-height: 200px;
   max-width: 100%;
   overflow: auto;
 }
 
-#sk-container-id-3 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+#sk-container-id-15 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
   content: "▾";
 }
 
 /* Pipeline/ColumnTransformer-specific style */
 
-#sk-container-id-3 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-15 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
   color: var(--sklearn-color-text);
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
-#sk-container-id-3 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-15 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
   background-color: var(--sklearn-color-fitted-level-2);
 }
 
 /* Estimator-specific style */
 
 /* Colorize estimator box */
-#sk-container-id-3 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-15 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
   /* unfitted */
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
-#sk-container-id-3 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-15 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-2);
 }
 
-#sk-container-id-3 div.sk-label label.sk-toggleable__label,
-#sk-container-id-3 div.sk-label label {
+#sk-container-id-15 div.sk-label label.sk-toggleable__label,
+#sk-container-id-15 div.sk-label label {
   /* The background is the default theme color */
   color: var(--sklearn-color-text-on-default-background);
 }
 
 /* On hover, darken the color of the background */
-#sk-container-id-3 div.sk-label:hover label.sk-toggleable__label {
+#sk-container-id-15 div.sk-label:hover label.sk-toggleable__label {
   color: var(--sklearn-color-text);
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
 /* Label box, darken color on hover, fitted */
-#sk-container-id-3 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+#sk-container-id-15 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
   color: var(--sklearn-color-text);
   background-color: var(--sklearn-color-fitted-level-2);
 }
 
 /* Estimator label */
 
-#sk-container-id-3 div.sk-label label {
+#sk-container-id-15 div.sk-label label {
   font-family: monospace;
   font-weight: bold;
   display: inline-block;
   line-height: 1.2em;
 }
 
-#sk-container-id-3 div.sk-label-container {
+#sk-container-id-15 div.sk-label-container {
   text-align: center;
 }
 
 /* Estimator-specific */
-#sk-container-id-3 div.sk-estimator {
+#sk-container-id-15 div.sk-estimator {
   font-family: monospace;
   border: 1px dotted var(--sklearn-color-border-box);
   border-radius: 0.25em;
@@ -1120,18 +1121,18 @@ clickable and can be expanded/collapsed.
   background-color: var(--sklearn-color-unfitted-level-0);
 }
 
-#sk-container-id-3 div.sk-estimator.fitted {
+#sk-container-id-15 div.sk-estimator.fitted {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-0);
 }
 
 /* on hover */
-#sk-container-id-3 div.sk-estimator:hover {
+#sk-container-id-15 div.sk-estimator:hover {
   /* unfitted */
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
-#sk-container-id-3 div.sk-estimator.fitted:hover {
+#sk-container-id-15 div.sk-estimator.fitted:hover {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-2);
 }
@@ -1218,7 +1219,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 
 /* "?"-specific style due to the `<a>` HTML tag */
 
-#sk-container-id-3 a.estimator_doc_link {
+#sk-container-id-15 a.estimator_doc_link {
   float: right;
   font-size: 1rem;
   line-height: 1em;
@@ -1233,25 +1234,25 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
   border: var(--sklearn-color-unfitted-level-1) 1pt solid;
 }
 
-#sk-container-id-3 a.estimator_doc_link.fitted {
+#sk-container-id-15 a.estimator_doc_link.fitted {
   /* fitted */
   border: var(--sklearn-color-fitted-level-1) 1pt solid;
   color: var(--sklearn-color-fitted-level-1);
 }
 
 /* On hover */
-#sk-container-id-3 a.estimator_doc_link:hover {
+#sk-container-id-15 a.estimator_doc_link:hover {
   /* unfitted */
   background-color: var(--sklearn-color-unfitted-level-3);
   color: var(--sklearn-color-background);
   text-decoration: none;
 }
 
-#sk-container-id-3 a.estimator_doc_link.fitted:hover {
+#sk-container-id-15 a.estimator_doc_link.fitted:hover {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-3);
 }
-</style><div id="sk-container-id-3" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>LinearRegression()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox" checked=""><label for="sk-estimator-id-3" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;LinearRegression<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.linear_model.LinearRegression.html">?<span>Documentation for LinearRegression</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>LinearRegression()</pre></div> </div></div></div></div>
+</style><div id="sk-container-id-15" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>LinearRegression()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-15" type="checkbox" checked=""><label for="sk-estimator-id-15" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;LinearRegression<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.linear_model.LinearRegression.html">?<span>Documentation for LinearRegression</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>LinearRegression()</pre></div> </div></div></div></div>
 </div>
 </div>
 </div>
@@ -1269,12 +1270,12 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <h2>Calculation of fitted values and residuals</h2>
 <p><br></p>
 <p>Recall that we can calculate the predicted values and residuals.</p>
-<div id="4df8aac7" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a><span class="co"># Make predictions using the the model</span></span>
-<span id="cb10-2"><a></a>prod_Y_pred <span class="op">=</span> LRmodelProd.predict(prod_X_train)</span>
-<span id="cb10-3"><a></a></span>
-<span id="cb10-4"><a></a><span class="co"># Calculate residuals.</span></span>
-<span id="cb10-5"><a></a>residuals <span class="op">=</span> prod_Y_train <span class="op">-</span> prod_Y_pred</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="97759eb4" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a><span class="co"># Make predictions using the the model</span></span>
+<span id="cb8-2"><a></a>prod_Y_pred <span class="op">=</span> LRmodelProd.predict(prod_X_train)</span>
+<span id="cb8-3"><a></a></span>
+<span id="cb8-4"><a></a><span class="co"># Calculate residuals.</span></span>
+<span id="cb8-5"><a></a>residuals <span class="op">=</span> prod_Y_train <span class="op">-</span> prod_Y_pred</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section></section>
 <section>
@@ -1285,11 +1286,11 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <section id="intuition-behind" class="slide level2">
 <h2>Intuition behind …</h2>
 <p>the Residuals versus Fitted Values plot.</p>
-<div id="40361476" class="cell" data-execution_count="9">
+<div id="fa34ed6a" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-10-output-1.png" class="quarto-figure quarto-figure-center" width="599" height="455"></p>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-9-output-1.png" class="quarto-figure quarto-figure-center" width="599" height="455"></p>
 </figure>
 </div>
 </div>
@@ -1299,42 +1300,42 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <h2>Residuals vs Fitted Values</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="18aac170" class="cell" data-execution_count="10">
+<div id="1397b0a9" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
-<span id="cb11-2"><a></a>sns.scatterplot(x<span class="op">=</span><span class="st">'RunSize'</span>, y<span class="op">=</span><span class="st">'RunTime'</span>, data<span class="op">=</span>production_data, color<span class="op">=</span><span class="st">'blue'</span>)</span>
-<span id="cb11-3"><a></a>plt.plot(production_data[<span class="st">'RunSize'</span>], prod_Y_pred, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, linewidth<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb11-4"><a></a>plt.title(<span class="st">"Fitted Regression Line"</span>)</span>
-<span id="cb11-5"><a></a>plt.xlabel(<span class="st">"Run size"</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
-<span id="cb11-6"><a></a>plt.ylabel(<span class="st">"Run time"</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
-<span id="cb11-7"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb9-2"><a></a>sns.scatterplot(x<span class="op">=</span><span class="st">'RunSize'</span>, y<span class="op">=</span><span class="st">'RunTime'</span>, data<span class="op">=</span>production_data, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb9-3"><a></a>plt.plot(production_data[<span class="st">'RunSize'</span>], prod_Y_pred, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, linewidth<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb9-4"><a></a>plt.title(<span class="st">"Fitted Regression Line"</span>)</span>
+<span id="cb9-5"><a></a>plt.xlabel(<span class="st">"Run size"</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
+<span id="cb9-6"><a></a>plt.ylabel(<span class="st">"Run time"</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
+<span id="cb9-7"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-11-output-1.png" class="quarto-figure quarto-figure-center" width="453" height="455"></p>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-10-output-1.png" class="quarto-figure quarto-figure-center" width="453" height="455"></p>
 </figure>
 </div>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="3d324f53" class="cell" data-execution_count="11">
+<div id="a5771997" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a><span class="co"># Residual vs Fitted Values Plot</span></span>
-<span id="cb12-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
-<span id="cb12-3"><a></a>sns.scatterplot(x <span class="op">=</span> prod_Y_pred, y <span class="op">=</span> residuals)</span>
-<span id="cb12-4"><a></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb12-5"><a></a>plt.title(<span class="st">'Residuals vs Fitted Values'</span>)</span>
-<span id="cb12-6"><a></a>plt.xlabel(<span class="st">'Fitted (predicted) Values'</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
-<span id="cb12-7"><a></a>plt.ylabel(<span class="st">'Residuals'</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
-<span id="cb12-8"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a><span class="co"># Residual vs Fitted Values Plot</span></span>
+<span id="cb10-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb10-3"><a></a>sns.scatterplot(x <span class="op">=</span> prod_Y_pred, y <span class="op">=</span> residuals)</span>
+<span id="cb10-4"><a></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb10-5"><a></a>plt.title(<span class="st">'Residuals vs Fitted Values'</span>)</span>
+<span id="cb10-6"><a></a>plt.xlabel(<span class="st">'Fitted (predicted) Values'</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
+<span id="cb10-7"><a></a>plt.ylabel(<span class="st">'Residuals'</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
+<span id="cb10-8"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-12-output-1.png" class="quarto-figure quarto-figure-center" width="453" height="455"></p>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-11-output-1.png" class="quarto-figure quarto-figure-center" width="453" height="455"></p>
 </figure>
 </div>
 </div>
@@ -1352,23 +1353,23 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </ul>
 </div><div class="column" style="width:60%;">
 <p><br></p>
-<div id="e5d67cc4" class="cell" data-execution_count="12">
+<div id="a3357fb8" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-13-output-1.png" class="quarto-figure quarto-figure-center" width="448" height="449"></p>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-12-output-1.png" class="quarto-figure quarto-figure-center" width="448" height="449"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </section>
-<section id="section-11" class="slide level2">
+<section id="section-12" class="slide level2">
 <h2></h2>
 <p>Examples of plots that do not support the conclusion of constant variance.</p>
 
 <img data-src="images/clipboard-513958775.png" class="quarto-figure quarto-figure-center r-stretch"></section>
-<section id="section-12" class="slide level2">
+<section id="section-13" class="slide level2">
 <h2></h2>
 <p>Another example.</p>
 
@@ -1388,32 +1389,32 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <li class="fragment"><p>Assessing the assumption of independence is hard in practice.</p></li>
 </ul>
 </section>
-<section id="section-13" class="slide level2">
+<section id="section-14" class="slide level2">
 <h2></h2>
 <p><br></p>
-<div id="8d5f3d20" class="cell" data-execution_count="13">
+<div id="50cd4fb4" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a><span class="co"># Residuals vs Time (Case) Plot</span></span>
-<span id="cb13-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">5</span>))</span>
-<span id="cb13-3"><a></a>sns.scatterplot(x <span class="op">=</span> production_data[<span class="st">'Case'</span>], y <span class="op">=</span> residuals)</span>
-<span id="cb13-4"><a></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb13-5"><a></a>plt.title(<span class="st">'Residuals vs Time (Case)'</span>)</span>
-<span id="cb13-6"><a></a>plt.xlabel(<span class="st">'Case'</span>)</span>
-<span id="cb13-7"><a></a>plt.xticks(production_data[<span class="st">'Case'</span>])</span>
-<span id="cb13-8"><a></a>plt.ylabel(<span class="st">'Residuals'</span>)</span>
-<span id="cb13-9"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a><span class="co"># Residuals vs Time (Case) Plot</span></span>
+<span id="cb11-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">5</span>))</span>
+<span id="cb11-3"><a></a>sns.scatterplot(x <span class="op">=</span> production_data[<span class="st">'Case'</span>], y <span class="op">=</span> residuals)</span>
+<span id="cb11-4"><a></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb11-5"><a></a>plt.title(<span class="st">'Residuals vs Time (Case)'</span>)</span>
+<span id="cb11-6"><a></a>plt.xlabel(<span class="st">'Case'</span>)</span>
+<span id="cb11-7"><a></a>plt.xticks(production_data[<span class="st">'Case'</span>])</span>
+<span id="cb11-8"><a></a>plt.ylabel(<span class="st">'Residuals'</span>)</span>
+<span id="cb11-9"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-14-output-1.png" class="quarto-figure quarto-figure-center" width="596" height="449"></p>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-13-output-1.png" class="quarto-figure quarto-figure-center" width="596" height="449"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="section-14" class="slide level2">
+<section id="section-15" class="slide level2">
 <h2></h2>
 <div class="columns">
 <div class="column" style="width:30%;">
@@ -1445,20 +1446,20 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <section id="histogram" class="slide level2">
 <h2>Histogram</h2>
 <p>Ideally, the histogram resembles a normal distribution around 0. If the number of observations is small, the histogram may not be an effective visualization.</p>
-<div id="88ff7330" class="cell" data-execution_count="14">
+<div id="ce0be2ae" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a><span class="co"># Histogram of residuals</span></span>
-<span id="cb14-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">3</span>))</span>
-<span id="cb14-3"><a></a>sns.histplot(residuals)</span>
-<span id="cb14-4"><a></a>plt.title(<span class="st">'Histogram of Residuals'</span>)</span>
-<span id="cb14-5"><a></a>plt.xlabel(<span class="st">'Residuals'</span>)</span>
-<span id="cb14-6"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a><span class="co"># Histogram of residuals</span></span>
+<span id="cb12-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">3</span>))</span>
+<span id="cb12-3"><a></a>sns.histplot(residuals)</span>
+<span id="cb12-4"><a></a>plt.title(<span class="st">'Histogram of Residuals'</span>)</span>
+<span id="cb12-5"><a></a>plt.xlabel(<span class="st">'Residuals'</span>)</span>
+<span id="cb12-6"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-15-output-1.png" class="quarto-figure quarto-figure-center" width="427" height="302"></p>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-14-output-1.png" class="quarto-figure quarto-figure-center" width="427" height="302"></p>
 </figure>
 </div>
 </div>
@@ -1479,7 +1480,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </ol>
 </div>
 </section>
-<section id="section-15" class="slide level2">
+<section id="section-16" class="slide level2">
 <h2></h2>
 <p><br><br></p>
 <ul>
@@ -1493,19 +1494,19 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <h2>QQ plot in Python</h2>
 <p><br><br><br></p>
 <p>To construct a QQ plot, we use the function <code>qqplot()</code> <strong>statsmodels</strong> library.</p>
-<div id="63ece93d" class="cell" data-execution_count="15">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a><span class="co"># QQ plot to assess normality of residuals</span></span>
-<span id="cb15-2"><a></a><span class="co">#plt.figure(figsize=(5, 3))</span></span>
-<span id="cb15-3"><a></a><span class="co">#sm.qqplot(residuals, fit = True, line = '45')</span></span>
-<span id="cb15-4"><a></a><span class="co">#plt.title('QQ Plot of Residuals')</span></span>
-<span id="cb15-5"><a></a><span class="co">#plt.show()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="9f719193" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a><span class="co"># QQ plot to assess normality of residuals</span></span>
+<span id="cb13-2"><a></a><span class="co">#plt.figure(figsize=(5, 3))</span></span>
+<span id="cb13-3"><a></a><span class="co">#sm.qqplot(residuals, fit = True, line = '45')</span></span>
+<span id="cb13-4"><a></a><span class="co">#plt.title('QQ Plot of Residuals')</span></span>
+<span id="cb13-5"><a></a><span class="co">#plt.show()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="section-16" class="slide level2">
+<section id="section-17" class="slide level2">
 <h2></h2>
 <p>Substantial departures from a straight line indicate that the distribution is not normal.</p>
 </section>
-<section id="section-17" class="slide level2">
+<section id="section-18" class="slide level2">
 <h2></h2>
 <p>This plot suggests that the residuals are consistent with a Normal curve.</p>
 </section>
@@ -1515,7 +1516,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 
 <img data-src="images/clipboard-191119898.png" class="quarto-figure quarto-figure-center r-stretch"><p>When <span class="math inline">\(n\)</span> is relatively small, you tend to see deviations, particularly in the tails.</p>
 </section>
-<section id="section-18" class="slide level2">
+<section id="section-19" class="slide level2">
 <h2></h2>
 <p><strong>Normal probability plots for data sets following various distributions.</strong> 100 observations in each data set.</p>
 
@@ -1536,7 +1537,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </ul>
 </div>
 </section>
-<section id="section-19" class="slide level2">
+<section id="section-20" class="slide level2">
 <h2></h2>
 <p><br><br><br></p>
 <ol start="3" type="1">
