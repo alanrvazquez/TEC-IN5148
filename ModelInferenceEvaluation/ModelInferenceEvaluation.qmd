@@ -40,8 +40,10 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
-from sklearn.feature_selection import f_regression
+import statsmodels.api as sm
 ```
+
+We will introduce the new library **statsmodels.api** later.
 
 # Inference about individual $\beta$’s using t-tests
 
@@ -323,9 +325,54 @@ The easiest and safest way to do this is to train a model from scratch using the
 
 🙁
 
-## statsod
+## statsmodels library
 
+-   **statsmodels** is a powerful Python library for statistical modeling, data analysis, and hypothesis testing.
+-   It provides classes and functions for estimating statistical models.
+-   It is built on top of libraries such as **NumPy**, **SciPy**, and **pandas**
+-   <https://www.statsmodels.org/stable/index.html>
 
+![](images/statsmodels-logo-v2-horizontal-dark.svg){fig-align="center"}
+
+## 
+
+</br>
+
+An issue with **statsmodels** is that we must add the intercept to our predictor matrix using the `add_constant()` function.
+
+```{python}
+#| echo: true
+#| output: true
+
+auto_X_train_with_intercept = sm.add_constant(auto_X_train)
+```
+
+</br>
+
+We fit or train a linear regression model using the `.OLS()` and `.fit()` functions. 
+
+```{python}
+#| echo: true
+#| output: true
+
+# Create linear regression object in statsmodel
+regr = sm.OLS(auto_Y_train, auto_X_train_with_intercept)
+
+# Train the model using the training sets
+linear_model = regr.fit()
+```
+
+##
+
+We access the information on the t-tests using the `.summary()` function.
+
+```{python}
+#| echo: true
+#| output: true
+
+model_summary = linear_model.summary()
+print(model_summary)
+```
 
 ## Table of t-tests
 
@@ -375,62 +422,30 @@ The columns $[0.025$ and $0.975]$ show the limits of a 95% confidence interval o
 
 # Residual analysis
 
-## Multiple linear regression model
-
-</br>
-
-$$Y_i = \beta_0 + \beta_1 X_{i1} + \cdots + \beta_p X_{ip} + \epsilon_i$$
-
--   $p$ is the number of predictors.
--   $n$ is the number of observations.
--   $X_{ij}$ is the i-th observation of the j-th predictor.
--   $Y_{i}$ is the i-th observation of the response.
--   $\epsilon_i$ is the i-th random error.
-
-## Assumptions
-
-</br>
-
-The error $\epsilon_i$’s must then satisfy the following assumptions:
-
-::: incremental
-1.  On average, they are close to zero for any value of the predictors $X_j$.
-2.  For any value of the predictor $X_j$, the dispersion or variance is constant and equal to $\sigma^2$.
-3.  The $\epsilon_i$’s are all independent from each other.
-4.  [The $\epsilon_i$’s follow normal distribution with mean 0 and variance $\sigma^2$.]{style="color:gray;"}
-:::
-
 ## Residuals
 
 </br>
 
-The errors $\epsilon_1, \ldots, \epsilon_n$ are not observed. To overcome this issue, we use the [**residuals**]{style="color:purple;"} of our model.
-
-. . .
-
-Suppose that the multiple linear regression model is correct and consider the fitted responses $\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \cdots + \hat{\beta}_p X_{ip}$, where $\hat{\beta}_{j}$ is the least squares estimator for the j-th predictor.
-
-. . .
-
-We define the [**residuals**]{style="color:purple;"} $\hat{\epsilon}_i = Y_i - \hat{Y}_i$, $i = 1, \ldots, n.$
-
-::: notes
-The residuals $\hat{\epsilon}_i$ are the estimates of the random errors $\epsilon_i$.
-:::
-
-## 
+The errors of the estimated model are called [**residuals**]{style="color:purple;"} $\hat{\epsilon}_i = Y_i - \hat{Y}_i$, $i = 1, \ldots, n.$
 
 </br>
 
-If the model structure is correctly specified and assuming that the least-squares estimates $\hat{\beta}_j$’s are close to the true $\beta_j$’s, respectively, we have that
+In linear regression, we can validate the adequacy of the model by checking whether the residuals $\hat{\epsilon}_1, \hat{\epsilon}_2, \ldots, \hat{\epsilon}_n$ satisfy three (or four) assumptions.
 
-$$\hat{\epsilon}_i = Y_i - \hat{Y}_i = Y_i - \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \cdots + \hat{\beta}_p X_{ip} \approx \epsilon_i$$
+## Assumptions
 
-So, the residuals $\hat{\epsilon}_i$ should resemble the random errors $\epsilon$.
+The residuals $\hat{\epsilon}_i$’s must then satisfy the following assumptions:
 
-. . .
+::: incremental
+1.  On average, they are close to zero for any value of the predictors $X_j$.
+2.  For any value of the predictor $X_j$, the dispersion or variance is roughly the same.
+3.  The $\epsilon_i$’s are independent from each other.
+4.  [The $\hat{\epsilon}_i$’s follow normal distribution.]{style="color:gray;"}
+:::
 
-To evaluate the assumption of a multiple linear regression model, we use a [**Residual analysis**]{style="color:green;"}.
+. . . 
+
+To evaluate the assumption of a linear regression model, we use a [**Residual analysis**]{style="color:green;"}.
 
 ## Residual Analysis
 
@@ -446,7 +461,7 @@ To check the validity of these assumptions, we will follow a graphical approach.
 3.  **Normal Quantile-Quantile** Plot. To assess if the residuals follow a normal distribution
 :::
 
-## Example 1
+## Example 2
 
 </br>
 
@@ -471,18 +486,18 @@ production_data.head()
 ## Linear regression model
 
 $$
-Y_i = \beta_0 + \beta_1 X_i +\epsilon_i
+\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i
 $$
 
-where $X_i$ is the run size and $Y_i$ is the run time for the $i$-th observation, $i = 1, \ldots, 20$.
+where $X_i$ is the run size and $\hat{Y}_i$ is the predicted run time for the $i$-th observation, $i = 1, \ldots, 20$.
 
 . . .
 
-We fit the model in Python as follows.
+We fit the model in **scikit-learn** using the entire data for training.
 
 ```{python}
 #| echo: true
-#| output: true
+#| output: false
 
 # Defining the predictor (X) and the response variable (Y).
 prod_Y_train = production_data['RunTime']
@@ -495,7 +510,17 @@ LRmodelProd.fit(prod_X_train, prod_Y_train)
 
 ## Estimated model
 
-</br>
+The estimated coefficients are
+
+```{python}
+#| echo: true
+#| output: false
+
+print("Intercept:", LRmodel.intercept_)
+print("Coefficients:", LRmodel.coef_)
+```
+
+So, the fitted model is
 
 $$
 \hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i = 149.75 + 0.26 X_i,
@@ -503,13 +528,13 @@ $$
 
 where $\hat{Y}_i$ is the *predicted* or *fitted* value of run time for the $i$-th observation, $i = 1, \ldots, 20$.
 
-The residuals of this estimated model are $\hat{\epsilon}_i = Y_i - \hat{Y}_i$.
+The [**residuals**]{style="color:purple;"} of this estimated model are $\hat{\epsilon}_i = Y_i - \hat{Y}_i$.
 
 ## Calculation of fitted values and residuals
 
 </br>
 
-Recall that we can calculate the predicted values and residuals.
+Recall that we can calculate the predicted values and residuals as follows.
 
 ```{python}
 #| echo: true
@@ -737,7 +762,7 @@ A normal QQ plot is helpful for deciding whether a sample was drawn from a distr
 
 </br></br></br>
 
-To construct a QQ plot, we use the function `qqplot()` **statsmodels** library.
+To construct a QQ plot, we use the function `qqplot()` from the **statsmodels** library.
 
 ```{python}
 #| echo: true
@@ -746,10 +771,10 @@ To construct a QQ plot, we use the function `qqplot()` **statsmodels** library.
 #| fig-align: center
 
 # QQ plot to assess normality of residuals
-#plt.figure(figsize=(5, 3))
-#sm.qqplot(residuals, fit = True, line = '45')
-#plt.title('QQ Plot of Residuals')
-#plt.show()
+plt.figure(figsize=(5, 3))
+sm.qqplot(residuals, fit = True, line = '45')
+plt.title('QQ Plot of Residuals')
+plt.show()
 ```
 
 ## 
@@ -763,10 +788,10 @@ Substantial departures from a straight line indicate that the distribution is no
 #| fig-align: center
 
 # QQ plot to assess normality of residuals
-#plt.figure(figsize=(7, 4))
-#sm.qqplot(residuals, fit = True, line = '45')
-#plt.title('QQ Plot of Residuals')
-#plt.show()
+plt.figure(figsize=(7, 4))
+sm.qqplot(residuals, fit = True, line = '45')
+plt.title('QQ Plot of Residuals')
+plt.show()
 ```
 
 ## 
@@ -780,10 +805,10 @@ This plot suggests that the residuals are consistent with a Normal curve.
 #| fig-align: center
 
 # QQ plot to assess normality of residuals
-#plt.figure(figsize=(7, 4))
-#sm.qqplot(residuals, fit = True, line = '45')
-#plt.title('QQ Plot of Residuals')
-#plt.show()
+plt.figure(figsize=(7, 4))
+sm.qqplot(residuals, fit = True, line = '45')
+plt.title('QQ Plot of Residuals')
+plt.show()
 ```
 
 ## Comments
@@ -804,14 +829,14 @@ When $n$ is relatively small, you tend to see deviations, particularly in the ta
 
 </br>
 
-1.  [If the model structure is incorrect]{style="color:red;"}, the estimated coefficients $\hat{\beta}_j$ will be biased and the predictions $\hat{Y}_i$ will be inaccurate.
+1.  [If the model structure is incorrect]{style="color:red;"}, the estimated coefficients $\hat{\beta}_j$ will be incorrect and the predictions $\hat{Y}_i$ will be inaccurate.
 
 . . .
 
 2.  [If the residuals do not follow a normal distribution]{style="color:red;"}, we have two cases:
 
--   If sample size is large, we still get accurate p-values for the t-tests (discussed later) for the coefficients thanks to the *Central Limit Theorem*.
--   However, the t-tests and all inference tools are invalidated.
+-   If sample size is large, we still get accurate p-values for the t-tests for the coefficients thanks to the *Central Limit Theorem*.
+-   Otherwiese, the t-tests and p-values are unreliable.
 
 ## 
 
@@ -821,6 +846,6 @@ When $n$ is relatively small, you tend to see deviations, particularly in the ta
 
 4.  [If the residuals are dependent]{style="color:red;"}, then the linear model is incorrect and everything falls apart!
 
-
+There are methods to *correct* the faulty assumptions, but we will not discus them here.
 
 # [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)
