@@ -223,7 +223,6 @@ print("Intercept:", LRmodel.intercept_)
 print("Coefficients:", LRmodel.coef_)
 ```
 
-
 ## Analysis of covariance
 
 </br>
@@ -242,7 +241,6 @@ The components of the ANCOVA model are individual functions of the coefficients.
 
 To gain insight into the model, we write it as follows:
 
-
 $$
 \begin{align}
 \hat{Y}_i &= \hat{\beta}_0+\hat{\beta}_1 d_{1i} +\hat{\beta}_2 d_{2i} + \hat{\beta}_3 X_{i} \\ &= \begin{cases}
@@ -259,7 +257,7 @@ The models have different intercepts but the same slope.
 
 </br></br></br>
 
--   To estimate $\hat{\beta}_0$, $\hat{\beta}_1$, $\hat{\beta}_2$ and $\hat{\beta}_3$, we use least squares. 
+-   To estimate $\hat{\beta}_0$, $\hat{\beta}_1$, $\hat{\beta}_2$ and $\hat{\beta}_3$, we use least squares.
 -   We could make individual inferences on $\beta_1$ and $\beta_2$ using t-tests in the **statsmodels** library.
 -   However, better tests are possible such as overall and partial F-tests (not discussed here).
 
@@ -439,7 +437,6 @@ Standardization does not affect the correlation between two predictors. So, it h
 . . .
 
 Ideally, the dummy variables for the categorical predictors are standardized too.
-
 
 # Putting All Together
 
