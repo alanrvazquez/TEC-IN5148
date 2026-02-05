@@ -229,7 +229,7 @@ Alan R. Vazquez
 <section id="load-the-libraries" class="slide level2">
 <h2>Load the libraries</h2>
 <p>Before we start, let’s import the data science libraries into Python.</p>
-<div id="321b2fe8" class="cell" data-execution_count="1">
+<div id="34346ead" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="co"># Importing necessary libraries</span></span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -359,7 +359,7 @@ Alan R. Vazquez
 </section>
 <section id="read-the-dataset" class="slide level2">
 <h2>Read the dataset</h2>
-<div id="e9b335ab" class="cell" data-execution_count="2">
+<div id="3437e8c7" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="co"># Load the data</span></span>
 <span id="cb2-2"><a></a>Adult_data <span class="op">=</span> pd.read_excel(<span class="st">'AdultReduced.xlsx'</span>)</span>
 <span id="cb2-3"><a></a></span>
@@ -473,7 +473,7 @@ Alan R. Vazquez
 <li>education.num: number of years of education.</li>
 <li>hours.per.week: Number of work hours per week.</li>
 </ul>
-<div id="6e98f9ce" class="cell" data-execution_count="3">
+<div id="c1ce4bcf" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="co"># Choose the predictors.</span></span>
 <span id="cb3-2"><a></a>X_full <span class="op">=</span> Adult_data.<span class="bu">filter</span>([<span class="st">'age'</span>, <span class="st">'sex'</span>, <span class="st">'race'</span>, <span class="st">'education.num'</span>, </span>
 <span id="cb3-3"><a></a>                            <span class="st">'hours.per.week'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -483,7 +483,7 @@ Alan R. Vazquez
 <h2>Pre-processing for categorical predictors</h2>
 <p><br><br></p>
 <p>Unfortunately, bagging does not work with categorical predictors. We must transform them into dummy variables using the code below.</p>
-<div id="164f38bb" class="cell" data-execution_count="4">
+<div id="a55c0f78" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># Turn categorical predictors into dummy variables.</span></span>
 <span id="cb4-2"><a></a>X_dummies <span class="op">=</span> pd.get_dummies(X_full[[<span class="st">'sex'</span>, <span class="st">'race'</span>]])</span>
 <span id="cb4-3"><a></a></span>
@@ -497,7 +497,7 @@ Alan R. Vazquez
 <section id="set-the-target-class" class="slide level2">
 <h2>Set the target class</h2>
 <p>Let’s set the <strong>target class</strong> and the <strong>reference class</strong> using the <code>get_dummies()</code> function.</p>
-<div id="bafab02e" class="cell" data-execution_count="5">
+<div id="dc6665a7" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="co"># Select answer</span></span>
 <span id="cb5-2"><a></a>Y <span class="op">=</span> Adult_data.<span class="bu">filter</span>([<span class="st">'income'</span>])</span>
 <span id="cb5-3"><a></a></span>
@@ -562,7 +562,7 @@ Alan R. Vazquez
 <h2></h2>
 <p><br><br></p>
 <p>Here we’ll use the <strong>large</strong> target class. So, let’s use the corresponding column as our response variable.</p>
-<div id="58cd2240" class="cell" data-execution_count="6">
+<div id="51f07161" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="co"># Choose target category.</span></span>
 <span id="cb6-2"><a></a>Y_target <span class="op">=</span> Y_dummies[<span class="st">'income_large'</span>]</span>
 <span id="cb6-3"><a></a></span>
@@ -581,7 +581,7 @@ Name: income_large, dtype: int64</code></pre>
 <h2>Training and validation datasets</h2>
 <p><br></p>
 <p>To evaluate a model’s performance on unobserved data, we split the current dataset into training and validation datasets. To do this, we use <code>train_test_split()</code> from <strong>scikit-learn</strong>.</p>
-<div id="5cff111e" class="cell" data-execution_count="7">
+<div id="8588ad4b" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a><span class="co"># Split into training and validation</span></span>
 <span id="cb8-2"><a></a>X_train, X_valid, Y_train, Y_valid <span class="op">=</span> train_test_split(X_full, Y_target, </span>
 <span id="cb8-3"><a></a>                                                      test_size <span class="op">=</span> <span class="fl">0.2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -593,7 +593,7 @@ Name: income_large, dtype: int64</code></pre>
 <p><br></p>
 <p>We define a bagging algorithm for classification using the <code>BaggingClassifier</code> function from <strong>scikit-learn</strong>.</p>
 <p>The <code>n_estimators</code> argument is the number of decision trees to generate in bagging. Ideally, it should be high, around 500.</p>
-<div id="197176fe" class="cell" data-execution_count="8">
+<div id="ac02d34b" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a><span class="co"># Set the bagging algorithm.</span></span>
 <span id="cb9-2"><a></a>Baggingalgorithm <span class="op">=</span> BaggingClassifier(n_estimators <span class="op">=</span> <span class="dv">500</span>, </span>
 <span id="cb9-3"><a></a>                                     random_state <span class="op">=</span> <span class="dv">59227</span>)</span>
@@ -606,18 +606,18 @@ Name: income_large, dtype: int64</code></pre>
 <section id="predictions-1" class="slide level2">
 <h2>Predictions</h2>
 <p>Predict the classes using bagging.</p>
-<div id="9efdad0d" class="cell" data-execution_count="9">
+<div id="e7f2c477" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>predicted_class <span class="op">=</span> Baggingalgorithm.predict(X_valid)</span>
 <span id="cb10-2"><a></a></span>
 <span id="cb10-3"><a></a>predicted_class</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
-<pre><code>array([0, 0, 0, ..., 0, 1, 1])</code></pre>
+<pre><code>array([0, 0, 0, ..., 0, 0, 0])</code></pre>
 </div>
 </div>
 </section>
 <section id="confusion-matrix" class="slide level2">
 <h2>Confusion matrix</h2>
-<div id="d92465a7" class="cell" data-execution_count="10">
+<div id="a32147a7" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a><span class="co"># Compute confusion matrix.</span></span>
 <span id="cb12-2"><a></a>cm <span class="op">=</span> confusion_matrix(Y_valid, predicted_class)</span>
 <span id="cb12-3"><a></a></span>
@@ -626,7 +626,7 @@ Name: income_large, dtype: int64</code></pre>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="EnsembleMethods_files/figure-revealjs/cell-11-output-1.png" class="quarto-figure quarto-figure-center" width="524" height="433"></p>
+<p><img data-src="EnsembleMethods_files/figure-revealjs/cell-11-output-1.png" class="quarto-figure quarto-figure-center" width="524" height="429"></p>
 </figure>
 </div>
 </div>
@@ -636,21 +636,21 @@ Name: income_large, dtype: int64</code></pre>
 <h2>Accuracy</h2>
 <p><br><br></p>
 <p>The accuracy of the bagging classifier is 78%.</p>
-<div id="3ca55a31" class="cell" data-execution_count="11">
+<div id="6e7e1d6b" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a><span class="co"># Compute accuracy.</span></span>
 <span id="cb13-2"><a></a>accuracy <span class="op">=</span> accuracy_score(Y_valid, predicted_class)</span>
 <span id="cb13-3"><a></a></span>
 <span id="cb13-4"><a></a><span class="co"># Show accuracy.</span></span>
 <span id="cb13-5"><a></a><span class="bu">print</span>( <span class="bu">round</span>(accuracy, <span class="dv">2</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.77</code></pre>
+<pre><code>0.78</code></pre>
 </div>
 </div>
 </section>
 <section id="a-single-deep-tree" class="slide level2">
 <h2>A single deep tree</h2>
 <p>To compare the bagging, let’s use a single deep tree.</p>
-<div id="59e60dee" class="cell" data-execution_count="12">
+<div id="d5d1d68b" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a><span class="co"># We tell Python that we want a classification tree</span></span>
@@ -662,12 +662,12 @@ Name: income_large, dtype: int64</code></pre>
 </details>
 </div>
 <p>Let’s compute the accuracy of the pruned tree.</p>
-<div id="6da91f59" class="cell" data-execution_count="13">
+<div id="e1411adc" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>single_tree_Y_pred <span class="op">=</span> clf_simple.predict(X_valid)</span>
 <span id="cb16-2"><a></a>accuracy <span class="op">=</span> accuracy_score(Y_valid, single_tree_Y_pred)</span>
 <span id="cb16-3"><a></a><span class="bu">print</span>( <span class="bu">round</span>(accuracy, <span class="dv">2</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.77</code></pre>
+<pre><code>0.76</code></pre>
 </div>
 </div>
 </section>
@@ -755,7 +755,7 @@ Name: income_large, dtype: int64</code></pre>
 <h2>Random Forest in Python</h2>
 <p><br></p>
 <p>In Python, we define a RandomForest algorithm for classification using the <code>RandomForestClassifier</code> function from <strong>scikit-learn</strong>. The <code>n_estimators</code> argument is the number of decision trees to generate in the RandomForest, and <code>random_state</code> allows you to reprudce the results.</p>
-<div id="1a7d355b" class="cell" data-execution_count="14">
+<div id="58f767b4" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a><span class="co"># Set the bagging algorithm.</span></span>
 <span id="cb18-2"><a></a>RFalgorithm <span class="op">=</span> RandomForestClassifier(n_estimators <span class="op">=</span> <span class="dv">500</span>,</span>
 <span id="cb18-3"><a></a>                                     random_state <span class="op">=</span> <span class="dv">59227</span>)</span>
@@ -767,7 +767,7 @@ Name: income_large, dtype: int64</code></pre>
 <section id="confusion-matrix-1" class="slide level2">
 <h2>Confusion matrix</h2>
 <p>Evaluate the performance of random forest.</p>
-<div id="84cb8a76" class="cell" data-execution_count="15">
+<div id="45cfb037" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a><span class="co"># Predict class.</span></span>
@@ -782,7 +782,7 @@ Name: income_large, dtype: int64</code></pre>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="EnsembleMethods_files/figure-revealjs/cell-16-output-1.png" class="quarto-figure quarto-figure-center" width="524" height="431"></p>
+<p><img data-src="EnsembleMethods_files/figure-revealjs/cell-16-output-1.png" class="quarto-figure quarto-figure-center" width="524" height="429"></p>
 </figure>
 </div>
 </div>
@@ -792,14 +792,14 @@ Name: income_large, dtype: int64</code></pre>
 <h2>Accuracy</h2>
 <p><br><br></p>
 <p>The accuracy of the random forest classifier is 79%.</p>
-<div id="327ad58e" class="cell" data-execution_count="16">
+<div id="b6debcf4" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a><span class="co"># Compute accuracy.</span></span>
 <span id="cb20-2"><a></a>accuracy <span class="op">=</span> accuracy_score(Y_valid, RF_predicted)</span>
 <span id="cb20-3"><a></a></span>
 <span id="cb20-4"><a></a><span class="co"># Show accuracy.</span></span>
 <span id="cb20-5"><a></a><span class="bu">print</span>( <span class="bu">round</span>(accuracy, <span class="dv">2</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.77</code></pre>
+<pre><code>0.78</code></pre>
 </div>
 </div>
 </section></section>
