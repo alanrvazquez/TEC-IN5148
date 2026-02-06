@@ -183,7 +183,7 @@ The "Index" section shows the number of observations in the dataset.
 
 ## 
 
-The output below shows that there are 240 entries but `bill_length_mm` has 238 that are "non-null". Therefore, this column has **two** missing observations.
+The output below shows that there are 344 entries but `bill_length_mm` has 342 that are "non-null". Therefore, this column has **two** missing observations.
 
 ```{python}
 #| echo: false
@@ -191,7 +191,7 @@ The output below shows that there are 240 entries but `bill_length_mm` has 238 t
 X_p.info()
 ```
 
-The same is true for the other predictors except for `sex` that has **eight** missing values.
+The same is true for the other predictors except for `sex` that has **11** missing values.
 
 ## 
 
@@ -229,7 +229,7 @@ complete_predictors.head()
 complete_predictors.info()
 ```
 
-The new data is complete because each column has 232 "non-null" values; the total number of observations in `complete_predictors`.
+The new data is complete because each column has 333 "non-null" values; the total number of observations in `complete_predictors`.
 
 However, note that we have lost eight of the original observations in `X_train_p`!
 
@@ -278,7 +278,7 @@ After imputation, the information of the predictors in the dataset looks like th
 X_p.info()
 ```
 
-Now, `bill_length_mm` has 240 complete values.
+Now, `bill_length_mm` has 344 complete values.
 
 ## 
 
@@ -347,7 +347,7 @@ Let's now have a look at the information of the dataset.
 X_p.info()
 ```
 
-The columns `bill_length_mm`, `bill_depth_mm`, and `sex` have 240 complete values.
+The columns `bill_length_mm`, `bill_depth_mm`, and `sex` have 344 complete values.
 
 ## 
 
