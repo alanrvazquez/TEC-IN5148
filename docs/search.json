@@ -1047,7 +1047,7 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#load-the-libraries",
     "title": "Clustering Methods",
     "section": "Load the libraries",
-    "text": "Load the libraries\nBefore we start, let’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.cluster import KMeans, AgglomerativeClustering\nfrom scipy.cluster.hierarchy import dendrogram, linkage\n\nHere, we use specific functions from the pandas, matplotlib, seaborn, sklearn, and scipy libraries in Python."
+    "text": "Load the libraries\n\nBefore we start, let’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.cluster import KMeans, AgglomerativeClustering\nfrom scipy.cluster.hierarchy import dendrogram, linkage\n\nHere, we use specific functions from the pandas, matplotlib, seaborn, sklearn, and scipy libraries in Python."
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#types-of-learning",
@@ -1096,28 +1096,28 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#clustering-methods-1",
     "title": "Clustering Methods",
     "section": "Clustering methods",
-    "text": "Clustering methods\nThey group data in different ways to discover groups with common traits."
+    "text": "Clustering methods\n\nThey group data in different ways to discover groups with common traits.\n\nTwo classic clustering methods are:\n\nK-Means Method. We seek to divide the observations into K groups.\nHierarchical Clustering. We divide the n observations into 1 group, 2 groups, 3 groups, …, up to n groups. We visualize the divisions using a graph called a dendrogram."
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#clustering-methods-2",
     "href": "UnsupervisedLearning/Clustering.slides.html#clustering-methods-2",
     "title": "Clustering Methods",
     "section": "Clustering methods",
-    "text": "Clustering methods\n\nTwo classic clustering methods are:\n\nK-Means Method. We seek to divide the observations into K groups.\nHierarchical Clustering. We divide the n observations into 1 group, 2 groups, 3 groups, …, up to n groups. We visualize the divisions using a graph called a dendrogram."
+    "text": "Clustering methods\nThey group data in different ways to discover groups with common traits.\n\nTwo classic clustering methods are:\n\nK-Means Method. We seek to divide the observations into K groups.\nHierarchical Clustering. We divide the n observations into 1 group, 2 groups, 3 groups, …, up to n groups. We visualize the divisions using a graph called a dendrogram."
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#example-1",
     "href": "UnsupervisedLearning/Clustering.slides.html#example-1",
     "title": "Clustering Methods",
     "section": "Example 1",
-    "text": "Example 1\nThe “penguins.xlsx” database contains data on 342 penguins in Antarctica. The data includes:\n\n\n\n\nBill length in millimeters.\nBill depth in millimeters.\nFlipper length in millimeters.\nBody mass in grams."
+    "text": "Example 1\n\nThe “penguins.xlsx” database contains data on 342 penguins in Antarctica. The data includes:\n\n\n\n\nBill length in millimeters.\nBill depth in millimeters.\nFlipper length in millimeters.\nBody mass in grams."
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#data",
     "href": "UnsupervisedLearning/Clustering.slides.html#data",
     "title": "Clustering Methods",
     "section": "Data",
-    "text": "Data\n\npenguins_data = pd.read_excel(\"penguins.xlsx\")\npenguins_data.head()\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n0\nAdelie\nTorgersen\n39.1\n18.7\n181\n3750\nmale\n2007\n\n\n1\nAdelie\nTorgersen\n39.5\n17.4\n186\n3800\nfemale\n2007\n\n\n2\nAdelie\nTorgersen\n40.3\n18.0\n195\n3250\nfemale\n2007\n\n\n3\nAdelie\nTorgersen\n36.7\n19.3\n193\n3450\nfemale\n2007\n\n\n4\nAdelie\nTorgersen\n39.3\n20.6\n190\n3650\nmale\n2007"
+    "text": "Data\n\n\npenguins_data = pd.read_excel(\"penguins.xlsx\")\npenguins_data.head()\n\n\n\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\nyear\n\n\n\n\n0\nAdelie\nTorgersen\n39.1\n18.7\n181\n3750\nmale\n2007\n\n\n1\nAdelie\nTorgersen\n39.5\n17.4\n186\n3800\nfemale\n2007\n\n\n2\nAdelie\nTorgersen\n40.3\n18.0\n195\n3250\nfemale\n2007\n\n\n3\nAdelie\nTorgersen\n36.7\n19.3\n193\n3450\nfemale\n2007\n\n\n4\nAdelie\nTorgersen\n39.3\n20.6\n190\n3650\nmale\n2007"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#data-visualization",
@@ -1145,7 +1145,7 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#how-do-we-measure-the-distance-between-observations",
     "title": "Clustering Methods",
     "section": "How do we measure the distance between observations?",
-    "text": "How do we measure the distance between observations?\nFor quantitative predictors, we use the Euclidean distance.\nFor example, if we have two predictors \\(X_1\\) and \\(X_2\\) with observations given in the table:\n\n\n\nObservation\n\\(X_1\\)\n\\(X_2\\)\n\n\n\n\n1\n\\(X_{1,1}\\)\n\\(X_{1,2}\\)\n\n\n2\n\\(X_{2,1}\\)\n\\(X_{2,2}\\)"
+    "text": "How do we measure the distance between observations?\n\nFor quantitative predictors, we use the Euclidean distance.\nFor example, if we have two predictors \\(X_1\\) and \\(X_2\\) with observations given in the table:\n\n\n\nObservation\n\\(X_1\\)\n\\(X_2\\)\n\n\n\n\n1\n\\(X_{1,1}\\)\n\\(X_{1,2}\\)\n\n\n2\n\\(X_{2,1}\\)\n\\(X_{2,2}\\)"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#euclidean-distance",
@@ -1180,21 +1180,21 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#example-1-cont.",
     "title": "Clustering Methods",
     "section": "Example 1 (cont.)",
-    "text": "Example 1 (cont.)\nLet’s apply the algorithm to the predictors bill_depth_mm and bill_length_mm of the penguins dataset.\n\n\nCode\nX_penguins = penguins_data.filter(['bill_depth_mm', 'bill_length_mm'])\nX_penguins.head()\n\n\n\n\n\n\n\n\n\nbill_depth_mm\nbill_length_mm\n\n\n\n\n0\n18.7\n39.1\n\n\n1\n17.4\n39.5\n\n\n2\n18.0\n40.3\n\n\n3\n19.3\n36.7\n\n\n4\n20.6\n39.3"
+    "text": "Example 1 (cont.)\n\nLet’s apply the algorithm to the predictors bill_depth_mm and bill_length_mm of the penguins dataset.\n\n\n\n\n\n\n\n\n\nbill_depth_mm\nbill_length_mm\n\n\n\n\n0\n18.7\n39.1\n\n\n1\n17.4\n39.5\n\n\n2\n18.0\n40.3\n\n\n3\n19.3\n36.7\n\n\n4\n20.6\n39.3"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#standarization",
     "href": "UnsupervisedLearning/Clustering.slides.html#standarization",
     "title": "Clustering Methods",
     "section": "Standarization",
-    "text": "Standarization\nSince the K-means algorithm works with Euclidean distance, we must standardize the predictors before we start. In this way, all of them will be equally informative in the process.\n\n\nCode\n## Standardize\nscaler = StandardScaler()\nXs_penguins = scaler.fit_transform(X_penguins)"
+    "text": "Standarization\n\nSince the K-means algorithm works with Euclidean distance, we must standardize the predictors before we start.\nIn this way, all of them will be equally informative in the process.\n\n## Standardize\nscaler = StandardScaler()\nXs_penguins = scaler.fit_transform(X_penguins)"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#section-3",
     "href": "UnsupervisedLearning/Clustering.slides.html#section-3",
     "title": "Clustering Methods",
     "section": "",
-    "text": "In Python, we use the KMeans() function of sklearn to apply K-means clustering. KMeans() tells Python we want to train a K-means clustering algorithm and .fit_predict() actually trains it using the data.\n\n# Fit KMeans with 3 clusters\nkmeans = KMeans(n_clusters = 3, random_state = 301655)\nclusters = kmeans.fit_predict(Xs_penguins)\n\nThe argument n_clusters sets the desired number of clusters and random_state allows us to reproduce the analysis."
+    "text": "In Python, we use the KMeans() function of sklearn to apply K-means clustering.\n\nKMeans() tells Python we want to train a K-means clustering algorithm and .fit_predict() actually trains it using the data.\n\n\n# Fit KMeans with 3 clusters\nkmeans = KMeans(n_clusters = 3, random_state = 301655)\nclusters = kmeans.fit_predict(Xs_penguins)\n\nThe argument n_clusters sets the desired number of clusters and random_state allows us to reproduce the analysis."
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#section-4",
@@ -1208,21 +1208,21 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#section-5",
     "title": "Clustering Methods",
     "section": "",
-    "text": "To visualize the clusters, we augment the original dataset X_penguins (without standarization) with the clusters object. usign the code below.\n\nclustered_penguins = (X_penguins\n              .assign(Cluster = clusters)\n              )\n\nclustered_penguins.head()\n\n\n\n\n\n\n\n\nbill_depth_mm\nbill_length_mm\nCluster\n\n\n\n\n0\n18.7\n39.1\n1\n\n\n1\n17.4\n39.5\n1\n\n\n2\n18.0\n40.3\n1\n\n\n3\n19.3\n36.7\n1\n\n\n4\n20.6\n39.3\n1"
+    "text": "To visualize the clusters, we augment the original dataset X_penguins (without standarization) with the clusters object. usign the code below.\n\nclustered_penguins = (X_penguins\n              .assign(Cluster = clusters)\n              )\nclustered_penguins.head()\n\n\n\n\n\n\n\n\nbill_depth_mm\nbill_length_mm\nCluster\n\n\n\n\n0\n18.7\n39.1\n1\n\n\n1\n17.4\n39.5\n1\n\n\n2\n18.0\n40.3\n1\n\n\n3\n19.3\n36.7\n1\n\n\n4\n20.6\n39.3\n1"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#section-6",
     "href": "UnsupervisedLearning/Clustering.slides.html#section-6",
     "title": "Clustering Methods",
     "section": "",
-    "text": "Code\nplt.figure(figsize=(9, 6))\nsns.scatterplot(data = clustered_penguins, x = 'bill_length_mm', y = 'bill_depth_mm', \n                hue = 'Cluster', palette = 'Set1')\nplt.title('K-means Clustering of Penguins')\nplt.xlabel('Bill Length (mm)')\nplt.ylabel('Bill Depth (mm)')\nplt.tight_layout()\nplt.show()"
+    "text": "Code\nplt.figure(figsize=(9, 6))\nsns.scatterplot(data = clustered_penguins, x = 'bill_length_mm', y = 'bill_depth_mm', \n                hue = 'Cluster', palette = 'Set1')\nplt.title('K-means Clustering of Penguins')\nplt.xlabel('Bill Length (mm)')\nplt.ylabel('Bill Depth (mm)')\nplt.grid(True)\nplt.tight_layout()\nplt.show()"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#the-truth-3-groups-of-penguins",
     "href": "UnsupervisedLearning/Clustering.slides.html#the-truth-3-groups-of-penguins",
     "title": "Clustering Methods",
     "section": "The truth: 3 groups of penguins",
-    "text": "The truth: 3 groups of penguins\n\n\nCode\nplt.figure(figsize=(9, 6))\nsns.scatterplot(data=penguins_data, x=\"bill_depth_mm\", y=\"bill_length_mm\",\n                hue=\"species\", palette = 'Set1') # Define type of plot.\nplt.show() # Display the plot."
+    "text": "The truth: 3 groups of penguins\n\n\nCode\nplt.figure(figsize=(8.5, 5.5))\nsns.scatterplot(data=penguins_data, x=\"bill_length_mm\", y=\"bill_depth_mm\",\n                hue=\"species\", palette = 'Set1') # Define type of plot.\nplt.xlabel('Bill Length (mm)')\nplt.ylabel('Bill Depth (mm)')\nplt.tight_layout()\nplt.grid(True)\nplt.show() # Display the plot."
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#lets-try-using-more-predictors",
@@ -1243,21 +1243,21 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#determining-the-number-of-clusters",
     "title": "Clustering Methods",
     "section": "Determining the number of clusters",
-    "text": "Determining the number of clusters\n\nA simple way to determine the number of clusters is recording the quality of clustering for different numbers of clusters.\nIn sklearn, we can record the inertia of a partition into clusters. Technically, the inertia is the sum of squared distances of observations to their closest cluster center.\nThe lower the intertia the better because this means that all observations are close to their cluster centers overall."
+    "text": "Determining the number of clusters\n\n\nA simple way to determine the number of clusters is recording the quality of clustering for different numbers of clusters.\nIn sklearn, we can record the inertia of a partition into clusters. Technically, the inertia is the sum of squared distances of observations to their closest cluster center.\nThe lower the intertia the better because this means that all observations are close to their cluster centers overall.\n\n\nAlso known as the Within-Cluster Sum of Squares (WCSS), it calculates how tightly grouped the data points are around their center."
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#section-9",
     "href": "UnsupervisedLearning/Clustering.slides.html#section-9",
     "title": "Clustering Methods",
     "section": "",
-    "text": "To record the intertias for different numbers of clusters, we use the code below.\n\ninertias = []\n\nfor i in range(1,11):\n    kmeans = KMeans(n_clusters=i)\n    kmeans.fit(Xs_penguins)\n    inertias.append(kmeans.inertia_)"
+    "text": "To record the intertias for different numbers of clusters, we use the code below.\n\ninertias = [] # List to save interia values.\nk_max = 11 # Maximum number of clusters to try.\n\nfor i in range(1,k_max):\n    kmeans = KMeans(n_clusters=i)\n    kmeans.fit(Xs_penguins)\n    inertias.append(kmeans.inertia_)"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#section-10",
     "href": "UnsupervisedLearning/Clustering.slides.html#section-10",
     "title": "Clustering Methods",
     "section": "",
-    "text": "Next, we plot the intertias and look for the elbow in the plot.\nThe elbow represents a number of clusters for which there is no significant improvement in the quality of the clustering.\nIn this case, the number of clusters recommended by this elbow method is 3.\n\n\n\nCode\nplt.figure(figsize=(6, 6))\nplt.plot(range(1,11), inertias, marker='o')\nplt.title('Elbow method')\nplt.xlabel('Number of clusters')\nplt.ylabel('Inertia')\nplt.show()"
+    "text": "Next, we plot the intertias and look for the elbow in the plot.\nThe elbow represents a number of clusters for which there is no significant improvement in the quality of the clustering.\nIn this case, the number of clusters recommended by this elbow method is 3.\n\n\n\nCode\nplt.figure(figsize=(6, 6))\nplt.plot(range(1,11), inertias, marker='o')\nplt.title('Elbow method')\nplt.xlabel('Number of clusters')\nplt.ylabel('Inertia')\nplt.grid(True)\nplt.show()"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#comments",
@@ -3963,5 +3963,12 @@
     "title": "Train, Test, and Validation Datasets",
     "section": "Work on your training dataset",
     "text": "Work on your training dataset\nAfter we have partitioned the data, we work on the training data to develop our predictive pipeline.\nThe pipeline has two main steps:\n\nData preprocessing.\nModel development.\n\nWe will now discuss preprocessing techniques applied to the predictor columns in the training dataset.\nNote that all preprocessing techniques will also be applied to the validation dataset and test dataset to prepare it for your model!"
+  },
+  {
+    "objectID": "UnsupervisedLearning/Clustering.slides.html#before-we-move-on",
+    "href": "UnsupervisedLearning/Clustering.slides.html#before-we-move-on",
+    "title": "Clustering Methods",
+    "section": "Before we move on…",
+    "text": "Before we move on…\n\nlet’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.cluster import KMeans, AgglomerativeClustering\nfrom scipy.cluster.hierarchy import dendrogram, linkage\n\nHere, we use specific functions from the pandas, matplotlib, seaborn, sklearn, and scipy libraries in Python."
   }
 ]

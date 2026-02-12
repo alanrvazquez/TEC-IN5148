@@ -32,24 +32,6 @@ jupyter: python3
 
 # Unsupervised Learning
 
-## Load the libraries
-
-Before we start, let's import the data science libraries into Python.
-
-```{python}
-#| echo: true
-#| output: false
-
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans, AgglomerativeClustering
-from scipy.cluster.hierarchy import dendrogram, linkage
-```
-
-Here, we use specific functions from the **pandas**, **matplotlib**, **seaborn**, **sklearn**, and **scipy** libraries in Python.
 
 ## Types of learning
 
@@ -126,13 +108,11 @@ Here we will use these methods on predictors $X_1, X_2, \ldots, X_p,$ which are 
 
 ## Clustering methods
 
+</br>
+
 They group data in different ways to discover groups with common traits.
 
-![](images/clipboard-4025099075.png){fig-align="center"}
-
-## Clustering methods
-
-</br></br>
+. . . 
 
 Two classic clustering methods are:
 
@@ -140,7 +120,31 @@ Two classic clustering methods are:
 
 -   [**Hierarchical Clustering**]{style="color:darkpink;"}. We divide the *n* observations into 1 group, 2 groups, 3 groups, ..., up to *n* groups. We visualize the divisions using a graph called a **dendrogram**.
 
+## Before we move on...
+
+</br>
+
+let's import the data science libraries into Python.
+
+```{python}
+#| echo: true
+#| output: false
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans, AgglomerativeClustering
+from scipy.cluster.hierarchy import dendrogram, linkage
+```
+
+Here, we use specific functions from the **pandas**, **matplotlib**, **seaborn**, **sklearn**, and **scipy** libraries in Python.
+
+
 ## Example 1
+
+</br>
 
 The “penguins.xlsx” database contains data on 342 penguins in Antarctica. The data includes:
 
@@ -160,6 +164,8 @@ The “penguins.xlsx” database contains data on 342 penguins in Antarctica. Th
 ::::::
 
 ## Data
+
+</br>
 
 ```{python}
 #| output: true
@@ -212,6 +218,8 @@ Good clustering is one in which observations within a group are close together a
 
 ## How do we measure the distance between observations?
 
+</br>
+
 For quantitative predictors, we use the **Euclidean distance**.
 
 For example, if we have two predictors $X_1$ and $X_2$ with observations given in the table:
@@ -256,7 +264,7 @@ $$d = \sqrt{(X_{1,1} - X_{2,1})^2 + (X_{1,2} - X_{2,2})^2 + (X_{1,3} - X_{2,3})^
 
 -   This is not good since we want all predictors to have equal importance when calculating the Euclidean distance between two observations.
 
--   The solution is to **standardize** the units of the predictors.
+-   [The solution is to **standardize** the units of the predictors.]{style="color:darkred;"}
 
 ## K-Means Algorithm
 
@@ -281,11 +289,13 @@ Choose a value for *K*, the number of groups.
 
 ## Example 1 (cont.)
 
+</br>
+
 Let's apply the algorithm to the predictors `bill_depth_mm` and `bill_length_mm` of the penguins dataset.
 
 ```{python}
 #| output: true
-#| echo: true
+#| echo: false
 #| fig-align: center
 #| code-fold: true 
 
@@ -295,13 +305,17 @@ X_penguins.head()
 
 ## Standarization
 
-Since the K-means algorithm works with Euclidean distance, we must standardize the predictors before we start. In this way, all of them will be equally informative in the process.
+</br></br>
+
+Since the K-means algorithm works with Euclidean distance, we must standardize the predictors before we start. 
+
+In this way, all of them will be equally informative in the process.
 
 ```{python}
 #| output: true
 #| echo: true
 #| fig-align: center
-#| code-fold: true 
+#| code-fold: false 
 
 ## Standardize
 scaler = StandardScaler()
@@ -310,9 +324,11 @@ Xs_penguins = scaler.fit_transform(X_penguins)
 
 ## 
 
-</br></br>
+</br>
 
-In Python, we use the `KMeans()` function of **sklearn** to apply K-means clustering. `KMeans()` tells Python we want to train a K-means clustering algorithm and `.fit_predict()` actually trains it using the data.
+In Python, we use the `KMeans()` function of **sklearn** to apply K-means clustering. 
+
+- `KMeans()` tells Python we want to train a K-means clustering algorithm and `.fit_predict()` actually trains it using the data.
 
 ```{python}
 #| output: true
@@ -353,7 +369,6 @@ To visualize the clusters, we augment the original dataset `X_penguins` (without
 clustered_penguins = (X_penguins
               .assign(Cluster = clusters)
               )
-
 clustered_penguins.head()
 ```
 
@@ -371,6 +386,7 @@ sns.scatterplot(data = clustered_penguins, x = 'bill_length_mm', y = 'bill_depth
 plt.title('K-means Clustering of Penguins')
 plt.xlabel('Bill Length (mm)')
 plt.ylabel('Bill Depth (mm)')
+plt.grid(True)
 plt.tight_layout()
 plt.show()
 ```
@@ -383,9 +399,13 @@ plt.show()
 #| fig-align: center
 #| code-fold: true 
 
-plt.figure(figsize=(9, 6))
-sns.scatterplot(data=penguins_data, x="bill_depth_mm", y="bill_length_mm",
+plt.figure(figsize=(8.5, 5.5))
+sns.scatterplot(data=penguins_data, x="bill_length_mm", y="bill_depth_mm",
                 hue="species", palette = 'Set1') # Define type of plot.
+plt.xlabel('Bill Length (mm)')
+plt.ylabel('Bill Depth (mm)')
+plt.tight_layout()
+plt.grid(True)
 plt.show() # Display the plot.
 ```
 
@@ -402,13 +422,13 @@ plt.show() # Display the plot.
 #| fig-align: center
 #| code-fold: false 
 
-plt.figure(figsize=(5, 5))
-sns.scatterplot(data = clustered_penguins, x = 'bill_length_mm', y = 'bill_depth_mm', 
-                hue = 'Cluster', palette = 'Set1')
+plt.figure(figsize=(6, 6))
+sns.scatterplot(data = clustered_penguins, x = 'bill_length_mm', y = 'bill_depth_mm', hue = 'Cluster', palette = 'Set1')
 plt.title('K-means Clustering of Penguins')
 plt.xlabel('Bill Length (mm)')
 plt.ylabel('Bill Depth (mm)')
 plt.tight_layout()
+plt.grid(True)
 plt.show()
 ```
 :::
@@ -421,8 +441,12 @@ plt.show()
 #| code-fold: false 
 
 plt.figure(figsize=(6, 6))
-sns.scatterplot(data=penguins_data, x="bill_depth_mm", y="bill_length_mm",
+sns.scatterplot(data=penguins_data, x = 'bill_length_mm', y = 'bill_depth_mm',
                 hue="species", palette = 'Set1') # Define type of plot.
+plt.xlabel('Bill Length (mm)')
+plt.ylabel('Bill Depth (mm)')
+plt.tight_layout()
+plt.grid(True)
 plt.show() # Display the plot.
 ```
 :::
@@ -458,6 +482,8 @@ clustered_X = (X_penguins
 
 ## 
 
+</br>
+
 :::::: center
 ::::: columns
 ::: {.column width="50%"}
@@ -467,12 +493,13 @@ clustered_X = (X_penguins
 #| fig-align: center
 #| code-fold: false 
 
-plt.figure(figsize=(5, 5))
+plt.figure(figsize=(6, 6))
 sns.scatterplot(data = clustered_X, x = 'bill_length_mm', y = 'bill_depth_mm', hue = 'Cluster', palette = 'Set1')
 plt.title('K-means Clustering of Penguins')
 plt.xlabel('Bill Length (mm)')
 plt.ylabel('Bill Depth (mm)')
 plt.tight_layout()
+plt.grid(True)
 plt.show()
 ```
 :::
@@ -485,8 +512,12 @@ plt.show()
 #| code-fold: false 
 
 plt.figure(figsize=(6, 6))
-sns.scatterplot(data=penguins_data, x="bill_depth_mm", y="bill_length_mm",
+sns.scatterplot(data=penguins_data, x = 'bill_length_mm', y = 'bill_depth_mm',
                 hue="species", palette = 'Set1') # Define type of plot.
+plt.xlabel('Bill Length (mm)')
+plt.ylabel('Bill Depth (mm)')
+plt.tight_layout()
+plt.grid(True)
 plt.show() # Display the plot.
 ```
 :::
@@ -521,11 +552,15 @@ Chinstrap
 
 </br>
 
-A simple way to determine the number of clusters is recording the quality of clustering for different numbers of clusters.
+- A simple way to determine the number of clusters is recording the quality of clustering for different numbers of clusters.
 
-In **sklearn**, we can record the [***inertia***]{style="color:#8B004F;"} of a partition into clusters. Technically, the inertia is the sum of squared distances of observations to their closest cluster center.
+- In **sklearn**, we can record the [***inertia***]{style="color:#8B004F;"} of a partition into clusters. Technically, the inertia is the sum of squared distances of observations to their closest cluster center.
 
-The lower the intertia the better because this means that all observations are close to their cluster centers *overall*.
+- The lower the intertia the better because this means that all observations are close to their cluster centers *overall*.
+
+::: {.notes}
+Also known as the Within-Cluster Sum of Squares (WCSS), it calculates how tightly grouped the data points are around their center.
+:::
 
 ## 
 
@@ -539,9 +574,10 @@ To record the intertias for different numbers of clusters, we use the code below
 #| fig-align: center
 #| code-fold: false 
 
-inertias = []
+inertias = [] # List to save interia values.
+k_max = 11 # Maximum number of clusters to try.
 
-for i in range(1,11):
+for i in range(1,k_max):
     kmeans = KMeans(n_clusters=i)
     kmeans.fit(Xs_penguins)
     inertias.append(kmeans.inertia_)
@@ -571,6 +607,7 @@ plt.plot(range(1,11), inertias, marker='o')
 plt.title('Elbow method')
 plt.xlabel('Number of clusters')
 plt.ylabel('Inertia')
+plt.grid(True)
 plt.show()
 ```
 :::
@@ -690,6 +727,8 @@ cereal_data = pd.read_excel("cereals.xlsx")
 ```
 
 ## 
+
+</br>
 
 Here, we will restrict to 7 numeric predictors.
 
