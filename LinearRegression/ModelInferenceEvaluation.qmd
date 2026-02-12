@@ -8,7 +8,7 @@ author:
 format: 
   revealjs:
     chalkboard: false
-    multiplex: true
+    multiplex: false
     footer: "Tecnologico de Monterrey"
     logo: IN5148_logo.png
     css: style.css
@@ -76,9 +76,9 @@ $$
 \hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1}+ \hat{\beta}_2 X_{i2},
 $$
 
-where $\hat{Y}_i$ is the predicted mpg, $X_{i1}$ is the weight, and $X_{i2}$ is the acceleration of the $i$-th car, $i = 1, \ldots, 392$. 
+where $\hat{Y}_i$ is the predicted mpg, $X_{i1}$ is the weight, and $X_{i2}$ is the acceleration of the $i$-th car, $i = 1, \ldots, 392$.
 
-[Here, we will use the entire dataset for training and ignore $K$-fold cross-validation to illustrate the concepts.]{style="color:darkred;"} 
+[Here, we will use the entire dataset for training and ignore $K$-fold cross-validation to illustrate the concepts.]{style="color:darkred;"}
 
 ## Research question
 
@@ -148,7 +148,7 @@ Testing this hypothesis consists of the following steps:
 
 </br></br>
 
-The random sample is the training data we use to train or fit the model. 
+The random sample is the training data we use to train or fit the model.
 
 ```{python}
 #| echo: true
@@ -317,7 +317,7 @@ No scientific basis for this advice. In practice, report the p-value and explore
 
 </br>
 
-Unfortunately, there is no native function in **scikit-learn** to compute all elements of t-tests for a linear regression model. 
+Unfortunately, there is no native function in **scikit-learn** to compute all elements of t-tests for a linear regression model.
 
 </br>
 
@@ -349,7 +349,7 @@ auto_X_train_with_intercept = sm.add_constant(auto_X_train)
 
 </br>
 
-We fit or train a linear regression model using the `.OLS()` and `.fit()` functions. 
+We fit or train a linear regression model using the `.OLS()` and `.fit()` functions.
 
 ```{python}
 #| echo: true
@@ -362,7 +362,7 @@ regr = sm.OLS(auto_Y_train, auto_X_train_with_intercept)
 linear_model = regr.fit()
 ```
 
-##
+## 
 
 We access the information on the t-tests using the `.summary()` function.
 
@@ -443,7 +443,7 @@ The residuals $\hat{\epsilon}_i$’s must then satisfy the following assumptions
 4.  [The $\hat{\epsilon}_i$’s follow normal distribution.]{style="color:gray;"}
 :::
 
-. . . 
+. . .
 
 To evaluate the assumption of a linear regression model, we use a [**Residual analysis**]{style="color:green;"}.
 

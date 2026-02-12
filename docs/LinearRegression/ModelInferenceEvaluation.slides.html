@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.25">
+
+  <meta name="author" content="Alan R. Vazquez">
+  <title>IN5148 Statistics and Data Science with Applications in Engineering – Model Evaluation and Inference</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-534cd8e3a96973385dffff3f4709048d.css">
+  <link rel="stylesheet" href="style.css">
+  <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+  
+  <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Model Evaluation and Inference</h1>
+  <p class="subtitle">IN5148: Statistics and Data Science with Applications in Engineering</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Alan R. Vazquez 
+</div>
+        <p class="quarto-title-affiliation">
+            Department of Industrial Engineering
+          </p>
+    </div>
+</div>
+
+</section>
+<section id="agenda" class="slide level2">
+<h2>Agenda</h2>
+<p><br></p>
+<ol type="1">
+<li>Residual analysis</li>
+<li>Inference about individual <span class="math inline">\(\beta\)</span>’s using t-tests</li>
+</ol>
+</section>
+<section id="load-the-libraries" class="slide level2">
+<h2>Load the libraries</h2>
+<p><br><br></p>
+<p>Let’s import the required libraries into Python together with other relevant libraries.</p>
+<div id="13eb3117" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="co"># Importing necessary libraries</span></span>
+<span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-4"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb1-6"><a></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We will introduce the new library <strong>statsmodels.api</strong> later.</p>
+</section>
+<section>
+<section id="inference-about-individual-betas-using-t-tests" class="title-slide slide level1 center">
+<h1>Inference about individual <span class="math inline">\(\beta\)</span>’s using t-tests</h1>
+
+</section>
+<section id="linear-regression-model" class="slide level2">
+<h2>Linear Regression Model</h2>
+<p>Recall that the linear regression model is a common candidate function for predicting a response:</p>
+<p><span class="math display">\[\hat{Y}_i = \hat{f}(\boldsymbol{X}_i) = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \cdots + \hat{\beta}_p X_{ip}.\]</span></p>
+<ul>
+<li><p>Where <span class="math inline">\(i = 1, \ldots, n_t\)</span> is the index of the <span class="math inline">\(n_t\)</span> training data.</p></li>
+<li><p><span class="math inline">\(\hat{Y}_i\)</span> is the prediction of the actual value of the response <span class="math inline">\(Y_i\)</span> associated with values of <span class="math inline">\(p\)</span> predictors denoted by <span class="math inline">\(\boldsymbol{X}_i = (X_{i1}, \ldots, X_{ip})\)</span>.</p></li>
+<li><p>The values <span class="math inline">\(\hat{\beta}_0\)</span>, <span class="math inline">\(\hat{\beta}_1\)</span>, …, <span class="math inline">\(\hat{\beta}_p\)</span> are the <span style="color:lightblue;"><em>coefficients</em></span> of the model.</p></li>
+</ul>
+</section>
+<section id="example-1" class="slide level2">
+<h2>Example 1</h2>
+<p>Let’s consider the “auto.xlsx” dataset.</p>
+<div id="7303fc78" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>auto_data <span class="op">=</span> pd.read_excel(<span class="st">'auto.xlsx'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><br></p>
+<p>Let’s assume that we want to train the following model.</p>
+<p><span class="math display">\[
+\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1}+ \hat{\beta}_2 X_{i2},
+\]</span></p>
+<p>where <span class="math inline">\(\hat{Y}_i\)</span> is the predicted mpg, <span class="math inline">\(X_{i1}\)</span> is the weight, and <span class="math inline">\(X_{i2}\)</span> is the acceleration of the <span class="math inline">\(i\)</span>-th car, <span class="math inline">\(i = 1, \ldots, 392\)</span>.</p>
+<p><span style="color:darkred;">Here, we will use the entire dataset for training and ignore <span class="math inline">\(K\)</span>-fold cross-validation to illustrate the concepts.</span></p>
+</section>
+<section id="research-question" class="slide level2">
+<h2>Research question</h2>
+<p><br><br><br></p>
+<blockquote>
+<p>Do the weight and acceleration have a significant association with the mpg of a car?</p>
+</blockquote>
+</section>
+<section id="the-two-cultures-of-statistical-models" class="slide level2">
+<h2>The two cultures of statistical models</h2>
+<p><br></p>
+<ul>
+<li class="fragment"><p><span style="color:darkblue;"><strong>Inference</strong></span>: develop a model that fits the data well. Then make inferences about the data-generating process based on the structure of such model.</p></li>
+<li class="fragment"><p><span style="color:darkgreen;"><strong>Prediction</strong></span>: Silent about the underlying mechanism generating the data and allow for many predictive algorithms, which only care about accuracy of predictions.</p></li>
+</ul>
+<div class="fragment">
+<p>They overlap very often.</p>
+</div>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
+<p><br><br><br></p>
+<p>The least squares estimates <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p\)</span> are subject to uncertainty, since they are calculated based on a random sample of data. That is, an <em>instance</em> of training data.</p>
+<p>Therefore, assessing the amount of the uncertainty in these estimates is important. To this end, we use <span style="color:blue;">hypothesis</span> tests on individual coefficients.</p>
+</section>
+<section id="hypothesis-test" class="slide level2">
+<h2>Hypothesis test</h2>
+<blockquote>
+<p>A statistical hypothesis is a statement about the coefficients of a model.</p>
+</blockquote>
+<div class="fragment">
+<p>In our case, we are interested in testing:</p>
+<div class="r-stack">
+<p><span class="math inline">\(H_0: \beta_j = 0\)</span> v.s. <span class="math inline">\(H_1: \beta_j \neq 0\)</span> (Two-tailed Test)</p>
+</div>
+<ul>
+<li class="fragment"><span class="math inline">\(\beta_j\)</span> is the <span style="color:darkblue;"><strong>true (unknown)</strong></span> coefficient of the predictor.</li>
+<li class="fragment">Rejecting <span class="math inline">\(H_0\)</span> (in favor of <span class="math inline">\(H_1\)</span>) implies that the predictor has a significant association with the response.</li>
+<li class="fragment">Not rejecting <span class="math inline">\(H_0\)</span> implies that the predictor does not have a significant association with the response.</li>
+</ul>
+</div>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+<p><br><br></p>
+<div class="r-stack">
+<p><span class="math inline">\(H_0: \beta_j = 0\)</span> v.s. <span class="math inline">\(H_1: \beta_j \neq 0\)</span> (Two-tailed Test)</p>
+</div>
+<p><br></p>
+<p>Testing this hypothesis consists of the following steps:</p>
+<ol type="1">
+<li class="fragment">Take a random sample (<span style="color:darkblue;"><strong>your training data</strong></span>).</li>
+<li class="fragment">Compute the appropriate test statistic.</li>
+<li class="fragment">Reject or fail to reject the null hypothesis based on a computed p-value.</li>
+</ol>
+</section>
+<section id="step-1.-random-sample" class="slide level2">
+<h2>Step 1. Random sample</h2>
+<p><br><br></p>
+<p>The random sample is the training data we use to train or fit the model.</p>
+<div id="d9314d73" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="co"># Dataset with predictors.</span></span>
+<span id="cb3-2"><a></a>auto_X_train <span class="op">=</span> auto_data[[<span class="st">'weight'</span>, <span class="st">'acceleration'</span>]]</span>
+<span id="cb3-3"><a></a></span>
+<span id="cb3-4"><a></a><span class="co"># Dataset with the response only.</span></span>
+<span id="cb3-5"><a></a>auto_Y_train <span class="op">=</span> auto_data[<span class="st">'mpg'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>As mentioned before, we will use the entire dataset for training.</p>
+</section>
+<section id="step-2.-test-statistic" class="slide level2">
+<h2>Step 2. Test statistic</h2>
+<p><br></p>
+<p>The test statistic is</p>
+<p><span class="math display">\[t_0 = \frac{\hat{\beta}_{j}}{\sqrt{ \hat{v}_{jj}} }\]</span></p>
+<ul>
+<li><span class="math inline">\(\hat{\beta}_j\)</span> is the least squares estimate of the true coefficient <span class="math inline">\(\beta_j\)</span>.</li>
+<li><span class="math inline">\(\sqrt{\hat{v}_{jj}}\)</span> is the <em>standard error</em> of the estimate <span class="math inline">\(\hat{\beta}_j\)</span> calculated using Python.</li>
+</ul>
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+<p>Recall that we obtain the least squares estimates (<span class="math inline">\(\hat{\beta}_{j}\)</span>) in Python using:</p>
+<div id="b78cc189" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># 1. Create the linear regression model</span></span>
+<span id="cb4-2"><a></a>LRmodel <span class="op">=</span> LinearRegression()</span>
+<span id="cb4-3"><a></a></span>
+<span id="cb4-4"><a></a><span class="co"># 2. Fit the model.</span></span>
+<span id="cb4-5"><a></a>LRmodel.fit(auto_X_train, auto_Y_train)</span>
+<span id="cb4-6"><a></a></span>
+<span id="cb4-7"><a></a><span class="co"># 3. Show estimated coefficients.</span></span>
+<span id="cb4-8"><a></a><span class="bu">print</span>(<span class="st">"Intercept:"</span>, LRmodel.intercept_)</span>
+<span id="cb4-9"><a></a><span class="bu">print</span>(<span class="st">"Coefficients:"</span>, LRmodel.coef_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Intercept: 41.095328779604216
+Coefficients: [-0.0072931  0.2616504]</code></pre>
+</div>
+</div>
+<p><br></p>
+<p>Later, we will see how to obtain the <em>standard error</em> of the estimate <span class="math inline">\(\hat{\beta}_j\)</span>.</p>
+</section>
+<section id="section-3" class="slide level2">
+<h2></h2>
+<p><br></p>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><br></p>
+<p><span class="math display">\[t_0 = \frac{\hat{\beta}_{j}}{\sqrt{ \hat{v}_{jj}} }\]</span></p>
+</div><div class="column" style="width:70%;">
+<ul>
+<li><p>We like this statistic because it follows a well-known distribution.</p></li>
+<li><p>If the null hypothesis (<span class="math inline">\(H_0: \beta_j = 0\)</span>) is true, the statistic <span class="math inline">\(t_0\)</span> follows a <span style="color:purple;"><span class="math inline">\(t\)</span> distribution</span> with <span class="math inline">\(n-p-1\)</span> degrees of freedom</p></li>
+<li><p>Remember that <span class="math inline">\(n\)</span> is the number of observations and <span class="math inline">\(p\)</span> the number of predictors.</p></li>
+</ul>
+</div></div>
+</section>
+<section id="t-distribution" class="slide level2">
+<h2>t distribution</h2>
+<p><br></p>
+<div class="columns">
+<div class="column" style="width:70%;">
+<p>This distribution is also known as the student’s t-distribution.</p>
+<p>It was invented by <a href="https://en.wikipedia.org/wiki/William_Sealy_Gosset">William Gosset</a> when he worked at the Guinness Brewery in Ireland.</p>
+<p>It has one parameter <span class="math inline">\(\nu\)</span> which generally equals a number of degrees of freedom.</p>
+<p>The parameter <span class="math inline">\(\nu\)</span> controls the shape of the distribution.</p>
+</div><div class="column" style="width:30%;">
+<p><img data-src="images/William_Sealy_Gosset.jpg" width="478"> <a href="https://en.wikipedia.org/wiki/William_Sealy_Gosset">William Gosset</a></p>
+</div></div>
+</section>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<p>The t-distribution resembles a standard normal distribution when <span class="math inline">\(\nu\)</span> goes to infinity.</p>
+
+<img data-src="images/clipboard-309922779.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="step-3.-calculate-the-p-value" class="slide level2">
+<h2>Step 3. Calculate the p-value</h2>
+<p><br><br><br></p>
+<p>The <span style="color:pink;"><strong>p-value</strong></span> is the probability that the <span style="color:darkgreen;"><span class="math inline">\(t\)</span> test statistic</span> will get a value that is at least as extreme as the observed <span class="math inline">\(t_0\)</span> value when the null hypothesis (<span class="math inline">\(H_0\)</span>) is true.</p>
+</section>
+<section id="section-5" class="slide level2">
+<h2></h2>
+<p>For <span class="math inline">\(H_0: \beta_j = 0\)</span> v.s. <span class="math inline">\(H_1: \beta_j \neq 0\)</span>, the p-value is calculated using both tails of the <span class="math inline">\(t\)</span> distribution. It is the blue area under the curve below.</p>
+
+<img data-src="images/critical_region2.png" class="quarto-figure quarto-figure-center r-stretch"><p>We use the two tails because <span class="math inline">\(H_1\)</span> includes the possibility that the value of <span class="math inline">\(\beta_j\)</span> is positive or negative.</p>
+</section>
+<section id="the-p-value-is-not-the-probability-that-h_0-is-true" class="slide level2">
+<h2>The p-value is not the probability that <span class="math inline">\(H_0\)</span> is true</h2>
+<p>Since the p-value is a probability, and since small p-values indicate that <span class="math inline">\(H_0\)</span> is unlikely to be true, it is tempting to think that the p-value represents the probability that <span class="math inline">\(H_0\)</span> is true.</p>
+<p><br></p>
+<div class="r-stack">
+<div style="font-size: 110%;">
+<p><span style="color:red;">This is not the case!</span></p>
+</div>
+</div>
+<p><br></p>
+<p>Remember that the <strong>p-value</strong> is the probability that the <span class="math inline">\(t\)</span> test statistic will get a value that is at least as extreme as the observed <span class="math inline">\(t_0\)</span> value <strong>when</strong> <span class="math inline">\(H_0\)</span> is true.</p>
+</section>
+<section id="how-small-must-the-p-value-be-to-reject-h_0" class="slide level2">
+<h2>How small must the p-value be to reject <span class="math inline">\(H_0\)</span>?</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<ul>
+<li class="fragment"><p><strong>Answer</strong>: Very small!</p></li>
+<li class="fragment"><p>But, how small?</p></li>
+<li class="fragment"><p><strong>Answer</strong>: Very small!</p></li>
+<li class="fragment"><p>But, tell me, how small?</p></li>
+<li class="fragment"><p><strong>Answer</strong>: Okay, it must be less than a value called <span class="math inline">\(\alpha\)</span> which is usually 0.1, 0.05, or 0.01.</p></li>
+<li class="fragment"><p>Thank you!</p></li>
+</ul>
+</div><div class="column" style="width:40%;">
+<p><img data-src="images/clipboard-2242705857.png" width="478"> <a href="https://en.wikipedia.org/wiki/Ronald_Fisher">Sir Ronald Fisher</a></p>
+</div></div>
+</section>
+<section id="decision" class="slide level2">
+<h2>Decision</h2>
+<p><br></p>
+<p>For a significance level of <span class="math inline">\(\alpha = 0.05\)</span>:</p>
+<ul>
+<li><p>If the p-value is smaller than <span class="math inline">\(\alpha\)</span>, we reject <span class="math inline">\(H_0: \beta_j = 0\)</span> in favor of <span class="math inline">\(H_1: \beta_j \neq 0\)</span>.</p></li>
+<li><p>If the p-value is larger than <span class="math inline">\(\alpha\)</span>, we do not reject <span class="math inline">\(H_0: \beta_j = 0\)</span>.</p></li>
+</ul>
+<p>No scientific basis for this advice. In practice, report the p-value and explore the data using descriptive statistics.</p>
+</section>
+<section id="section-6" class="slide level2">
+<h2></h2>
+
+<img data-src="images/clipboard-1571120222.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="t-tests-in-python" class="slide level2">
+<h2>t-tests in Python</h2>
+<p><br></p>
+<p>Unfortunately, there is no native function in <strong>scikit-learn</strong> to compute all elements of t-tests for a linear regression model.</p>
+<p><br></p>
+<p>The easiest and safest way to do this is to train a model from scratch using the <strong>statsmodels</strong> library in Python.</p>
+<p>🙁</p>
+</section>
+<section id="statsmodels-library" class="slide level2">
+<h2>statsmodels library</h2>
+<ul>
+<li><strong>statsmodels</strong> is a powerful Python library for statistical modeling, data analysis, and hypothesis testing.</li>
+<li>It provides classes and functions for estimating statistical models.</li>
+<li>It is built on top of libraries such as <strong>NumPy</strong>, <strong>SciPy</strong>, and <strong>pandas</strong></li>
+<li><a href="https://www.statsmodels.org/stable/index.html" class="uri">https://www.statsmodels.org/stable/index.html</a></li>
+</ul>
+
+<img data-src="images/statsmodels-logo-v2-horizontal-dark.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="section-7" class="slide level2">
+<h2></h2>
+<p><br></p>
+<p>An issue with <strong>statsmodels</strong> is that we must add the intercept to our predictor matrix using the <code>add_constant()</code> function.</p>
+<div id="4da38b70" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>auto_X_train_with_intercept <span class="op">=</span> sm.add_constant(auto_X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><br></p>
+<p>We fit or train a linear regression model using the <code>.OLS()</code> and <code>.fit()</code> functions.</p>
+<div id="67cb19c9" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="co"># Create linear regression object in statsmodel</span></span>
+<span id="cb7-2"><a></a>regr <span class="op">=</span> sm.OLS(auto_Y_train, auto_X_train_with_intercept)</span>
+<span id="cb7-3"><a></a></span>
+<span id="cb7-4"><a></a><span class="co"># Train the model using the training sets</span></span>
+<span id="cb7-5"><a></a>linear_model <span class="op">=</span> regr.fit()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-8" class="slide level2">
+<h2></h2>
+<p>We access the information on the t-tests using the <code>.summary()</code> function.</p>
+<div id="564cadb0" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>model_summary <span class="op">=</span> linear_model.summary()</span>
+<span id="cb8-2"><a></a><span class="bu">print</span>(model_summary)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                    mpg   R-squared:                       0.700
+Model:                            OLS   Adj. R-squared:                  0.698
+Method:                 Least Squares   F-statistic:                     453.2
+Date:                Thu, 12 Feb 2026   Prob (F-statistic):          2.43e-102
+Time:                        15:39:12   Log-Likelihood:                -1125.4
+No. Observations:                 392   AIC:                             2257.
+Df Residuals:                     389   BIC:                             2269.
+Df Model:                           2                                         
+Covariance Type:            nonrobust                                         
+================================================================================
+                   coef    std err          t      P&gt;|t|      [0.025      0.975]
+--------------------------------------------------------------------------------
+const           41.0953      1.868     21.999      0.000      37.423      44.768
+weight          -0.0073      0.000    -25.966      0.000      -0.008      -0.007
+acceleration     0.2617      0.086      3.026      0.003       0.092       0.432
+==============================================================================
+Omnibus:                       31.397   Durbin-Watson:                   0.818
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               39.962
+Skew:                           0.632   Prob(JB):                     2.10e-09
+Kurtosis:                       3.922   Cond. No.                     2.67e+04
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 2.67e+04. This might indicate that there are
+strong multicollinearity or other numerical problems.</code></pre>
+</div>
+</div>
+</section>
+<section id="table-of-t-tests" class="slide level2">
+<h2>Table of t-tests</h2>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>coef</th>
+<th>std err</th>
+<th>t</th>
+<th>P&gt;<span class="math inline">\(|t|\)</span></th>
+<th><span class="math inline">\([0.025\)</span></th>
+<th><span class="math inline">\(0.975 ]\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>const</td>
+<td>41.0953</td>
+<td>1.868</td>
+<td>21.999</td>
+<td>0.000</td>
+<td>37.423</td>
+<td>44.768</td>
+</tr>
+<tr class="even">
+<td>weight</td>
+<td>-0.0073</td>
+<td>0.000</td>
+<td>-25.966</td>
+<td>0.000</td>
+<td>-0.008</td>
+<td>-0.007</td>
+</tr>
+<tr class="odd">
+<td>acceleration</td>
+<td>0.2617</td>
+<td>0.086</td>
+<td>3.026</td>
+<td>0.003</td>
+<td>0.092</td>
+<td>0.432</td>
+</tr>
+</tbody>
+</table>
+<p>The column <span style="color:darkblue;"><strong>std err</strong></span> contains the values of the <span style="color:darkblue;">estimated standard error</span> (<span class="math inline">\(\sqrt{ \hat{v}_{jj}}\)</span>) of the estimates <span class="math inline">\(\hat{\beta}_j\)</span>. They represent the variability in the estimates.</p>
+</section>
+<section id="section-9" class="slide level2">
+<h2></h2>
+<p><br></p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>coef</th>
+<th>std err</th>
+<th>t</th>
+<th>P&gt;<span class="math inline">\(|t|\)</span></th>
+<th><span class="math inline">\([0.025\)</span></th>
+<th><span class="math inline">\(0.975 ]\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>const</td>
+<td>41.0953</td>
+<td>1.868</td>
+<td>21.999</td>
+<td>0.000</td>
+<td>37.423</td>
+<td>44.768</td>
+</tr>
+<tr class="even">
+<td>weight</td>
+<td>-0.0073</td>
+<td>0.000</td>
+<td>-25.966</td>
+<td>0.000</td>
+<td>-0.008</td>
+<td>-0.007</td>
+</tr>
+<tr class="odd">
+<td>acceleration</td>
+<td>0.2617</td>
+<td>0.086</td>
+<td>3.026</td>
+<td>0.003</td>
+<td>0.092</td>
+<td>0.432</td>
+</tr>
+</tbody>
+</table>
+<p>The column <span style="color:darkgreen;"><strong>t</strong></span> contains the values of the <span style="color:darkgreen;">observed statistic <span class="math inline">\(t_0\)</span></span> for the hypothesis tests.</p>
+</section>
+<section id="section-10" class="slide level2">
+<h2></h2>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>coef</th>
+<th>std err</th>
+<th>t</th>
+<th>P&gt;<span class="math inline">\(|t|\)</span></th>
+<th><span class="math inline">\([0.025\)</span></th>
+<th><span class="math inline">\(0.975 ]\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>const</td>
+<td>41.0953</td>
+<td>1.868</td>
+<td>21.999</td>
+<td>0.000</td>
+<td>37.423</td>
+<td>44.768</td>
+</tr>
+<tr class="even">
+<td>weight</td>
+<td>-0.0073</td>
+<td>0.000</td>
+<td>-25.966</td>
+<td>0.000</td>
+<td>-0.008</td>
+<td>-0.007</td>
+</tr>
+<tr class="odd">
+<td>acceleration</td>
+<td>0.2617</td>
+<td>0.086</td>
+<td>3.026</td>
+<td>0.003</td>
+<td>0.092</td>
+<td>0.432</td>
+</tr>
+</tbody>
+</table>
+<p>The column <span style="color:pink;"><strong>P&gt;|t|</strong></span> contains the <span style="color:pink;">p-values</span> for the hypothesis tests.</p>
+<p>Since the p-value is smaller than <span class="math inline">\(\alpha = 0.05\)</span>, we reject <span class="math inline">\(H_0\)</span> for acceleration and weight. Therefore, <strong>weight and acceleration have a significant association with the mpg of a car</strong>.</p>
+</section>
+<section id="section-11" class="slide level2">
+<h2></h2>
+<p><br></p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>coef</th>
+<th>std err</th>
+<th>t</th>
+<th>P&gt;<span class="math inline">\(|t|\)</span></th>
+<th><span class="math inline">\([0.025\)</span></th>
+<th><span class="math inline">\(0.975 ]\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>const</td>
+<td>41.0953</td>
+<td>1.868</td>
+<td>21.999</td>
+<td>0.000</td>
+<td>37.423</td>
+<td>44.768</td>
+</tr>
+<tr class="even">
+<td>weight</td>
+<td>-0.0073</td>
+<td>0.000</td>
+<td>-25.966</td>
+<td>0.000</td>
+<td>-0.008</td>
+<td>-0.007</td>
+</tr>
+<tr class="odd">
+<td>acceleration</td>
+<td>0.2617</td>
+<td>0.086</td>
+<td>3.026</td>
+<td>0.003</td>
+<td>0.092</td>
+<td>0.432</td>
+</tr>
+</tbody>
+</table>
+<p>The columns <span class="math inline">\([0.025\)</span> and <span class="math inline">\(0.975]\)</span> show the limits of a 95% confidence interval on each true coefficient <span class="math inline">\(\beta_j\)</span>. This interval <em>contains</em> the true parameter value with a confidence of 95%.</p>
+</section></section>
+<section>
+<section id="residual-analysis" class="title-slide slide level1 center">
+<h1>Residual analysis</h1>
+
+</section>
+<section id="residuals" class="slide level2">
+<h2>Residuals</h2>
+<p><br></p>
+<p>The errors of the estimated model are called <span style="color:purple;"><strong>residuals</strong></span> <span class="math inline">\(\hat{\epsilon}_i = Y_i - \hat{Y}_i\)</span>, <span class="math inline">\(i = 1, \ldots, n.\)</span></p>
+<p><br></p>
+<p>In linear regression, we can validate the adequacy of the model by checking whether the residuals <span class="math inline">\(\hat{\epsilon}_1, \hat{\epsilon}_2, \ldots, \hat{\epsilon}_n\)</span> satisfy three (or four) assumptions.</p>
+</section>
+<section id="assumptions" class="slide level2">
+<h2>Assumptions</h2>
+<p>The residuals <span class="math inline">\(\hat{\epsilon}_i\)</span>’s must then satisfy the following assumptions:</p>
+<ol type="1">
+<li class="fragment">On average, they are close to zero for any value of the predictors <span class="math inline">\(X_j\)</span>.</li>
+<li class="fragment">For any value of the predictor <span class="math inline">\(X_j\)</span>, the dispersion or variance is roughly the same.</li>
+<li class="fragment">The <span class="math inline">\(\epsilon_i\)</span>’s are independent from each other.</li>
+<li class="fragment"><span style="color:gray;">The <span class="math inline">\(\hat{\epsilon}_i\)</span>’s follow normal distribution.</span></li>
+</ol>
+<div class="fragment">
+<p>To evaluate the assumption of a linear regression model, we use a <span style="color:green;"><strong>Residual analysis</strong></span>.</p>
+</div>
+</section>
+<section id="residual-analysis-1" class="slide level2">
+<h2>Residual Analysis</h2>
+<p><br></p>
+<p>To check the validity of these assumptions, we will follow a graphical approach. Specifically, we will construct three informative plots of the residuals.</p>
+<ol type="1">
+<li class="fragment"><p><strong>Residuals vs Fitted Values</strong> Plot. To assess the structure of the model and check for constant variance</p></li>
+<li class="fragment"><p><strong>Residuals Vs Time</strong> Plot. To check independence.</p></li>
+<li class="fragment"><p><strong>Normal Quantile-Quantile</strong> Plot. To assess if the residuals follow a normal distribution</p></li>
+</ol>
+</section>
+<section id="example-2" class="slide level2">
+<h2>Example 2</h2>
+<p><br></p>
+<ul>
+<li><p>This example is inspired by Foster, Stine and Waterman (1997, pages 191–199).</p></li>
+<li><p>The data are in the form of the time taken (in minutes) for a production run, <span class="math inline">\(Y\)</span>, and the number of items produced, <span class="math inline">\(X\)</span>, for 20 randomly selected orders as supervised by a manager.</p></li>
+<li><p>We wish to develop an equation to model the relationship between the run time (<span class="math inline">\(Y\)</span>) and the run size (<span class="math inline">\(X\)</span>).</p></li>
+</ul>
+</section>
+<section id="dataset" class="slide level2">
+<h2>Dataset</h2>
+<p>The dataset is in the file “production.xlsx”.</p>
+<div id="3594f1b0" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>production_data <span class="op">=</span> pd.read_excel(<span class="st">'production.xlsx'</span>)</span>
+<span id="cb10-2"><a></a>production_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Case</th>
+<th data-quarto-table-cell-role="th">RunTime</th>
+<th data-quarto-table-cell-role="th">RunSize</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>195</td>
+<td>175</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2</td>
+<td>215</td>
+<td>189</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>3</td>
+<td>243</td>
+<td>344</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>4</td>
+<td>162</td>
+<td>88</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>5</td>
+<td>185</td>
+<td>114</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="linear-regression-model-1" class="slide level2">
+<h2>Linear regression model</h2>
+<p><span class="math display">\[
+\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i
+\]</span></p>
+<p>where <span class="math inline">\(X_i\)</span> is the run size and <span class="math inline">\(\hat{Y}_i\)</span> is the predicted run time for the <span class="math inline">\(i\)</span>-th observation, <span class="math inline">\(i = 1, \ldots, 20\)</span>.</p>
+<div class="fragment">
+<p>We fit the model in <strong>scikit-learn</strong> using the entire data for training.</p>
+<div id="c0eef4d0" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a><span class="co"># Defining the predictor (X) and the response variable (Y).</span></span>
+<span id="cb11-2"><a></a>prod_Y_train <span class="op">=</span> production_data[<span class="st">'RunTime'</span>]</span>
+<span id="cb11-3"><a></a>prod_X_train <span class="op">=</span> production_data[[<span class="st">'RunSize'</span>]]</span>
+<span id="cb11-4"><a></a></span>
+<span id="cb11-5"><a></a><span class="co"># Fitting the simple linear regression model.</span></span>
+<span id="cb11-6"><a></a>LRmodelProd <span class="op">=</span> LinearRegression()</span>
+<span id="cb11-7"><a></a>LRmodelProd.fit(prod_X_train, prod_Y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+<section id="estimated-model" class="slide level2">
+<h2>Estimated model</h2>
+<p>The estimated coefficients are</p>
+<div id="f410c63c" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a><span class="bu">print</span>(<span class="st">"Intercept:"</span>, LRmodel.intercept_)</span>
+<span id="cb12-2"><a></a><span class="bu">print</span>(<span class="st">"Coefficients:"</span>, LRmodel.coef_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>So, the fitted model is</p>
+<p><span class="math display">\[
+\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i = 149.75 + 0.26 X_i,
+\]</span></p>
+<p>where <span class="math inline">\(\hat{Y}_i\)</span> is the <em>predicted</em> or <em>fitted</em> value of run time for the <span class="math inline">\(i\)</span>-th observation, <span class="math inline">\(i = 1, \ldots, 20\)</span>.</p>
+<p>The <span style="color:purple;"><strong>residuals</strong></span> of this estimated model are <span class="math inline">\(\hat{\epsilon}_i = Y_i - \hat{Y}_i\)</span>.</p>
+</section>
+<section id="calculation-of-fitted-values-and-residuals" class="slide level2">
+<h2>Calculation of fitted values and residuals</h2>
+<p><br></p>
+<p>Recall that we can calculate the predicted values and residuals as follows.</p>
+<div id="da7c5b2a" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a><span class="co"># Make predictions using the the model</span></span>
+<span id="cb13-2"><a></a>prod_Y_pred <span class="op">=</span> LRmodelProd.predict(prod_X_train)</span>
+<span id="cb13-3"><a></a></span>
+<span id="cb13-4"><a></a><span class="co"># Calculate residuals.</span></span>
+<span id="cb13-5"><a></a>residuals <span class="op">=</span> prod_Y_train <span class="op">-</span> prod_Y_pred</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section></section>
+<section>
+<section id="residuals-vs-fitted-values-plot" class="title-slide slide level1 center">
+<h1>Residuals vs Fitted Values Plot</h1>
+
+</section>
+<section id="intuition-behind" class="slide level2">
+<h2>Intuition behind …</h2>
+<p>the Residuals versus Fitted Values plot.</p>
+<div id="0769dcbe" class="cell" data-execution_count="12">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-13-output-1.png" class="quarto-figure quarto-figure-center" width="599" height="455"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="residuals-vs-fitted-values" class="slide level2">
+<h2>Residuals vs Fitted Values</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="ffee4cef" class="cell" data-execution_count="13">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb14-2"><a></a>sns.scatterplot(x<span class="op">=</span><span class="st">'RunSize'</span>, y<span class="op">=</span><span class="st">'RunTime'</span>, data<span class="op">=</span>production_data, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb14-3"><a></a>plt.plot(production_data[<span class="st">'RunSize'</span>], prod_Y_pred, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, linewidth<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb14-4"><a></a>plt.title(<span class="st">"Fitted Regression Line"</span>)</span>
+<span id="cb14-5"><a></a>plt.xlabel(<span class="st">"Run size"</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
+<span id="cb14-6"><a></a>plt.ylabel(<span class="st">"Run time"</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
+<span id="cb14-7"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-14-output-1.png" class="quarto-figure quarto-figure-center" width="453" height="455"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div id="786e474c" class="cell" data-execution_count="14">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a><span class="co"># Residual vs Fitted Values Plot</span></span>
+<span id="cb15-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb15-3"><a></a>sns.scatterplot(x <span class="op">=</span> prod_Y_pred, y <span class="op">=</span> residuals)</span>
+<span id="cb15-4"><a></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb15-5"><a></a>plt.title(<span class="st">'Residuals vs Fitted Values'</span>)</span>
+<span id="cb15-6"><a></a>plt.xlabel(<span class="st">'Fitted (predicted) Values'</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
+<span id="cb15-7"><a></a>plt.ylabel(<span class="st">'Residuals'</span>, fontsize <span class="op">=</span> <span class="dv">14</span>)</span>
+<span id="cb15-8"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-15-output-1.png" class="quarto-figure quarto-figure-center" width="453" height="455"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="residuals-vs-fitted-values-1" class="slide level2">
+<h2>Residuals vs Fitted Values</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p><br></p>
+<ul>
+<li>If there is a trend, the model is misspecified.</li>
+<li>A “funnel” shape indicates that the assumption of constant variance is not met.</li>
+</ul>
+</div><div class="column" style="width:60%;">
+<p><br></p>
+<div id="9debb53e" class="cell" data-execution_count="15">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-16-output-1.png" class="quarto-figure quarto-figure-center" width="448" height="449"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="section-12" class="slide level2">
+<h2></h2>
+<p>Examples of plots that do not support the conclusion of constant variance.</p>
+
+<img data-src="images/clipboard-513958775.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="section-13" class="slide level2">
+<h2></h2>
+<p>Another example.</p>
+
+<img data-src="images/clipboard-890785179.png" class="quarto-figure quarto-figure-center r-stretch"><p>The phenomenon of non-constant variance is called <span style="color:red;"><strong>heteroscedasticity</strong></span>.</p>
+</section></section>
+<section>
+<section id="residuals-vs-time-plot" class="title-slide slide level1 center">
+<h1>Residuals vs Time Plot</h1>
+
+</section>
+<section id="residuals-vs-time-plot-1" class="slide level2">
+<h2>Residuals vs Time Plot</h2>
+<ul>
+<li class="fragment"><p>By “time,” we mean that time the observation was taken or the order in which it was taken. The plot should not show any structure or pattern in the residuals.</p></li>
+<li class="fragment"><p>Dependence on time is a common source of lack of independence, but other plots might also detect lack of independence.</p></li>
+<li class="fragment"><p>Ideally, we plot the residuals versus each variable of interest we could think of, either included or excluded in the model.</p></li>
+<li class="fragment"><p>Assessing the assumption of independence is hard in practice.</p></li>
+</ul>
+</section>
+<section id="section-14" class="slide level2">
+<h2></h2>
+<p><br></p>
+<div id="4a4dc999" class="cell" data-execution_count="16">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a><span class="co"># Residuals vs Time (Case) Plot</span></span>
+<span id="cb16-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">5</span>))</span>
+<span id="cb16-3"><a></a>sns.scatterplot(x <span class="op">=</span> production_data[<span class="st">'Case'</span>], y <span class="op">=</span> residuals)</span>
+<span id="cb16-4"><a></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb16-5"><a></a>plt.title(<span class="st">'Residuals vs Time (Case)'</span>)</span>
+<span id="cb16-6"><a></a>plt.xlabel(<span class="st">'Case'</span>)</span>
+<span id="cb16-7"><a></a>plt.xticks(production_data[<span class="st">'Case'</span>])</span>
+<span id="cb16-8"><a></a>plt.ylabel(<span class="st">'Residuals'</span>)</span>
+<span id="cb16-9"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-17-output-1.png" class="quarto-figure quarto-figure-center" width="596" height="449"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="section-15" class="slide level2">
+<h2></h2>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><br><br></p>
+<p>Examples of plots that do and do not support the independence assumption.</p>
+</div><div class="column" style="width:70%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/clipboard-2835904055.png" class="quarto-figure quarto-figure-center" width="411"></p>
+</figure>
+</div>
+</div></div>
+</section></section>
+<section>
+<section id="normal-quantile-quantile-plot" class="title-slide slide level1 center">
+<h1>Normal Quantile-Quantile Plot</h1>
+
+</section>
+<section id="checking-for-normality" class="slide level2">
+<h2>Checking for normality</h2>
+<p><br></p>
+<p>This assumption is generally checked by looking at the distribution of the residuals.</p>
+<p>Two plots:</p>
+<ul>
+<li><p>Histogram.</p></li>
+<li><p>Normal Quantile-Quantile Plot (also called normal probability plot).</p></li>
+</ul>
+</section>
+<section id="histogram" class="slide level2">
+<h2>Histogram</h2>
+<p>Ideally, the histogram resembles a normal distribution around 0. If the number of observations is small, the histogram may not be an effective visualization.</p>
+<div id="54fd8fa2" class="cell" data-execution_count="17">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a><span class="co"># Histogram of residuals</span></span>
+<span id="cb17-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">3</span>))</span>
+<span id="cb17-3"><a></a>sns.histplot(residuals)</span>
+<span id="cb17-4"><a></a>plt.title(<span class="st">'Histogram of Residuals'</span>)</span>
+<span id="cb17-5"><a></a>plt.xlabel(<span class="st">'Residuals'</span>)</span>
+<span id="cb17-6"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-18-output-1.png" class="quarto-figure quarto-figure-center" width="427" height="302"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="normal-quantile-quantile-qq-plot" class="slide level2">
+<h2>Normal Quantile-Quantile (QQ) Plot</h2>
+<p><br></p>
+<p>A normal QQ plot is helpful for deciding whether a sample was drawn from a distribution that is approximately normal.</p>
+<div class="fragment">
+<ol type="1">
+<li>First, let <span class="math inline">\(\hat{\epsilon}_{[1]}, \hat{\epsilon}_{[2]}, \ldots, \hat{\epsilon}_{[n]}\)</span> be the residuals ranked in an increasing order, where <span class="math inline">\(\hat{\epsilon}_{[1]}\)</span> is the minimum and <span class="math inline">\(\hat{\epsilon}_{[n]}\)</span> is the maximum. These points define the <span style="color:lightblue;"><strong>sample</strong></span> percentiles (or quantiles) of the distribution of the residuals.</li>
+</ol>
+</div>
+<div class="fragment">
+<ol start="2" type="1">
+<li>Next, calculate the <span style="color:pink;"><strong>theoretical</strong></span> percentiles of a (standard) Normal distribution calculated using Python.</li>
+</ol>
+</div>
+</section>
+<section id="section-16" class="slide level2">
+<h2></h2>
+<p><br><br></p>
+<ul>
+<li><p>The normal QQ plot displays the (sample) percentiles of the residuals versus the percentiles of a normal distribution.</p></li>
+<li><p>If these percentiles agree with each other, then they would approximate a straight line.</p></li>
+<li><p>The straight line is usually determined visually, with emphasis on the central values rather than the extremes.</p></li>
+<li><p>For a nice explanation, see this <a href="https://www.youtube.com/watch?v=okjYjClSjOg&amp;ab_channel=StatQuestwithJoshStarmer">YouTube video</a>.</p></li>
+</ul>
+</section>
+<section id="qq-plot-in-python" class="slide level2">
+<h2>QQ plot in Python</h2>
+<p><br><br><br></p>
+<p>To construct a QQ plot, we use the function <code>qqplot()</code> from the <strong>statsmodels</strong> library.</p>
+<div id="d9c3f393" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a><span class="co"># QQ plot to assess normality of residuals</span></span>
+<span id="cb18-2"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">3</span>))</span>
+<span id="cb18-3"><a></a>sm.qqplot(residuals, fit <span class="op">=</span> <span class="va">True</span>, line <span class="op">=</span> <span class="st">'45'</span>)</span>
+<span id="cb18-4"><a></a>plt.title(<span class="st">'QQ Plot of Residuals'</span>)</span>
+<span id="cb18-5"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-17" class="slide level2">
+<h2></h2>
+<p>Substantial departures from a straight line indicate that the distribution is not normal.</p>
+<div id="a6c89575" class="cell" data-execution_count="19">
+<div class="cell-output cell-output-display">
+<pre><code>&lt;Figure size 672x384 with 0 Axes&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-20-output-2.png" class="quarto-figure quarto-figure-center" width="819" height="449"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="section-18" class="slide level2">
+<h2></h2>
+<p>This plot suggests that the residuals are consistent with a Normal curve.</p>
+<div id="00ddbf95" class="cell" data-execution_count="20">
+<div class="cell-output cell-output-display">
+<pre><code>&lt;Figure size 672x384 with 0 Axes&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ModelInferenceEvaluation_files/figure-revealjs/cell-21-output-2.png" class="quarto-figure quarto-figure-center" width="819" height="449"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="comments" class="slide level2">
+<h2>Comments</h2>
+<p>These data are truly Normally distributed. But note that we still see deviations. These are entirely due to chance.</p>
+
+<img data-src="images/clipboard-191119898.png" class="quarto-figure quarto-figure-center r-stretch"><p>When <span class="math inline">\(n\)</span> is relatively small, you tend to see deviations, particularly in the tails.</p>
+</section>
+<section id="section-19" class="slide level2">
+<h2></h2>
+<p><strong>Normal probability plots for data sets following various distributions.</strong> 100 observations in each data set.</p>
+
+<img data-src="images/clipboard-1290062732.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="consequences-of-faulty-assumptions" class="slide level2">
+<h2>Consequences of faulty assumptions</h2>
+<p><br></p>
+<ol type="1">
+<li><span style="color:red;">If the model structure is incorrect</span>, the estimated coefficients <span class="math inline">\(\hat{\beta}_j\)</span> will be incorrect and the predictions <span class="math inline">\(\hat{Y}_i\)</span> will be inaccurate.</li>
+</ol>
+<div class="fragment">
+<ol start="2" type="1">
+<li><span style="color:red;">If the residuals do not follow a normal distribution</span>, we have two cases:</li>
+</ol>
+<ul>
+<li>If sample size is large, we still get accurate p-values for the t-tests for the coefficients thanks to the <em>Central Limit Theorem</em>.</li>
+<li>Otherwiese, the t-tests and p-values are unreliable.</li>
+</ul>
+</div>
+</section>
+<section id="section-20" class="slide level2">
+<h2></h2>
+<p><br><br><br></p>
+<ol start="3" type="1">
+<li><p><span style="color:red;">If the residuals do not have constant variance</span>, then the linear model is incorrect and everything falls apart!</p></li>
+<li><p><span style="color:red;">If the residuals are dependent</span>, then the linear model is incorrect and everything falls apart!</p></li>
+</ol>
+<p>There are methods to <em>correct</em> the faulty assumptions, but we will not discus them here.</p>
+</section></section>
+<section id="return-to-main-page" class="title-slide slide level1 center">
+<h1><a href="https://alanrvazquez.github.io/TEC-IN5148/">Return to main page</a></h1>
+
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="IN5148_logo.png" class="slide-logo"></p>
+<div class="footer footer-default">
+<p>Tecnologico de Monterrey</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
