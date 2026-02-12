@@ -35,7 +35,6 @@ Let's import the required libraries into Python together with other relevant lib
 #| echo: true
 #| output: false
 
-# Importing necessary libraries
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt

@@ -36,7 +36,6 @@ Let's import **scikit-learn** into Python together with the other relevant libra
 #| echo: true
 #| output: false
 
-# Importing necessary libraries
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt

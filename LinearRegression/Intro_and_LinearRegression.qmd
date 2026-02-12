@@ -320,6 +320,16 @@ The estimated model thus is
 
 $$\hat{Y}_i = 6.69 + 0.051 X_i.$$
 
+## Interpretation
+
+</br></br>
+
+$$\hat{Y}_i = 6.69 + 0.051 X_i.$$
+
+- The average sales are 6.69 thousands of dollars when the advertising budget for TV is 0 dollars. 
+
+- Increasing the advertising TV by 1 thousand dollars increases the average sales by 0.051 thousands of dollars.  
+
 ## Prediction error
 
 After estimating and validating the linear regression model, we can check the quality of its predictions on [**unobserved**]{style="color:darkred;"} data. That is, on the data in the validation set.
@@ -368,8 +378,6 @@ Y_pred = LRmodel.predict(X_valid)
 ```
 
 ## 
-
-</br>
 
 To evaluate the model, we use the function `mean_squared_error()` from **scikit-learn**. Recall that the responses from the validation dataset are in `Y_valid`, and the model predictions are in `Y_pred`.
 
