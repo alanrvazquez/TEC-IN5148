@@ -1,5 +1,5 @@
 ---
-title: "*K* nearest neighbors"
+title: "*K*-nearest neighbors"
 subtitle: "IN2004B: Generation of Value with Data Analytics"
 author: 
   - name: Alan R. Vazquez
@@ -20,6 +20,8 @@ jupyter: python3
 
 ## Load the libraries
 
+</br>
+
 Before we start, let's import the data science libraries into Python.
 
 ```{python}
@@ -31,7 +33,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier, plot_tree
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay 
@@ -41,8 +42,6 @@ from sklearn.metrics import accuracy_score
 Here, we use specific functions from the **pandas**, **matplotlib**, **seaborn** and **sklearn** libraries in Python.
 
 ## *K*-nearest neighbors (KNN)
-
-</br>
 
 KNN a supervised learning algorithm that uses proximity to make classifications or predictions about the clustering of a single data point.
 
@@ -323,19 +322,7 @@ Using $K = 3$, that's 3 votes for "counterfeit" and 0 for "genuine." So we class
 
 . . .
 
-**Therefore, as a first step, we must transform the predictors so that they have the same units!**
-
-## Standardization
-
-</br>
-
-Standardization refers to *centering* and *scaling* each numerical predictor individually. This places all predictors on the same scale.
-
-In mathematical terms, we standardize a predictor $\mathbf{X}$ as:
-
-$${\color{blue} \tilde{X}_{i}} = \frac{{ X_{i} - \bar{X}}}{ \sqrt{\frac{1}{n -1} \sum_{i=1}^{n} (X_{i} - \bar{X})^2}},$$
-
-with $\bar{X} = \sum_{i=1}^n \frac{x_i}{n}$.
+[**Therefore, as a first step, we must transform the predictors so that they have the same units!**]{style="color:darkred;"}
 
 ## Example
 
@@ -559,4 +546,4 @@ KNN is intuitive and simple and can produce decent predictions. However, KNN has
 <https://aiaspirant.com/curse-of-dimensionality/>
 :::
 
-# [Return to main page](https://alanrvazquez.github.io/TEC-IN2004B/)
+# [Return to main page](https://alanrvazquez.github.io/TEC-5148/)

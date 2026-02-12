@@ -1,0 +1,2204 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alan R. Vazquez">
+
+<title>Classification Trees – IN5148 Statistics and Data Science with Applications in Engineering</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-ff63373b1067ca6f91cf1456aa1f00a2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Classification Trees</li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link active" data-scroll-target="#agenda">Agenda</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#load-the-libraries" id="toc-load-the-libraries" class="nav-link" data-scroll-target="#load-the-libraries">Load the libraries</a></li>
+  <li><a href="#main-data-science-problems" id="toc-main-data-science-problems" class="nav-link" data-scroll-target="#main-data-science-problems">Main data science problems</a></li>
+  <li><a href="#main-data-science-problems-1" id="toc-main-data-science-problems-1" class="nav-link" data-scroll-target="#main-data-science-problems-1">Main data science problems</a></li>
+  <li><a href="#terminology" id="toc-terminology" class="nav-link" data-scroll-target="#terminology">Terminology</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#classification-algorithms" id="toc-classification-algorithms" class="nav-link" data-scroll-target="#classification-algorithms">Classification algorithms</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1">Example 1</a></li>
+  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2"></a></li>
+  <li><a href="#bayes-classifier" id="toc-bayes-classifier" class="nav-link" data-scroll-target="#bayes-classifier">Bayes classifier</a></li>
+  <li><a href="#section-3" id="toc-section-3" class="nav-link" data-scroll-target="#section-3"></a></li>
+  <li><a href="#two-datasets" id="toc-two-datasets" class="nav-link" data-scroll-target="#two-datasets">Two datasets</a></li>
+  <li><a href="#section-4" id="toc-section-4" class="nav-link" data-scroll-target="#section-4"></a></li>
+  <li><a href="#validation-dataset" id="toc-validation-dataset" class="nav-link" data-scroll-target="#validation-dataset">Validation dataset</a></li>
+  <li><a href="#example-2-identifying-counterfeit-banknotes" id="toc-example-2-identifying-counterfeit-banknotes" class="nav-link" data-scroll-target="#example-2-identifying-counterfeit-banknotes">Example 2: Identifying Counterfeit Banknotes</a></li>
+  <li><a href="#dataset" id="toc-dataset" class="nav-link" data-scroll-target="#dataset">Dataset</a></li>
+  <li><a href="#how-do-we-generate-validation-data" id="toc-how-do-we-generate-validation-data" class="nav-link" data-scroll-target="#how-do-we-generate-validation-data">How do we generate validation data?</a></li>
+  <li><a href="#create-the-predictor-matrix" id="toc-create-the-predictor-matrix" class="nav-link" data-scroll-target="#create-the-predictor-matrix">Create the predictor matrix</a></li>
+  <li><a href="#create-the-response-column" id="toc-create-the-response-column" class="nav-link" data-scroll-target="#create-the-response-column">Create the response column</a></li>
+  <li><a href="#set-the-target-category" id="toc-set-the-target-category" class="nav-link" data-scroll-target="#set-the-target-category">Set the target category</a></li>
+  <li><a href="#lets-partition-the-dataset" id="toc-lets-partition-the-dataset" class="nav-link" data-scroll-target="#lets-partition-the-dataset">Let’s partition the dataset</a></li>
+  <li><a href="#section-5" id="toc-section-5" class="nav-link" data-scroll-target="#section-5"></a></li>
+  <li><a href="#section-6" id="toc-section-6" class="nav-link" data-scroll-target="#section-6"></a></li>
+  <li><a href="#work-on-your-training-dataset" id="toc-work-on-your-training-dataset" class="nav-link" data-scroll-target="#work-on-your-training-dataset">Work on your training dataset</a></li>
+  </ul></li>
+  <li><a href="#classification-trees" id="toc-classification-trees" class="nav-link" data-scroll-target="#classification-trees">Classification Trees</a>
+  <ul class="collapse">
+  <li><a href="#decision-tree" id="toc-decision-tree" class="nav-link" data-scroll-target="#decision-tree">Decision tree</a></li>
+  <li><a href="#basic-idea-of-a-decision-tree" id="toc-basic-idea-of-a-decision-tree" class="nav-link" data-scroll-target="#basic-idea-of-a-decision-tree">Basic idea of a decision tree</a></li>
+  <li><a href="#section-7" id="toc-section-7" class="nav-link" data-scroll-target="#section-7"></a></li>
+  <li><a href="#section-8" id="toc-section-8" class="nav-link" data-scroll-target="#section-8"></a></li>
+  <li><a href="#how-do-you-build-a-decision-tree" id="toc-how-do-you-build-a-decision-tree" class="nav-link" data-scroll-target="#how-do-you-build-a-decision-tree">How do you build a decision tree?</a></li>
+  <li><a href="#how-do-we-grow-a-tree" id="toc-how-do-we-grow-a-tree" class="nav-link" data-scroll-target="#how-do-we-grow-a-tree">How do we grow a tree?</a></li>
+  <li><a href="#section-9" id="toc-section-9" class="nav-link" data-scroll-target="#section-9"></a></li>
+  <li><a href="#section-10" id="toc-section-10" class="nav-link" data-scroll-target="#section-10"></a></li>
+  <li><a href="#section-11" id="toc-section-11" class="nav-link" data-scroll-target="#section-11"></a></li>
+  <li><a href="#section-12" id="toc-section-12" class="nav-link" data-scroll-target="#section-12"></a></li>
+  <li><a href="#section-13" id="toc-section-13" class="nav-link" data-scroll-target="#section-13"></a></li>
+  <li><a href="#section-14" id="toc-section-14" class="nav-link" data-scroll-target="#section-14"></a></li>
+  <li><a href="#section-15" id="toc-section-15" class="nav-link" data-scroll-target="#section-15"></a></li>
+  <li><a href="#section-16" id="toc-section-16" class="nav-link" data-scroll-target="#section-16"></a></li>
+  <li><a href="#section-17" id="toc-section-17" class="nav-link" data-scroll-target="#section-17"></a></li>
+  <li><a href="#section-18" id="toc-section-18" class="nav-link" data-scroll-target="#section-18"></a></li>
+  <li><a href="#section-19" id="toc-section-19" class="nav-link" data-scroll-target="#section-19"></a></li>
+  <li><a href="#section-20" id="toc-section-20" class="nav-link" data-scroll-target="#section-20"></a></li>
+  <li><a href="#section-21" id="toc-section-21" class="nav-link" data-scroll-target="#section-21"></a></li>
+  <li><a href="#what-is-impurity" id="toc-what-is-impurity" class="nav-link" data-scroll-target="#what-is-impurity">What is impurity?</a></li>
+  <li><a href="#how-do-we-measure-impurity" id="toc-how-do-we-measure-impurity" class="nav-link" data-scroll-target="#how-do-we-measure-impurity">How do we measure impurity?</a></li>
+  <li><a href="#pruning-the-tree" id="toc-pruning-the-tree" class="nav-link" data-scroll-target="#pruning-the-tree">Pruning the tree</a></li>
+  <li><a href="#section-22" id="toc-section-22" class="nav-link" data-scroll-target="#section-22"></a></li>
+  <li><a href="#section-23" id="toc-section-23" class="nav-link" data-scroll-target="#section-23"></a></li>
+  <li><a href="#section-24" id="toc-section-24" class="nav-link" data-scroll-target="#section-24"></a></li>
+  <li><a href="#in-python" id="toc-in-python" class="nav-link" data-scroll-target="#in-python">In Python</a></li>
+  <li><a href="#plotting-the-tree" id="toc-plotting-the-tree" class="nav-link" data-scroll-target="#plotting-the-tree">Plotting the tree</a></li>
+  <li><a href="#section-25" id="toc-section-25" class="nav-link" data-scroll-target="#section-25"></a></li>
+  <li><a href="#implementation-details" id="toc-implementation-details" class="nav-link" data-scroll-target="#implementation-details">Implementation details</a></li>
+  <li><a href="#apply-penalty-for-large-trees" id="toc-apply-penalty-for-large-trees" class="nav-link" data-scroll-target="#apply-penalty-for-large-trees">Apply penalty for large trees</a></li>
+  <li><a href="#section-26" id="toc-section-26" class="nav-link" data-scroll-target="#section-26"></a></li>
+  </ul></li>
+  <li><a href="#classification-metrics" id="toc-classification-metrics" class="nav-link" data-scroll-target="#classification-metrics">Classification Metrics</a>
+  <ul class="collapse">
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">Evaluation</a></li>
+  <li><a href="#section-27" id="toc-section-27" class="nav-link" data-scroll-target="#section-27"></a></li>
+  <li><a href="#section-28" id="toc-section-28" class="nav-link" data-scroll-target="#section-28"></a></li>
+  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix">Confusion matrix</a></li>
+  <li><a href="#in-python-1" id="toc-in-python-1" class="nav-link" data-scroll-target="#in-python-1">In Python</a></li>
+  <li><a href="#section-29" id="toc-section-29" class="nav-link" data-scroll-target="#section-29"></a></li>
+  <li><a href="#accuracy" id="toc-accuracy" class="nav-link" data-scroll-target="#accuracy">Accuracy</a></li>
+  <li><a href="#lets-get-back-to-the-penalized-trees" id="toc-lets-get-back-to-the-penalized-trees" class="nav-link" data-scroll-target="#lets-get-back-to-the-penalized-trees">Let’s get back to the penalized trees</a></li>
+  <li><a href="#section-30" id="toc-section-30" class="nav-link" data-scroll-target="#section-30"></a></li>
+  <li><a href="#choosing-the-best-tree" id="toc-choosing-the-best-tree" class="nav-link" data-scroll-target="#choosing-the-best-tree">Choosing the best tree</a></li>
+  <li><a href="#section-31" id="toc-section-31" class="nav-link" data-scroll-target="#section-31"></a></li>
+  <li><a href="#evaluation-1" id="toc-evaluation-1" class="nav-link" data-scroll-target="#evaluation-1">Evaluation</a></li>
+  <li><a href="#comments" id="toc-comments" class="nav-link" data-scroll-target="#comments">Comments</a></li>
+  <li><a href="#an-example" id="toc-an-example" class="nav-link" data-scroll-target="#an-example">An example</a></li>
+  <li><a href="#section-32" id="toc-section-32" class="nav-link" data-scroll-target="#section-32"></a></li>
+  <li><a href="#another-example" id="toc-another-example" class="nav-link" data-scroll-target="#another-example">Another example</a></li>
+  <li><a href="#classification-specific-metrics" id="toc-classification-specific-metrics" class="nav-link" data-scroll-target="#classification-specific-metrics">Classification-specific metrics</a></li>
+  <li><a href="#section-33" id="toc-section-33" class="nav-link" data-scroll-target="#section-33"></a></li>
+  <li><a href="#section-34" id="toc-section-34" class="nav-link" data-scroll-target="#section-34"></a></li>
+  <li><a href="#section-35" id="toc-section-35" class="nav-link" data-scroll-target="#section-35"></a></li>
+  <li><a href="#section-36" id="toc-section-36" class="nav-link" data-scroll-target="#section-36"></a></li>
+  <li><a href="#section-37" id="toc-section-37" class="nav-link" data-scroll-target="#section-37"></a></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
+  <li><a href="#activity-2.1-classification-and-metrics-solo-mode" id="toc-activity-2.1-classification-and-metrics-solo-mode" class="nav-link" data-scroll-target="#activity-2.1-classification-and-metrics-solo-mode">Activity 2.1: Classification and Metrics (solo mode)</a></li>
+  <li><a href="#disadvantages-of-decision-trees" id="toc-disadvantages-of-decision-trees" class="nav-link" data-scroll-target="#disadvantages-of-decision-trees">Disadvantages of decision trees</a></li>
+  </ul></li>
+  <li><a href="#return-to-main-page" id="toc-return-to-main-page" class="nav-link" data-scroll-target="#return-to-main-page">Return to main page</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="Classification.slides.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Classification Trees</h1>
+<p class="subtitle lead">IN5148: Statistics and Data Science with Applications in Engineering</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Alan R. Vazquez </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Department of Industrial Engineering
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="agenda" class="level3">
+<h3 class="anchored" data-anchor-id="agenda">Agenda</h3>
+<p><br></p>
+<ol type="1">
+<li>Introduction</li>
+<li>Classification Trees</li>
+<li>Classification Algorithm Metrics</li>
+</ol>
+</section>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<section id="load-the-libraries" class="level3">
+<h3 class="anchored" data-anchor-id="load-the-libraries">Load the libraries</h3>
+<p>Before we start, let’s import the data science libraries into Python.</p>
+<div id="567f7683" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importing necessary libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier, plot_tree</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, ConfusionMatrixDisplay </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score, recall_score, precision_score</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Here, we use specific functions from the <strong>pandas</strong>, <strong>matplotlib</strong>, <strong>seaborn</strong> and <strong>sklearn</strong> libraries in Python.</p>
+</section>
+<section id="main-data-science-problems" class="level3">
+<h3 class="anchored" data-anchor-id="main-data-science-problems">Main data science problems</h3>
+<p><br></p>
+<p><span style="color:green;"><strong>Regression Problems</strong></span>. The response is numerical. For example, a person’s income, the value of a house, or a patient’s blood pressure.</p>
+<p><span style="color:blue;"><strong>Classification Problems</strong></span>. The response is categorical and involves <em>K</em> different categories. For example, the brand of a product purchased (A, B, C) or whether a person defaults on a debt (yes or no).</p>
+<p>The predictors (<span class="math inline">\(\boldsymbol{X}\)</span>) can be <em>numerical</em> or <em>categorical</em>.</p>
+</section>
+<section id="main-data-science-problems-1" class="level3">
+<h3 class="anchored" data-anchor-id="main-data-science-problems-1">Main data science problems</h3>
+<p><br></p>
+<p><span style="color:gray;"><strong>Regression Problems</strong>. The response is numerical. For example, a person’s income, the value of a house, or a patient’s blood pressure.</span></p>
+<p><span style="color:blue;"><strong>Classification Problems</strong></span>. The response is categorical and involves <em>K</em> different categories. For example, the brand of a product purchased (A, B, C) or whether a person defaults on a debt (yes or no).</p>
+<p>The predictors (<span class="math inline">\(\boldsymbol{X}\)</span>) can be <em>numerical</em> or <em>categorical</em>.</p>
+</section>
+<section id="terminology" class="level3">
+<h3 class="anchored" data-anchor-id="terminology">Terminology</h3>
+<p><br><br></p>
+<p>Explanatory variables or predictors:</p>
+<ul>
+<li><span class="math inline">\(X\)</span> represents an explanatory variable or predictor.</li>
+<li><span class="math inline">\(\boldsymbol{X} = (X_1, X_2, \ldots, X_p)\)</span> represents a collection of <span class="math inline">\(p\)</span> predictors.</li>
+</ul>
+</section>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
+<p><br></p>
+<p><span style="text-decoration: underline;">Response</span>:</p>
+<div class="incremental">
+<ul class="incremental">
+<li><p><span class="math inline">\(Y\)</span> is a <span style="color:darkgreen;"><strong>categorical variable</strong></span> that takes <span style="color:darkgreen;"><strong>2 categories</strong></span> or <span style="color:darkgreen;"><strong>classes</strong></span>.</p></li>
+<li><p>For example, <span class="math inline">\(Y\)</span> can take <span style="color:darkgreen;">0</span> or <span style="color:darkgreen;">1</span>, <span style="color:darkgreen;">A</span> or <span style="color:darkgreen;">B</span>, <span style="color:darkgreen;">no</span> or <span style="color:darkgreen;">yes</span>, <span style="color:darkgreen;">spam</span> or <span style="color:darkgreen;">no spam</span>.</p></li>
+<li><p>When classes are strings, they are usually encoded as 0 and 1.</p>
+<ul class="incremental">
+<li>The <strong>target class</strong> is the one for which <span class="math inline">\(Y = 1\)</span>.</li>
+<li>The <strong>reference class</strong> is the one for which <span class="math inline">\(Y = 0\)</span>.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="classification-algorithms" class="level3">
+<h3 class="anchored" data-anchor-id="classification-algorithms">Classification algorithms</h3>
+<p><br></p>
+<p>Classification algorithms use predictor values <span style="color:blue;">to predict the class</span> of the response (target or reference).</p>
+<p><br></p>
+<p>That is, for an unseen record, they use predictor values to predict whether the record belongs to the target class or not.</p>
+<p><br></p>
+<p>Technically, <span style="color:purple;"><strong>they predict the probability</strong></span> that the record belongs to the target class.</p>
+</section>
+<section id="section-1" class="level3">
+<h3 class="anchored" data-anchor-id="section-1"></h3>
+<p><br><br></p>
+<p><span style="color:darkgreen;"><strong>Goal</strong></span>: Develop a function <span class="math inline">\(C(\boldsymbol{X})\)</span> for predicting <span class="math inline">\(Y = \{0, 1\}\)</span> from <span class="math inline">\(\boldsymbol{X}\)</span>.</p>
+<p><br></p>
+<p>. . .</p>
+<p>To achieve this goal, most algorithms consider functions <span class="math inline">\(C(\boldsymbol{X})\)</span> that <span style="color:brown;"><strong>predict the probability</strong></span> that <span class="math inline">\(Y\)</span> takes the value of 1.</p>
+<p><br></p>
+<p>. . .</p>
+<p>A probability for each class can be very useful for gauging the model’s confidence about the predicted classification.</p>
+</section>
+<section id="example-1" class="level3">
+<h3 class="anchored" data-anchor-id="example-1">Example 1</h3>
+<p>Consider a spam filter where <span class="math inline">\(Y\)</span> is the email type.</p>
+<ul>
+<li>The target class is spam. In this case, <span class="math inline">\(Y=1\)</span>.</li>
+<li>The reference class is not spam. In this case, <span class="math inline">\(Y=0\)</span>.</li>
+</ul>
+<p>. . .</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/spam.png" class="quarto-figure quarto-figure-center figure-img" width="556" height="178"></p>
+</figure>
+</div>
+<p>. . .</p>
+<p>Both emails would be classified as spam. However, we would have greater confidence in our classification for the second email.</p>
+</section>
+<section id="section-2" class="level3">
+<h3 class="anchored" data-anchor-id="section-2"></h3>
+<p><br></p>
+<p>Technically, <span class="math inline">\(C(\boldsymbol{X})\)</span> works with the <em>conditional probability</em>:</p>
+<p><span class="math display">\[P(Y = 1 | X_1 = x_1, X_2 = x_2, \ldots, X_p = x_p) = P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})\]</span></p>
+<p>In words, this is the probability that <span class="math inline">\(Y\)</span> takes a value of 1 <span style="color:brown;"><strong>given that</strong></span> the predictors <span class="math inline">\(\boldsymbol{X}\)</span> have taken the values <span class="math inline">\(\boldsymbol{x} = (x_1, x_2, \ldots, x_p)\)</span>.</p>
+<p><br></p>
+<p>. . .</p>
+<p>The conditional probability that <span class="math inline">\(Y\)</span> takes the value of 0 is</p>
+<p><span class="math display">\[P(Y = 0 | \boldsymbol{X} = \boldsymbol{x}) = 1 - P(Y = 1 | \boldsymbol{X} = \boldsymbol{x}).\]</span></p>
+</section>
+<section id="bayes-classifier" class="level3">
+<h3 class="anchored" data-anchor-id="bayes-classifier">Bayes classifier</h3>
+<p><br></p>
+<p>It turns out that, if we know the true structure of <span class="math inline">\(P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})\)</span>, we can build a good classification function called the <span style="color:darkblue;"><strong>Bayes classifier</strong></span>:</p>
+<p><span class="math display">\[C(\boldsymbol{X}) =
+    \begin{cases}
+      1, &amp; \text{if}\ P(Y = 1 | \boldsymbol{X} = \boldsymbol{x}) &gt; 0.5 \\
+      0, &amp; \text{if}\ P(Y = 1 | \boldsymbol{X} = \boldsymbol{x}) \leq 0.5
+    \end{cases}.\]</span></p>
+<p>This function classifies to the most probable class using the conditional distribution <span class="math inline">\(P(Y | \boldsymbol{X} = \boldsymbol{x})\)</span>.</p>
+</section>
+<section id="section-3" class="level3">
+<h3 class="anchored" data-anchor-id="section-3"></h3>
+<p><br></p>
+<p><span style="color:red;">HOWEVER, we don’t (and will never) know the true form of <span class="math inline">\(P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})\)</span>!</span></p>
+<p><br></p>
+<p>. . .</p>
+<p>To overcome this issue, we several standard solutions:</p>
+<div class="incremental">
+<ul class="incremental">
+<li><span style="color:brown;"><strong>Logistic Regression</strong></span>: Impose an structure on <span class="math inline">\(P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})\)</span>. This was covered in IN1002B.</li>
+<li><span style="color:darkblue;"><strong>Classification Trees</strong></span>: Estimate <span class="math inline">\(P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})\)</span> directly. What we will cover today.</li>
+<li><span style="color:orange;"><strong>Ensemble methods</strong></span> and <span style="color:darkgreen;"><strong><em>K</em>-Nearest Neighbours</strong></span>: Estimate <span class="math inline">\(P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})\)</span> directly. (If time permits).</li>
+</ul>
+</div>
+</section>
+<section id="two-datasets" class="level3">
+<h3 class="anchored" data-anchor-id="two-datasets">Two datasets</h3>
+<p><br><br></p>
+<p>The application of data science algorithms needs two data sets:</p>
+<div class="incremental">
+<ul class="incremental">
+<li><p><span style="color:blue;"><strong>Training data</strong></span> is data that we use to train or construct the estimated function <span class="math inline">\(\hat{f}(\boldsymbol{X})\)</span>.</p></li>
+<li><p><span style="color:green;"><strong>Test data</strong></span> is data that we use to evaluate the predictive performance of <span class="math inline">\(\hat{f}(\boldsymbol{X})\)</span> only.</p></li>
+</ul>
+</div>
+</section>
+<section id="section-4" class="level3">
+<h3 class="anchored" data-anchor-id="section-4"></h3>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><img src="images/training.png" class="img-fluid" width="256"></p>
+</div><div class="column" style="width:70%;">
+<p><br></p>
+<p>A random sample of <span class="math inline">\(n\)</span> observations.</p>
+<p>Use it to <strong>construct</strong> <span class="math inline">\(\hat{f}(\boldsymbol{X})\)</span>.</p>
+</div>
+</div>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><img src="images/test.png" class="img-fluid" width="262"></p>
+</div><div class="column" style="width:70%;">
+<p>Another random sample of <span class="math inline">\(n_t\)</span> observations, which is independent of the training data.</p>
+<p>Use it to <strong>evaluate</strong> <span class="math inline">\(\hat{f}(\boldsymbol{X})\)</span>.</p>
+</div>
+</div>
+</section>
+<section id="validation-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="validation-dataset">Validation dataset</h3>
+<p>In many practical situations, a test dataset is not available. To overcome this issue, we use a <span style="color:orange;"><strong>validation dataset</strong></span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/validation.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="645"></p>
+</figure>
+</div>
+<p>. . .</p>
+<p><strong>Idea</strong>: Apply model to your <span style="color:orange;"><strong>validation dataset</strong></span> to mimic what will happen when you apply it to test dataset.</p>
+</section>
+<section id="example-2-identifying-counterfeit-banknotes" class="level3">
+<h3 class="anchored" data-anchor-id="example-2-identifying-counterfeit-banknotes">Example 2: Identifying Counterfeit Banknotes</h3>
+<p><br></p>
+<p><img src="images/clipboard-270396609.png" class="img-fluid"></p>
+</section>
+<section id="dataset" class="level3">
+<h3 class="anchored" data-anchor-id="dataset">Dataset</h3>
+<p>The data is located in the file “banknotes.xlsx”.</p>
+<div id="e21c9f22" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bank_data <span class="op">=</span> pd.read_excel(<span class="st">"banknotes.xlsx"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Set response variable as categorical.</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>bank_data[<span class="st">'Status'</span>] <span class="op">=</span> pd.Categorical(bank_data[<span class="st">'Status'</span>])</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>bank_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Status</th>
+<th data-quarto-table-cell-role="th">Left</th>
+<th data-quarto-table-cell-role="th">Right</th>
+<th data-quarto-table-cell-role="th">Bottom</th>
+<th data-quarto-table-cell-role="th">Top</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>genuine</td>
+<td>131.0</td>
+<td>131.1</td>
+<td>9.0</td>
+<td>9.7</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>genuine</td>
+<td>129.7</td>
+<td>129.7</td>
+<td>8.1</td>
+<td>9.5</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>genuine</td>
+<td>129.7</td>
+<td>129.7</td>
+<td>8.7</td>
+<td>9.6</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>genuine</td>
+<td>129.7</td>
+<td>129.6</td>
+<td>7.5</td>
+<td>10.4</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>genuine</td>
+<td>129.6</td>
+<td>129.7</td>
+<td>10.4</td>
+<td>7.7</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="how-do-we-generate-validation-data" class="level3">
+<h3 class="anchored" data-anchor-id="how-do-we-generate-validation-data">How do we generate validation data?</h3>
+<p>We split the current dataset into a training and a validation dataset. To this end, we use the function <code>train_test_split()</code> from <strong>scikit-learn</strong>.</p>
+<p><br></p>
+<p>The function has three main inputs:</p>
+<ul>
+<li>A pandas dataframe with the predictor columns only.</li>
+<li>A pandas dataframe with the response column only.</li>
+<li>The parameter <code>test_size</code> which sets the portion of the dataset that will go to the validation set.</li>
+</ul>
+</section>
+<section id="create-the-predictor-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="create-the-predictor-matrix">Create the predictor matrix</h3>
+<p>We use the function <code>.drop()</code> from <strong>pandas</strong>. This function drops one or more columns from a data frame. Let’s drop the response column <code>Status</code> and store the result in <code>X_full</code>.</p>
+<div id="a5f264e2" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set full matrix of predictors.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X_full <span class="op">=</span> bank_data.drop(columns <span class="op">=</span> [<span class="st">'Status'</span>]) </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>X_full.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Left</th>
+<th data-quarto-table-cell-role="th">Right</th>
+<th data-quarto-table-cell-role="th">Bottom</th>
+<th data-quarto-table-cell-role="th">Top</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>131.0</td>
+<td>131.1</td>
+<td>9.0</td>
+<td>9.7</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>129.7</td>
+<td>129.7</td>
+<td>8.1</td>
+<td>9.5</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>129.7</td>
+<td>129.7</td>
+<td>8.7</td>
+<td>9.6</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>129.7</td>
+<td>129.6</td>
+<td>7.5</td>
+<td>10.4</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="create-the-response-column" class="level3">
+<h3 class="anchored" data-anchor-id="create-the-response-column">Create the response column</h3>
+<p>We use the function <code>.filter()</code> from <strong>pandas</strong> to extract the column <code>Status</code> from the data frame. We store the result in <code>Y_full</code>.</p>
+<div id="40617c2b" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set full matrix of responses.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Y_full <span class="op">=</span> bank_data.<span class="bu">filter</span>([<span class="st">'Status'</span>])</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Y_full.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>genuine</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>genuine</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>genuine</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>genuine</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="set-the-target-category" class="level3">
+<h3 class="anchored" data-anchor-id="set-the-target-category">Set the target category</h3>
+<p>To set the target category in the response we use the <code>get_dummies()</code> function.</p>
+<div id="a1d98a21" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create dummy variables.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Y_dummies <span class="op">=</span> pd.get_dummies(Y_full, dtype <span class="op">=</span> <span class="st">'int'</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Select target variable.</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>Y_target_full <span class="op">=</span> Y_dummies[<span class="st">'Status_counterfeit'</span>]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Show target variable.</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>Y_target_full.head() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>0    0
+1    0
+2    0
+3    0
+4    0
+Name: Status_counterfeit, dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="lets-partition-the-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="lets-partition-the-dataset">Let’s partition the dataset</h3>
+<p><br></p>
+<div id="c52715df" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the dataset into training and validation.</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>X_train, X_valid, Y_train, Y_valid <span class="op">=</span> train_test_split(X_full, Y_target_full, </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                                                      test_size <span class="op">=</span> <span class="fl">0.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li><p>The function makes a clever partition of the data using the <em>empirical</em> distribution of the response.</p></li>
+<li><p>Technically, it splits the data so that the distribution of the response under the training and validation sets is similar.</p></li>
+<li><p>Usually, the proportion of the dataset that goes to the validation set is 20% or 30%.</p></li>
+</ul>
+</section>
+<section id="section-5" class="level3">
+<h3 class="anchored" data-anchor-id="section-5"></h3>
+<p>The predictors and response in the training dataset are in the objects <code>X_train</code> and <code>Y_train</code>, respectively. We compile these objects into a single dataset using the function <code>.concat()</code> from <strong>pandas</strong>. The argument <code>axis = 1</code> tells <code>.concat()</code> to concatenate the datasets by their rows.</p>
+<div id="7f44ea4e" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>training_dataset <span class="op">=</span> pd.concat([X_train, Y_train], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>training_dataset.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Left</th>
+<th data-quarto-table-cell-role="th">Right</th>
+<th data-quarto-table-cell-role="th">Bottom</th>
+<th data-quarto-table-cell-role="th">Top</th>
+<th data-quarto-table-cell-role="th">Status_counterfeit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">86</th>
+<td>129.9</td>
+<td>129.7</td>
+<td>8.7</td>
+<td>9.5</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">138</th>
+<td>130.4</td>
+<td>130.4</td>
+<td>11.3</td>
+<td>10.8</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">108</th>
+<td>130.2</td>
+<td>129.9</td>
+<td>10.0</td>
+<td>11.9</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">94</th>
+<td>129.6</td>
+<td>129.5</td>
+<td>8.3</td>
+<td>10.0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-6" class="level3">
+<h3 class="anchored" data-anchor-id="section-6"></h3>
+<p>Equivalently, the predictors and response in the validation dataset are in the objects <code>X_valid</code> and <code>Y_valid</code>, respectively.</p>
+<div id="b24deaef" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>validation_dataset <span class="op">=</span> pd.concat([X_valid, Y_valid], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>validation_dataset.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Left</th>
+<th data-quarto-table-cell-role="th">Right</th>
+<th data-quarto-table-cell-role="th">Bottom</th>
+<th data-quarto-table-cell-role="th">Top</th>
+<th data-quarto-table-cell-role="th">Status_counterfeit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">153</th>
+<td>130.1</td>
+<td>130.1</td>
+<td>12.1</td>
+<td>10.3</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">36</th>
+<td>130.3</td>
+<td>130.0</td>
+<td>8.4</td>
+<td>9.7</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">59</th>
+<td>130.0</td>
+<td>129.8</td>
+<td>8.2</td>
+<td>10.3</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">10</th>
+<td>130.4</td>
+<td>130.3</td>
+<td>7.9</td>
+<td>11.7</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">136</th>
+<td>129.8</td>
+<td>130.2</td>
+<td>10.7</td>
+<td>11.1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="work-on-your-training-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="work-on-your-training-dataset">Work on your training dataset</h3>
+<p>After we have partitioned the data, we <strong>work on the</strong> <span style="color:blue;"><strong>training data</strong></span> to develop our predictive pipeline.</p>
+<p>The pipeline has two main steps:</p>
+<ol type="1">
+<li>Data preprocessing.</li>
+<li>Model development.</li>
+</ol>
+<p>We will now discuss preprocessing techniques applied to the predictor columns in the training dataset.</p>
+<p>Note that all preprocessing techniques will also be applied to the <span style="color:orange;"><strong>validation</strong></span> and <span style="color:green;"><strong>test</strong></span> datasets to prepare it for your model!</p>
+</section>
+</section>
+<section id="classification-trees" class="level2">
+<h2 class="anchored" data-anchor-id="classification-trees">Classification Trees</h2>
+<section id="decision-tree" class="level3">
+<h3 class="anchored" data-anchor-id="decision-tree">Decision tree</h3>
+<p>It is a supervised learning algorithm that predicts or classifies observations using a hierarchical tree structure.</p>
+<p><br></p>
+<p>Main characteristics:</p>
+<ul>
+<li><p>Simple and useful for interpretation.</p></li>
+<li><p>Can handle numerical and categorical predictors and responses.</p></li>
+<li><p>Computationally efficient.</p></li>
+<li><p>Nonparametric technique.</p></li>
+</ul>
+</section>
+<section id="basic-idea-of-a-decision-tree" class="level3">
+<h3 class="anchored" data-anchor-id="basic-idea-of-a-decision-tree">Basic idea of a decision tree</h3>
+<p>Stratify or segment the prediction space into several simpler regions.</p>
+<div id="5e938c23" class="cell" data-execution_count="9">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-10-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="877" height="493"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="section-7" class="level3">
+<h3 class="anchored" data-anchor-id="section-7"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="f37bc6ac" class="cell" data-execution_count="10">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-11-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tree_plot.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="section-8" class="level3">
+<h3 class="anchored" data-anchor-id="section-8"></h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tree_scheme.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="how-do-you-build-a-decision-tree" class="level3">
+<h3 class="anchored" data-anchor-id="how-do-you-build-a-decision-tree">How do you build a decision tree?</h3>
+<p><br><br></p>
+<p>Building decision trees involves two main procedures:</p>
+<ol type="1">
+<li><p><span style="color:darkblue;">Grow a large tree.</span></p></li>
+<li><p><span style="color:darkblue;">Prune the tree to prevent overfitting.</span></p></li>
+</ol>
+<p>After building a “good” tree, we can predict new observations that are not in the data set we used to build it.</p>
+</section>
+<section id="how-do-we-grow-a-tree" class="level3">
+<h3 class="anchored" data-anchor-id="how-do-we-grow-a-tree">How do we grow a tree?</h3>
+<p><br></p>
+<p>. . .</p>
+<p><strong>Using the CART algorithm!</strong></p>
+<div class="incremental">
+<ul class="incremental">
+<li><p>The algorithm uses a recursive binary splitting strategy that builds the tree using a greedy top-down approach.</p></li>
+<li><p>Basically, at a given node, it considers all variables and all possible splits of that variable. Then, for classification, it chooses the best variable and splits it that <strong>minimizes</strong> the so-called <span style="color:purple;"><strong><em>impurity</em></strong></span>.</p></li>
+</ul>
+</div>
+</section>
+<section id="section-9" class="level3">
+<h3 class="anchored" data-anchor-id="section-9"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="8fa81c9b" class="cell" data-execution_count="11">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-12-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-10" class="level3">
+<h3 class="anchored" data-anchor-id="section-10"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="362d19e2" class="cell" data-execution_count="12">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-13-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-11" class="level3">
+<h3 class="anchored" data-anchor-id="section-11"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="8c9757fb" class="cell" data-execution_count="13">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-14-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-12" class="level3">
+<h3 class="anchored" data-anchor-id="section-12"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="74bf5b03" class="cell" data-execution_count="14">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-15-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-13" class="level3">
+<h3 class="anchored" data-anchor-id="section-13"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="18df9e5b" class="cell" data-execution_count="15">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-16-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+
+</div>
+</div>
+</div>
+</section>
+<section id="section-14" class="level3">
+<h3 class="anchored" data-anchor-id="section-14"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="5a92389f" class="cell" data-execution_count="16">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-17-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tree_sequence_1.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="section-15" class="level3">
+<h3 class="anchored" data-anchor-id="section-15"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="b6d217ff" class="cell" data-execution_count="17">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-18-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tree_sequence_2.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="section-16" class="level3">
+<h3 class="anchored" data-anchor-id="section-16"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="52c1be2a" class="cell" data-execution_count="18">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-19-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tree_sequence_2.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="section-17" class="level3">
+<h3 class="anchored" data-anchor-id="section-17"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="524ffc89" class="cell" data-execution_count="19">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-20-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tree_sequence_2.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="section-18" class="level3">
+<h3 class="anchored" data-anchor-id="section-18"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="c310db98" class="cell" data-execution_count="20">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-21-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tree_sequence_2.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="section-19" class="level3">
+<h3 class="anchored" data-anchor-id="section-19"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="29a22355" class="cell" data-execution_count="21">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-22-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tree_sequence_4.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="section-20" class="level3">
+<h3 class="anchored" data-anchor-id="section-20"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="9df89d9a" class="cell" data-execution_count="22">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-23-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tree_sequence_6.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="section-21" class="level3">
+<h3 class="anchored" data-anchor-id="section-21"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:40%;">
+<p>We repeat the partitioning process until the terminal nodes have no less than, say, 5 observations.</p>
+</div><div class="column" style="width:60%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/full_tree.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="what-is-impurity" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-impurity">What is impurity?</h3>
+<p>Node impurity refers to the homogeneity of the response classes at that node.</p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Impurity1.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Impurity2.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p><span style="color:darkgray;"><em>The CART algorithm minimizes impurity between tree nodes.</em></span></p>
+</section>
+<section id="how-do-we-measure-impurity" class="level3">
+<h3 class="anchored" data-anchor-id="how-do-we-measure-impurity">How do we measure impurity?</h3>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:40%;">
+<p>There are three different metrics for impurity:</p>
+<ul>
+<li><p>Risk of misclassification.</p></li>
+<li><p>Cross entropy.</p></li>
+<li><p>Gini impurity index.</p></li>
+</ul>
+</div><div class="column" style="width:60%;">
+<p><img src="images/Metrics1.png" class="img-fluid quarto-figure quarto-figure-center" width="469"> <img src="images/Metrics2.png" class="img-fluid quarto-figure quarto-figure-center" width="396"></p>
+<div style="font-size: 50%;">
+<p>Proportion of elements in a class</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="pruning-the-tree" class="level3">
+<h3 class="anchored" data-anchor-id="pruning-the-tree">Pruning the tree</h3>
+<p>To avoid overfitting, we pruned some of the tree’s branches. More specifically, we collapsed two internal (non-terminal) nodes.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-1949573140.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="section-22" class="level3">
+<h3 class="anchored" data-anchor-id="section-22"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="b3428bc5" class="cell" data-execution_count="23">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-24-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tree_plot.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="section-23" class="level3">
+<h3 class="anchored" data-anchor-id="section-23"></h3>
+<p><br></p>
+<div class="center">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div id="431efa9a" class="cell" data-execution_count="24">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-25-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="560" height="560"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tree_plot_simple.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="section-24" class="level3">
+<h3 class="anchored" data-anchor-id="section-24"></h3>
+<p><br><br><br></p>
+<p>To prune a tree, we use an advanced algorithm to measure the contribution of the tree’s branches.</p>
+<p>The algorithm has a tuning parameter called <span class="math inline">\(\alpha\)</span>, which <strong>places greater weight on the number of tree nodes</strong> (or size):</p>
+<ul>
+<li><p>Large values of <span class="math inline">\(\alpha\)</span> result in small trees with few nodes.</p></li>
+<li><p>Small values of <span class="math inline">\(\alpha\)</span> result in large trees with many nodes.</p></li>
+</ul>
+</section>
+<section id="in-python" class="level3">
+<h3 class="anchored" data-anchor-id="in-python">In Python</h3>
+<p><br></p>
+<p>In Python, we can use the <code>DecisionTreeClassifier()</code> and <code>fit()</code> functions from <strong>scikit-learn</strong> to train a decision tree.</p>
+<div id="4712281a" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We tell Python we want a classification tree</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span><span class="dv">5</span>, random_state<span class="op">=</span><span class="dv">507134</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># We train the classification tree using the training data.</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>clf.fit(X_train, Y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The parameters <code>max_depth</code> of <code>DecisionTreeClassifier()</code> controls the depth of the tree. The parameter <code>random_state</code> allows you to reproduce the same tree in different runs of the Python code.</p>
+</section>
+<section id="plotting-the-tree" class="level3">
+<h3 class="anchored" data-anchor-id="plotting-the-tree">Plotting the tree</h3>
+<p><br></p>
+<p>To see the decision tree, we use the <code>plot_tree</code> function from <strong>scikit-learn</strong> and some commands from <strong>matplotlib</strong>. Specifically, we use the <code>plt.figure()</code> functions to define the size of the figure and <code>plt.show()</code> to display the figure.</p>
+<div id="4ea03dc1" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plot_tree(clf, filled<span class="op">=</span><span class="va">True</span>, rounded<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-25" class="level3">
+<h3 class="anchored" data-anchor-id="section-25"></h3>
+<p><br></p>
+<div id="ad04fe0d" class="cell" data-execution_count="27">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-28-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="614" height="463"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="implementation-details" class="level3">
+<h3 class="anchored" data-anchor-id="implementation-details">Implementation details</h3>
+<ul>
+<li><p>Categorical predictors with unordered levels <span class="math inline">\(\{A, B, C\}\)</span>. We order the levels in a specific way (works for binary and regression problems).</p></li>
+<li><p>Predictors with missing values. For quantitative predictors, we use multiple imputation. For categorical predictors, we create a new “NA” level.</p></li>
+<li><p>Tertiary or quartary splits. There is not much improvement.</p></li>
+<li><p>Diagonal splits (using a linear combination for partitioning). These can lead to improvement, but they impair interpretability.</p></li>
+</ul>
+</section>
+<section id="apply-penalty-for-large-trees" class="level3">
+<h3 class="anchored" data-anchor-id="apply-penalty-for-large-trees">Apply penalty for large trees</h3>
+<p>Now, let’s illustrate the pruning technique to find a small decision tree that performs well. To do this, we will train several decision trees using different values of the <span class="math inline">\(\alpha\)</span> parameter, which weighs the contribution of the tree branches.</p>
+<p><br></p>
+<p>In Python, this is achieved using the <code>cost_complexity_pruning_path()</code> function with the following syntax.</p>
+<div id="970df9f6" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> clf.cost_complexity_pruning_path(X_train, Y_train)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ccp_alphas, impurities <span class="op">=</span> path.ccp_alphas, path.impurities</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-26" class="level3">
+<h3 class="anchored" data-anchor-id="section-26"></h3>
+<p>The <code>ccp_alphas</code> and <code>impurities</code> objects contain the different values of the <span class="math inline">\(\alpha\)</span> parameter used, as well as the impurity performance of the generated trees.</p>
+<p>To train a decision tree using different alpha values, we use the following code that iterates over the values contained in <code>ccp_alphas</code>.</p>
+<div id="64c10c20" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>clfs <span class="op">=</span> []</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ccp_alpha <span class="kw">in</span> ccp_alphas:</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    clf <span class="op">=</span> DecisionTreeClassifier(random_state<span class="op">=</span><span class="dv">507134</span>, ccp_alpha<span class="op">=</span>ccp_alpha)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    clf.fit(X_train, Y_train)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    clfs.append(clf)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>In the next section, we will evaluate the performance of these decision trees.</p>
+</section>
+</section>
+<section id="classification-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="classification-metrics">Classification Metrics</h2>
+<section id="evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="evaluation">Evaluation</h3>
+<p><br></p>
+<p>We evaluate a classification tree by classifying observations that were not used for training.</p>
+<p>That is, we use the classifier to predict categories in the validation data set using only the predictor values from this set.</p>
+<p>In Python, we use the commands:</p>
+<div id="58501bed" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict classes.</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>predicted_class <span class="op">=</span> clf.predict(X_valid)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-27" class="level3">
+<h3 class="anchored" data-anchor-id="section-27"></h3>
+<p><br></p>
+<p>The <code>predict()</code> function generates actual classes to which each observation was assigned.</p>
+<div id="49852a03" class="cell" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>predicted_class</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<pre><code>array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])</code></pre>
+</div>
+</div>
+</section>
+<section id="section-28" class="level3">
+<h3 class="anchored" data-anchor-id="section-28"></h3>
+<p>The <code>predict_proba()</code> function generates the probabilities used by the algorithm to assign the classes.</p>
+<div id="c8fdc850" class="cell" data-execution_count="32">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict probabilities.</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>predicted_probability <span class="op">=</span> clf.predict_proba(X_valid)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>predicted_probability</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<pre><code>array([[0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857],
+       [0.52857143, 0.47142857]])</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="confusion-matrix">Confusion matrix</h3>
+<ul>
+<li><p>Table to evaluate the performance of a classifier.</p></li>
+<li><p>Compares actual values with the predicted values of a classifier.</p></li>
+<li><p>Useful for binary and multiclass classification problems.</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/confusion_matrix.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="in-python-1" class="level3">
+<h3 class="anchored" data-anchor-id="in-python-1">In Python</h3>
+<p><br></p>
+<p>We calculate the confusion matrix using the homonymous function <strong>scikit-learn</strong>.</p>
+<div id="381c7a1f" class="cell" data-execution_count="33">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute confusion matrix.</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>cm <span class="op">=</span> confusion_matrix(Y_valid, predicted_class)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Show confusion matrix.</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[26  0]
+ [34  0]]</code></pre>
+</div>
+</div>
+</section>
+<section id="section-29" class="level3">
+<h3 class="anchored" data-anchor-id="section-29"></h3>
+<p><br></p>
+<p>We can display the confusion matrix using the <code>ConfusionMatrixDisplay()</code> function.</p>
+<div id="652c5fd2" class="cell" data-execution_count="34">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay(cm).plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-35-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="514" height="435"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="accuracy" class="level3">
+<h3 class="anchored" data-anchor-id="accuracy">Accuracy</h3>
+<p>A simple metric for summarizing the information in the confusion matrix is <strong>accuracy</strong>. It is the proportion of correct classifications for both classes, out of the total classifications performed.</p>
+<p>In Python, we calculate accuracy using the <strong>scikit-learn</strong> <code>accuracy_score()</code> function.</p>
+<div id="914d903c" class="cell" data-execution_count="35">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>accuracy <span class="op">=</span> accuracy_score(Y_valid, predicted_class)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( <span class="bu">round</span>(accuracy, <span class="dv">2</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.43</code></pre>
+</div>
+</div>
+<p>The higher the accuracy, the better the performance of the classifier.</p>
+</section>
+<section id="lets-get-back-to-the-penalized-trees" class="level3">
+<h3 class="anchored" data-anchor-id="lets-get-back-to-the-penalized-trees">Let’s get back to the penalized trees</h3>
+<p><br></p>
+<p>Now, for each of those trees contained in <code>clfs</code>, we evaluate the performance in terms of accuracy for the training and validation data.</p>
+<div id="23ae45a8" class="cell" data-execution_count="36">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>train_scores <span class="op">=</span> [clf.score(X_train, Y_train) <span class="cf">for</span> clf <span class="kw">in</span> clfs]</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>validation_scores <span class="op">=</span> [clf.score(X_valid, Y_valid) <span class="cf">for</span> clf <span class="kw">in</span> clfs]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-30" class="level3">
+<h3 class="anchored" data-anchor-id="section-30"></h3>
+<p>We visualize the results using the following plot.</p>
+<div id="30a759df" class="cell" data-execution_count="37">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"alpha"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Accuracy"</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Accuracy vs alpha for training and validation data"</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>ax.plot(ccp_alphas, train_scores, marker<span class="op">=</span><span class="st">"o"</span>, label<span class="op">=</span><span class="st">"train"</span>, drawstyle<span class="op">=</span><span class="st">"steps-post"</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>ax.plot(ccp_alphas, validation_scores, marker<span class="op">=</span><span class="st">"o"</span>, label<span class="op">=</span><span class="st">"validation"</span>, drawstyle<span class="op">=</span><span class="st">"steps-post"</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-38-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="816" height="455"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="choosing-the-best-tree" class="level3">
+<h3 class="anchored" data-anchor-id="choosing-the-best-tree">Choosing the best tree</h3>
+<p>We can see that the best <span class="math inline">\(\alpha\)</span> value for the validation dataset is 0.01.</p>
+<p>To train our new reduced tree, we use the <code>DecisionTreeClassifier()</code> function again with the <code>ccp_alpha</code> parameter set to the best <span class="math inline">\(\alpha\)</span> value. The object containing this new tree is <code>clf_simple</code>.</p>
+<div id="fb559587" class="cell" data-execution_count="38">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We tell Python that we want a classification tree</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>clf_simple <span class="op">=</span> DecisionTreeClassifier(ccp_alpha<span class="op">=</span><span class="fl">0.01</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># We train the classification tree using the training data.</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>clf_simple.fit(X_train, Y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="section-31" class="level3">
+<h3 class="anchored" data-anchor-id="section-31"></h3>
+<p>Once this is done, we can visualize the small tree using the <code>plot_tree()</code> function.</p>
+<div id="72101e2f" class="cell" data-execution_count="39">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>plot_tree(clf_simple, filled<span class="op">=</span><span class="va">True</span>, rounded<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Classification_files/figure-revealjs/cell-40-output-1.png" class="quarto-figure quarto-figure-center figure-img" width="466" height="463"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="evaluation-1" class="level3">
+<h3 class="anchored" data-anchor-id="evaluation-1">Evaluation</h3>
+<p>Let’s compute the accuracy of the pruned tree.</p>
+<div id="68001801" class="cell" data-execution_count="40">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>single_tree_Y_pred <span class="op">=</span> clf_simple.predict(X_valid)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>accuracy <span class="op">=</span> accuracy_score(Y_valid, single_tree_Y_pred)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( <span class="bu">round</span>(accuracy, <span class="dv">2</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.95</code></pre>
+</div>
+</div>
+</section>
+<section id="comments" class="level3">
+<h3 class="anchored" data-anchor-id="comments">Comments</h3>
+<p><br></p>
+<ul>
+<li><p>Accuracy is easy to calculate and interpret.</p></li>
+<li><p>It works well when the data set has a balanced class distribution (i.e., cases 1 and 0 are approximately equal).</p></li>
+<li><p>However, there are situations in which identifying the target class is more important than the reference class.</p></li>
+<li><p>For example, it is not ideal for unbalanced data sets. When one class is much more frequent than the other, accuracy can be misleading.</p></li>
+</ul>
+</section>
+<section id="an-example" class="level3">
+<h3 class="anchored" data-anchor-id="an-example">An example</h3>
+<ul>
+<li><p>Let’s say we want to create a classifier that tells us whether a mobile phone company’s customer will churn next month.</p></li>
+<li><p>Customers who churn significantly decrease the company’s revenue. That’s why it’s important to retain these customers.</p></li>
+<li><p>To retain that customer, the company will send them a text message with an offer for a low-cost mobile plan.</p></li>
+<li><p>Ideally, our classifier correctly identifies customers who will churn, so they get the offer and, hopefully, stay.</p></li>
+</ul>
+</section>
+<section id="section-32" class="level3">
+<h3 class="anchored" data-anchor-id="section-32"></h3>
+<p><br><br><br></p>
+<ul>
+<li><p>In other words, we want to avoid making wrong decisions about customers who will churn.</p></li>
+<li><p>Wrong decisions about loyal customers aren’t as relevant.</p></li>
+<li><p>Because if we classify a loyal customer as one who will churn, the customer will get a good deal. They’ll probably pay less but stay anyway.</p></li>
+</ul>
+</section>
+<section id="another-example" class="level3">
+<h3 class="anchored" data-anchor-id="another-example">Another example</h3>
+<ul>
+<li><p>Another example is developing an algorithm (classifier) that can quickly identify patients who may have a rare disease and need a more extensive and expensive medical evaluation.</p></li>
+<li><p>The classifier must make correct decisions about patients with the rare disease, so they can be evaluated and eventually treated.</p></li>
+<li><p>A healthy patient who is misclassified with the disease will only incur a few extra dollars to pay for the next test, only to discover that the patient does not have the disease.</p></li>
+</ul>
+</section>
+<section id="classification-specific-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="classification-specific-metrics">Classification-specific metrics</h3>
+<p><br><br></p>
+<p>To overcome this limitation of accuracy, there are several class-specific metrics. The most popular are:</p>
+<ul>
+<li><p><span style="color:darkblue;"><strong>Sensitivity</strong></span> or <em>recall</em></p></li>
+<li><p><span style="color:darkgreen;"><strong>Precision</strong></span></p></li>
+<li><p><strong>Type I error</strong></p></li>
+</ul>
+<p>These metrics are calculated from the confusion matrix.</p>
+</section>
+<section id="section-33" class="level3">
+<h3 class="anchored" data-anchor-id="section-33"></h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/classspecific_metrics.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p><span style="color:darkblue;"><strong>Sensitivity</strong></span> or <em>recall</em> = OO/(OO + OR) “How many records of the target class did we predict correctly?”</p>
+</section>
+<section id="section-34" class="level3">
+<h3 class="anchored" data-anchor-id="section-34"></h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/classspecific_metrics.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p><span style="color:darkgreen;"><strong>Precision</strong></span> = OO/(OO + RO) How many of the records we predicted as target class were classified correctly?</p>
+</section>
+<section id="section-35" class="level3">
+<h3 class="anchored" data-anchor-id="section-35"></h3>
+<p><br></p>
+<p>In Python, we compute sensitivity and precision using the following commands:</p>
+<div id="445bed46" class="cell" data-execution_count="41">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>recall <span class="op">=</span> recall_score(Y_valid, predicted_class)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( <span class="bu">round</span>(recall, <span class="dv">2</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.0</code></pre>
+</div>
+</div>
+<p><br></p>
+<div id="a29029db" class="cell" data-execution_count="42">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>precision <span class="op">=</span> precision_score(Y_valid, predicted_class)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( <span class="bu">round</span>(precision, <span class="dv">2</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.0</code></pre>
+</div>
+</div>
+</section>
+<section id="section-36" class="level3">
+<h3 class="anchored" data-anchor-id="section-36"></h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/classspecific_metrics.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p><strong>Type I error</strong> = RO/(RO + RR) “How many of the reference records did we incorrectly predict as targets?”</p>
+</section>
+<section id="section-37" class="level3">
+<h3 class="anchored" data-anchor-id="section-37"></h3>
+<p><br><br><br></p>
+<p>Unfortunately, there is no simple command to calculate the type-I error in <strong>sklearn</strong>. To overcome this issue, we must calculate it manually.</p>
+<div id="1177d642" class="cell" data-execution_count="43">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix to compute Type-I error</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>tn, fp, fn, tp <span class="op">=</span> confusion_matrix(Y_valid, predicted_class).ravel()</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Type-I error rate = False Positive Rate = FP / (FP + TN)</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>type_I_error <span class="op">=</span> fp <span class="op">/</span> (fp <span class="op">+</span> tn)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( <span class="bu">round</span>(type_I_error, <span class="dv">2</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.0</code></pre>
+</div>
+</div>
+</section>
+<section id="discussion" class="level3">
+<h3 class="anchored" data-anchor-id="discussion">Discussion</h3>
+<p><br></p>
+<ul>
+<li><p>There is generally a trade-off between sensitivity and Type I error.</p></li>
+<li><p>Intuitively, increasing the sensitivity of a classifier is likely to increase Type I error, because more observations are predicted as positive.</p></li>
+<li><p>Possible trade-offs between sensitivity and Type I error may be appropriate when there are different penalties or costs associated with each type of error.</p></li>
+</ul>
+</section>
+<section id="activity-2.1-classification-and-metrics-solo-mode" class="level3">
+<h3 class="anchored" data-anchor-id="activity-2.1-classification-and-metrics-solo-mode">Activity 2.1: Classification and Metrics (solo mode)</h3>
+<p>Using the data in the “weight-height.csv” table, apply the CART procedure to build a decision tree useful for predicting a person’s sex based on their weight and height.</p>
+<p>In this example, the predictor variables are continuous, and the predictor variable is binary.</p>
+<p>Interpret the Precision, Accuracy, Sensitivity, and Type 1 Error values for the validation set. If the software doesn’t report them, perform the calculations using the confusion matrix. Use “Female” as the target class. Discuss the effectiveness of the resulting model.</p>
+</section>
+<section id="disadvantages-of-decision-trees" class="level3">
+<h3 class="anchored" data-anchor-id="disadvantages-of-decision-trees">Disadvantages of decision trees</h3>
+<ul>
+<li><p>Decision trees have high variance. A small change in the training data can result in a very different tree.</p></li>
+<li><p>It has trouble identifying simple data structures.</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-3265772983.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+</section>
+<section id="return-to-main-page" class="level2">
+<h2 class="anchored" data-anchor-id="return-to-main-page"><a href="https://alanrvazquez.github.io/TEC-IN5148/">Return to main page</a></h2>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
