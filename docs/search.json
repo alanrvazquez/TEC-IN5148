@@ -1866,7 +1866,7 @@
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-1",
     "title": "Supervised Learning and Linear Regression",
     "section": "",
-    "text": "The values of \\(\\hat{\\beta}_0\\), \\(\\hat{\\beta}_1\\), …, \\(\\hat{\\beta}_p\\) are obtained from the training data using method of least squares.\nThis method finds the coefficient values that minimize the error made by the model \\(\\hat{f}(X_i)\\) when trying to predict the responses in the training set:\n\n\\[RSS = \\sum_{i=1}^{n_t} (Y_i - (\\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\cdots + \\hat{\\beta}_p X_{ip} ))^2  \\]\n\nwhere \\(RSS\\) means residual sum of squares."
+    "text": "\\[\\hat{Y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\cdots + \\hat{\\beta}_p X_{ip},\\]\nInterpretation:\n\n\\(\\hat{\\beta}_0\\) is the average response when all predictors \\(X_j\\) equal 0.\n\\(\\hat{\\beta}_j\\) is the amount of increase in the average response by a 1 unit increase in the predictor \\(X_j\\), when all other predictors are fixed to an arbitrary value."
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#the-idea-in-two-dimensions",
@@ -5090,5 +5090,26 @@
     "title": "Additional Topics",
     "section": "",
     "text": "Now, we use the values of the predictors in this dataset and use it as input to our model. Our model then computes the prediction of the response for each combination of values of the predictors.\n\n# Predict responses using validation data.\npredicted_medv_val = LRmodel.predict(Boston_X_val)\n\nWe compute the validation RMSE using scikit-learn.\n\nrmse = root_mean_squared_error(Y_valid, predicted_medv_val)\nprint( round(rmse, 3) )\n\n6.02\n\n\nThe lower the validation RMSE, the more accurate our model.\nInterpretation: On average, our predictions are off by \\(\\pm\\) 5,981 dollars."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#interpretation-of-coefficients",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#interpretation-of-coefficients",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Interpretation of coefficients",
+    "text": "Interpretation of coefficients\n\\[\\hat{Y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\cdots + \\hat{\\beta}_p X_{ip},\\]\nwhere the unknown parameter \\(\\hat{\\beta}_0\\) is called the “intercept,” and \\(\\hat{\\beta}_j\\) is the “coefficient” of the j-th predictor.\n\nFor the j-th predictor, we have that:\n\n\\(\\hat{\\beta}_j = 0\\) implies no dependence.\n\\(\\hat{\\beta}_j &gt; 0\\) implies positive dependence.\n\\(\\hat{\\beta}_j &lt; 0\\) implies negative dependence."
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-11",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-11",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "",
+    "text": "We can also compute a \\(K\\)-fold CV estimate for the root mean squared error (RMSE).\n\nLRmodel_cv = LinearRegression()\nneg_cv_RMSEs = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5, \n                        scoring = \"neg_root_mean_squared_error\")\ncv_RMSEs = -neg_cv_RMSEs\nRMSE_cv = cv_RMSEs.mean()\nprint(round(RMSE_cv, 3))\n\n3.276"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#estimation-of-coefficients",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#estimation-of-coefficients",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Estimation of Coefficients",
+    "text": "Estimation of Coefficients\nThe values of \\(\\hat{\\beta}_0\\), \\(\\hat{\\beta}_1\\), …, \\(\\hat{\\beta}_p\\) are obtained from the training data using method of least squares.\nThis method finds the coefficient values that minimize the error made by the model \\(\\hat{f}(X_i)\\) when trying to predict the responses in the training set:\n\n\\[RSS = \\sum_{i=1}^{n_t} (Y_i - (\\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\cdots + \\hat{\\beta}_p X_{ip} ))^2  \\]\n\nwhere \\(RSS\\) means residual sum of squares."
   }
 ]

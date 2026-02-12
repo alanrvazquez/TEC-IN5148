@@ -170,9 +170,35 @@ $$\hat{Y}_i = \hat{f}(\boldsymbol{X}_i) = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} +
 
 -   The values $\hat{\beta}_0$, $\hat{\beta}_1$, ..., $\hat{\beta}_p$ are the [*coefficients*]{style="color:lightblue;"} of the model.
 
+## Interpretation of coefficients
+
+$$\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \cdots + \hat{\beta}_p X_{ip},$$
+
+where the unknown parameter $\hat{\beta}_0$ is called the “intercept,” and $\hat{\beta}_j$ is the “coefficient” of the j-th predictor.
+
+. . .
+
+For the j-th predictor, we have that:
+
+::: incremental
+-   $\hat{\beta}_j = 0$ implies no dependence.
+-   $\hat{\beta}_j > 0$ implies positive dependence.
+-   $\hat{\beta}_j < 0$ implies negative dependence.
+:::
+
 ## 
 
 </br>
+
+$$\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \cdots + \hat{\beta}_p X_{ip},$$
+
+**Interpretation**:
+
+-   $\hat{\beta}_0$ is the [average response]{style="color:blue;"} when all predictors $X_j$ equal 0.
+-   $\hat{\beta}_j$ is the [amount of increase in the average response]{style="color:blue;"} by a 1 unit increase in the predictor $X_j$, *when all other predictors are fixed to an arbitrary value*.
+
+
+## Estimation of Coefficients
 
 The values of $\hat{\beta}_0$, $\hat{\beta}_1$, ..., $\hat{\beta}_p$ are obtained from the training data using method of **least squares**.
 
