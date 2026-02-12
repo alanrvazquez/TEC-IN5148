@@ -30,8 +30,9 @@ author:
 ### D. Supervised Learning for Classification
 
 1.  Decision trees for classification ([slides](/Classification/Classification.slides.html)) ([colab](https://colab.research.google.com/drive/1Bn63H5HKhFOag_DQ0rTgJB9Vlqa0ZguG?usp=sharing))
-2.  Ensemble methods ([slides](/Classification/EnsembleMethods.slides.html)) ([colab](https://colab.research.google.com/drive/1Ktdp0c5OHFPdoxa-FW1tB5a6j6uv7y6T?usp=sharing))
-3.  *K*-nearest neighbors ([slides](/Classification/KNearestNeighbours.slides.html)) ([colab](https://colab.research.google.com/drive/1Ktdp0c5OHFPdoxa-FW1tB5a6j6uv7y6T?usp=sharing))
+2.  *K*-nearest neighbors ([slides](/Classification/KNearestNeighbours.slides.html)) ([colab](https://colab.research.google.com/drive/1Seel9nS-DCGkvtG4o8HHqK6HunWTcNbd?usp=sharing))
+3.  Ensemble methods ([slides](/Classification/EnsembleMethods.slides.html)) ([colab](https://colab.research.google.com/drive/1Ktdp0c5OHFPdoxa-FW1tB5a6j6uv7y6T?usp=sharing))
+
 
 ## About the author
 
