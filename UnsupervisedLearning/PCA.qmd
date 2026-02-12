@@ -30,6 +30,8 @@ jupyter: python3
 
 ## Load the libraries
 
+</br></br>
+
 Before we start, let's import the data science libraries into Python.
 
 ```{python}
@@ -586,7 +588,7 @@ plt.show()
 
 The code to generate the biplot is lenghty but it can be broken into three steps.
 
-Step 1. Create a DataFrame with the PCA results
+**Step 1**. Create a DataFrame with the PCA results
 
 ```{python}
 #| output: true
@@ -599,7 +601,7 @@ pca_df.head()
 
 ## 
 
-Step 2. Create biplot of first two principal components
+**Step 2**. Create biplot of first two principal components
 
 ```{python}
 #| output: true
@@ -621,7 +623,7 @@ plt.show()
 
 ## 
 
-Step 3. Add more information to the biplot.
+**Step 3**. Add more information to the biplot.
 
 ```{python}
 #| output: true

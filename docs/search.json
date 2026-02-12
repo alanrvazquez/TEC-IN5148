@@ -3588,7 +3588,7 @@
     "href": "UnsupervisedLearning/PCA.slides.html#load-the-libraries",
     "title": "Principal Component Analysis",
     "section": "Load the libraries",
-    "text": "Load the libraries\nBefore we start, let’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.decomposition import PCA\n\nHere, we use specific functions from the pandas, matplotlib, seaborn, and sklearn libraries in Python."
+    "text": "Load the libraries\n\nBefore we start, let’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.decomposition import PCA\n\nHere, we use specific functions from the pandas, matplotlib, seaborn, and sklearn libraries in Python."
   },
   {
     "objectID": "UnsupervisedLearning/PCA.slides.html#types-of-learning",
