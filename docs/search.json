@@ -4900,7 +4900,7 @@
     "href": "LinearRegression/AdditionalTopics.slides.html#section-1",
     "title": "Additional Topics",
     "section": "",
-    "text": "Alternatively, we can write the regression model as:\n\\[\n\\hat{Y}_i= \\hat{\\beta}_0+\\hat{\\beta}_1 d_{1i} +\\hat{\\beta}_2 d_{2i} = \\begin{cases}\n\\hat{\\beta}_0+\\hat{\\beta}_1 +\\hat{\\beta}_i \\text{ if car is European}\\\\\n\\hat{\\beta}_0+\\hat{\\beta}_2  \\text{ if car is Japanese} \\\\\n\\hat{\\beta}_0 \\;\\;\\;\\;\\;\\;\\ \\text{ if car is American}\n\\end{cases}\n\\]\nGiven this model representation:\n\n\\(\\hat{\\beta}_0\\) is the mean mpg for American cars,\n\\(\\hat{\\beta}_1\\) is the difference in the mean mpg between European and American cars, and\n\\(\\hat{\\beta}_2\\) is the difference in the mean mpg between Japanese and American cars."
+    "text": "Alternatively, we can write the regression model as:\n\\[\n\\hat{Y}_i= \\hat{\\beta}_0+\\hat{\\beta}_1 d_{1i} +\\hat{\\beta}_2 d_{2i} = \\begin{cases}\n\\hat{\\beta}_0+\\hat{\\beta}_1 +\\hat{\\beta}_i \\text{ if car is European}\\\\\n\\hat{\\beta}_0+\\hat{\\beta}_2  \\text{ if car is Japanese} \\\\\n\\hat{\\beta}_0 \\;\\;\\;\\;\\;\\;\\ \\text{ if car is American}\n\\end{cases}\n\\]\nGiven this model representation:\n\n\n\\(\\hat{\\beta}_0\\) is the mean mpg for American cars,\n\\(\\hat{\\beta}_1\\) is the difference in the mean mpg between European and American cars, and\n\\(\\hat{\\beta}_2\\) is the difference in the mean mpg between Japanese and American cars."
   },
   {
     "objectID": "LinearRegression/AdditionalTopics.slides.html#in-python",
@@ -4942,7 +4942,7 @@
     "href": "LinearRegression/AdditionalTopics.slides.html#in-python-1",
     "title": "Additional Topics",
     "section": "In Python",
-    "text": "In Python\nTo fit an ANCOVA model, we use similar steps as before. The only extra step is to concatenate the data with the dummy variables and the numerical predictor using the function concat() from pandas.\n\n# Concatenate the two data sets.\nX_train = pd.concat([dummy_X_train, auto_data['weight']], axis = 1)\n\n# 1. Create the linear regression model\nLRmodel_ancova = LinearRegression()\n\n# 2. Fit the model.\nLRmodel_ancova.fit(X_train, Y_train)\n\n# 3. Show estimated coefficients.\nprint(\"Intercept:\", LRmodel_ancova.intercept_)\nprint(\"Coefficients:\", LRmodel_ancova.coef_)"
+    "text": "In Python\n\nTo fit an ANCOVA model, we use similar steps as before. The only extra step is to concatenate the data with the dummy variables and the numerical predictor using the function concat() from pandas.\n\n# Concatenate the two data sets.\nX_train = pd.concat([dummy_X_train, auto_data['weight']], axis = 1)\n\n# 1. Create the linear regression model\nLRmodel_ancova = LinearRegression()\n\n# 2. Fit the model.\nLRmodel_ancova.fit(X_train, Y_train)"
   },
   {
     "objectID": "LinearRegression/AdditionalTopics.slides.html#standardization",
@@ -4956,7 +4956,7 @@
     "href": "LinearRegression/AdditionalTopics.slides.html#section-4",
     "title": "Additional Topics",
     "section": "",
-    "text": "In mathematical terms, we standardize a predictor \\(X\\) as:\n\\[{\\color{blue} \\tilde{X}_{i}} = \\frac{{ X_{i} - \\bar{X}}}{ \\sqrt{\\frac{1}{n -1} \\sum_{i=1}^{n} (X_{i} - \\bar{X})^2 }} \\text{ with } \\bar{X} = \\sum_{i=1}^n \\frac{X_i}{n}.\\]\nThe average value of \\(\\tilde{X}\\) is 0.\nThe standard deviation of \\(\\tilde{X}\\) is 1."
+    "text": "The estimated model is shown below.\n\n# 3. Show estimated coefficients.\nprint(\"Intercept:\", LRmodel_ancova.intercept_)\nprint(\"Coefficients:\", LRmodel_ancova.coef_)\n\nIntercept: 43.732236151632975\nCoefficients: [ 0.97090559  2.3271499  -0.00702708]"
   },
   {
     "objectID": "LinearRegression/AdditionalTopics.slides.html#benefits-and-limitations",
@@ -4977,14 +4977,14 @@
     "href": "LinearRegression/AdditionalTopics.slides.html#example-2",
     "title": "Additional Topics",
     "section": "Example 2",
-    "text": "Example 2\n\nThe yield of a chemical process (\\(Y\\)) is related to the concentration of the reactant (\\(X_1\\)) and the operating temperature (\\(X_2\\)).\n\nAn experiment was conducted to study the effect between these factors on the yield.\n\nThe training dataset is in the file “catalyst.xlsx”."
+    "text": "Example 2\n\nThe “BostonHousing.xlsx” contains data collected by the US Bureau of the Census concerning housing in the area of Boston, Massachusetts. The dataset includes data on 506 census housing tracts in the Boston area in 1970s.\nThe goal is to predict the median house price in new tracts based on information such as crime rate, pollution, and number of rooms.\nThe response is the median value of owner-occupied homes in $1000s, contained in the column MEDV."
   },
   {
     "objectID": "LinearRegression/AdditionalTopics.slides.html#section-5",
     "href": "LinearRegression/AdditionalTopics.slides.html#section-5",
     "title": "Additional Topics",
     "section": "",
-    "text": "The units of concentration and temperature are percentages and Farenheit degrees, respectively.\n\ncatalyst_data = pd.read_excel(\"catalyst.xlsx\")\ncatalyst_data\n\n\n\n\n\n\n\n\nOrder\nYield\nConcentration\nTemperature\n\n\n\n\n0\n1\n90\n2\n180\n\n\n1\n2\n91\n2\n180\n\n\n2\n3\n84\n2\n150\n\n\n3\n4\n89\n1\n180\n\n\n4\n5\n83\n2\n150\n\n\n5\n6\n79\n1\n150\n\n\n6\n7\n81\n1\n150\n\n\n7\n8\n87\n1\n180"
+    "text": "Now, we use the values of the predictors in this dataset and use it as input to our model. Our model then computes the prediction of the response for each combination of values of the predictors.\n\n# Predict responses using validation data.\npredicted_medv_val = LRmodel.predict(Boston_X_val)\n\nWe compute the validation RMSE using scikit-learn.\n\nrmse = root_mean_squared_error(Y_valid, predicted_medv_val)\nprint( round(rmse, 3) )\n\n6.02\n\n\nThe lower the validation RMSE, the more accurate our model.\nInterpretation: On average, our predictions are off by \\(\\pm\\) 5,981 dollars."
   },
   {
     "objectID": "LinearRegression/AdditionalTopics.slides.html#standarization-in-python",
@@ -4998,14 +4998,14 @@
     "href": "LinearRegression/AdditionalTopics.slides.html#section-6",
     "title": "Additional Topics",
     "section": "",
-    "text": "Now the predictors are on the same scale\n\n\nCode\nXs_training = pd.DataFrame(Xs_training, columns = predictor_data.columns)\nXs_training \n\n\n\n\n\n\n\n\n\nConcentration\nTemperature\n\n\n\n\n0\n1.0\n1.0\n\n\n1\n1.0\n1.0\n\n\n2\n1.0\n-1.0\n\n\n3\n-1.0\n1.0\n\n\n4\n1.0\n-1.0\n\n\n5\n-1.0\n-1.0\n\n\n6\n-1.0\n-1.0\n\n\n7\n-1.0\n1.0"
+    "text": "The units of concentration and temperature are percentages and Farenheit degrees, respectively.\n\ncatalyst_data = pd.read_excel(\"catalyst.xlsx\")\ncatalyst_data\n\n\n\n\n\n\n\n\nOrder\nYield\nConcentration\nTemperature\n\n\n\n\n0\n1\n90\n2\n180\n\n\n1\n2\n91\n2\n180\n\n\n2\n3\n84\n2\n150\n\n\n3\n4\n89\n1\n180\n\n\n4\n5\n83\n2\n150\n\n\n5\n6\n79\n1\n150\n\n\n6\n7\n81\n1\n150\n\n\n7\n8\n87\n1\n180"
   },
   {
     "objectID": "LinearRegression/AdditionalTopics.slides.html#section-7",
     "href": "LinearRegression/AdditionalTopics.slides.html#section-7",
     "title": "Additional Topics",
     "section": "",
-    "text": "To fit the model, we follow the same functions as before.\n\n# 0. Set the response.\nYc = catalyst_data['Yield']\n\n# 1. Create the linear regression model\nLinear_model_sd = LinearRegression()\n\n# 2. Fit the model.\nLinear_model_sd.fit(Xs_training, Yc)\n\n# 3. Show estimated coefficients.\nprint(\"Intercept:\", Linear_model_sd.intercept_)\nprint(\"Coefficients:\", Linear_model_sd.coef_)\n\nIntercept: 85.5\nCoefficients: [1.5  3.75]"
+    "text": "Now the predictors are on the same scale\n\n\nCode\nXs_training = pd.DataFrame(Xs_training, columns = predictor_data.columns)\nXs_training \n\n\n\n\n\n\n\n\n\nConcentration\nTemperature\n\n\n\n\n0\n1.0\n1.0\n\n\n1\n1.0\n1.0\n\n\n2\n1.0\n-1.0\n\n\n3\n-1.0\n1.0\n\n\n4\n1.0\n-1.0\n\n\n5\n-1.0\n-1.0\n\n\n6\n-1.0\n-1.0\n\n\n7\n-1.0\n1.0"
   },
   {
     "objectID": "LinearRegression/AdditionalTopics.slides.html#discussion",
@@ -5089,7 +5089,7 @@
     "href": "LinearRegression/AdditionalTopics.slides.html#section-8",
     "title": "Additional Topics",
     "section": "",
-    "text": "Now, we use the values of the predictors in this dataset and use it as input to our model. Our model then computes the prediction of the response for each combination of values of the predictors.\n\n# Predict responses using validation data.\npredicted_medv_val = LRmodel.predict(Boston_X_val)\n\nWe compute the validation RMSE using scikit-learn.\n\nrmse = root_mean_squared_error(Y_valid, predicted_medv_val)\nprint( round(rmse, 3) )\n\n6.02\n\n\nThe lower the validation RMSE, the more accurate our model.\nInterpretation: On average, our predictions are off by \\(\\pm\\) 5,981 dollars."
+    "text": "To fit the model, we follow the same functions as before.\n\n# 0. Set the response.\nYc = catalyst_data['Yield']\n\n# 1. Create the linear regression model\nLinear_model_sd = LinearRegression()\n\n# 2. Fit the model.\nLinear_model_sd.fit(Xs_training, Yc)\n\n# 3. Show estimated coefficients.\nprint(\"Intercept:\", Linear_model_sd.intercept_)\nprint(\"Coefficients:\", Linear_model_sd.coef_)\n\nIntercept: 85.5\nCoefficients: [1.5  3.75]"
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#interpretation-of-coefficients",
@@ -5118,5 +5118,12 @@
     "title": "Supervised Learning and Linear Regression",
     "section": "Interpretation",
     "text": "Interpretation\n\n\\[\\hat{Y}_i = 6.69 + 0.051 X_i.\\]\n\nThe average sales are 6.69 thousands of dollars when the advertising budget for TV is 0 dollars.\nIncreasing the advertising TV by 1 thousand dollars increases the average sales by 0.051 thousands of dollars."
+  },
+  {
+    "objectID": "LinearRegression/AdditionalTopics.slides.html#section-9",
+    "href": "LinearRegression/AdditionalTopics.slides.html#section-9",
+    "title": "Additional Topics",
+    "section": "",
+    "text": "Now, we use the values of the predictors in this dataset and use it as input to our model. Our model then computes the prediction of the response for each combination of values of the predictors.\n\n# Predict responses using validation data.\npredicted_medv_val = LRmodel.predict(Boston_X_val)\n\nWe compute the validation RMSE using scikit-learn.\n\nrmse = root_mean_squared_error(Y_valid, predicted_medv_val)\nprint( round(rmse, 3) )\n\n6.02\n\n\nThe lower the validation RMSE, the more accurate our model.\nInterpretation: On average, our predictions are off by \\(\\pm\\) 5,981 dollars."
   }
 ]

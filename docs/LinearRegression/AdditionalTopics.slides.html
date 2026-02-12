@@ -225,7 +225,7 @@ Alan R. Vazquez
 <h2>Load the libraries</h2>
 <p><br></p>
 <p>Let’s import <strong>scikit-learn</strong> into Python together with the other relevant libraries.</p>
-<div id="60dbbb5d" class="cell" data-execution_count="1">
+<div id="43fba481" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb1-3"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -267,7 +267,7 @@ Alan R. Vazquez
 <h2>Example 1</h2>
 <p><br></p>
 <p>The auto data set includes a categorical variable “Origin” which shows the origin of each car.</p>
-<div id="ae23ad5d" class="cell" data-execution_count="2">
+<div id="920ae8f0" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="co"># Load the Excel file into a pandas DataFrame.</span></span>
 <span id="cb2-2"><a></a>auto_data <span class="op">=</span> pd.read_excel(<span class="st">"auto.xlsx"</span>)</span>
 <span id="cb2-3"><a></a></span>
@@ -278,11 +278,11 @@ Alan R. Vazquez
 </section>
 <section id="dataset" class="slide level2">
 <h2>Dataset</h2>
-<div id="7a3a2f64" class="cell" data-execution_count="3">
+<div id="b01fdcff" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>(auto_data</span>
 <span id="cb3-2"><a></a>.<span class="bu">filter</span>([<span class="st">'mpg'</span>, <span class="st">'origin'</span>])</span>
 <span id="cb3-3"><a></a>).head(<span class="dv">6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div class="cell-output cell-output-display" data-execution_count="100">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -444,23 +444,25 @@ Alan R. Vazquez
 \end{cases}
 \]</span></p>
 <p>Given this model representation:</p>
+<div style="font-size: 90%;">
 <ul>
 <li><span class="math inline">\(\hat{\beta}_0\)</span> is the mean mpg for American cars,</li>
 <li><span class="math inline">\(\hat{\beta}_1\)</span> is the difference in the mean mpg between European and American cars, and</li>
 <li><span class="math inline">\(\hat{\beta}_2\)</span> is the difference in the mean mpg between Japanese and American cars.</li>
 </ul>
+</div>
 </section>
 <section id="in-python" class="slide level2">
 <h2>In Python</h2>
 <p><br><br></p>
 <p>We follow three steps to fit a linear model with a categorical predictor. First, we compute the dummy variables.</p>
-<div id="7c04e1c4" class="cell" data-execution_count="4">
+<div id="e4338b2e" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># Create linear regression object</span></span>
 <span id="cb4-2"><a></a>dummy_X_train <span class="op">=</span> pd.get_dummies(auto_data[<span class="st">'origin'</span>], drop_first <span class="op">=</span> <span class="va">True</span>, </span>
 <span id="cb4-3"><a></a>                            dtype <span class="op">=</span> <span class="st">'int'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, we construct the response column.</p>
-<div id="892bf739" class="cell" data-execution_count="5">
+<div id="4f432c5e" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="co"># Create response vector</span></span>
 <span id="cb5-2"><a></a>Y_train <span class="op">=</span> auto_data[<span class="st">'mpg'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -469,7 +471,7 @@ Alan R. Vazquez
 <h2></h2>
 <p><br><br></p>
 <p>Finally, we fit the model using <strong>scikit-learn</strong>.</p>
-<div id="a1222dae" class="cell" data-execution_count="6">
+<div id="a78340fc" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="co"># 1. Create the linear regression model</span></span>
 <span id="cb6-2"><a></a>LRmodel <span class="op">=</span> LinearRegression()</span>
 <span id="cb6-3"><a></a></span>
@@ -519,8 +521,9 @@ Coefficients: [ 7.56947179 10.41716352]</code></pre>
 </section>
 <section id="in-python-1" class="slide level2">
 <h2>In Python</h2>
+<p><br></p>
 <p>To fit an ANCOVA model, we use similar steps as before. The only extra step is to concatenate the data with the dummy variables and the numerical predictor using the function <code>concat()</code> from <strong>pandas</strong>.</p>
-<div id="382644fe" class="cell" data-execution_count="7">
+<div id="f4b3277c" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a><span class="co"># Concatenate the two data sets.</span></span>
 <span id="cb8-2"><a></a>X_train <span class="op">=</span> pd.concat([dummy_X_train, auto_data[<span class="st">'weight'</span>]], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb8-3"><a></a></span>
@@ -528,307 +531,30 @@ Coefficients: [ 7.56947179 10.41716352]</code></pre>
 <span id="cb8-5"><a></a>LRmodel_ancova <span class="op">=</span> LinearRegression()</span>
 <span id="cb8-6"><a></a></span>
 <span id="cb8-7"><a></a><span class="co"># 2. Fit the model.</span></span>
-<span id="cb8-8"><a></a>LRmodel_ancova.fit(X_train, Y_train)</span>
-<span id="cb8-9"><a></a></span>
-<span id="cb8-10"><a></a><span class="co"># 3. Show estimated coefficients.</span></span>
-<span id="cb8-11"><a></a><span class="bu">print</span>(<span class="st">"Intercept:"</span>, LRmodel_ancova.intercept_)</span>
-<span id="cb8-12"><a></a><span class="bu">print</span>(<span class="st">"Coefficients:"</span>, LRmodel_ancova.coef_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-8"><a></a>LRmodel_ancova.fit(X_train, Y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section></section>
-<section>
-<section id="linear-models-with-standardized-numerical-predictors" class="title-slide slide level1 center">
-<h1>Linear Models with Standardized Numerical Predictors</h1>
-
-</section>
-<section id="standardization" class="slide level2">
-<h2>Standardization</h2>
-<p><br><br></p>
-<ul>
-<li class="fragment"><p>Standardization refers to centering and scaling each numeric predictor individually.</p></li>
-<li class="fragment"><p>To center a predictor variable, the average predictor value is subtracted from all the values.</p></li>
-<li class="fragment"><p>To scale a predictor, each of its value is divided by its standard deviation.</p></li>
-</ul>
 </section>
 <section id="section-4" class="slide level2">
 <h2></h2>
 <p><br><br></p>
-<p>In mathematical terms, we standardize a predictor <span class="math inline">\(X\)</span> as:</p>
-<p><span class="math display">\[{\color{blue} \tilde{X}_{i}} = \frac{{ X_{i} - \bar{X}}}{ \sqrt{\frac{1}{n -1} \sum_{i=1}^{n} (X_{i} - \bar{X})^2 }} \text{ with } \bar{X} = \sum_{i=1}^n \frac{X_i}{n}.\]</span></p>
-<p>The average value of <span class="math inline">\(\tilde{X}\)</span> is 0.</p>
-<p>The standard deviation of <span class="math inline">\(\tilde{X}\)</span> is 1.</p>
-</section>
-<section id="benefits-and-limitations" class="slide level2">
-<h2>Benefits and limitations</h2>
-<p><br></p>
-<p>Benefits:</p>
-<ul>
-<li>All quantitative predictors are on the same scale.</li>
-<li>Size and importance of linear regression coefficients can be compared easily.</li>
-</ul>
-<div class="fragment">
-<p>Limitations:</p>
-<ul>
-<li>The interpretation of the coefficients is affected.</li>
-</ul>
-</div>
-</section>
-<section id="interpretation" class="slide level2">
-<h2>Interpretation</h2>
-<p><span class="math display">\[\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1 \tilde{X}_1 + \hat{\beta}_2 \tilde{X}_2 + \cdots + \hat{\beta}_p \tilde{X}_p,\]</span></p>
-<p>where <span class="math inline">\(\tilde{X}_i\)</span> is the standardized version of the predictor <span class="math inline">\(X_i\)</span>.</p>
-<p>Interpretation:</p>
-<ul>
-<li class="fragment"><span class="math inline">\(\hat{\beta}_0\)</span> is the average response when all <span style="color:darkblue;"><strong>original</strong></span> predictors <span class="math inline">\(X_1, X_2, \ldots, X_p\)</span> are set to their average value.</li>
-<li class="fragment"><span class="math inline">\(\hat{\beta}_j\)</span> is the amount of increase in the average response by an increase of 1 standard deviation in the <span style="color:darkblue;"><strong>original</strong></span> predictor <span class="math inline">\(X_j,\)</span> <em>when all other predictors are fixed to an arbitrary value</em>.</li>
-</ul>
-</section>
-<section id="example-2" class="slide level2">
-<h2>Example 2</h2>
-<p><br></p>
-<p>The yield of a chemical process (<span class="math inline">\(Y\)</span>) is related to the concentration of the reactant (<span class="math inline">\(X_1\)</span>) and the operating temperature (<span class="math inline">\(X_2\)</span>).</p>
-<p><br></p>
-<p>An experiment was conducted to study the effect between these factors on the yield.</p>
-<p><br></p>
-<p>The <span style="color:darkblue;"><strong>training</strong></span> dataset is in the file “catalyst.xlsx”.</p>
-</section>
-<section id="section-5" class="slide level2">
-<h2></h2>
-<p>The units of concentration and temperature are percentages and Farenheit degrees, respectively.</p>
-<div id="6f1c2285" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>catalyst_data <span class="op">=</span> pd.read_excel(<span class="st">"catalyst.xlsx"</span>)</span>
-<span id="cb9-2"><a></a>catalyst_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Order</th>
-<th data-quarto-table-cell-role="th">Yield</th>
-<th data-quarto-table-cell-role="th">Concentration</th>
-<th data-quarto-table-cell-role="th">Temperature</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>1</td>
-<td>90</td>
-<td>2</td>
-<td>180</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
-<td>2</td>
-<td>91</td>
-<td>2</td>
-<td>180</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
-<td>3</td>
-<td>84</td>
-<td>2</td>
-<td>150</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
-<td>4</td>
-<td>89</td>
-<td>1</td>
-<td>180</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
-<td>5</td>
-<td>83</td>
-<td>2</td>
-<td>150</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">5</th>
-<td>6</td>
-<td>79</td>
-<td>1</td>
-<td>150</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">6</th>
-<td>7</td>
-<td>81</td>
-<td>1</td>
-<td>150</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">7</th>
-<td>8</td>
-<td>87</td>
-<td>1</td>
-<td>180</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-</section>
-<section id="standarization-in-python" class="slide level2">
-<h2>Standarization in Python</h2>
-<p><br></p>
-<p>Recall that we standardize numerical predictors using the <code>scaler()</code> function from <strong>scikit-learn</strong>.</p>
-<div id="e870a126" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a><span class="co"># Select predictor matrix.</span></span>
-<span id="cb10-2"><a></a>predictor_data <span class="op">=</span> (catalyst_data</span>
-<span id="cb10-3"><a></a>                  .<span class="bu">filter</span>([<span class="st">'Concentration'</span>, <span class="st">'Temperature'</span>])</span>
-<span id="cb10-4"><a></a>                  )</span>
-<span id="cb10-5"><a></a></span>
-<span id="cb10-6"><a></a><span class="co"># Define the scaling operator.</span></span>
-<span id="cb10-7"><a></a>scaler <span class="op">=</span> StandardScaler()</span>
-<span id="cb10-8"><a></a></span>
-<span id="cb10-9"><a></a><span class="co"># Apply the scaling operator.</span></span>
-<span id="cb10-10"><a></a>Xs_training <span class="op">=</span> scaler.fit_transform(predictor_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="section-6" class="slide level2">
-<h2></h2>
-<p>Now the predictors are on the same scale</p>
-<div id="474a57dc" class="cell" data-execution_count="10">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>Xs_training <span class="op">=</span> pd.DataFrame(Xs_training, columns <span class="op">=</span> predictor_data.columns)</span>
-<span id="cb11-2"><a></a>Xs_training </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-display" data-execution_count="29">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Concentration</th>
-<th data-quarto-table-cell-role="th">Temperature</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>1.0</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
-<td>1.0</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
-<td>1.0</td>
-<td>-1.0</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
-<td>-1.0</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
-<td>1.0</td>
-<td>-1.0</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">5</th>
-<td>-1.0</td>
-<td>-1.0</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">6</th>
-<td>-1.0</td>
-<td>-1.0</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">7</th>
-<td>-1.0</td>
-<td>1.0</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-</section>
-<section id="section-7" class="slide level2">
-<h2></h2>
-<p><br></p>
-<p>To fit the model, we follow the same functions as before.</p>
-<div id="137d7df5" class="cell" data-execution_count="11">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a><span class="co"># 0. Set the response.</span></span>
-<span id="cb12-2"><a></a>Yc <span class="op">=</span> catalyst_data[<span class="st">'Yield'</span>]</span>
-<span id="cb12-3"><a></a></span>
-<span id="cb12-4"><a></a><span class="co"># 1. Create the linear regression model</span></span>
-<span id="cb12-5"><a></a>Linear_model_sd <span class="op">=</span> LinearRegression()</span>
-<span id="cb12-6"><a></a></span>
-<span id="cb12-7"><a></a><span class="co"># 2. Fit the model.</span></span>
-<span id="cb12-8"><a></a>Linear_model_sd.fit(Xs_training, Yc)</span>
-<span id="cb12-9"><a></a></span>
-<span id="cb12-10"><a></a><span class="co"># 3. Show estimated coefficients.</span></span>
-<span id="cb12-11"><a></a><span class="bu">print</span>(<span class="st">"Intercept:"</span>, Linear_model_sd.intercept_)</span>
-<span id="cb12-12"><a></a><span class="bu">print</span>(<span class="st">"Coefficients:"</span>, Linear_model_sd.coef_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The estimated model is shown below.</p>
+<div id="cabb6ced" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a><span class="co"># 3. Show estimated coefficients.</span></span>
+<span id="cb9-2"><a></a><span class="bu">print</span>(<span class="st">"Intercept:"</span>, LRmodel_ancova.intercept_)</span>
+<span id="cb9-3"><a></a><span class="bu">print</span>(<span class="st">"Coefficients:"</span>, LRmodel_ancova.coef_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Intercept: 85.5
-Coefficients: [1.5  3.75]</code></pre>
+<pre><code>Intercept: 43.732236151632975
+Coefficients: [ 0.97090559  2.3271499  -0.00702708]</code></pre>
 </div>
-</div>
-</section>
-<section id="discussion" class="slide level2">
-<h2>Discussion</h2>
-<p>Standardization of predictors has no impact on the overall quality of the linear regression model.</p>
-<ul>
-<li class="fragment">Predictions are identical.</li>
-<li class="fragment">Residuals do not change.</li>
-</ul>
-<div class="fragment">
-<p>Standardization does not affect the correlation between two predictors. So, it has not effect on collinearity.</p>
-</div>
-<div class="fragment">
-<p>Ideally, the dummy variables for the categorical predictors are standardized too.</p>
 </div>
 </section></section>
 <section>
-<section id="putting-all-together" class="title-slide slide level1 center">
-<h1>Putting All Together</h1>
+<section id="another-example" class="title-slide slide level1 center">
+<h1>Another Example</h1>
 
 </section>
-<section id="example-3" class="slide level2">
-<h2>Example 3</h2>
+<section id="example-2" class="slide level2">
+<h2>Example 2</h2>
 <p><br></p>
 <p>The “BostonHousing.xlsx” contains data collected by the US Bureau of the Census concerning housing in the area of Boston, Massachusetts. The dataset includes data on 506 census housing tracts in the Boston area in 1970s.</p>
 <p>The goal is to predict the median house price in new tracts based on information such as crime rate, pollution, and number of rooms.</p>
@@ -856,17 +582,17 @@ Coefficients: [1.5  3.75]</code></pre>
 <section id="read-the-dataset" class="slide level2">
 <h2>Read the dataset</h2>
 <p>We read the dataset and set the variable <code>CHAS</code> as categorical.</p>
-<div id="7718c414" class="cell" data-execution_count="12">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a><span class="co"># Load Excel file (make sure the file is in your Colab)</span></span>
-<span id="cb14-2"><a></a>Boston_data <span class="op">=</span> pd.read_excel(<span class="st">'BostonHousing.xlsx'</span>)</span>
-<span id="cb14-3"><a></a></span>
-<span id="cb14-4"><a></a><span class="co"># Drop the categorical variable.</span></span>
-<span id="cb14-5"><a></a>Boston_data[<span class="st">'CHAS'</span>] <span class="op">=</span> pd.Categorical(Boston_data[<span class="st">'CHAS'</span>])</span>
-<span id="cb14-6"><a></a>Boston_data[<span class="st">'RAD'</span>] <span class="op">=</span> pd.Categorical(Boston_data[<span class="st">'RAD'</span>])</span>
-<span id="cb14-7"><a></a></span>
-<span id="cb14-8"><a></a><span class="co"># Preview the dataset.</span></span>
-<span id="cb14-9"><a></a>Boston_data.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div id="4a2f46c6" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a><span class="co"># Load Excel file (make sure the file is in your Colab)</span></span>
+<span id="cb11-2"><a></a>Boston_data <span class="op">=</span> pd.read_excel(<span class="st">'BostonHousing.xlsx'</span>)</span>
+<span id="cb11-3"><a></a></span>
+<span id="cb11-4"><a></a><span class="co"># Drop the categorical variable.</span></span>
+<span id="cb11-5"><a></a>Boston_data[<span class="st">'CHAS'</span>] <span class="op">=</span> pd.Categorical(Boston_data[<span class="st">'CHAS'</span>])</span>
+<span id="cb11-6"><a></a>Boston_data[<span class="st">'RAD'</span>] <span class="op">=</span> pd.Categorical(Boston_data[<span class="st">'RAD'</span>])</span>
+<span id="cb11-7"><a></a></span>
+<span id="cb11-8"><a></a><span class="co"># Preview the dataset.</span></span>
+<span id="cb11-9"><a></a>Boston_data.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="106">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -960,17 +686,17 @@ Coefficients: [1.5  3.75]</code></pre>
 <section id="train-and-validation-data" class="slide level2">
 <h2>Train and validation data</h2>
 <p>We split the dataset into a training and a validation dataset using the function <code>train_test_split()</code> from <strong>scikit-learn</strong>.</p>
-<div id="3bf7b666" class="cell" data-execution_count="13">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a><span class="co"># Set full matrix of predictors.</span></span>
-<span id="cb15-2"><a></a>X_full <span class="op">=</span> Boston_data.drop(columns <span class="op">=</span> [<span class="st">'MEDV'</span>]) </span>
-<span id="cb15-3"><a></a></span>
-<span id="cb15-4"><a></a><span class="co"># Set full matrix of responses.</span></span>
-<span id="cb15-5"><a></a>Y_full <span class="op">=</span> Boston_data[<span class="st">'MEDV'</span>]</span>
-<span id="cb15-6"><a></a></span>
-<span id="cb15-7"><a></a><span class="co"># Split the dataset into training and validation.</span></span>
-<span id="cb15-8"><a></a>X_train, X_valid, Y_train, Y_valid <span class="op">=</span> train_test_split(X_full, Y_full, </span>
-<span id="cb15-9"><a></a>                                                      test_size<span class="op">=</span><span class="fl">0.3</span>,</span>
-<span id="cb15-10"><a></a>                                                      random_state <span class="op">=</span> <span class="dv">59227</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="279dc912" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a><span class="co"># Set full matrix of predictors.</span></span>
+<span id="cb12-2"><a></a>X_full <span class="op">=</span> Boston_data.drop(columns <span class="op">=</span> [<span class="st">'MEDV'</span>]) </span>
+<span id="cb12-3"><a></a></span>
+<span id="cb12-4"><a></a><span class="co"># Set full matrix of responses.</span></span>
+<span id="cb12-5"><a></a>Y_full <span class="op">=</span> Boston_data[<span class="st">'MEDV'</span>]</span>
+<span id="cb12-6"><a></a></span>
+<span id="cb12-7"><a></a><span class="co"># Split the dataset into training and validation.</span></span>
+<span id="cb12-8"><a></a>X_train, X_valid, Y_train, Y_valid <span class="op">=</span> train_test_split(X_full, Y_full, </span>
+<span id="cb12-9"><a></a>                                                      test_size<span class="op">=</span><span class="fl">0.3</span>,</span>
+<span id="cb12-10"><a></a>                                                      random_state <span class="op">=</span> <span class="dv">59227</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The parameter <code>test_size</code> sets the portion of the dataset that will go to the validation set. It is usually 0.3 or 0.2.</p>
 </section>
@@ -978,11 +704,11 @@ Coefficients: [1.5  3.75]</code></pre>
 <h2>Transform the categorical predictors</h2>
 <p><br></p>
 <p>Before we continue, let’s turn the categorical predictors into dummy variables</p>
-<div id="307690dd" class="cell" data-execution_count="14">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a><span class="co"># Transform categorical predictors into dummy variables</span></span>
-<span id="cb16-2"><a></a>Boston_X_train <span class="op">=</span> pd.get_dummies(X_train, drop_first <span class="op">=</span> <span class="va">True</span>, dtype <span class="op">=</span> <span class="st">'int'</span>)</span>
-<span id="cb16-3"><a></a>Boston_X_train.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div id="66f60384" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a><span class="co"># Transform categorical predictors into dummy variables</span></span>
+<span id="cb13-2"><a></a>Boston_X_train <span class="op">=</span> pd.get_dummies(X_train, drop_first <span class="op">=</span> <span class="va">True</span>, dtype <span class="op">=</span> <span class="st">'int'</span>)</span>
+<span id="cb13-3"><a></a>Boston_X_train.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="108">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1077,16 +803,16 @@ Coefficients: [1.5  3.75]</code></pre>
 <h2>Fit a model using training data</h2>
 <p><br></p>
 <p>We train a linear regression model to predict the <code>MEDV</code> in terms of the 12 predictors using functions from <strong>scikit-learn</strong>.</p>
-<div id="ba2cae2c" class="cell" data-execution_count="15">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a><span class="co"># 1. Create the linear regression model</span></span>
-<span id="cb17-2"><a></a>LRmodel <span class="op">=</span> LinearRegression()</span>
-<span id="cb17-3"><a></a></span>
-<span id="cb17-4"><a></a><span class="co"># 2. Fit the model.</span></span>
-<span id="cb17-5"><a></a>LRmodel.fit(Boston_X_train, Y_train)</span>
-<span id="cb17-6"><a></a></span>
-<span id="cb17-7"><a></a><span class="co"># 3. Show estimated coefficients.</span></span>
-<span id="cb17-8"><a></a><span class="bu">print</span>(<span class="st">"Intercept:"</span>, LRmodel.intercept_)</span>
-<span id="cb17-9"><a></a><span class="bu">print</span>(<span class="st">"Coefficients:"</span>, LRmodel.coef_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="0ad382bb" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a><span class="co"># 1. Create the linear regression model</span></span>
+<span id="cb14-2"><a></a>LRmodel <span class="op">=</span> LinearRegression()</span>
+<span id="cb14-3"><a></a></span>
+<span id="cb14-4"><a></a><span class="co"># 2. Fit the model.</span></span>
+<span id="cb14-5"><a></a>LRmodel.fit(Boston_X_train, Y_train)</span>
+<span id="cb14-6"><a></a></span>
+<span id="cb14-7"><a></a><span class="co"># 3. Show estimated coefficients.</span></span>
+<span id="cb14-8"><a></a><span class="bu">print</span>(<span class="st">"Intercept:"</span>, LRmodel.intercept_)</span>
+<span id="cb14-9"><a></a><span class="bu">print</span>(<span class="st">"Coefficients:"</span>, LRmodel.coef_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Intercept: 37.516763561108434
 Coefficients: [-5.31702151e-02  4.42408175e-02  8.46402739e-02 -1.19782458e+01
@@ -1099,11 +825,11 @@ Coefficients: [-5.31702151e-02  4.42408175e-02  8.46402739e-02 -1.19782458e+01
 <section id="brief-residual-analysis" class="slide level2">
 <h2>Brief Residual Analysis</h2>
 <p>We evaluate the model using a “Residual versus Fitted Values” plot. The plot does not show concerning patterns in the residuals. So, we assume that the model satisfies the assumption of constant variance.</p>
-<div id="dab18e18" class="cell" data-execution_count="16">
+<div id="a0c939c1" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="AdditionalTopics_files/figure-revealjs/cell-17-output-1.png" class="quarto-figure quarto-figure-center" width="596" height="376"></p>
+<p><img data-src="AdditionalTopics_files/figure-revealjs/cell-14-output-1.png" class="quarto-figure quarto-figure-center" width="596" height="376"></p>
 </figure>
 </div>
 </div>
@@ -1129,10 +855,10 @@ Coefficients: [-5.31702151e-02  4.42408175e-02  8.46402739e-02 -1.19782458e+01
 <section id="in-python-2" class="slide level2">
 <h2>In Python</h2>
 <p>We first compute the predictions of our model on the validation dataset. To this end, we create the dummy variables of the categorical variables using the validation dataset.</p>
-<div id="034a4450" class="cell" data-execution_count="17">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a>Boston_X_val <span class="op">=</span> pd.get_dummies(X_valid, drop_first <span class="op">=</span> <span class="va">True</span>, dtype <span class="op">=</span> <span class="st">'int'</span>)</span>
-<span id="cb19-2"><a></a>Boston_X_val.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="36">
+<div id="f440cfca" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>Boston_X_val <span class="op">=</span> pd.get_dummies(X_valid, drop_first <span class="op">=</span> <span class="va">True</span>, dtype <span class="op">=</span> <span class="st">'int'</span>)</span>
+<span id="cb16-2"><a></a>Boston_X_val.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="111">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1223,17 +949,17 @@ Coefficients: [-5.31702151e-02  4.42408175e-02  8.46402739e-02 -1.19782458e+01
 </div>
 </div>
 </section>
-<section id="section-8" class="slide level2">
+<section id="section-5" class="slide level2">
 <h2></h2>
 <p>Now, we use the values of the predictors in this dataset and use it as input to our model. Our model then computes the prediction of the response for each combination of values of the predictors.</p>
-<div id="733ef45c" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a><span class="co"># Predict responses using validation data.</span></span>
-<span id="cb20-2"><a></a>predicted_medv_val <span class="op">=</span> LRmodel.predict(Boston_X_val)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="07eedb30" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a><span class="co"># Predict responses using validation data.</span></span>
+<span id="cb17-2"><a></a>predicted_medv_val <span class="op">=</span> LRmodel.predict(Boston_X_val)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We compute the validation RMSE using <strong>scikit-learn</strong>.</p>
-<div id="de3e1818" class="cell" data-execution_count="19">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>rmse <span class="op">=</span> root_mean_squared_error(Y_valid, predicted_medv_val)</span>
-<span id="cb21-2"><a></a><span class="bu">print</span>( <span class="bu">round</span>(rmse, <span class="dv">3</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="61711352" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a>rmse <span class="op">=</span> root_mean_squared_error(Y_valid, predicted_medv_val)</span>
+<span id="cb18-2"><a></a><span class="bu">print</span>( <span class="bu">round</span>(rmse, <span class="dv">3</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>6.02</code></pre>
 </div>

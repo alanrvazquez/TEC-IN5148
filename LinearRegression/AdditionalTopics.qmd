@@ -172,9 +172,11 @@ $$
 
 Given this model representation:
 
+::: {style="font-size: 90%;"}
 -   $\hat{\beta}_0$ is the mean mpg for American cars,
 -   $\hat{\beta}_1$ is the difference in the mean mpg between European and American cars, and
 -   $\hat{\beta}_2$ is the difference in the mean mpg between Japanese and American cars.
+:::
 
 ## In Python
 
@@ -262,6 +264,8 @@ The models have different intercepts but the same slope.
 
 ## In Python
 
+</br>
+
 To fit an ANCOVA model, we use similar steps as before. The only extra step is to concatenate the data with the dummy variables and the numerical predictor using the function `concat()` from **pandas**.
 
 ```{python}
@@ -276,170 +280,26 @@ LRmodel_ancova = LinearRegression()
 
 # 2. Fit the model.
 LRmodel_ancova.fit(X_train, Y_train)
+```
+
+##
+
+</br></br>
+
+The estimated model is shown below.
+
+```{python}
+#| echo: true
+#| output: true
 
 # 3. Show estimated coefficients.
 print("Intercept:", LRmodel_ancova.intercept_)
 print("Coefficients:", LRmodel_ancova.coef_)
 ```
 
-# Linear Models with Standardized Numerical Predictors
-
-## Standardization
-
-</br></br>
-
-::: incremental
--   Standardization refers to centering and scaling each numeric predictor individually.
-
--   To center a predictor variable, the average predictor value is subtracted from all the values.
-
--   To scale a predictor, each of its value is divided by its standard deviation.
-:::
-
-## 
-
-</br></br>
-
-In mathematical terms, we standardize a predictor $X$ as:
-
-$${\color{blue} \tilde{X}_{i}} = \frac{{ X_{i} - \bar{X}}}{ \sqrt{\frac{1}{n -1} \sum_{i=1}^{n} (X_{i} - \bar{X})^2 }} \text{ with } \bar{X} = \sum_{i=1}^n \frac{X_i}{n}.$$
-
-The average value of $\tilde{X}$ is 0.
-
-The standard deviation of $\tilde{X}$ is 1.
-
-## Benefits and limitations
-
-</br>
-
-Benefits:
-
--   All quantitative predictors are on the same scale.
--   Size and importance of linear regression coefficients can be compared easily.
-
-. . .
-
-Limitations:
-
--   The interpretation of the coefficients is affected.
-
-## Interpretation
-
-$$\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1 \tilde{X}_1 + \hat{\beta}_2 \tilde{X}_2 + \cdots + \hat{\beta}_p \tilde{X}_p,$$
-
-where $\tilde{X}_i$ is the standardized version of the predictor $X_i$.
-
-Interpretation:
-
-::: incremental
--   $\hat{\beta}_0$ is the average response when all [**original**]{style="color:darkblue;"} predictors $X_1, X_2, \ldots, X_p$ are set to their average value.
--   $\hat{\beta}_j$ is the amount of increase in the average response by an increase of 1 standard deviation in the [**original**]{style="color:darkblue;"} predictor $X_j,$ *when all other predictors are fixed to an arbitrary value*.
-:::
+# Another Example
 
 ## Example 2
-
-</br>
-
-The yield of a chemical process ($Y$) is related to the concentration of the reactant ($X_1$) and the operating temperature ($X_2$).
-
-</br>
-
-An experiment was conducted to study the effect between these factors on the yield.
-
-</br>
-
-The [**training**]{style="color:darkblue;"} dataset is in the file "catalyst.xlsx".
-
-## 
-
-The units of concentration and temperature are percentages and Farenheit degrees, respectively.
-
-```{python}
-#| echo: true
-
-catalyst_data = pd.read_excel("catalyst.xlsx")
-catalyst_data
-```
-
-## Standarization in Python
-
-</br>
-
-Recall that we standardize numerical predictors using the `scaler()` function from **scikit-learn**.
-
-```{python}
-#| echo: true
-#| output: true
-
-# Select predictor matrix.
-predictor_data = (catalyst_data
-                  .filter(['Concentration', 'Temperature'])
-                  )
-
-# Define the scaling operator.
-scaler = StandardScaler()
-
-# Apply the scaling operator.
-Xs_training = scaler.fit_transform(predictor_data)
-```
-
-## 
-
-Now the predictors are on the same scale
-
-```{python}
-#| echo: true
-#| code-fold: true
-#| output: true
-
-Xs_training = pd.DataFrame(Xs_training, columns = predictor_data.columns)
-Xs_training 
-```
-
-## 
-
-</br>
-
-To fit the model, we follow the same functions as before.
-
-```{python}
-#| echo: true
-#| output: true
-
-# 0. Set the response.
-Yc = catalyst_data['Yield']
-
-# 1. Create the linear regression model
-Linear_model_sd = LinearRegression()
-
-# 2. Fit the model.
-Linear_model_sd.fit(Xs_training, Yc)
-
-# 3. Show estimated coefficients.
-print("Intercept:", Linear_model_sd.intercept_)
-print("Coefficients:", Linear_model_sd.coef_)
-```
-
-## Discussion
-
-Standardization of predictors has no impact on the overall quality of the linear regression model.
-
-::: incremental
--   Predictions are identical.
--   Residuals do not change.
-:::
-
-. . .
-
-Standardization does not affect the correlation between two predictors. So, it has not effect on collinearity.
-
-. . .
-
-Ideally, the dummy variables for the categorical predictors are standardized too.
-
-# Putting All Together
-
-## Example 3
 
 </br>
 
