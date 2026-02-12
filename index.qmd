@@ -23,7 +23,7 @@ author:
 
 ### C. Supervised Learning for Regression
 
-1.  Supervised Learning and Linear Regression ([slides](/LinearRegression/Intro_and_LinearRegression.slides.html)) ([colab](https://colab.research.google.com/drive/1VnU6PtxQIb6A0AmD79n-BmS8T3xBu5iV?usp=sharing)) ([colab](https://colab.research.google.com/drive/1RnI9499Tzn3B8qihdsUKgeUQPH1ns2v3?usp=sharing))
+1.  Supervised Learning and Linear Regression ([slides](/LinearRegression/Intro_and_LinearRegression.slides.html)) ([colab](https://colab.research.google.com/drive/16E5s7Y2PHStzuSBe9oNjeUQI6eiR59l2?usp=sharing))
 2.  Model Inference and Evaluation ([slides](/LinearRegression/ModelInferenceEvaluation.slides.html)) ([colab](https://colab.research.google.com/drive/14s_BBjptHmEpg_zk3Vl_wAUTpDD0RrYJ?usp=sharing))
 3.  Additional Topics ([slides](/LinearRegression/AdditionalTopics.slides.html)) ([colab](https://colab.research.google.com/drive/1KxT0uWXH6E-8RTsw1-KXlAvt-rUXkPcr?usp=sharing))
 

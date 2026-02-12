@@ -216,7 +216,7 @@ Alan R. Vazquez
 <h2>Before we start,</h2>
 <p><br></p>
 <p>Let’s import <strong>scikit-learn</strong> into Python together with the other relevant libraries.</p>
-<div id="36ef8435" class="cell" data-execution_count="1">
+<div id="ec3a6407" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
@@ -304,7 +304,7 @@ Alan R. Vazquez
 <h2>Read the dataset</h2>
 <p><br></p>
 <p>We read the dataset and set the variable <code>CHAS</code> and <code>RAD</code> as categorical.</p>
-<div id="69956dc1" class="cell" data-execution_count="2">
+<div id="1d93c784" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>Boston_data <span class="op">=</span> pd.read_excel(<span class="st">'BostonHousing.xlsx'</span>)</span>
 <span id="cb2-2"><a></a></span>
 <span id="cb2-3"><a></a>Boston_data[<span class="st">'CHAS'</span>] <span class="op">=</span> pd.Categorical(Boston_data[<span class="st">'CHAS'</span>])</span>
@@ -316,7 +316,7 @@ Alan R. Vazquez
 <section id="section-1" class="slide level2">
 <h2></h2>
 <p><br></p>
-<div id="b02c3502" class="cell" data-execution_count="3">
+<div id="ca818ec6" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>Boston_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -455,7 +455,7 @@ Alan R. Vazquez
 <section id="create-the-predictor-matrix" class="slide level2">
 <h2>Create the predictor matrix</h2>
 <p>We use the function <code>.drop()</code> from <strong>pandas</strong>. This function drops one or more columns from a data frame. Let’s drop the response column <code>MEDV</code> and store the result in <code>X_full</code>.</p>
-<div id="ab63c500" class="cell" data-execution_count="4">
+<div id="27422d0b" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># Set full matrix of predictors.</span></span>
 <span id="cb4-2"><a></a>X_full <span class="op">=</span> Boston_data.drop(columns <span class="op">=</span> [<span class="st">'MEDV'</span>]) </span>
 <span id="cb4-3"><a></a>X_full.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -564,7 +564,7 @@ Alan R. Vazquez
 <section id="create-the-response-column" class="slide level2">
 <h2>Create the response column</h2>
 <p>We use the function <code>.filter()</code> from <strong>pandas</strong> to extract the column <code>MEDV</code> from the data frame. We store the result in <code>Y_full</code>.</p>
-<div id="90c45f6a" class="cell" data-execution_count="5">
+<div id="1324b33a" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="co"># Set full matrix of responses.</span></span>
 <span id="cb5-2"><a></a>Y_full <span class="op">=</span> Boston_data.<span class="bu">filter</span>([<span class="st">'MEDV'</span>])</span>
 <span id="cb5-3"><a></a>Y_full.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -618,7 +618,7 @@ Alan R. Vazquez
 <section id="lets-partition-the-dataset" class="slide level2">
 <h2>Let’s partition the dataset</h2>
 <p><br></p>
-<div id="682acb81" class="cell" data-execution_count="6">
+<div id="fde35f77" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="co"># Split the dataset into training and validation.</span></span>
 <span id="cb6-2"><a></a>X_train, X_valid, Y_train, Y_valid <span class="op">=</span> train_test_split(X_full, Y_full, </span>
 <span id="cb6-3"><a></a>                                                      test_size <span class="op">=</span> <span class="fl">0.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -632,7 +632,7 @@ Alan R. Vazquez
 <section id="section-2" class="slide level2">
 <h2></h2>
 <p>The predictors and response in the training dataset are in the objects <code>X_train</code> and <code>Y_train</code>, respectively. We compile these objects into a single dataset using the function <code>.concat()</code> from <strong>pandas</strong>. The argument <code>axis = 1</code> tells <code>.concat()</code> to concatenate the datasets by their rows.</p>
-<div id="bba55d8c" class="cell" data-execution_count="7">
+<div id="ca6fa2e3" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>training_dataset <span class="op">=</span> pd.concat([X_train, Y_train], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb7-2"><a></a>training_dataset.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -672,68 +672,68 @@ Alan R. Vazquez
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">259</th>
-<td>0.65665</td>
-<td>20.0</td>
-<td>3.97</td>
-<td>No</td>
-<td>0.647</td>
-<td>6.842</td>
-<td>100.0</td>
-<td>2.0107</td>
+<th data-quarto-table-cell-role="th">218</th>
+<td>0.11069</td>
+<td>0.0</td>
+<td>13.89</td>
+<td>Yes</td>
+<td>0.550</td>
+<td>5.951</td>
+<td>93.8</td>
+<td>2.8893</td>
 <td>Medium</td>
-<td>264</td>
-<td>13.0</td>
-<td>6.90</td>
-<td>30.1</td>
+<td>276</td>
+<td>16.4</td>
+<td>17.92</td>
+<td>21.5</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">38</th>
-<td>0.17505</td>
-<td>0.0</td>
-<td>5.96</td>
+<th data-quarto-table-cell-role="th">248</th>
+<td>0.16439</td>
+<td>22.0</td>
+<td>5.86</td>
 <td>No</td>
-<td>0.499</td>
-<td>5.966</td>
-<td>30.2</td>
-<td>3.8473</td>
-<td>Medium</td>
-<td>279</td>
-<td>19.2</td>
-<td>10.13</td>
-<td>24.7</td>
+<td>0.431</td>
+<td>6.433</td>
+<td>49.1</td>
+<td>7.8265</td>
+<td>High</td>
+<td>330</td>
+<td>19.1</td>
+<td>9.52</td>
+<td>24.5</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">238</th>
-<td>0.08244</td>
-<td>30.0</td>
-<td>4.93</td>
+<th data-quarto-table-cell-role="th">292</th>
+<td>0.03615</td>
+<td>80.0</td>
+<td>4.95</td>
 <td>No</td>
-<td>0.428</td>
-<td>6.481</td>
-<td>18.5</td>
-<td>6.1899</td>
+<td>0.411</td>
+<td>6.630</td>
+<td>23.4</td>
+<td>5.1167</td>
 <td>Medium</td>
-<td>300</td>
-<td>16.6</td>
-<td>6.36</td>
-<td>23.7</td>
+<td>245</td>
+<td>19.2</td>
+<td>4.70</td>
+<td>27.9</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">504</th>
-<td>0.10959</td>
-<td>0.0</td>
-<td>11.93</td>
+<th data-quarto-table-cell-role="th">298</th>
+<td>0.06466</td>
+<td>70.0</td>
+<td>2.24</td>
 <td>No</td>
-<td>0.573</td>
-<td>6.794</td>
-<td>89.3</td>
-<td>2.3889</td>
-<td>Low</td>
-<td>273</td>
-<td>21.0</td>
-<td>6.48</td>
-<td>22.0</td>
+<td>0.400</td>
+<td>6.345</td>
+<td>20.1</td>
+<td>7.8278</td>
+<td>Medium</td>
+<td>358</td>
+<td>14.8</td>
+<td>4.97</td>
+<td>22.5</td>
 </tr>
 </tbody>
 </table>
@@ -745,7 +745,7 @@ Alan R. Vazquez
 <section id="section-3" class="slide level2">
 <h2></h2>
 <p>Equivalently, the predictors and response in the validation dataset are in the objects <code>X_valid</code> and <code>Y_valid</code>, respectively.</p>
-<div id="d089b624" class="cell" data-execution_count="8">
+<div id="8efc4e7d" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>validation_dataset <span class="op">=</span> pd.concat([X_valid, Y_valid], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb8-2"><a></a>validation_dataset.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
@@ -785,84 +785,84 @@ Alan R. Vazquez
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">499</th>
-<td>0.17783</td>
-<td>0.0</td>
-<td>9.69</td>
+<th data-quarto-table-cell-role="th">94</th>
+<td>0.04294</td>
+<td>28.0</td>
+<td>15.04</td>
 <td>No</td>
-<td>0.585</td>
-<td>5.569</td>
-<td>73.5</td>
-<td>2.3999</td>
+<td>0.464</td>
+<td>6.249</td>
+<td>77.3</td>
+<td>3.6150</td>
 <td>Medium</td>
-<td>391</td>
-<td>19.2</td>
-<td>15.10</td>
-<td>17.5</td>
+<td>270</td>
+<td>18.2</td>
+<td>10.59</td>
+<td>20.6</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">61</th>
-<td>0.17171</td>
-<td>25.0</td>
-<td>5.13</td>
-<td>No</td>
-<td>0.453</td>
-<td>5.966</td>
-<td>93.4</td>
-<td>6.8185</td>
-<td>High</td>
-<td>284</td>
-<td>19.7</td>
-<td>14.44</td>
-<td>16.0</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">378</th>
-<td>23.64820</td>
+<th data-quarto-table-cell-role="th">338</th>
+<td>0.03306</td>
 <td>0.0</td>
-<td>18.10</td>
+<td>5.19</td>
 <td>No</td>
-<td>0.671</td>
-<td>6.380</td>
-<td>96.2</td>
-<td>1.3861</td>
-<td>High</td>
-<td>666</td>
+<td>0.515</td>
+<td>6.059</td>
+<td>37.3</td>
+<td>4.8122</td>
+<td>Medium</td>
+<td>224</td>
 <td>20.2</td>
-<td>23.69</td>
-<td>13.1</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">120</th>
-<td>0.06899</td>
-<td>0.0</td>
-<td>25.65</td>
-<td>No</td>
-<td>0.581</td>
-<td>5.870</td>
-<td>69.7</td>
-<td>2.2577</td>
-<td>Low</td>
-<td>188</td>
-<td>19.1</td>
-<td>14.37</td>
-<td>22.0</td>
+<td>8.51</td>
+<td>20.6</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">98</th>
-<td>0.08187</td>
-<td>0.0</td>
-<td>2.89</td>
+<th data-quarto-table-cell-role="th">251</th>
+<td>0.21409</td>
+<td>22.0</td>
+<td>5.86</td>
 <td>No</td>
-<td>0.445</td>
-<td>7.820</td>
-<td>36.9</td>
-<td>3.4952</td>
+<td>0.431</td>
+<td>6.438</td>
+<td>8.9</td>
+<td>7.3967</td>
+<td>High</td>
+<td>330</td>
+<td>19.1</td>
+<td>3.59</td>
+<td>24.8</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">272</th>
+<td>0.11460</td>
+<td>20.0</td>
+<td>6.96</td>
+<td>No</td>
+<td>0.464</td>
+<td>6.538</td>
+<td>58.7</td>
+<td>3.9175</td>
 <td>Low</td>
-<td>276</td>
-<td>18.0</td>
-<td>3.57</td>
-<td>43.8</td>
+<td>223</td>
+<td>18.6</td>
+<td>7.73</td>
+<td>24.4</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">118</th>
+<td>0.13058</td>
+<td>0.0</td>
+<td>10.01</td>
+<td>No</td>
+<td>0.547</td>
+<td>5.872</td>
+<td>73.1</td>
+<td>2.4775</td>
+<td>Medium</td>
+<td>432</td>
+<td>17.8</td>
+<td>15.37</td>
+<td>20.4</td>
 </tr>
 </tbody>
 </table>

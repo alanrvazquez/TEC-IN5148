@@ -312,7 +312,7 @@ Alan R. Vazquez
 <h2>Before we move on…</h2>
 <p><br></p>
 <p>let’s import the data science libraries into Python.</p>
-<div id="64866dda" class="cell" data-execution_count="1">
+<div id="cb68b33f" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -348,10 +348,10 @@ Alan R. Vazquez
 <section id="data" class="slide level2">
 <h2>Data</h2>
 <p><br></p>
-<div id="636b76ae" class="cell" data-execution_count="2">
+<div id="af328bc7" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>penguins_data <span class="op">=</span> pd.read_excel(<span class="st">"penguins.xlsx"</span>)</span>
 <span id="cb2-2"><a></a>penguins_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="552">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -447,7 +447,7 @@ Alan R. Vazquez
 <section id="data-visualization" class="slide level2">
 <h2>Data visualization</h2>
 <p>Can we group penguins based on their characteristics?</p>
-<div id="22886693" class="cell" data-execution_count="3">
+<div id="09639f3a" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>)) <span class="co"># Set figure size.</span></span>
@@ -589,8 +589,8 @@ Alan R. Vazquez
 <h2>Example 1 (cont.)</h2>
 <p><br></p>
 <p>Let’s apply the algorithm to the predictors <code>bill_depth_mm</code> and <code>bill_length_mm</code> of the penguins dataset.</p>
-<div id="8f5714c8" class="cell" data-execution_count="4">
-<div class="cell-output cell-output-display" data-execution_count="554">
+<div id="dd38f88c" class="cell" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -652,7 +652,7 @@ Alan R. Vazquez
 <p><br><br></p>
 <p>Since the K-means algorithm works with Euclidean distance, we must standardize the predictors before we start.</p>
 <p>In this way, all of them will be equally informative in the process.</p>
-<div id="c2e2d605" class="cell" data-execution_count="5">
+<div id="a3b1da6a" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co">## Standardize</span></span>
 <span id="cb4-2"><a></a>scaler <span class="op">=</span> StandardScaler()</span>
 <span id="cb4-3"><a></a>Xs_penguins <span class="op">=</span> scaler.fit_transform(X_penguins)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -665,7 +665,7 @@ Alan R. Vazquez
 <ul>
 <li><code>KMeans()</code> tells Python we want to train a K-means clustering algorithm and <code>.fit_predict()</code> actually trains it using the data.</li>
 </ul>
-<div id="cf2fc4f8" class="cell" data-execution_count="6">
+<div id="aef2f391" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="co"># Fit KMeans with 3 clusters</span></span>
 <span id="cb5-2"><a></a>kmeans <span class="op">=</span> KMeans(n_clusters <span class="op">=</span> <span class="dv">3</span>, random_state <span class="op">=</span> <span class="dv">301655</span>)</span>
 <span id="cb5-3"><a></a>clusters <span class="op">=</span> kmeans.fit_predict(Xs_penguins)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -675,12 +675,12 @@ Alan R. Vazquez
 <section id="section-4" class="slide level2">
 <h2></h2>
 <p>The clusters created are contained in the <code>clusters</code> object.</p>
-<div id="3deedc6f" class="cell" data-execution_count="7">
+<div id="954dcddd" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>clusters</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="557">
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1,
        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1,
        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -703,12 +703,12 @@ Alan R. Vazquez
 <section id="section-5" class="slide level2">
 <h2></h2>
 <p>To visualize the clusters, we augment the original dataset <code>X_penguins</code> (without standarization) with the <code>clusters</code> object. usign the code below.</p>
-<div id="7af5f8fc" class="cell" data-execution_count="8">
+<div id="58bab39c" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>clustered_penguins <span class="op">=</span> (X_penguins</span>
 <span id="cb8-2"><a></a>              .assign(Cluster <span class="op">=</span> clusters)</span>
 <span id="cb8-3"><a></a>              )</span>
 <span id="cb8-4"><a></a>clustered_penguins.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="558">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -773,7 +773,7 @@ Alan R. Vazquez
 </section>
 <section id="section-6" class="slide level2">
 <h2></h2>
-<div id="d11c621d" class="cell" data-execution_count="9">
+<div id="b2a07463" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">6</span>))</span>
@@ -797,7 +797,7 @@ Alan R. Vazquez
 </section>
 <section id="the-truth-3-groups-of-penguins" class="slide level2">
 <h2>The truth: 3 groups of penguins</h2>
-<div id="395abe5c" class="cell" data-execution_count="10">
+<div id="52418db0" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="fl">8.5</span>, <span class="fl">5.5</span>))</span>
@@ -824,7 +824,7 @@ Alan R. Vazquez
 <div class="center">
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="670021a7" class="cell" data-execution_count="11">
+<div id="8d7b8a0b" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -834,7 +834,7 @@ Alan R. Vazquez
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="e398eb70" class="cell" data-execution_count="12">
+<div id="ecf1d29c" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -849,7 +849,7 @@ Alan R. Vazquez
 <section id="lets-try-using-more-predictors" class="slide level2">
 <h2>Let’s try using more predictors</h2>
 <p><br></p>
-<div id="8018d7cc" class="cell" data-execution_count="13">
+<div id="6ab5918a" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>X_penguins <span class="op">=</span> penguins_data.<span class="bu">filter</span>([<span class="st">'bill_depth_mm'</span>, <span class="st">'bill_length_mm'</span>, </span>
 <span id="cb11-2"><a></a>                          <span class="st">'flipper_length_mm'</span>, <span class="st">'body_mass_g'</span>])</span>
 <span id="cb11-3"><a></a></span>
@@ -873,7 +873,7 @@ Alan R. Vazquez
 <div class="center">
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="ea88d413" class="cell" data-execution_count="14">
+<div id="d72fe024" class="cell" data-execution_count="14">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -883,7 +883,7 @@ Alan R. Vazquez
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="5ca333fa" class="cell" data-execution_count="15">
+<div id="336874ef" class="cell" data-execution_count="15">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -937,7 +937,7 @@ Alan R. Vazquez
 <h2></h2>
 <p><br><br></p>
 <p>To record the intertias for different numbers of clusters, we use the code below.</p>
-<div id="31cca6c6" class="cell" data-execution_count="16">
+<div id="1bc2d5c1" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>inertias <span class="op">=</span> [] <span class="co"># List to save interia values.</span></span>
 <span id="cb12-2"><a></a>k_max <span class="op">=</span> <span class="dv">11</span> <span class="co"># Maximum number of clusters to try.</span></span>
 <span id="cb12-3"><a></a></span>
@@ -956,7 +956,7 @@ Alan R. Vazquez
 <p>The <em>elbow</em> represents a number of clusters for which there is no significant improvement in the quality of the clustering.</p>
 <p>In this case, the number of clusters recommended by this <em>elbow</em> method is 3.</p>
 </div><div class="column" style="width:50%;">
-<div id="5d74be66" class="cell" data-execution_count="17">
+<div id="8e1411b3" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
@@ -1067,7 +1067,7 @@ Alan R. Vazquez
 <h2>Example 2</h2>
 <p><br><br></p>
 <p>Let’s consider a dataset called “Cereals.xlsx.” The data includes nutritional information for 77 cereals, among other data.</p>
-<div id="f15f8d2b" class="cell" data-execution_count="18">
+<div id="005cd720" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>cereal_data <span class="op">=</span> pd.read_excel(<span class="st">"cereals.xlsx"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
@@ -1075,11 +1075,11 @@ Alan R. Vazquez
 <h2></h2>
 <p><br></p>
 <p>Here, we will restrict to 7 numeric predictors.</p>
-<div id="6b83b932" class="cell" data-execution_count="19">
+<div id="4715295c" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>X_cereal <span class="op">=</span> cereal_data.<span class="bu">filter</span>([<span class="st">'calories'</span>, <span class="st">'protein'</span>, <span class="st">'fat'</span>, <span class="st">'sodium'</span>, <span class="st">'fiber'</span>,</span>
 <span id="cb15-2"><a></a>                              <span class="st">'carbo'</span>, <span class="st">'sugars'</span>, <span class="st">'potass'</span>, <span class="st">'vitamins'</span>])</span>
 <span id="cb15-3"><a></a>X_cereal.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="569">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1182,7 +1182,7 @@ Alan R. Vazquez
 <h2>Do not forget to standardize</h2>
 <p><br><br><br></p>
 <p>Since the hierarchical clustering algorithm also works with distances, we must standardize the predictors to have an accurate analysis.</p>
-<div id="687b4e1e" class="cell" data-execution_count="20">
+<div id="e3475d11" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>scaler <span class="op">=</span> StandardScaler()</span>
 <span id="cb16-2"><a></a>Xs_cereal <span class="op">=</span> scaler.fit_transform(X_cereal)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1191,7 +1191,7 @@ Alan R. Vazquez
 <h2></h2>
 <p><br><br></p>
 <p>Unfortunately, the <code>Agglomerative()</code> function in <strong>sklearn</strong> is not as user friendly compared to other available functions in Python. In particular, the <strong>scipy</strong> library has a function called <code>linkage()</code> for hierarchical clustering that works as follows.</p>
-<div id="8192d2c1" class="cell" data-execution_count="21">
+<div id="1d4c7bbc" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a>Clust_Cereal <span class="op">=</span> linkage(Xs_cereal, method <span class="op">=</span> <span class="st">'complete'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The argument <code>method</code> sets the type of linkage to be used.</p>
@@ -1243,7 +1243,7 @@ Alan R. Vazquez
 <section id="dendrogram-in-python" class="slide level2">
 <h2>Dendrogram in Python</h2>
 <p>To produce a nice dendrogram in Python, we use the function <code>dendrogram</code> from <strong>scipy</strong>.</p>
-<div id="51362c96" class="cell" data-execution_count="22">
+<div id="bf0c9261" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
