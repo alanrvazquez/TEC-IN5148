@@ -23,8 +23,7 @@ jupyter: python3
 </br>
 
 1.  Linear Models with Categorical Predictors
-2.  Linear Models with Standardized Numerical Predictors
-3.  Putting All Together
+2.  Another Example
 
 ## Load the libraries
 

@@ -4830,7 +4830,7 @@
     "href": "LinearRegression/AdditionalTopics.slides.html#agenda",
     "title": "Additional Topics",
     "section": "Agenda",
-    "text": "Agenda\n\n\nLinear Models with Categorical Predictors\nLinear Models with Standardized Numerical Predictors\nPutting All Together"
+    "text": "Agenda\n\n\nLinear Models with Categorical Predictors\nAnother Example"
   },
   {
     "objectID": "LinearRegression/AdditionalTopics.slides.html#load-the-libraries",
