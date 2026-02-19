@@ -26,26 +26,6 @@ jupyter: python3
 2.  Linear Regression Model
 3.  K-fold Cross Validation
 
-## Load the libraries
-
-</br>
-
-Before we start, let's import the data science libraries into Python.
-
-```{python}
-#| echo: true
-#| output: false
-
-import numpy as np
-import pandas as pd
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, root_mean_squared_error
-from sklearn.metrics import r2_score
-```
-
-Here, we use specific functions from the **pandas**, **matplotlib**, **seaborn** and **sklearn** libraries in Python.
-
 # Introduction to Supervised Learning
 
 ## Supervised Learning
@@ -214,14 +194,36 @@ where $RSS$ means [*residual sum of squares*]{style="color:green;"}.
 
 ![](images/Modulo%203%20-%20Modelos%20predictivos%20y%20series%20de%20tiempo%20copy.012.jpeg){fig-align="center"}
 
-## Example 1
+
+## Load the libraries
 
 </br>
 
+Before we see an example, let's import the data science libraries into Python.
+
+```{python}
+#| echo: true
+#| output: false
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, root_mean_squared_error
+from sklearn.metrics import r2_score
+```
+
+Here, we use specific functions from the **pandas**, **matplotlib**, **seaborn** and **sklearn** libraries in Python.
+
+
+## Example 1
+
 We used the dataset called "Advertising.xlsx" in Canvas.
 
--   TV: Money spent on TV ads for a product (\$).
--   Sales: Sales generated from the product (\$).
+-   TV: Money spent on TV ads for a product (in hundreds of \$).
+-   Radio: Money spent on Radio ads for a product (in hundreds of \$).
+-   Newspaper: Money spent on Newspaper ads for a product (in hundreds of \$).
+-   Sales: Sales generated from the product ( in thousands of \$).
 -   200 markets
 
 ```{python}
@@ -231,6 +233,17 @@ We used the dataset called "Advertising.xlsx" in Canvas.
 # Load the data into Python
 Ads_data = pd.read_excel('Advertising.xlsx')
 ```
+
+## Notation
+
+</br></br>
+
+For our linear regression model:
+
+- $Y_i$ is the $i$-th observation for Sales.
+- $X_{i1}$ is the $i$-th observation for TV.
+- $X_{i2}$ is the $i$-th observation for Radio.
+- $X_{i3}$ is the $i$-th observation for Newspaper.
 
 ## 
 
@@ -247,14 +260,14 @@ Ads_data.head()
 
 </br></br>
 
-Now, let's choose our predictor and response. In the definition of `X_full`, the double bracket in `[]` is important because it allows us to have a pandas DataFrame as output. This makes it easier to fit the linear regression model with **scikit-learn**.
+Now, let's set the predictors and response. In the definition of `X_full`, the double bracket in `[]` is important because it allows us to have a pandas DataFrame as output. This makes it easier to fit the linear regression model with **scikit-learn**.
 
 ```{python}
 #| echo: true
 #| output: true
 
 # Chose the predictor.
-X_full = Ads_data.filter(['TV'])
+X_full = Ads_data.filter(['TV', 'Radio', 'Newspaper'])
 
 # Set the response.
 Y_full = Ads_data.filter(['Sales'])
@@ -318,17 +331,21 @@ print("Intercept:", LRmodel.intercept_)
 
 The estimated model thus is
 
-$$\hat{Y}_i = 6.69 + 0.051 X_i.$$
+$$\hat{Y}_i = 3.258 + 0.046 X_{i1} + 0.186 X_{i2} - 0.005X_{i3}.$$
 
 ## Interpretation
 
-</br></br>
+$$\hat{Y}_i = 3.258 + 0.046 X_{i1} + 0.186 X_{i2} - 0.005X_{i3}.$$
 
-$$\hat{Y}_i = 6.69 + 0.051 X_i.$$
+::: {style="font-size: 90%;"}
+- The average sales are 3.258 thousands of dollars when the [advertising budgets]{style="color:darkgreen;"} for TV, Radio, and Newspaper [are 0 dollars]{style="color:darkgreen;"}. 
 
-- The average sales are 6.69 thousands of dollars when the advertising budget for TV is 0 dollars. 
+- Increasing the advertising TV by 1 hundreds of dollars [increases the average sales]{style="color:darkblue;"} by 0.046 thousands of dollars.  
 
-- Increasing the advertising TV by 1 thousand dollars increases the average sales by 0.051 thousands of dollars.  
+- Increasing the advertising Radio by 1 hundreds of dollars [increases the average sales]{style="color:darkblue;"} by 0.186 thousands of dollars.  
+
+- Increasing the advertising Newspaper by 1 hundreds of dollars [reduces the average sales]{style="color:darkred;"} by 0.005 thousands of dollars.  
+:::
 
 ## Prediction error
 
@@ -424,18 +441,6 @@ We compute $R^2$ in Python as follows:
 rtwo_sc = r2_score(Y_valid, Y_pred)  # Rsquared
 print(round(rtwo_sc, 2))
 ```
-
-## Mini-Activity (cooperative mode)
-
-</br></br>
-
-1.  Consider the Advertising.xlsx dataset in Canvas.
-
-2.  Use a model to predict Sales that includes the Radio predictor (money spent on radio ads for a product (\$)). What is the $\text{RMSE}_v$?
-
-3.  Now, use a model to predict Sales that includes two predictors: TV and Radio. What is the $\text{RMSE}_v$?
-
-4.  Which model do you prefer?
 
 # K-fold Cross Validation
 
@@ -656,6 +661,6 @@ print(round(RMSE_cv, 3))
 -   $K$-fold CV provides a robust estimate of prediction error by averaging performance across multiple data splits.\
 -   It improves data efficiency by allowing all observations to be used for both training and validation.\
 -   It is widely used for **model comparison** and **hyperparameter tuning**.
--   It can be extended to *generalized* K-fold cross-validation (e.g., stratified, grouped, or time-series folds) to respect data structure.
+-   It can be extended to *generalized* $K$-fold cross-validation (e.g., stratified, grouped, or time-series folds) to respect data structure.
 
 # [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

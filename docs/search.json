@@ -1155,7 +1155,7 @@
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#load-the-libraries",
     "title": "Supervised Learning and Linear Regression",
     "section": "Load the libraries",
-    "text": "Load the libraries\n\nBefore we start, let’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split, cross_val_score\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_squared_error, root_mean_squared_error\nfrom sklearn.metrics import r2_score\n\nHere, we use specific functions from the pandas, matplotlib, seaborn and sklearn libraries in Python."
+    "text": "Load the libraries\n\nBefore we see an example, let’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split, cross_val_score\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_squared_error, root_mean_squared_error\nfrom sklearn.metrics import r2_score\n\nHere, we use specific functions from the pandas, matplotlib, seaborn and sklearn libraries in Python."
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#supervised-learning",
@@ -1260,7 +1260,7 @@
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#example-1",
     "title": "Supervised Learning and Linear Regression",
     "section": "Example 1",
-    "text": "Example 1\n\nWe used the dataset called “Advertising.xlsx” in Canvas.\n\nTV: Money spent on TV ads for a product ($).\nSales: Sales generated from the product ($).\n200 markets\n\n\n# Load the data into Python\nAds_data = pd.read_excel('Advertising.xlsx')"
+    "text": "Example 1\nWe used the dataset called “Advertising.xlsx” in Canvas.\n\nTV: Money spent on TV ads for a product (in hundreds of $).\nRadio: Money spent on Radio ads for a product (in hundreds of $).\nNewspaper: Money spent on Newspaper ads for a product (in hundreds of $).\nSales: Sales generated from the product ( in thousands of $).\n200 markets\n\n\n# Load the data into Python\nAds_data = pd.read_excel('Advertising.xlsx')"
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-2",
@@ -1274,7 +1274,7 @@
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-3",
     "title": "Supervised Learning and Linear Regression",
     "section": "",
-    "text": "Now, let’s choose our predictor and response. In the definition of X_full, the double bracket in [] is important because it allows us to have a pandas DataFrame as output. This makes it easier to fit the linear regression model with scikit-learn.\n\n# Chose the predictor.\nX_full = Ads_data.filter(['TV'])\n\n# Set the response.\nY_full = Ads_data.filter(['Sales'])"
+    "text": "Now, let’s set the predictors and response. In the definition of X_full, the double bracket in [] is important because it allows us to have a pandas DataFrame as output. This makes it easier to fit the linear regression model with scikit-learn.\n\n# Chose the predictor.\nX_full = Ads_data.filter(['TV', 'Radio', 'Newspaper'])\n\n# Set the response.\nY_full = Ads_data.filter(['Sales'])"
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#create-training-and-validation-data",
@@ -1295,14 +1295,14 @@
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-4",
     "title": "Supervised Learning and Linear Regression",
     "section": "",
-    "text": "The following commands allow you to show the estimated coefficients of the model.\n\nprint(\"Coefficients:\", LRmodel.coef_)\n\nCoefficients: [[0.05185463]]\n\n\nWe can also show the estimated intercept.\n\nprint(\"Intercept:\", LRmodel.intercept_)\n\nIntercept: [6.69303889]\n\n\n\nThe estimated model thus is\n\\[\\hat{Y}_i = 6.69 + 0.051 X_i.\\]"
+    "text": "The following commands allow you to show the estimated coefficients of the model.\n\nprint(\"Coefficients:\", LRmodel.coef_)\n\nCoefficients: [[ 0.04620676  0.18682436 -0.0059342 ]]\n\n\nWe can also show the estimated intercept.\n\nprint(\"Intercept:\", LRmodel.intercept_)\n\nIntercept: [3.25814952]\n\n\n\nThe estimated model thus is\n\\[\\hat{Y}_i = 3.258 + 0.046 X_{i1} + 0.186 X_{i2} - 0.005X_{i3}.\\]"
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#interpretation",
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#interpretation",
     "title": "Supervised Learning and Linear Regression",
     "section": "Interpretation",
-    "text": "Interpretation\n\n\\[\\hat{Y}_i = 6.69 + 0.051 X_i.\\]\n\nThe average sales are 6.69 thousands of dollars when the advertising budget for TV is 0 dollars.\nIncreasing the advertising TV by 1 thousand dollars increases the average sales by 0.051 thousands of dollars."
+    "text": "Interpretation\n\\[\\hat{Y}_i = 3.258 + 0.046 X_{i1} + 0.186 X_{i2} - 0.005X_{i3}.\\]\n\n\nThe average sales are 3.258 thousands of dollars when the advertising budgets for TV, Radio, and Newspaper are 0 dollars.\nIncreasing the advertising TV by 1 hundreds of dollars increases the average sales by 0.046 thousands of dollars.\nIncreasing the advertising Radio by 1 hundreds of dollars increases the average sales by 0.186 thousands of dollars.\nIncreasing the advertising Newspaper by 1 hundreds of dollars reduces the average sales by 0.005 thousands of dollars."
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#prediction-error",
@@ -1330,14 +1330,14 @@
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-6",
     "title": "Supervised Learning and Linear Regression",
     "section": "",
-    "text": "To evaluate the model, we use the function mean_squared_error() from scikit-learn. Recall that the responses from the validation dataset are in Y_valid, and the model predictions are in Y_pred.\n\nmse = mean_squared_error(Y_valid, Y_pred)  # Mean Squared Error (MSE)\nprint(round(mse, 2))\n\n15.49\n\n\n\nTo obtain the root mean squared error (RMSE), we use root_mean_squared_error() instead.\n\nrmse = root_mean_squared_error(Y_valid, Y_pred)\nprint(round(rmse, 2))\n\n3.94"
+    "text": "To evaluate the model, we use the function mean_squared_error() from scikit-learn. Recall that the responses from the validation dataset are in Y_valid, and the model predictions are in Y_pred.\n\nmse = mean_squared_error(Y_valid, Y_pred)  # Mean Squared Error (MSE)\nprint(round(mse, 2))\n\n5.09\n\n\n\nTo obtain the root mean squared error (RMSE), we use root_mean_squared_error() instead.\n\nrmse = root_mean_squared_error(Y_valid, Y_pred)\nprint(round(rmse, 2))\n\n2.26"
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#another-metric-r2",
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#another-metric-r2",
     "title": "Supervised Learning and Linear Regression",
     "section": "Another Metric: \\(R^2\\)",
-    "text": "Another Metric: \\(R^2\\)\n\nIn the context of Data Science, \\(R^2\\) can be interpreted as the squared correlation between the actual responses and those predicted by the model.\nThe higher the correlation, the better the agreement between the predicted and actual responses.\n\n\nWe compute \\(R^2\\) in Python as follows:\n\nrtwo_sc = r2_score(Y_valid, Y_pred)  # Rsquared\nprint(round(rtwo_sc, 2))\n\n0.33"
+    "text": "Another Metric: \\(R^2\\)\n\nIn the context of Data Science, \\(R^2\\) can be interpreted as the squared correlation between the actual responses and those predicted by the model.\nThe higher the correlation, the better the agreement between the predicted and actual responses.\n\n\nWe compute \\(R^2\\) in Python as follows:\n\nrtwo_sc = r2_score(Y_valid, Y_pred)  # Rsquared\nprint(round(rtwo_sc, 2))\n\n0.78"
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#mini-activity-cooperative-mode",
@@ -1400,35 +1400,35 @@
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#k-fold-cv-in-python",
     "title": "Supervised Learning and Linear Regression",
     "section": "\\(K\\)-fold CV in Python",
-    "text": "\\(K\\)-fold CV in Python\nIn Python, we apply \\(K\\)-fold cross validation (CV) using the function cross_val_score() from scikit-learn. The argument cv sets the number of folds to use, and scoring sets the evaluation metric to compute on the folds.\n\n# 1. Define a new linear regression model\nLRmodel_cv = LinearRegression()\n\n# 2. Apply 5-fold CV\nneg_cv_MSEs = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5, \n                        scoring = \"neg_mean_squared_error\")\n\n# 3. Show scores\nprint(neg_cv_MSEs)\n\n[-10.49682074  -9.19992376  -9.67254119 -10.47448349 -14.12876134]"
+    "text": "\\(K\\)-fold CV in Python\nIn Python, we apply \\(K\\)-fold cross validation (CV) using the function cross_val_score() from scikit-learn. The argument cv sets the number of folds to use, and scoring sets the evaluation metric to compute on the folds.\n\n# 1. Define a new linear regression model\nLRmodel_cv = LinearRegression()\n\n# 2. Apply 5-fold CV\nneg_cv_MSEs = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5, \n                        scoring = \"neg_mean_squared_error\")\n\n# 3. Show scores\nprint(neg_cv_MSEs)\n\n[-3.1365399  -2.42566776 -1.58522508 -5.42615506 -2.79114519]"
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-8",
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-8",
     "title": "Supervised Learning and Linear Regression",
     "section": "",
-    "text": "Unfortunately, cross_val_score() outputs negative scores. We simply turn them into positive by multiplying them by -1 or adding a - symbol.\n\ncv_MSEs = -neg_cv_MSEs\n\n\nAfter that, we average the values using .mean() to obtain a the \\(5\\)-fold CV estimate.\n\nMSE_cv = cv_MSEs.mean()\nprint(round(MSE_cv, 3))\n\n10.795"
+    "text": "Unfortunately, cross_val_score() outputs negative scores. We simply turn them into positive by multiplying them by -1 or adding a - symbol.\n\ncv_MSEs = -neg_cv_MSEs\n\n\nAfter that, we average the values using .mean() to obtain a the \\(5\\)-fold CV estimate.\n\nMSE_cv = cv_MSEs.mean()\nprint(round(MSE_cv, 3))\n\n3.073"
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-9",
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-9",
     "title": "Supervised Learning and Linear Regression",
     "section": "",
-    "text": "Note that we can compute a \\(K\\)-fold CV estimate for any evaluation metric including the \\(R^2\\). To this end, we set scoring = \"r2\".\n\n# 1. Define a new linear regression model\nLRmodel_cv = LinearRegression()\n\n# 2. Apply 5-fold CV\ncv_Rsq = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5, \n                        scoring = \"r2\")\n\n# 3. Compute CV estimate\nRsq_cv = cv_Rsq.mean()\nprint(round(Rsq_cv, 3))\n\n0.593"
+    "text": "Note that we can compute a \\(K\\)-fold CV estimate for any evaluation metric including the \\(R^2\\). To this end, we set scoring = \"r2\".\n\n# 1. Define a new linear regression model\nLRmodel_cv = LinearRegression()\n\n# 2. Apply 5-fold CV\ncv_Rsq = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5, \n                        scoring = \"r2\")\n\n# 3. Compute CV estimate\nRsq_cv = cv_Rsq.mean()\nprint(round(Rsq_cv, 3))\n\n0.887"
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-10",
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-10",
     "title": "Supervised Learning and Linear Regression",
     "section": "",
-    "text": "We can also compute a \\(K\\)-fold CV estimate for the root mean squared error (RMSE).\n\nLRmodel_cv = LinearRegression()\nneg_cv_RMSEs = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5, \n                        scoring = \"neg_root_mean_squared_error\")\ncv_RMSEs = -neg_cv_RMSEs\nRMSE_cv = cv_RMSEs.mean()\nprint(round(RMSE_cv, 3))\n\n3.276"
+    "text": "We can also compute a \\(K\\)-fold CV estimate for the root mean squared error (RMSE).\n\nLRmodel_cv = LinearRegression()\nneg_cv_RMSEs = cross_val_score(LRmodel_cv, X_full, Y_full, cv = 5, \n                        scoring = \"neg_root_mean_squared_error\")\ncv_RMSEs = -neg_cv_RMSEs\nRMSE_cv = cv_RMSEs.mean()\nprint(round(RMSE_cv, 3))\n\n1.718"
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#final-remarks",
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#final-remarks",
     "title": "Supervised Learning and Linear Regression",
     "section": "Final remarks",
-    "text": "Final remarks\n\n\\(K\\)-fold CV provides a robust estimate of prediction error by averaging performance across multiple data splits.\n\nIt improves data efficiency by allowing all observations to be used for both training and validation.\n\nIt is widely used for model comparison and hyperparameter tuning.\nIt can be extended to generalized K-fold cross-validation (e.g., stratified, grouped, or time-series folds) to respect data structure."
+    "text": "Final remarks\n\n\\(K\\)-fold CV provides a robust estimate of prediction error by averaging performance across multiple data splits.\n\nIt improves data efficiency by allowing all observations to be used for both training and validation.\n\nIt is widely used for model comparison and hyperparameter tuning.\nIt can be extended to generalized \\(K\\)-fold cross-validation (e.g., stratified, grouped, or time-series folds) to respect data structure."
   },
   {
     "objectID": "LinearRegression/ModelInferenceEvaluation.slides.html#agenda",
@@ -4082,5 +4082,12 @@
     "title": "Train, Test, and Validation Datasets",
     "section": "Work on your training dataset",
     "text": "Work on your training dataset\nAfter we have partitioned the data, we work on the training data to develop our predictive pipeline.\nThe pipeline has two main steps:\n\nData preprocessing.\nModel development.\n\nWe will now discuss preprocessing techniques applied to the predictor columns in the training dataset.\nNote that all preprocessing techniques will also be applied to the validation dataset and test dataset to prepare it for your model!"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#notation",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#notation",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Notation",
+    "text": "Notation\n\nFor our linear regression model:\n\n\\(Y_i\\) is the \\(i\\)-th observation for Sales.\n\\(X_{i1}\\) is the \\(i\\)-th observation for TV.\n\\(X_{i2}\\) is the \\(i\\)-th observation for Radio.\n\\(X_{i3}\\) is the \\(i\\)-th observation for Newspaper."
   }
 ]
