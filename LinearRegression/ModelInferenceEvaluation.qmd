@@ -145,7 +145,7 @@ Testing this hypothesis consists of the following steps:
 
 ## Step 1. Random sample
 
-</br></br>
+</br>
 
 The random sample is the training data we use to train or fit the model.
 
@@ -160,7 +160,9 @@ auto_X_train = auto_data[['weight', 'acceleration']]
 auto_Y_train = auto_data['mpg']
 ```
 
-As mentioned before, we will use the entire dataset for training.
+</br>
+
+[As mentioned before, we will use the entire dataset for training.]{style="color:darkred;"}
 
 ## Step 2. Test statistic
 
@@ -405,7 +407,7 @@ The column [**t**]{style="color:darkgreen;"} contains the values of the [observe
 
 The column [**P\>\|t\|**]{style="color:pink;"} contains the [p-values]{style="color:pink;"} for the hypothesis tests.
 
-Since the p-value is smaller than $\alpha = 0.05$, we reject $H_0$ for acceleration and weight. Therefore, **weight and acceleration have a significant association with the mpg of a car**.
+Since the p-value is smaller than $\alpha = 0.05$, we reject $H_0$ for acceleration and weight. Therefore, [**weight and acceleration have a significant association with the mpg of a car**]{style="color:darkgreen;"}.
 
 ## 
 
@@ -540,11 +542,13 @@ Recall that we can calculate the predicted values and residuals as follows.
 #| output: true
 
 # Make predictions using the the model
-prod_Y_pred = LRmodelProd.predict(prod_X_train)
+prod_Y_pred = LRmodelProd.predict(prod_X_train) + 0*prod_Y_train
 
 # Calculate residuals.
 residuals = prod_Y_train - prod_Y_pred
 ```
+
+The extra `0*prod_Y_train` above allows us to have the correct Python for the predictions from **scikit-learn** functions.
 
 # Residuals vs Fitted Values Plot
 
