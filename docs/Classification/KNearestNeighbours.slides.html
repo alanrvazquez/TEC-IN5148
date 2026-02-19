@@ -216,7 +216,7 @@ Alan R. Vazquez
 <h2>Load the libraries</h2>
 <p><br></p>
 <p>Before we start, let’s import the data science libraries into Python.</p>
-<div id="3f15e005" class="cell" data-execution_count="1">
+<div id="34dd694f" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="co"># Importing necessary libraries</span></span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -275,7 +275,7 @@ Alan R. Vazquez
 <h2>Banknote data</h2>
 <div class="columns">
 <div class="column" style="width:70%;">
-<div id="dabf1bd6" class="cell" data-execution_count="2">
+<div id="d94ad55e" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -293,7 +293,7 @@ Alan R. Vazquez
 <h2>Banknote data</h2>
 <div class="columns">
 <div class="column" style="width:70%;">
-<div id="cda06e27" class="cell" data-execution_count="3">
+<div id="f0448ccc" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -311,7 +311,7 @@ Alan R. Vazquez
 <h2>Banknote data</h2>
 <div class="columns">
 <div class="column" style="width:70%;">
-<div id="c1abfcc9" class="cell" data-execution_count="4">
+<div id="0bc2dfa7" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -329,7 +329,7 @@ Alan R. Vazquez
 <h2>Banknote data</h2>
 <div class="columns">
 <div class="column" style="width:70%;">
-<div id="acf4a28f" class="cell" data-execution_count="5">
+<div id="8e299989" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -368,7 +368,7 @@ Alan R. Vazquez
 <section id="example" class="slide level2">
 <h2>Example</h2>
 <p>The data is located in the file “banknotes.xlsx”.</p>
-<div id="4b8a85f1" class="cell" data-execution_count="6">
+<div id="2ae3451b" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>bank_data <span class="op">=</span> pd.read_excel(<span class="st">"banknotes.xlsx"</span>)</span>
 <span id="cb2-2"><a></a><span class="co"># Set response variable as categorical.</span></span>
 <span id="cb2-3"><a></a>bank_data[<span class="st">'Status'</span>] <span class="op">=</span> pd.Categorical(bank_data[<span class="st">'Status'</span>])</span>
@@ -451,7 +451,7 @@ Alan R. Vazquez
 <section id="create-the-predictor-matrix-and-response-column" class="slide level2">
 <h2>Create the predictor matrix and response column</h2>
 <p>Let’s create the predictor matrix or response column</p>
-<div id="9f4da619" class="cell" data-execution_count="7">
+<div id="70bf8819" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="co"># Set full matrix of predictors.</span></span>
 <span id="cb3-2"><a></a>X_full <span class="op">=</span> bank_data.drop(columns <span class="op">=</span> [<span class="st">'Status'</span>]) </span>
 <span id="cb3-3"><a></a></span>
@@ -459,7 +459,7 @@ Alan R. Vazquez
 <span id="cb3-5"><a></a>Y_full <span class="op">=</span> bank_data.<span class="bu">filter</span>([<span class="st">'Status'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>To set the target category in the response we use the <code>get_dummies()</code> function.</p>
-<div id="3b578624" class="cell" data-execution_count="8">
+<div id="29952d2f" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># Create dummy variables.</span></span>
 <span id="cb4-2"><a></a>Y_dummies <span class="op">=</span> pd.get_dummies(Y_full, dtype <span class="op">=</span> <span class="st">'int'</span>)</span>
 <span id="cb4-3"><a></a></span>
@@ -471,7 +471,7 @@ Alan R. Vazquez
 <h2>Let’s partition the dataset</h2>
 <p><br></p>
 <p>We use 70% for training and the rest for validation.</p>
-<div id="bc68dff4" class="cell" data-execution_count="9">
+<div id="3b8dda6f" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="co"># Split the dataset into training and validation.</span></span>
 <span id="cb5-2"><a></a>X_train, X_valid, Y_train, Y_valid <span class="op">=</span> train_test_split(X_full, Y_target_full, </span>
 <span id="cb5-3"><a></a>                                                      test_size <span class="op">=</span> <span class="fl">0.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -482,7 +482,7 @@ Alan R. Vazquez
 <p><br></p>
 <p>To standardize <strong>numeric</strong> predictors, we use the <code>StandardScaler()</code> function. We also apply the function to variables using the <code>fit_transform()</code> function.</p>
 <p><br></p>
-<div id="a73ebdf3" class="cell" data-execution_count="10">
+<div id="199b3028" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>scaler <span class="op">=</span> StandardScaler()</span>
 <span id="cb6-2"><a></a>Xs_train <span class="op">=</span> scaler.fit_transform(X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -492,7 +492,7 @@ Alan R. Vazquez
 <p><br></p>
 <p>In Python, we can use the <code>KNeighborsClassifier()</code> and <code>fit()</code> from <strong>scikit-learn</strong> to train a KNN.</p>
 <p>In the <code>KNeighborsClassifier</code> function, we can define the number of nearest neighbors using the <code>n_neighbors</code> parameter.</p>
-<div id="fdfba409" class="cell" data-execution_count="11">
+<div id="dd4ef531" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="co"># For example, let's use KNN with three neighbours</span></span>
 <span id="cb7-2"><a></a>knn <span class="op">=</span> KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb7-3"><a></a></span>
@@ -504,18 +504,18 @@ Alan R. Vazquez
 <h2>Evaluation</h2>
 <p><br></p>
 <p>To evaluate KNN, we make predictions on the validation data (not used to train the KNN). To do this, we must first perform standardization operations on the predictors in the validation dataset.</p>
-<div id="0d2ab147" class="cell" data-execution_count="12">
+<div id="51ee095d" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>Xs_valid <span class="op">=</span> scaler.fit_transform(X_valid)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <p>Next, we make predictions.</p>
-<div id="8f27a805" class="cell" data-execution_count="13">
+<div id="7633ab03" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>Y_pred_knn <span class="op">=</span> knn.predict(Xs_valid)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="confusion-matrix" class="slide level2">
 <h2>Confusion matrix</h2>
-<div id="1f5090cf" class="cell" data-execution_count="14">
+<div id="befbf090" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a><span class="co"># Calcular matriz de confusión.</span></span>
 <span id="cb10-2"><a></a>cm <span class="op">=</span> confusion_matrix(Y_valid, Y_pred_knn)</span>
 <span id="cb10-3"><a></a></span>
@@ -533,7 +533,7 @@ Alan R. Vazquez
 <section id="finding-the-best-value-of-k" class="slide level2">
 <h2>Finding the best value of <em>K</em></h2>
 <p>We can determine the best value of <em>K</em> for the KNN algorithm. To this end, we evaluate the performance of the KNN for different values of <span class="math inline">\(K\)</span> in terms of accuracy on the validation dataset.</p>
-<div id="d8ce48ef" class="cell" data-execution_count="15">
+<div id="b8aeb7aa" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>best_k <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb11-2"><a></a>best_accuracy <span class="op">=</span> <span class="dv">0</span></span>
 <span id="cb11-3"><a></a>k_values <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">50</span>)  <span class="co"># Test k values from 1 to 50</span></span>
@@ -553,7 +553,7 @@ Alan R. Vazquez
 <section id="visualize" class="slide level2">
 <h2>Visualize</h2>
 <p>We can then visualize the accuracy for different values of <span class="math inline">\(K\)</span> using the following graph and code.</p>
-<div id="25fb2e5d" class="cell" data-execution_count="16">
+<div id="573691fc" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="fl">6.3</span>, <span class="fl">4.3</span>))</span>
@@ -576,18 +576,18 @@ Alan R. Vazquez
 <h2></h2>
 <p><br></p>
 <p>Finally, we select the best number of nearest neighbors contained in the <code>best_k</code> object.</p>
-<div id="084d4dc6" class="cell" data-execution_count="17">
+<div id="bb48dfc3" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>KNN_final <span class="op">=</span> KNeighborsClassifier(n_neighbors <span class="op">=</span> best_k)</span>
 <span id="cb13-2"><a></a>KNN_final.fit(Xs_train, Y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <p>The accuracy of the best KNN is</p>
-<div id="b383a97f" class="cell" data-execution_count="18">
+<div id="b1ed1c4f" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>Y_pred_KNNfinal <span class="op">=</span> KNN_final.predict(Xs_valid)</span>
 <span id="cb14-2"><a></a>valid_accuracy <span class="op">=</span> accuracy_score(Y_valid, Y_pred_KNNfinal)</span>
 <span id="cb14-3"><a></a><span class="bu">print</span>(valid_accuracy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.9833333333333333</code></pre>
+<pre><code>0.95</code></pre>
 </div>
 </div>
 </section>

@@ -1151,13 +1151,6 @@
     "text": "Agenda\n\n\nIntroduction to Supervised Learning\nLinear Regression Model\nK-fold Cross Validation"
   },
   {
-    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#load-the-libraries",
-    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#load-the-libraries",
-    "title": "Supervised Learning and Linear Regression",
-    "section": "Load the libraries",
-    "text": "Load the libraries\n\nBefore we see an example, let’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split, cross_val_score\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_squared_error, root_mean_squared_error\nfrom sklearn.metrics import r2_score\n\nHere, we use specific functions from the pandas, matplotlib, seaborn and sklearn libraries in Python."
-  },
-  {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#supervised-learning",
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#supervised-learning",
     "title": "Supervised Learning and Linear Regression",
@@ -1256,11 +1249,25 @@
     "text": "The idea in two dimensions"
   },
   {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#load-the-libraries",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#load-the-libraries",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Load the libraries",
+    "text": "Load the libraries\n\nBefore we see an example, let’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split, cross_val_score\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_squared_error, root_mean_squared_error\nfrom sklearn.metrics import r2_score\n\nHere, we use specific functions from the pandas, matplotlib, seaborn and sklearn libraries in Python."
+  },
+  {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#example-1",
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#example-1",
     "title": "Supervised Learning and Linear Regression",
     "section": "Example 1",
     "text": "Example 1\nWe used the dataset called “Advertising.xlsx” in Canvas.\n\nTV: Money spent on TV ads for a product (in hundreds of $).\nRadio: Money spent on Radio ads for a product (in hundreds of $).\nNewspaper: Money spent on Newspaper ads for a product (in hundreds of $).\nSales: Sales generated from the product ( in thousands of $).\n200 markets\n\n\n# Load the data into Python\nAds_data = pd.read_excel('Advertising.xlsx')"
+  },
+  {
+    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#notation",
+    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#notation",
+    "title": "Supervised Learning and Linear Regression",
+    "section": "Notation",
+    "text": "Notation\n\nFor our linear regression model:\n\n\\(Y_i\\) is the \\(i\\)-th observation for Sales.\n\\(X_{i1}\\) is the \\(i\\)-th observation for TV.\n\\(X_{i2}\\) is the \\(i\\)-th observation for Radio.\n\\(X_{i3}\\) is the \\(i\\)-th observation for Newspaper."
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#section-2",
@@ -1338,13 +1345,6 @@
     "title": "Supervised Learning and Linear Regression",
     "section": "Another Metric: \\(R^2\\)",
     "text": "Another Metric: \\(R^2\\)\n\nIn the context of Data Science, \\(R^2\\) can be interpreted as the squared correlation between the actual responses and those predicted by the model.\nThe higher the correlation, the better the agreement between the predicted and actual responses.\n\n\nWe compute \\(R^2\\) in Python as follows:\n\nrtwo_sc = r2_score(Y_valid, Y_pred)  # Rsquared\nprint(round(rtwo_sc, 2))\n\n0.78"
-  },
-  {
-    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#mini-activity-cooperative-mode",
-    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#mini-activity-cooperative-mode",
-    "title": "Supervised Learning and Linear Regression",
-    "section": "Mini-Activity (cooperative mode)",
-    "text": "Mini-Activity (cooperative mode)\n\n\nConsider the Advertising.xlsx dataset in Canvas.\nUse a model to predict Sales that includes the Radio predictor (money spent on radio ads for a product ($)). What is the \\(\\text{RMSE}_v\\)?\nNow, use a model to predict Sales that includes two predictors: TV and Radio. What is the \\(\\text{RMSE}_v\\)?\nWhich model do you prefer?"
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#limitations-of-a-validation-set",
@@ -1596,7 +1596,7 @@
     "href": "LinearRegression/ModelInferenceEvaluation.slides.html#section-8",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "We access the information on the t-tests using the .summary() function.\n\nmodel_summary = linear_model.summary()\nprint(model_summary)\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.700\nModel:                            OLS   Adj. R-squared:                  0.698\nMethod:                 Least Squares   F-statistic:                     453.2\nDate:                Thu, 19 Feb 2026   Prob (F-statistic):          2.43e-102\nTime:                        16:17:19   Log-Likelihood:                -1125.4\nNo. Observations:                 392   AIC:                             2257.\nDf Residuals:                     389   BIC:                             2269.\nDf Model:                           2                                         \nCovariance Type:            nonrobust                                         \n================================================================================\n                   coef    std err          t      P&gt;|t|      [0.025      0.975]\n--------------------------------------------------------------------------------\nconst           41.0953      1.868     21.999      0.000      37.423      44.768\nweight          -0.0073      0.000    -25.966      0.000      -0.008      -0.007\nacceleration     0.2617      0.086      3.026      0.003       0.092       0.432\n==============================================================================\nOmnibus:                       31.397   Durbin-Watson:                   0.818\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               39.962\nSkew:                           0.632   Prob(JB):                     2.10e-09\nKurtosis:                       3.922   Cond. No.                     2.67e+04\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n[2] The condition number is large, 2.67e+04. This might indicate that there are\nstrong multicollinearity or other numerical problems."
+    "text": "We access the information on the t-tests using the .summary() function.\n\nmodel_summary = linear_model.summary()\nprint(model_summary)\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.700\nModel:                            OLS   Adj. R-squared:                  0.698\nMethod:                 Least Squares   F-statistic:                     453.2\nDate:                Thu, 19 Feb 2026   Prob (F-statistic):          2.43e-102\nTime:                        16:18:46   Log-Likelihood:                -1125.4\nNo. Observations:                 392   AIC:                             2257.\nDf Residuals:                     389   BIC:                             2269.\nDf Model:                           2                                         \nCovariance Type:            nonrobust                                         \n================================================================================\n                   coef    std err          t      P&gt;|t|      [0.025      0.975]\n--------------------------------------------------------------------------------\nconst           41.0953      1.868     21.999      0.000      37.423      44.768\nweight          -0.0073      0.000    -25.966      0.000      -0.008      -0.007\nacceleration     0.2617      0.086      3.026      0.003       0.092       0.432\n==============================================================================\nOmnibus:                       31.397   Durbin-Watson:                   0.818\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               39.962\nSkew:                           0.632   Prob(JB):                     2.10e-09\nKurtosis:                       3.922   Cond. No.                     2.67e+04\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n[2] The condition number is large, 2.67e+04. This might indicate that there are\nstrong multicollinearity or other numerical problems."
   },
   {
     "objectID": "LinearRegression/ModelInferenceEvaluation.slides.html#table-of-t-tests",
@@ -1974,7 +1974,7 @@
     "href": "Classification/KNearestNeighbours.slides.html#section-1",
     "title": "K-nearest neighbors",
     "section": "",
-    "text": "Finally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_valid)\nvalid_accuracy = accuracy_score(Y_valid, Y_pred_KNNfinal)\nprint(valid_accuracy)\n\n0.9833333333333333"
+    "text": "Finally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_valid)\nvalid_accuracy = accuracy_score(Y_valid, Y_pred_KNNfinal)\nprint(valid_accuracy)\n\n0.95"
   },
   {
     "objectID": "Classification/KNearestNeighbours.slides.html#discussion",
@@ -2149,14 +2149,14 @@
     "href": "Classification/Classification.slides.html#section-5",
     "title": "Classification Trees",
     "section": "",
-    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nLeft\nRight\nBottom\nTop\nStatus_counterfeit\n\n\n\n\n10\n130.4\n130.3\n7.9\n11.7\n0\n\n\n194\n130.3\n130.5\n11.6\n10.6\n1\n\n\n69\n130.2\n130.2\n8.0\n11.2\n0\n\n\n3\n129.7\n129.6\n7.5\n10.4\n0"
+    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nLeft\nRight\nBottom\nTop\nStatus_counterfeit\n\n\n\n\n166\n130.7\n130.4\n10.0\n10.1\n1\n\n\n31\n129.7\n129.7\n8.6\n9.1\n0\n\n\n175\n130.4\n130.2\n11.9\n10.7\n1\n\n\n101\n130.5\n130.2\n11.0\n11.5\n1"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-6",
     "href": "Classification/Classification.slides.html#section-6",
     "title": "Classification Trees",
     "section": "",
-    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nLeft\nRight\nBottom\nTop\nStatus_counterfeit\n\n\n\n\n199\n129.9\n129.9\n10.2\n11.5\n1\n\n\n162\n130.1\n130.0\n11.5\n10.6\n1\n\n\n62\n129.8\n129.4\n8.0\n10.6\n0\n\n\n198\n130.7\n130.8\n11.2\n11.2\n1\n\n\n189\n130.3\n130.2\n12.7\n9.1\n1"
+    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nLeft\nRight\nBottom\nTop\nStatus_counterfeit\n\n\n\n\n182\n130.5\n130.1\n11.0\n11.4\n1\n\n\n8\n129.4\n129.7\n8.2\n11.0\n0\n\n\n5\n130.8\n130.5\n9.0\n10.1\n0\n\n\n118\n130.5\n130.2\n11.0\n11.0\n1\n\n\n28\n130.0\n130.0\n7.4\n10.5\n0"
   },
   {
     "objectID": "Classification/Classification.slides.html#work-on-your-training-dataset",
@@ -2282,7 +2282,7 @@
     "href": "Classification/Classification.slides.html#section-28",
     "title": "Classification Trees",
     "section": "",
-    "text": "The predict_proba() function generates the probabilities used by the algorithm to assign the classes.\n\n# Predict probabilities.\npredicted_probability = clf.predict_proba(X_valid)\npredicted_probability\n\narray([[0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429],\n       [0.46428571, 0.53571429]])"
+    "text": "The predict_proba() function generates the probabilities used by the algorithm to assign the classes.\n\n# Predict probabilities.\npredicted_probability = clf.predict_proba(X_valid)\npredicted_probability\n\narray([[0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571]])"
   },
   {
     "objectID": "Classification/Classification.slides.html#confusion-matrix",
@@ -2296,7 +2296,7 @@
     "href": "Classification/Classification.slides.html#in-python-1",
     "title": "Classification Trees",
     "section": "In Python",
-    "text": "In Python\n\nWe calculate the confusion matrix using the homonymous function scikit-learn.\n\n# Compute confusion matrix.\ncm = confusion_matrix(Y_valid, predicted_class)\n\n# Show confusion matrix.\nprint(cm)\n\n[[ 0 35]\n [ 0 25]]"
+    "text": "In Python\n\nWe calculate the confusion matrix using the homonymous function scikit-learn.\n\n# Compute confusion matrix.\ncm = confusion_matrix(Y_valid, predicted_class)\n\n# Show confusion matrix.\nprint(cm)\n\n[[ 0 39]\n [ 0 21]]"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-29",
@@ -2310,7 +2310,7 @@
     "href": "Classification/Classification.slides.html#accuracy",
     "title": "Classification Trees",
     "section": "Accuracy",
-    "text": "Accuracy\nA simple metric for summarizing the information in the confusion matrix is accuracy. It is the proportion of correct classifications for both classes, out of the total classifications performed.\nIn Python, we calculate accuracy using the scikit-learn accuracy_score() function.\n\naccuracy = accuracy_score(Y_valid, predicted_class)\nprint( round(accuracy, 2) )\n\n0.42\n\n\nThe higher the accuracy, the better the performance of the classifier."
+    "text": "Accuracy\nA simple metric for summarizing the information in the confusion matrix is accuracy. It is the proportion of correct classifications for both classes, out of the total classifications performed.\nIn Python, we calculate accuracy using the scikit-learn accuracy_score() function.\n\naccuracy = accuracy_score(Y_valid, predicted_class)\nprint( round(accuracy, 2) )\n\n0.35\n\n\nThe higher the accuracy, the better the performance of the classifier."
   },
   {
     "objectID": "Classification/Classification.slides.html#lets-get-back-to-the-penalized-trees",
@@ -2345,7 +2345,7 @@
     "href": "Classification/Classification.slides.html#evaluation-1",
     "title": "Classification Trees",
     "section": "Evaluation",
-    "text": "Evaluation\nLet’s compute the accuracy of the pruned tree.\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.95"
+    "text": "Evaluation\nLet’s compute the accuracy of the pruned tree.\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.98"
   },
   {
     "objectID": "Classification/Classification.slides.html#comments",
@@ -2401,7 +2401,7 @@
     "href": "Classification/Classification.slides.html#section-35",
     "title": "Classification Trees",
     "section": "",
-    "text": "In Python, we compute sensitivity and precision using the following commands:\n\nrecall = recall_score(Y_valid, predicted_class)\nprint( round(recall, 2) )\n\n1.0\n\n\n\n\nprecision = precision_score(Y_valid, predicted_class)\nprint( round(precision, 2) )\n\n0.42"
+    "text": "In Python, we compute sensitivity and precision using the following commands:\n\nrecall = recall_score(Y_valid, predicted_class)\nprint( round(recall, 2) )\n\n1.0\n\n\n\n\nprecision = precision_score(Y_valid, predicted_class)\nprint( round(precision, 2) )\n\n0.35"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-36",
@@ -2583,7 +2583,7 @@
     "href": "Classification/EnsembleMethods.slides.html#predictions-1",
     "title": "Ensemble Methods",
     "section": "Predictions",
-    "text": "Predictions\nPredict the classes using bagging.\n\npredicted_class = Baggingalgorithm.predict(X_valid)\n\npredicted_class\n\narray([0, 1, 0, ..., 0, 0, 0])"
+    "text": "Predictions\nPredict the classes using bagging.\n\npredicted_class = Baggingalgorithm.predict(X_valid)\n\npredicted_class\n\narray([0, 0, 0, ..., 0, 0, 0])"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#confusion-matrix",
@@ -2597,7 +2597,7 @@
     "href": "Classification/EnsembleMethods.slides.html#accuracy",
     "title": "Ensemble Methods",
     "section": "Accuracy",
-    "text": "Accuracy\n\nThe accuracy of the bagging classifier is 78%.\n\n# Compute accuracy.\naccuracy = accuracy_score(Y_valid, predicted_class)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.77"
+    "text": "Accuracy\n\nThe accuracy of the bagging classifier is 78%.\n\n# Compute accuracy.\naccuracy = accuracy_score(Y_valid, predicted_class)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.78"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#a-single-deep-tree",
@@ -2681,7 +2681,7 @@
     "href": "Classification/EnsembleMethods.slides.html#accuracy-1",
     "title": "Ensemble Methods",
     "section": "Accuracy",
-    "text": "Accuracy\n\nThe accuracy of the random forest classifier is 79%.\n\n# Compute accuracy.\naccuracy = accuracy_score(Y_valid, RF_predicted)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.78"
+    "text": "Accuracy\n\nThe accuracy of the random forest classifier is 79%.\n\n# Compute accuracy.\naccuracy = accuracy_score(Y_valid, RF_predicted)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.79"
   },
   {
     "objectID": "Classification/IntrotoDataScience.slides.html#agenda",
@@ -3059,7 +3059,7 @@
     "href": "Classification/NeuralNetworks.slides.html#section-1",
     "title": "K-nearest neighbors",
     "section": "",
-    "text": "Finally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_valid)\nvalid_accuracy = accuracy_score(Y_valid, Y_pred_KNNfinal)\nprint(valid_accuracy)\n\n0.9666666666666667"
+    "text": "Finally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_valid)\nvalid_accuracy = accuracy_score(Y_valid, Y_pred_KNNfinal)\nprint(valid_accuracy)\n\n0.9833333333333333"
   },
   {
     "objectID": "Classification/NeuralNetworks.slides.html#discussion",
@@ -4067,14 +4067,14 @@
     "href": "PreProcessing/TrainTestData.slides.html#section-2",
     "title": "Train, Test, and Validation Datasets",
     "section": "",
-    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n218\n0.11069\n0.0\n13.89\nYes\n0.550\n5.951\n93.8\n2.8893\nMedium\n276\n16.4\n17.92\n21.5\n\n\n248\n0.16439\n22.0\n5.86\nNo\n0.431\n6.433\n49.1\n7.8265\nHigh\n330\n19.1\n9.52\n24.5\n\n\n292\n0.03615\n80.0\n4.95\nNo\n0.411\n6.630\n23.4\n5.1167\nMedium\n245\n19.2\n4.70\n27.9\n\n\n298\n0.06466\n70.0\n2.24\nNo\n0.400\n6.345\n20.1\n7.8278\nMedium\n358\n14.8\n4.97\n22.5"
+    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n394\n13.35980\n0.0\n18.10\nNo\n0.693\n5.887\n94.7\n1.7821\nHigh\n666\n20.2\n16.35\n12.7\n\n\n67\n0.05789\n12.5\n6.07\nNo\n0.409\n5.878\n21.4\n6.4980\nMedium\n345\n18.9\n8.10\n22.0\n\n\n50\n0.08873\n21.0\n5.64\nNo\n0.439\n5.963\n45.7\n6.8147\nMedium\n243\n16.8\n13.45\n19.7\n\n\n505\n0.04741\n0.0\n11.93\nNo\n0.573\n6.030\n80.8\n2.5050\nLow\n273\n21.0\n7.88\n11.9"
   },
   {
     "objectID": "PreProcessing/TrainTestData.slides.html#section-3",
     "href": "PreProcessing/TrainTestData.slides.html#section-3",
     "title": "Train, Test, and Validation Datasets",
     "section": "",
-    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n94\n0.04294\n28.0\n15.04\nNo\n0.464\n6.249\n77.3\n3.6150\nMedium\n270\n18.2\n10.59\n20.6\n\n\n338\n0.03306\n0.0\n5.19\nNo\n0.515\n6.059\n37.3\n4.8122\nMedium\n224\n20.2\n8.51\n20.6\n\n\n251\n0.21409\n22.0\n5.86\nNo\n0.431\n6.438\n8.9\n7.3967\nHigh\n330\n19.1\n3.59\n24.8\n\n\n272\n0.11460\n20.0\n6.96\nNo\n0.464\n6.538\n58.7\n3.9175\nLow\n223\n18.6\n7.73\n24.4\n\n\n118\n0.13058\n0.0\n10.01\nNo\n0.547\n5.872\n73.1\n2.4775\nMedium\n432\n17.8\n15.37\n20.4"
+    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n99\n0.06860\n0.0\n2.89\nNo\n0.445\n7.416\n62.5\n3.4952\nLow\n276\n18.0\n6.19\n33.2\n\n\n82\n0.03659\n25.0\n4.86\nNo\n0.426\n6.302\n32.2\n5.4007\nMedium\n281\n19.0\n6.72\n24.8\n\n\n235\n0.33045\n0.0\n6.20\nNo\n0.507\n6.086\n61.5\n3.6519\nHigh\n307\n17.4\n10.88\n24.0\n\n\n251\n0.21409\n22.0\n5.86\nNo\n0.431\n6.438\n8.9\n7.3967\nHigh\n330\n19.1\n3.59\n24.8\n\n\n448\n9.32909\n0.0\n18.10\nNo\n0.713\n6.185\n98.7\n2.2616\nHigh\n666\n20.2\n18.13\n14.1"
   },
   {
     "objectID": "PreProcessing/TrainTestData.slides.html#work-on-your-training-dataset",
@@ -4082,12 +4082,5 @@
     "title": "Train, Test, and Validation Datasets",
     "section": "Work on your training dataset",
     "text": "Work on your training dataset\nAfter we have partitioned the data, we work on the training data to develop our predictive pipeline.\nThe pipeline has two main steps:\n\nData preprocessing.\nModel development.\n\nWe will now discuss preprocessing techniques applied to the predictor columns in the training dataset.\nNote that all preprocessing techniques will also be applied to the validation dataset and test dataset to prepare it for your model!"
-  },
-  {
-    "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#notation",
-    "href": "LinearRegression/Intro_and_LinearRegression.slides.html#notation",
-    "title": "Supervised Learning and Linear Regression",
-    "section": "Notation",
-    "text": "Notation\n\nFor our linear regression model:\n\n\\(Y_i\\) is the \\(i\\)-th observation for Sales.\n\\(X_{i1}\\) is the \\(i\\)-th observation for TV.\n\\(X_{i2}\\) is the \\(i\\)-th observation for Radio.\n\\(X_{i3}\\) is the \\(i\\)-th observation for Newspaper."
   }
 ]
