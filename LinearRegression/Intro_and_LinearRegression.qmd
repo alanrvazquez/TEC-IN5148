@@ -175,8 +175,7 @@ $$\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_{i1} + \cdots + \hat{\beta}_p X_{i
 **Interpretation**:
 
 -   $\hat{\beta}_0$ is the [average response]{style="color:blue;"} when all predictors $X_j$ equal 0.
--   $\hat{\beta}_j$ is the [amount of increase in the average response]{style="color:blue;"} by a 1 unit increase in the predictor $X_j$, *when all other predictors are fixed to an arbitrary value*.
-
+-   $\hat{\beta}_j$ is the [amount of increase in the average response]{style="color:blue;"} by a 1 unit increase in the $j$-th predictor $X_{ij}$, *when all other predictors are fixed to an arbitrary value*.
 
 ## Estimation of Coefficients
 
@@ -193,7 +192,6 @@ where $RSS$ means [*residual sum of squares*]{style="color:green;"}.
 ## The idea in two dimensions
 
 ![](images/Modulo%203%20-%20Modelos%20predictivos%20y%20series%20de%20tiempo%20copy.012.jpeg){fig-align="center"}
-
 
 ## Load the libraries
 
@@ -214,7 +212,6 @@ from sklearn.metrics import r2_score
 ```
 
 Here, we use specific functions from the **pandas**, **matplotlib**, **seaborn** and **sklearn** libraries in Python.
-
 
 ## Example 1
 
@@ -240,10 +237,10 @@ Ads_data = pd.read_excel('Advertising.xlsx')
 
 For our linear regression model:
 
-- $Y_i$ is the $i$-th observation for Sales.
-- $X_{i1}$ is the $i$-th observation for TV.
-- $X_{i2}$ is the $i$-th observation for Radio.
-- $X_{i3}$ is the $i$-th observation for Newspaper.
+-   $Y_i$ is the $i$-th observation for Sales.
+-   $X_{i1}$ is the $i$-th observation for TV.
+-   $X_{i2}$ is the $i$-th observation for Radio.
+-   $X_{i3}$ is the $i$-th observation for Newspaper.
 
 ## 
 
@@ -338,13 +335,13 @@ $$\hat{Y}_i = 3.258 + 0.046 X_{i1} + 0.186 X_{i2} - 0.005X_{i3}.$$
 $$\hat{Y}_i = 3.258 + 0.046 X_{i1} + 0.186 X_{i2} - 0.005X_{i3}.$$
 
 ::: {style="font-size: 90%;"}
-- The average sales are 3.258 thousands of dollars when the [advertising budgets]{style="color:darkgreen;"} for TV, Radio, and Newspaper [are 0 dollars]{style="color:darkgreen;"}. 
+-   The average sales are 3.258 thousands of dollars when the [advertising budgets]{style="color:darkgreen;"} for TV, Radio, and Newspaper [are 0 dollars]{style="color:darkgreen;"}.
 
-- Increasing the advertising TV by 1 hundreds of dollars [increases the average sales]{style="color:darkblue;"} by 0.046 thousands of dollars.  
+-   Increasing the advertising TV by 1 hundreds of dollars [increases the average sales]{style="color:darkblue;"} by 0.046 thousands of dollars.
 
-- Increasing the advertising Radio by 1 hundreds of dollars [increases the average sales]{style="color:darkblue;"} by 0.186 thousands of dollars.  
+-   Increasing the advertising Radio by 1 hundreds of dollars [increases the average sales]{style="color:darkblue;"} by 0.186 thousands of dollars.
 
-- Increasing the advertising Newspaper by 1 hundreds of dollars [reduces the average sales]{style="color:darkred;"} by 0.005 thousands of dollars.  
+-   Increasing the advertising Newspaper by 1 hundreds of dollars [reduces the average sales]{style="color:darkred;"} by 0.005 thousands of dollars.\
 :::
 
 ## Prediction error
