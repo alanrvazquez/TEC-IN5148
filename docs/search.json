@@ -731,11 +731,11 @@
     "text": "Dendrogram in Python\nTo produce a nice dendrogram in Python, we use the function dendrogram from scipy.\n\n\nCode\nplt.figure(figsize=(8, 4))\ndendrogram(Clust_Cereal, color_threshold=None)\nplt.title('Hierarchical Clustering Dendrogram (Complete Linkage)')\nplt.xlabel('Sample Index')\nplt.ylabel('Distance')\nplt.tight_layout()\nplt.show()"
   },
   {
-    "objectID": "UnsupervisedLearning/Clustering.slides.html#comments-1",
-    "href": "UnsupervisedLearning/Clustering.slides.html#comments-1",
+    "objectID": "UnsupervisedLearning/Clustering.slides.html#coloring-clusters",
+    "href": "UnsupervisedLearning/Clustering.slides.html#coloring-clusters",
     "title": "Clustering Methods",
-    "section": "Comments",
-    "text": "Comments\n\n\nRemember to standardize the predictors!\nIt’s not easy to choose the correct number of clusters using the dendrogram.\nThe results depend on the linkage measure used.\n\nComplete linkage results in narrower clusters.\nAverage linkage strikes a balance between narrow and thinner clusters.\n\nHierarchical clustering is useful for detecting outliers."
+    "section": "Coloring clusters",
+    "text": "Coloring clusters\n\nThe dendrogram function colors a specific number of groups by default, but we can alter this behavior and color two, three, or more groups. To this end, w must determine the threshold to cut the dendrogram using the code below.\n\n# Define the number of clusters\nnum_clusters = 4\n\n# Compute the color threshold to form exactly 3 clusters\n# Find the distance at which to cut the dendrogram\ndistance_threshold = Clust_Cereal[-(num_clusters - 1), 2]"
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#section-14",
@@ -743,6 +743,34 @@
     "title": "Clustering Methods",
     "section": "",
     "text": "We specify the threshold to cut the dendrogram and set the groups using the color_threshold argument in dendrogram().\n\n\nCode\nplt.figure(figsize=(9, 4.5))\ndendrogram(Clust_Cereal, color_threshold = distance_threshold)\nplt.title('Hierarchical Clustering Dendrogram (Complete Linkage)')\nplt.xlabel('Sample Index')\nplt.ylabel('Distance')\nplt.tight_layout()\nplt.show()"
+  },
+  {
+    "objectID": "UnsupervisedLearning/Clustering.slides.html#extracting-the-hierarchical-clusters",
+    "href": "UnsupervisedLearning/Clustering.slides.html#extracting-the-hierarchical-clusters",
+    "title": "Clustering Methods",
+    "section": "Extracting the hierarchical clusters",
+    "text": "Extracting the hierarchical clusters\nUnfortunately, the previous functions do not allow us to easily extract the cluster assignments. To overcome this issue, we use the function fclusters from the scipy library in Python.\n\n# Extract the clusters using fcluster\ndistance_threshold = Clust_Cereal[-(num_clusters), 2]\ncereal_clusters = fcluster(Clust_Cereal, distance_threshold, criterion='distance')\n\n# Display the clusters\nprint(cereal_clusters)\n\n[1 4 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 2 2 2 2 2 3 2 2 2 2 2 2 2 2 2 2\n 2 2 2 2 2 2 3 2 2 2 2 2 2 2 2 2 2 3 3 2 4 2 2 3 2 2 3 3 3 2 2 3 2 2 2 2 2\n 2 2 2]\n\n\n\nIn contrast with the creation of the dendrogram, here we use -(num_clusters) insetad of -(num_clusters - 1)"
+  },
+  {
+    "objectID": "UnsupervisedLearning/Clustering.slides.html#section-15",
+    "href": "UnsupervisedLearning/Clustering.slides.html#section-15",
+    "title": "Clustering Methods",
+    "section": "",
+    "text": "Finally, we assign the final clusters to the data as follows:\n\n# Add new variable with cluster assignment.\nX_cereal_clust = (X_cereal\n                  .assign(Clusters = cereal_clusters)\n                  )\n\n# Preview the new variable.\nX_cereal_clust.head(4)\n\n\n\n\n\n\n\n\ncalories\nprotein\nfat\nsodium\nfiber\ncarbo\nsugars\npotass\nvitamins\nClusters\n\n\n\n\n0\n70\n4\n1\n130\n10.0\n5.0\n6\n280\n25\n1\n\n\n1\n120\n3\n5\n15\n2.0\n8.0\n8\n135\n0\n4\n\n\n2\n70\n4\n1\n260\n9.0\n7.0\n5\n320\n25\n1\n\n\n3\n50\n4\n0\n140\n14.0\n8.0\n0\n330\n25\n1"
+  },
+  {
+    "objectID": "UnsupervisedLearning/Clustering.slides.html#comments-1",
+    "href": "UnsupervisedLearning/Clustering.slides.html#comments-1",
+    "title": "Clustering Methods",
+    "section": "Comments",
+    "text": "Comments\n\n\nRemember to standardize the predictors!\nIt’s not easy to choose the correct number of clusters using the dendrogram.\nThe results depend on the linkage measure used.\n\nComplete linkage results in narrower clusters.\nAverage linkage strikes a balance between narrow and thinner clusters.\n\nHierarchical clustering is useful for detecting outliers."
+  },
+  {
+    "objectID": "UnsupervisedLearning/Clustering.slides.html#section-16",
+    "href": "UnsupervisedLearning/Clustering.slides.html#section-16",
+    "title": "Clustering Methods",
+    "section": "",
+    "text": "With these methods, there is no single correct answer; any solution that exposes some interesting aspect of the data should be considered.\n\nJames et al. (2017)"
   },
   {
     "objectID": "Tools/Tools1.slides.html#agenda",
@@ -1232,7 +1260,7 @@
     "href": "LinearRegression/Intro_and_LinearRegression.slides.html#section-1",
     "title": "Supervised Learning and Linear Regression",
     "section": "",
-    "text": "\\[\\hat{Y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\cdots + \\hat{\\beta}_p X_{ip},\\]\nInterpretation:\n\n\\(\\hat{\\beta}_0\\) is the average response when all predictors \\(X_j\\) equal 0.\n\\(\\hat{\\beta}_j\\) is the amount of increase in the average response by a 1 unit increase in the predictor \\(X_j\\), when all other predictors are fixed to an arbitrary value."
+    "text": "\\[\\hat{Y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_{i1} + \\cdots + \\hat{\\beta}_p X_{ip},\\]\nInterpretation:\n\n\\(\\hat{\\beta}_0\\) is the average response when all predictors \\(X_j\\) equal 0.\n\\(\\hat{\\beta}_j\\) is the amount of increase in the average response by a 1 unit increase in the \\(j\\)-th predictor \\(X_{ij}\\), when all other predictors are fixed to an arbitrary value."
   },
   {
     "objectID": "LinearRegression/Intro_and_LinearRegression.slides.html#estimation-of-coefficients",
@@ -1596,7 +1624,7 @@
     "href": "LinearRegression/ModelInferenceEvaluation.slides.html#section-8",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "We access the information on the t-tests using the .summary() function.\n\nmodel_summary = linear_model.summary()\nprint(model_summary)\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.700\nModel:                            OLS   Adj. R-squared:                  0.698\nMethod:                 Least Squares   F-statistic:                     453.2\nDate:                Thu, 19 Feb 2026   Prob (F-statistic):          2.43e-102\nTime:                        16:18:46   Log-Likelihood:                -1125.4\nNo. Observations:                 392   AIC:                             2257.\nDf Residuals:                     389   BIC:                             2269.\nDf Model:                           2                                         \nCovariance Type:            nonrobust                                         \n================================================================================\n                   coef    std err          t      P&gt;|t|      [0.025      0.975]\n--------------------------------------------------------------------------------\nconst           41.0953      1.868     21.999      0.000      37.423      44.768\nweight          -0.0073      0.000    -25.966      0.000      -0.008      -0.007\nacceleration     0.2617      0.086      3.026      0.003       0.092       0.432\n==============================================================================\nOmnibus:                       31.397   Durbin-Watson:                   0.818\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               39.962\nSkew:                           0.632   Prob(JB):                     2.10e-09\nKurtosis:                       3.922   Cond. No.                     2.67e+04\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n[2] The condition number is large, 2.67e+04. This might indicate that there are\nstrong multicollinearity or other numerical problems."
+    "text": "We access the information on the t-tests using the .summary() function.\n\nmodel_summary = linear_model.summary()\nprint(model_summary)\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.700\nModel:                            OLS   Adj. R-squared:                  0.698\nMethod:                 Least Squares   F-statistic:                     453.2\nDate:                Tue, 24 Feb 2026   Prob (F-statistic):          2.43e-102\nTime:                        18:52:12   Log-Likelihood:                -1125.4\nNo. Observations:                 392   AIC:                             2257.\nDf Residuals:                     389   BIC:                             2269.\nDf Model:                           2                                         \nCovariance Type:            nonrobust                                         \n================================================================================\n                   coef    std err          t      P&gt;|t|      [0.025      0.975]\n--------------------------------------------------------------------------------\nconst           41.0953      1.868     21.999      0.000      37.423      44.768\nweight          -0.0073      0.000    -25.966      0.000      -0.008      -0.007\nacceleration     0.2617      0.086      3.026      0.003       0.092       0.432\n==============================================================================\nOmnibus:                       31.397   Durbin-Watson:                   0.818\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               39.962\nSkew:                           0.632   Prob(JB):                     2.10e-09\nKurtosis:                       3.922   Cond. No.                     2.67e+04\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n[2] The condition number is large, 2.67e+04. This might indicate that there are\nstrong multicollinearity or other numerical problems."
   },
   {
     "objectID": "LinearRegression/ModelInferenceEvaluation.slides.html#table-of-t-tests",
@@ -1974,7 +2002,7 @@
     "href": "Classification/KNearestNeighbours.slides.html#section-1",
     "title": "K-nearest neighbors",
     "section": "",
-    "text": "Finally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_valid)\nvalid_accuracy = accuracy_score(Y_valid, Y_pred_KNNfinal)\nprint(valid_accuracy)\n\n0.95"
+    "text": "Finally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_valid)\nvalid_accuracy = accuracy_score(Y_valid, Y_pred_KNNfinal)\nprint(valid_accuracy)\n\n0.9666666666666667"
   },
   {
     "objectID": "Classification/KNearestNeighbours.slides.html#discussion",
@@ -2149,14 +2177,14 @@
     "href": "Classification/Classification.slides.html#section-5",
     "title": "Classification Trees",
     "section": "",
-    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nLeft\nRight\nBottom\nTop\nStatus_counterfeit\n\n\n\n\n166\n130.7\n130.4\n10.0\n10.1\n1\n\n\n31\n129.7\n129.7\n8.6\n9.1\n0\n\n\n175\n130.4\n130.2\n11.9\n10.7\n1\n\n\n101\n130.5\n130.2\n11.0\n11.5\n1"
+    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nLeft\nRight\nBottom\nTop\nStatus_counterfeit\n\n\n\n\n152\n129.7\n129.3\n10.4\n11.0\n1\n\n\n1\n129.7\n129.7\n8.1\n9.5\n0\n\n\n3\n129.7\n129.6\n7.5\n10.4\n0\n\n\n54\n129.4\n129.5\n7.9\n10.0\n0"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-6",
     "href": "Classification/Classification.slides.html#section-6",
     "title": "Classification Trees",
     "section": "",
-    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nLeft\nRight\nBottom\nTop\nStatus_counterfeit\n\n\n\n\n182\n130.5\n130.1\n11.0\n11.4\n1\n\n\n8\n129.4\n129.7\n8.2\n11.0\n0\n\n\n5\n130.8\n130.5\n9.0\n10.1\n0\n\n\n118\n130.5\n130.2\n11.0\n11.0\n1\n\n\n28\n130.0\n130.0\n7.4\n10.5\n0"
+    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nLeft\nRight\nBottom\nTop\nStatus_counterfeit\n\n\n\n\n175\n130.4\n130.2\n11.9\n10.7\n1\n\n\n194\n130.3\n130.5\n11.6\n10.6\n1\n\n\n161\n130.5\n130.1\n9.9\n10.2\n1\n\n\n172\n130.5\n130.3\n11.8\n10.5\n1\n\n\n173\n129.6\n130.0\n10.4\n11.6\n1"
   },
   {
     "objectID": "Classification/Classification.slides.html#work-on-your-training-dataset",
@@ -2275,14 +2303,14 @@
     "href": "Classification/Classification.slides.html#section-27",
     "title": "Classification Trees",
     "section": "",
-    "text": "The predict() function generates actual classes to which each observation was assigned.\n\npredicted_class\n\narray([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,\n       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,\n       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])"
+    "text": "The predict() function generates actual classes to which each observation was assigned.\n\npredicted_class\n\narray([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,\n       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,\n       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-28",
     "href": "Classification/Classification.slides.html#section-28",
     "title": "Classification Trees",
     "section": "",
-    "text": "The predict_proba() function generates the probabilities used by the algorithm to assign the classes.\n\n# Predict probabilities.\npredicted_probability = clf.predict_proba(X_valid)\npredicted_probability\n\narray([[0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571],\n       [0.43571429, 0.56428571]])"
+    "text": "The predict_proba() function generates the probabilities used by the algorithm to assign the classes.\n\n# Predict probabilities.\npredicted_probability = clf.predict_proba(X_valid)\npredicted_probability\n\narray([[0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429],\n       [0.56428571, 0.43571429]])"
   },
   {
     "objectID": "Classification/Classification.slides.html#confusion-matrix",
@@ -2296,7 +2324,7 @@
     "href": "Classification/Classification.slides.html#in-python-1",
     "title": "Classification Trees",
     "section": "In Python",
-    "text": "In Python\n\nWe calculate the confusion matrix using the homonymous function scikit-learn.\n\n# Compute confusion matrix.\ncm = confusion_matrix(Y_valid, predicted_class)\n\n# Show confusion matrix.\nprint(cm)\n\n[[ 0 39]\n [ 0 21]]"
+    "text": "In Python\n\nWe calculate the confusion matrix using the homonymous function scikit-learn.\n\n# Compute confusion matrix.\ncm = confusion_matrix(Y_valid, predicted_class)\n\n# Show confusion matrix.\nprint(cm)\n\n[[21  0]\n [39  0]]"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-29",
@@ -2345,7 +2373,7 @@
     "href": "Classification/Classification.slides.html#evaluation-1",
     "title": "Classification Trees",
     "section": "Evaluation",
-    "text": "Evaluation\nLet’s compute the accuracy of the pruned tree.\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.98"
+    "text": "Evaluation\nLet’s compute the accuracy of the pruned tree.\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.97"
   },
   {
     "objectID": "Classification/Classification.slides.html#comments",
@@ -2401,7 +2429,7 @@
     "href": "Classification/Classification.slides.html#section-35",
     "title": "Classification Trees",
     "section": "",
-    "text": "In Python, we compute sensitivity and precision using the following commands:\n\nrecall = recall_score(Y_valid, predicted_class)\nprint( round(recall, 2) )\n\n1.0\n\n\n\n\nprecision = precision_score(Y_valid, predicted_class)\nprint( round(precision, 2) )\n\n0.35"
+    "text": "In Python, we compute sensitivity and precision using the following commands:\n\nrecall = recall_score(Y_valid, predicted_class)\nprint( round(recall, 2) )\n\n0.0\n\n\n\n\nprecision = precision_score(Y_valid, predicted_class)\nprint( round(precision, 2) )\n\n0.0"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-36",
@@ -2415,7 +2443,7 @@
     "href": "Classification/Classification.slides.html#section-37",
     "title": "Classification Trees",
     "section": "",
-    "text": "Unfortunately, there is no simple command to calculate the type-I error in sklearn. To overcome this issue, we must calculate it manually.\n\n# Confusion matrix to compute Type-I error\ntn, fp, fn, tp = confusion_matrix(Y_valid, predicted_class).ravel()\n\n# Type-I error rate = False Positive Rate = FP / (FP + TN)\ntype_I_error = fp / (fp + tn)\nprint( round(type_I_error, 2) )\n\n1.0"
+    "text": "Unfortunately, there is no simple command to calculate the type-I error in sklearn. To overcome this issue, we must calculate it manually.\n\n# Confusion matrix to compute Type-I error\ntn, fp, fn, tp = confusion_matrix(Y_valid, predicted_class).ravel()\n\n# Type-I error rate = False Positive Rate = FP / (FP + TN)\ntype_I_error = fp / (fp + tn)\nprint( round(type_I_error, 2) )\n\n0.0"
   },
   {
     "objectID": "Classification/Classification.slides.html#discussion",
@@ -2583,7 +2611,7 @@
     "href": "Classification/EnsembleMethods.slides.html#predictions-1",
     "title": "Ensemble Methods",
     "section": "Predictions",
-    "text": "Predictions\nPredict the classes using bagging.\n\npredicted_class = Baggingalgorithm.predict(X_valid)\n\npredicted_class\n\narray([0, 0, 0, ..., 0, 0, 0])"
+    "text": "Predictions\nPredict the classes using bagging.\n\npredicted_class = Baggingalgorithm.predict(X_valid)\n\npredicted_class\n\narray([0, 0, 1, ..., 0, 0, 1])"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#confusion-matrix",
@@ -2681,7 +2709,7 @@
     "href": "Classification/EnsembleMethods.slides.html#accuracy-1",
     "title": "Ensemble Methods",
     "section": "Accuracy",
-    "text": "Accuracy\n\nThe accuracy of the random forest classifier is 79%.\n\n# Compute accuracy.\naccuracy = accuracy_score(Y_valid, RF_predicted)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.79"
+    "text": "Accuracy\n\nThe accuracy of the random forest classifier is 79%.\n\n# Compute accuracy.\naccuracy = accuracy_score(Y_valid, RF_predicted)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.78"
   },
   {
     "objectID": "Classification/IntrotoDataScience.slides.html#agenda",
@@ -4067,14 +4095,14 @@
     "href": "PreProcessing/TrainTestData.slides.html#section-2",
     "title": "Train, Test, and Validation Datasets",
     "section": "",
-    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n394\n13.35980\n0.0\n18.10\nNo\n0.693\n5.887\n94.7\n1.7821\nHigh\n666\n20.2\n16.35\n12.7\n\n\n67\n0.05789\n12.5\n6.07\nNo\n0.409\n5.878\n21.4\n6.4980\nMedium\n345\n18.9\n8.10\n22.0\n\n\n50\n0.08873\n21.0\n5.64\nNo\n0.439\n5.963\n45.7\n6.8147\nMedium\n243\n16.8\n13.45\n19.7\n\n\n505\n0.04741\n0.0\n11.93\nNo\n0.573\n6.030\n80.8\n2.5050\nLow\n273\n21.0\n7.88\n11.9"
+    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n31\n1.35472\n0.0\n8.14\nNo\n0.538\n6.072\n100.0\n4.1750\nMedium\n307\n21.0\n13.04\n14.5\n\n\n478\n10.23300\n0.0\n18.10\nNo\n0.614\n6.185\n96.7\n2.1705\nHigh\n666\n20.2\n18.03\n14.6\n\n\n157\n1.22358\n0.0\n19.58\nNo\n0.605\n6.943\n97.4\n1.8773\nMedium\n403\n14.7\n4.59\n41.3\n\n\n260\n0.54011\n20.0\n3.97\nNo\n0.647\n7.203\n81.8\n2.1121\nMedium\n264\n13.0\n9.59\n33.8"
   },
   {
     "objectID": "PreProcessing/TrainTestData.slides.html#section-3",
     "href": "PreProcessing/TrainTestData.slides.html#section-3",
     "title": "Train, Test, and Validation Datasets",
     "section": "",
-    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n99\n0.06860\n0.0\n2.89\nNo\n0.445\n7.416\n62.5\n3.4952\nLow\n276\n18.0\n6.19\n33.2\n\n\n82\n0.03659\n25.0\n4.86\nNo\n0.426\n6.302\n32.2\n5.4007\nMedium\n281\n19.0\n6.72\n24.8\n\n\n235\n0.33045\n0.0\n6.20\nNo\n0.507\n6.086\n61.5\n3.6519\nHigh\n307\n17.4\n10.88\n24.0\n\n\n251\n0.21409\n22.0\n5.86\nNo\n0.431\n6.438\n8.9\n7.3967\nHigh\n330\n19.1\n3.59\n24.8\n\n\n448\n9.32909\n0.0\n18.10\nNo\n0.713\n6.185\n98.7\n2.2616\nHigh\n666\n20.2\n18.13\n14.1"
+    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n180\n0.06588\n0.0\n2.46\nNo\n0.488\n7.765\n83.3\n2.7410\nLow\n193\n17.8\n7.56\n39.8\n\n\n389\n8.15174\n0.0\n18.10\nNo\n0.700\n5.390\n98.9\n1.7281\nHigh\n666\n20.2\n20.85\n11.5\n\n\n55\n0.01311\n90.0\n1.22\nNo\n0.403\n7.249\n21.9\n8.6966\nMedium\n226\n17.9\n4.81\n35.4\n\n\n505\n0.04741\n0.0\n11.93\nNo\n0.573\n6.030\n80.8\n2.5050\nLow\n273\n21.0\n7.88\n11.9\n\n\n322\n0.35114\n0.0\n7.38\nNo\n0.493\n6.041\n49.9\n4.7211\nMedium\n287\n19.6\n7.70\n20.4"
   },
   {
     "objectID": "PreProcessing/TrainTestData.slides.html#work-on-your-training-dataset",
@@ -4082,33 +4110,5 @@
     "title": "Train, Test, and Validation Datasets",
     "section": "Work on your training dataset",
     "text": "Work on your training dataset\nAfter we have partitioned the data, we work on the training data to develop our predictive pipeline.\nThe pipeline has two main steps:\n\nData preprocessing.\nModel development.\n\nWe will now discuss preprocessing techniques applied to the predictor columns in the training dataset.\nNote that all preprocessing techniques will also be applied to the validation dataset and test dataset to prepare it for your model!"
-  },
-  {
-    "objectID": "UnsupervisedLearning/Clustering.slides.html#coloring-clusters",
-    "href": "UnsupervisedLearning/Clustering.slides.html#coloring-clusters",
-    "title": "Clustering Methods",
-    "section": "Coloring clusters",
-    "text": "Coloring clusters\n\nThe dendrogram function colors a specific number of groups by default, but we can alter this behavior and color two, three, or more groups. To this end, w must determine the threshold to cut the dendrogram using the code below.\n\n# Define the number of clusters\nnum_clusters = 4\n\n# Compute the color threshold to form exactly 3 clusters\n# Find the distance at which to cut the dendrogram\ndistance_threshold = Clust_Cereal[-(num_clusters - 1), 2]"
-  },
-  {
-    "objectID": "UnsupervisedLearning/Clustering.slides.html#extracting-the-hierarchical-clusters",
-    "href": "UnsupervisedLearning/Clustering.slides.html#extracting-the-hierarchical-clusters",
-    "title": "Clustering Methods",
-    "section": "Extracting the hierarchical clusters",
-    "text": "Extracting the hierarchical clusters\nUnfortunately, the previous functions do not allow us to easily extract the cluster assignments. To overcome this issue, we use the function fclusters from the scipy library in Python.\n\n# Extract the clusters using fcluster\ndistance_threshold = Clust_Cereal[-(num_clusters), 2]\ncereal_clusters = fcluster(Clust_Cereal, distance_threshold, criterion='distance')\n\n# Display the clusters\nprint(cereal_clusters)\n\n[1 4 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 2 2 2 2 2 3 2 2 2 2 2 2 2 2 2 2\n 2 2 2 2 2 2 3 2 2 2 2 2 2 2 2 2 2 3 3 2 4 2 2 3 2 2 3 3 3 2 2 3 2 2 2 2 2\n 2 2 2]\n\n\n\nIn contrast with the creation of the dendrogram, here we use -(num_clusters) insetad of -(num_clusters - 1)"
-  },
-  {
-    "objectID": "UnsupervisedLearning/Clustering.slides.html#section-15",
-    "href": "UnsupervisedLearning/Clustering.slides.html#section-15",
-    "title": "Clustering Methods",
-    "section": "",
-    "text": "Finally, we assign the final clusters to the data as follows:\n\n# Add new variable with cluster assignment.\nX_cereal_clust = (X_cereal\n                  .assign(Clusters = cereal_clusters)\n                  )\n\n# Preview the new variable.\nX_cereal_clust.head(4)\n\n\n\n\n\n\n\n\ncalories\nprotein\nfat\nsodium\nfiber\ncarbo\nsugars\npotass\nvitamins\nClusters\n\n\n\n\n0\n70\n4\n1\n130\n10.0\n5.0\n6\n280\n25\n1\n\n\n1\n120\n3\n5\n15\n2.0\n8.0\n8\n135\n0\n4\n\n\n2\n70\n4\n1\n260\n9.0\n7.0\n5\n320\n25\n1\n\n\n3\n50\n4\n0\n140\n14.0\n8.0\n0\n330\n25\n1"
-  },
-  {
-    "objectID": "UnsupervisedLearning/Clustering.slides.html#section-16",
-    "href": "UnsupervisedLearning/Clustering.slides.html#section-16",
-    "title": "Clustering Methods",
-    "section": "",
-    "text": "With these methods, there is no single correct answer; any solution that exposes some interesting aspect of the data should be considered.\n\nJames et al. (2017)"
   }
 ]
