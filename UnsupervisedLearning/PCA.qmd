@@ -445,7 +445,7 @@ Other predictors are:
 #| echo: true
 
 tiktok_data = pd.read_excel("TikTok_Songs_2020_Reduced.xlsx")
-tiktok_data.head()
+tiktok_data.head(3)
 ```
 
 ## Standardize the data

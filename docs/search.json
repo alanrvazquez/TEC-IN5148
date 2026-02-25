@@ -3934,7 +3934,7 @@
     "href": "UnsupervisedLearning/PCA.slides.html#the-data",
     "title": "Principal Component Analysis",
     "section": "The data",
-    "text": "The data\n\ntiktok_data = pd.read_excel(\"TikTok_Songs_2020_Reduced.xlsx\")\ntiktok_data.head()\n\n\n\n\n\n\n\n\ntrack_name\nartist_name\nalbum\ndanceability\nenergy\nloudness\nspeechiness\nacousticness\nliveness\nvalence\ntempo\n\n\n\n\n0\nSay So\nDoja Cat\nHot Pink\n0.787\n0.673\n-4.583\n0.1590\n0.26400\n0.0904\n0.779\n110.962\n\n\n1\nBlinding Lights\nThe Weeknd\nAfter Hours\n0.514\n0.730\n-5.934\n0.0598\n0.00146\n0.0897\n0.334\n171.005\n\n\n2\nSupalonely (feat. Gus Dapperton)\nBENEE\nHey u x\n0.862\n0.631\n-4.746\n0.0515\n0.29100\n0.1230\n0.841\n128.978\n\n\n3\nSavage\nMegan Thee Stallion\nSuga\n0.843\n0.741\n-5.609\n0.3340\n0.02520\n0.0960\n0.680\n168.983\n\n\n4\nMoral of the Story\nAshe\nMoral of the Story\n0.572\n0.406\n-8.624\n0.0427\n0.58700\n0.1020\n0.265\n119.812"
+    "text": "The data\n\ntiktok_data = pd.read_excel(\"TikTok_Songs_2020_Reduced.xlsx\")\ntiktok_data.head(3)\n\n\n\n\n\n\n\n\ntrack_name\nartist_name\nalbum\ndanceability\nenergy\nloudness\nspeechiness\nacousticness\nliveness\nvalence\ntempo\n\n\n\n\n0\nSay So\nDoja Cat\nHot Pink\n0.787\n0.673\n-4.583\n0.1590\n0.26400\n0.0904\n0.779\n110.962\n\n\n1\nBlinding Lights\nThe Weeknd\nAfter Hours\n0.514\n0.730\n-5.934\n0.0598\n0.00146\n0.0897\n0.334\n171.005\n\n\n2\nSupalonely (feat. Gus Dapperton)\nBENEE\nHey u x\n0.862\n0.631\n-4.746\n0.0515\n0.29100\n0.1230\n0.841\n128.978"
   },
   {
     "objectID": "UnsupervisedLearning/PCA.slides.html#standardize-the-data",
