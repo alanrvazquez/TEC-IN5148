@@ -469,7 +469,7 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#before-we-move-on",
     "title": "Clustering Methods",
     "section": "Before we move on…",
-    "text": "Before we move on…\n\nlet’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.cluster import KMeans, AgglomerativeClustering\nfrom scipy.cluster.hierarchy import dendrogram, linkage\n\nHere, we use specific functions from the pandas, matplotlib, seaborn, sklearn, and scipy libraries in Python."
+    "text": "Before we move on…\n\nlet’s import the data science libraries into Python.\n\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.cluster import KMeans\nfrom scipy.cluster.hierarchy import dendrogram, linkage, fcluster\n\nHere, we use specific functions from the pandas, matplotlib, seaborn, sklearn, and scipy libraries in Python."
   },
   {
     "objectID": "UnsupervisedLearning/Clustering.slides.html#example-1",
@@ -742,7 +742,7 @@
     "href": "UnsupervisedLearning/Clustering.slides.html#section-14",
     "title": "Clustering Methods",
     "section": "",
-    "text": "With these methods, there is no single correct answer; any solution that exposes some interesting aspect of the data should be considered.\n\nJames et al. (2017)"
+    "text": "We specify the threshold to cut the dendrogram and set the groups using the color_threshold argument in dendrogram().\n\n\nCode\nplt.figure(figsize=(9, 4.5))\ndendrogram(Clust_Cereal, color_threshold = distance_threshold)\nplt.title('Hierarchical Clustering Dendrogram (Complete Linkage)')\nplt.xlabel('Sample Index')\nplt.ylabel('Distance')\nplt.tight_layout()\nplt.show()"
   },
   {
     "objectID": "Tools/Tools1.slides.html#agenda",
@@ -4082,5 +4082,33 @@
     "title": "Train, Test, and Validation Datasets",
     "section": "Work on your training dataset",
     "text": "Work on your training dataset\nAfter we have partitioned the data, we work on the training data to develop our predictive pipeline.\nThe pipeline has two main steps:\n\nData preprocessing.\nModel development.\n\nWe will now discuss preprocessing techniques applied to the predictor columns in the training dataset.\nNote that all preprocessing techniques will also be applied to the validation dataset and test dataset to prepare it for your model!"
+  },
+  {
+    "objectID": "UnsupervisedLearning/Clustering.slides.html#coloring-clusters",
+    "href": "UnsupervisedLearning/Clustering.slides.html#coloring-clusters",
+    "title": "Clustering Methods",
+    "section": "Coloring clusters",
+    "text": "Coloring clusters\n\nThe dendrogram function colors a specific number of groups by default, but we can alter this behavior and color two, three, or more groups. To this end, w must determine the threshold to cut the dendrogram using the code below.\n\n# Define the number of clusters\nnum_clusters = 4\n\n# Compute the color threshold to form exactly 3 clusters\n# Find the distance at which to cut the dendrogram\ndistance_threshold = Clust_Cereal[-(num_clusters - 1), 2]"
+  },
+  {
+    "objectID": "UnsupervisedLearning/Clustering.slides.html#extracting-the-hierarchical-clusters",
+    "href": "UnsupervisedLearning/Clustering.slides.html#extracting-the-hierarchical-clusters",
+    "title": "Clustering Methods",
+    "section": "Extracting the hierarchical clusters",
+    "text": "Extracting the hierarchical clusters\nUnfortunately, the previous functions do not allow us to easily extract the cluster assignments. To overcome this issue, we use the function fclusters from the scipy library in Python.\n\n# Extract the clusters using fcluster\ndistance_threshold = Clust_Cereal[-(num_clusters), 2]\ncereal_clusters = fcluster(Clust_Cereal, distance_threshold, criterion='distance')\n\n# Display the clusters\nprint(cereal_clusters)\n\n[1 4 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 2 2 2 2 2 3 2 2 2 2 2 2 2 2 2 2\n 2 2 2 2 2 2 3 2 2 2 2 2 2 2 2 2 2 3 3 2 4 2 2 3 2 2 3 3 3 2 2 3 2 2 2 2 2\n 2 2 2]\n\n\n\nIn contrast with the creation of the dendrogram, here we use -(num_clusters) insetad of -(num_clusters - 1)"
+  },
+  {
+    "objectID": "UnsupervisedLearning/Clustering.slides.html#section-15",
+    "href": "UnsupervisedLearning/Clustering.slides.html#section-15",
+    "title": "Clustering Methods",
+    "section": "",
+    "text": "Finally, we assign the final clusters to the data as follows:\n\n# Add new variable with cluster assignment.\nX_cereal_clust = (X_cereal\n                  .assign(Clusters = cereal_clusters)\n                  )\n\n# Preview the new variable.\nX_cereal_clust.head(4)\n\n\n\n\n\n\n\n\ncalories\nprotein\nfat\nsodium\nfiber\ncarbo\nsugars\npotass\nvitamins\nClusters\n\n\n\n\n0\n70\n4\n1\n130\n10.0\n5.0\n6\n280\n25\n1\n\n\n1\n120\n3\n5\n15\n2.0\n8.0\n8\n135\n0\n4\n\n\n2\n70\n4\n1\n260\n9.0\n7.0\n5\n320\n25\n1\n\n\n3\n50\n4\n0\n140\n14.0\n8.0\n0\n330\n25\n1"
+  },
+  {
+    "objectID": "UnsupervisedLearning/Clustering.slides.html#section-16",
+    "href": "UnsupervisedLearning/Clustering.slides.html#section-16",
+    "title": "Clustering Methods",
+    "section": "",
+    "text": "With these methods, there is no single correct answer; any solution that exposes some interesting aspect of the data should be considered.\n\nJames et al. (2017)"
   }
 ]
