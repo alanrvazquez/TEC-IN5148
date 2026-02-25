@@ -487,7 +487,7 @@ PCA_tiktok = pca.fit_transform(Xs_tiktok)
 :::::: center
 ::::: columns
 ::: {.column width="50%"}
--   The **Screen or Summary Plot** tells you the variability captured by each component. This variability is given by the *Eigenvalue*. From 1 to 8 components.
+-   The **Scree or Summary Plot** tells you the variability captured by each component. This variability is given by the *Eigenvalue*. From 1 to 8 components.
 
 -   The first component covers most of the data dispersion.
 
@@ -495,20 +495,28 @@ PCA_tiktok = pca.fit_transform(Xs_tiktok)
 :::
 
 ::: {.column width="50%"}
+
+</br>
+
 ```{python}
 #| output: true
 #| echo: false
 #| fig-align: center
 
 explained_var = pca.explained_variance_ratio_
+cumulative_explained_var = np.cumsum(explained_var)
 
 plt.figure(figsize=(5, 5))
-plt.plot(range(1, len(explained_var) + 1), explained_var, marker='o', linestyle='-')
+plt.plot(range(1, len(explained_var) + 1), explained_var, marker='o', 
+         color = 'blue', label='Individual')
+plt.plot(range(1, len(explained_var) + 1), cumulative_explained_var, marker='o', 
+         color='orange', label='Cumulative')         
 plt.title('Scree Plot')
 plt.xlabel('Principal Component')
 plt.ylabel('Explained Variance Ratio')
 plt.xticks(range(1, len(explained_var) + 1))
 plt.grid(True)
+plt.legend()
 plt.tight_layout()
 plt.show()
 ```
@@ -518,8 +526,6 @@ plt.show()
 
 ## 
 
-</br></br>
-
 The code to generate a scree plot is below.
 
 ```{python}
@@ -528,15 +534,19 @@ The code to generate a scree plot is below.
 #| fig-align: center
 
 explained_var = pca.explained_variance_ratio_
+cumulative_explained_var = np.cumsum(explained_var)
 
 plt.figure(figsize=(5, 5))
-plt.plot(range(1, len(explained_var) + 1), explained_var, 
-         marker='o', linestyle='-')
+plt.plot(range(1, len(explained_var) + 1), explained_var, marker='o', 
+         color = 'blue', label='Individual')
+plt.plot(range(1, len(explained_var) + 1), cumulative_explained_var, 
+         marker='o', color='orange', label='Cumulative')         
 plt.title('Scree Plot')
 plt.xlabel('Principal Component')
 plt.ylabel('Explained Variance Ratio')
 plt.xticks(range(1, len(explained_var) + 1))
 plt.grid(True)
+plt.legend()
 plt.tight_layout()
 plt.show()
 ```

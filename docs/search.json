@@ -3955,14 +3955,14 @@
     "href": "UnsupervisedLearning/PCA.slides.html#section-7",
     "title": "Principal Component Analysis",
     "section": "",
-    "text": "The Screen or Summary Plot tells you the variability captured by each component. This variability is given by the Eigenvalue. From 1 to 8 components.\nThe first component covers most of the data dispersion.\nThis graph is used to define the total number of components to use."
+    "text": "The Scree or Summary Plot tells you the variability captured by each component. This variability is given by the Eigenvalue. From 1 to 8 components.\nThe first component covers most of the data dispersion.\nThis graph is used to define the total number of components to use."
   },
   {
     "objectID": "UnsupervisedLearning/PCA.slides.html#section-8",
     "href": "UnsupervisedLearning/PCA.slides.html#section-8",
     "title": "Principal Component Analysis",
     "section": "",
-    "text": "The code to generate a scree plot is below.\n\nexplained_var = pca.explained_variance_ratio_\n\nplt.figure(figsize=(5, 5))\nplt.plot(range(1, len(explained_var) + 1), explained_var, \n         marker='o', linestyle='-')\nplt.title('Scree Plot')\nplt.xlabel('Principal Component')\nplt.ylabel('Explained Variance Ratio')\nplt.xticks(range(1, len(explained_var) + 1))\nplt.grid(True)\nplt.tight_layout()\nplt.show()"
+    "text": "The code to generate a scree plot is below.\n\nexplained_var = pca.explained_variance_ratio_\ncumulative_explained_var = np.cumsum(explained_var)\n\nplt.figure(figsize=(5, 5))\nplt.plot(range(1, len(explained_var) + 1), explained_var, marker='o', \n         color = 'blue', label='Individual')\nplt.plot(range(1, len(explained_var) + 1), cumulative_explained_var, \n         marker='o', color='orange', label='Cumulative')         \nplt.title('Scree Plot')\nplt.xlabel('Principal Component')\nplt.ylabel('Explained Variance Ratio')\nplt.xticks(range(1, len(explained_var) + 1))\nplt.grid(True)\nplt.legend()\nplt.tight_layout()\nplt.show()"
   },
   {
     "objectID": "UnsupervisedLearning/PCA.slides.html#biplot",
