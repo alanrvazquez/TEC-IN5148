@@ -747,7 +747,7 @@ A normal QQ plot is helpful for deciding whether a sample was drawn from a distr
 
 . . .
 
-2.  Next, calculate the [**theoretical**]{style="color:pink;"} percentiles of a (standard) Normal distribution calculated using Python.
+2.  Next, calculate the [**theoretical**]{style="color:pink;"} percentiles of a (standard) Normal distribution using Python.
 
 ## 
 
@@ -775,7 +775,7 @@ To construct a QQ plot, we use the function `qqplot()` from the **statsmodels** 
 
 # QQ plot to assess normality of residuals
 plt.figure(figsize=(5, 3))
-sm.qqplot(residuals, fit = True, line = '45')
+sm.qqplot(residuals, line = 'q')
 plt.title('QQ Plot of Residuals')
 plt.show()
 ```
@@ -792,7 +792,7 @@ Substantial departures from a straight line indicate that the distribution is no
 
 # QQ plot to assess normality of residuals
 plt.figure(figsize=(7, 4))
-sm.qqplot(residuals, fit = True, line = '45')
+sm.qqplot(residuals, line = 'q')
 plt.title('QQ Plot of Residuals')
 plt.show()
 ```
@@ -809,7 +809,7 @@ This plot suggests that the residuals are consistent with a Normal curve.
 
 # QQ plot to assess normality of residuals
 plt.figure(figsize=(7, 4))
-sm.qqplot(residuals, fit = True, line = '45')
+sm.qqplot(residuals, line = 'q')
 plt.title('QQ Plot of Residuals')
 plt.show()
 ```
