@@ -1624,7 +1624,7 @@
     "href": "LinearRegression/ModelInferenceEvaluation.slides.html#section-8",
     "title": "Model Evaluation and Inference",
     "section": "",
-    "text": "We access the information on the t-tests using the .summary() function.\n\nmodel_summary = linear_model.summary()\nprint(model_summary)\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.700\nModel:                            OLS   Adj. R-squared:                  0.698\nMethod:                 Least Squares   F-statistic:                     453.2\nDate:                Thu, 26 Feb 2026   Prob (F-statistic):          2.43e-102\nTime:                        16:47:46   Log-Likelihood:                -1125.4\nNo. Observations:                 392   AIC:                             2257.\nDf Residuals:                     389   BIC:                             2269.\nDf Model:                           2                                         \nCovariance Type:            nonrobust                                         \n================================================================================\n                   coef    std err          t      P&gt;|t|      [0.025      0.975]\n--------------------------------------------------------------------------------\nconst           41.0953      1.868     21.999      0.000      37.423      44.768\nweight          -0.0073      0.000    -25.966      0.000      -0.008      -0.007\nacceleration     0.2617      0.086      3.026      0.003       0.092       0.432\n==============================================================================\nOmnibus:                       31.397   Durbin-Watson:                   0.818\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               39.962\nSkew:                           0.632   Prob(JB):                     2.10e-09\nKurtosis:                       3.922   Cond. No.                     2.67e+04\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n[2] The condition number is large, 2.67e+04. This might indicate that there are\nstrong multicollinearity or other numerical problems."
+    "text": "We access the information on the t-tests using the .summary() function.\n\nmodel_summary = linear_model.summary()\nprint(model_summary)\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.700\nModel:                            OLS   Adj. R-squared:                  0.698\nMethod:                 Least Squares   F-statistic:                     453.2\nDate:                Thu, 26 Feb 2026   Prob (F-statistic):          2.43e-102\nTime:                        16:49:20   Log-Likelihood:                -1125.4\nNo. Observations:                 392   AIC:                             2257.\nDf Residuals:                     389   BIC:                             2269.\nDf Model:                           2                                         \nCovariance Type:            nonrobust                                         \n================================================================================\n                   coef    std err          t      P&gt;|t|      [0.025      0.975]\n--------------------------------------------------------------------------------\nconst           41.0953      1.868     21.999      0.000      37.423      44.768\nweight          -0.0073      0.000    -25.966      0.000      -0.008      -0.007\nacceleration     0.2617      0.086      3.026      0.003       0.092       0.432\n==============================================================================\nOmnibus:                       31.397   Durbin-Watson:                   0.818\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               39.962\nSkew:                           0.632   Prob(JB):                     2.10e-09\nKurtosis:                       3.922   Cond. No.                     2.67e+04\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n[2] The condition number is large, 2.67e+04. This might indicate that there are\nstrong multicollinearity or other numerical problems."
   },
   {
     "objectID": "LinearRegression/ModelInferenceEvaluation.slides.html#table-of-t-tests",
@@ -2002,7 +2002,7 @@
     "href": "Classification/KNearestNeighbours.slides.html#section-1",
     "title": "K-nearest neighbors",
     "section": "",
-    "text": "Finally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_valid)\nvalid_accuracy = accuracy_score(Y_valid, Y_pred_KNNfinal)\nprint(valid_accuracy)\n\n0.9833333333333333"
+    "text": "Finally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_valid)\nvalid_accuracy = accuracy_score(Y_valid, Y_pred_KNNfinal)\nprint(valid_accuracy)\n\n0.9666666666666667"
   },
   {
     "objectID": "Classification/KNearestNeighbours.slides.html#discussion",
@@ -2177,14 +2177,14 @@
     "href": "Classification/Classification.slides.html#section-5",
     "title": "Classification Trees",
     "section": "",
-    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nLeft\nRight\nBottom\nTop\nStatus_counterfeit\n\n\n\n\n83\n130.1\n129.9\n7.9\n10.8\n0\n\n\n165\n130.3\n130.6\n10.3\n12.0\n1\n\n\n99\n130.0\n129.4\n7.8\n10.0\n0\n\n\n198\n130.7\n130.8\n11.2\n11.2\n1"
+    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nLeft\nRight\nBottom\nTop\nStatus_counterfeit\n\n\n\n\n113\n130.4\n129.9\n11.4\n11.0\n1\n\n\n47\n129.9\n129.7\n7.3\n10.9\n0\n\n\n128\n130.2\n130.2\n10.1\n11.3\n1\n\n\n110\n130.4\n130.3\n8.0\n11.5\n1"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-6",
     "href": "Classification/Classification.slides.html#section-6",
     "title": "Classification Trees",
     "section": "",
-    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nLeft\nRight\nBottom\nTop\nStatus_counterfeit\n\n\n\n\n196\n130.3\n129.9\n10.3\n11.5\n1\n\n\n134\n130.0\n130.2\n11.0\n11.2\n1\n\n\n132\n130.5\n130.2\n10.6\n11.5\n1\n\n\n168\n129.9\n129.8\n9.6\n12.0\n1\n\n\n43\n130.4\n129.7\n9.0\n9.8\n0"
+    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nLeft\nRight\nBottom\nTop\nStatus_counterfeit\n\n\n\n\n118\n130.5\n130.2\n11.0\n11.0\n1\n\n\n5\n130.8\n130.5\n9.0\n10.1\n0\n\n\n167\n130.4\n130.1\n9.6\n11.2\n1\n\n\n189\n130.3\n130.2\n12.7\n9.1\n1\n\n\n11\n129.5\n129.6\n7.7\n10.5\n0"
   },
   {
     "objectID": "Classification/Classification.slides.html#work-on-your-training-dataset",
@@ -2373,7 +2373,7 @@
     "href": "Classification/Classification.slides.html#evaluation-1",
     "title": "Classification Trees",
     "section": "Evaluation",
-    "text": "Evaluation\nLet’s compute the accuracy of the pruned tree.\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.93"
+    "text": "Evaluation\nLet’s compute the accuracy of the pruned tree.\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.97"
   },
   {
     "objectID": "Classification/Classification.slides.html#comments",
@@ -2611,7 +2611,7 @@
     "href": "Classification/EnsembleMethods.slides.html#predictions-1",
     "title": "Ensemble Methods",
     "section": "Predictions",
-    "text": "Predictions\nPredict the classes using bagging.\n\npredicted_class = Baggingalgorithm.predict(X_valid)\n\npredicted_class\n\narray([0, 0, 0, ..., 0, 0, 1])"
+    "text": "Predictions\nPredict the classes using bagging.\n\npredicted_class = Baggingalgorithm.predict(X_valid)\n\npredicted_class\n\narray([0, 0, 1, ..., 0, 0, 1])"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#confusion-matrix",
@@ -2625,14 +2625,14 @@
     "href": "Classification/EnsembleMethods.slides.html#accuracy",
     "title": "Ensemble Methods",
     "section": "Accuracy",
-    "text": "Accuracy\n\nThe accuracy of the bagging classifier is 78%.\n\n# Compute accuracy.\naccuracy = accuracy_score(Y_valid, predicted_class)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.77"
+    "text": "Accuracy\n\nThe accuracy of the bagging classifier is 78%.\n\n# Compute accuracy.\naccuracy = accuracy_score(Y_valid, predicted_class)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.76"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#a-single-deep-tree",
     "href": "Classification/EnsembleMethods.slides.html#a-single-deep-tree",
     "title": "Ensemble Methods",
     "section": "A single deep tree",
-    "text": "A single deep tree\nTo compare the bagging, let’s use a single deep tree.\n\n\nCode\n# We tell Python that we want a classification tree\nclf_simple = DecisionTreeClassifier(ccp_alpha=0.0,\n                                    random_state=507134)\n\n# We train the classification tree using the training data.\nclf_simple.fit(X_train, Y_train)\n\n\nLet’s compute the accuracy of the pruned tree.\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.76"
+    "text": "A single deep tree\nTo compare the bagging, let’s use a single deep tree.\n\n\nCode\n# We tell Python that we want a classification tree\nclf_simple = DecisionTreeClassifier(ccp_alpha=0.0,\n                                    random_state=507134)\n\n# We train the classification tree using the training data.\nclf_simple.fit(X_train, Y_train)\n\n\nLet’s compute the accuracy of the pruned tree.\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.75"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#advantages",
@@ -3087,7 +3087,7 @@
     "href": "Classification/NeuralNetworks.slides.html#section-1",
     "title": "K-nearest neighbors",
     "section": "",
-    "text": "Finally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_valid)\nvalid_accuracy = accuracy_score(Y_valid, Y_pred_KNNfinal)\nprint(valid_accuracy)\n\n1.0"
+    "text": "Finally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_valid)\nvalid_accuracy = accuracy_score(Y_valid, Y_pred_KNNfinal)\nprint(valid_accuracy)\n\n0.9666666666666667"
   },
   {
     "objectID": "Classification/NeuralNetworks.slides.html#discussion",
@@ -4095,14 +4095,14 @@
     "href": "PreProcessing/TrainTestData.slides.html#section-2",
     "title": "Train, Test, and Validation Datasets",
     "section": "",
-    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n289\n0.04297\n52.5\n5.32\nNo\n0.405\n6.565\n22.9\n7.3172\nMedium\n293\n16.6\n9.51\n24.8\n\n\n27\n0.95577\n0.0\n8.14\nNo\n0.538\n6.047\n88.8\n4.4534\nMedium\n307\n21.0\n17.28\n14.8\n\n\n389\n8.15174\n0.0\n18.10\nNo\n0.700\n5.390\n98.9\n1.7281\nHigh\n666\n20.2\n20.85\n11.5\n\n\n494\n0.27957\n0.0\n9.69\nNo\n0.585\n5.926\n42.6\n2.3817\nMedium\n391\n19.2\n13.59\n24.5"
+    "text": "The predictors and response in the training dataset are in the objects X_train and Y_train, respectively. We compile these objects into a single dataset using the function .concat() from pandas. The argument axis = 1 tells .concat() to concatenate the datasets by their rows.\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head(4)\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n353\n0.01709\n90.0\n2.02\nNo\n0.410\n6.728\n36.1\n12.1265\nMedium\n187\n17.0\n4.50\n30.1\n\n\n20\n1.25179\n0.0\n8.14\nNo\n0.538\n5.570\n98.1\n3.7979\nMedium\n307\n21.0\n21.02\n13.6\n\n\n379\n17.86670\n0.0\n18.10\nNo\n0.671\n6.223\n100.0\n1.3861\nHigh\n666\n20.2\n21.78\n10.2\n\n\n500\n0.22438\n0.0\n9.69\nNo\n0.585\n6.027\n79.7\n2.4982\nMedium\n391\n19.2\n14.33\n16.8"
   },
   {
     "objectID": "PreProcessing/TrainTestData.slides.html#section-3",
     "href": "PreProcessing/TrainTestData.slides.html#section-3",
     "title": "Train, Test, and Validation Datasets",
     "section": "",
-    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n419\n11.81230\n0.0\n18.10\nNo\n0.7180\n6.824\n76.5\n1.7940\nHigh\n666\n20.2\n22.74\n8.4\n\n\n147\n2.36862\n0.0\n19.58\nNo\n0.8710\n4.926\n95.7\n1.4608\nMedium\n403\n14.7\n29.53\n14.6\n\n\n96\n0.11504\n0.0\n2.89\nNo\n0.4450\n6.163\n69.6\n3.4952\nLow\n276\n18.0\n11.34\n21.4\n\n\n280\n0.03578\n20.0\n3.33\nNo\n0.4429\n7.820\n64.5\n4.6947\nMedium\n216\n14.9\n3.76\n45.4\n\n\n119\n0.14476\n0.0\n10.01\nNo\n0.5470\n5.731\n65.2\n2.7592\nMedium\n432\n17.8\n13.61\n19.3"
+    "text": "Equivalently, the predictors and response in the validation dataset are in the objects X_valid and Y_valid, respectively.\n\nvalidation_dataset = pd.concat([X_valid, Y_valid], axis = 1)\nvalidation_dataset.head()\n\n\n\n\n\n\n\n\nCRIM\nZN\nINDUS\nCHAS\nNOX\nRM\nAGE\nDIS\nRAD\nTAX\nPTRATIO\nLSTAT\nMEDV\n\n\n\n\n46\n0.18836\n0.0\n6.91\nNo\n0.448\n5.786\n33.3\n5.1004\nLow\n233\n17.9\n14.15\n20.0\n\n\n176\n0.07022\n0.0\n4.05\nNo\n0.510\n6.020\n47.2\n3.5549\nMedium\n296\n16.6\n10.11\n23.2\n\n\n380\n88.97620\n0.0\n18.10\nNo\n0.671\n6.968\n91.9\n1.4165\nHigh\n666\n20.2\n17.21\n10.4\n\n\n268\n0.54050\n20.0\n3.97\nNo\n0.575\n7.470\n52.6\n2.8720\nMedium\n264\n13.0\n3.16\n43.5\n\n\n292\n0.03615\n80.0\n4.95\nNo\n0.411\n6.630\n23.4\n5.1167\nMedium\n245\n19.2\n4.70\n27.9"
   },
   {
     "objectID": "PreProcessing/TrainTestData.slides.html#work-on-your-training-dataset",
