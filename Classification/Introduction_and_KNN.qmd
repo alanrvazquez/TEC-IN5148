@@ -10,7 +10,7 @@ format:
     chalkboard: false
     multiplex: false
     footer: "Tecnologico de Monterrey"
-    logo: IN2004B_logo.png
+    logo: IN5148_logo.png
     css: style.css
     slide-number: True
     html-math-method: mathjax
@@ -149,8 +149,9 @@ Both emails would be classified as spam. However, we'd have greater confidence i
 
 Technically, $C(\boldsymbol{X})$ works with the *conditional probability*:
 
+::: {style="font-size: 90%;"}
 $$P(Y = 1 | X_1 = x_1, X_2 = x_2, \ldots, X_p = x_p) = P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})$$
-
+:::
 In words, this is the probability that $Y$ takes a value of 1 [**given that**]{style="color:brown;"} the predictors $\boldsymbol{X}$ have taken the values $\boldsymbol{x} = (x_1, x_2, \ldots, x_p)$.
 
 </br>

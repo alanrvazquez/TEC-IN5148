@@ -4172,7 +4172,7 @@
     "href": "Classification/Introduction_and_KNN.slides.html#section-2",
     "title": "Introduction to Classification",
     "section": "",
-    "text": "Technically, \\(C(\\boldsymbol{X})\\) works with the conditional probability:\n\\[P(Y = 1 | X_1 = x_1, X_2 = x_2, \\ldots, X_p = x_p) = P(Y = 1 | \\boldsymbol{X} = \\boldsymbol{x})\\]\nIn words, this is the probability that \\(Y\\) takes a value of 1 given that the predictors \\(\\boldsymbol{X}\\) have taken the values \\(\\boldsymbol{x} = (x_1, x_2, \\ldots, x_p)\\).\n\n\nThe conditional probability that \\(Y\\) takes the value of 0 is\n\\[P(Y = 0 | \\boldsymbol{X} = \\boldsymbol{x}) = 1 - P(Y = 1 | \\boldsymbol{X} = \\boldsymbol{x}).\\]"
+    "text": "Technically, \\(C(\\boldsymbol{X})\\) works with the conditional probability:\n\n\\[P(Y = 1 | X_1 = x_1, X_2 = x_2, \\ldots, X_p = x_p) = P(Y = 1 | \\boldsymbol{X} = \\boldsymbol{x})\\]\n\nIn words, this is the probability that \\(Y\\) takes a value of 1 given that the predictors \\(\\boldsymbol{X}\\) have taken the values \\(\\boldsymbol{x} = (x_1, x_2, \\ldots, x_p)\\).\n\n\nThe conditional probability that \\(Y\\) takes the value of 0 is\n\\[P(Y = 0 | \\boldsymbol{X} = \\boldsymbol{x}) = 1 - P(Y = 1 | \\boldsymbol{X} = \\boldsymbol{x}).\\]"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#bayes-classifier",
@@ -4263,7 +4263,7 @@
     "href": "Classification/Introduction_and_KNN.slides.html#section-5",
     "title": "Introduction to Classification",
     "section": "",
-    "text": "The predict_proba() function generates the probabilities used by the algorithm to assign the classes.\n\npredicted_probability = knn.predict_proba(Xs_test)\npredicted_probability\n\narray([[1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.33333333, 0.66666667],\n       [1.        , 0.        ],\n       [0.66666667, 0.33333333],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.33333333, 0.66666667],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.66666667, 0.33333333],\n       [0.        , 1.        ],\n       [0.66666667, 0.33333333],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ]])"
+    "text": "The predict_proba() function generates the probabilities used by the algorithm to assign the classes.\n\npredicted_probability = knn.predict_proba(Xs_test)\npredicted_probability\n\narray([[1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.33333333, 0.66666667],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ]])"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#section-6",
@@ -4361,7 +4361,7 @@
     "href": "Classification/Introduction_and_KNN.slides.html#section-7",
     "title": "Introduction to Classification",
     "section": "",
-    "text": "Now, we actually run the grid search.\n\n# Run the search.\ngrid_search.fit(Xs_train, Y_train)\n\n\nWe see the K-fold CV estimates of accuracy for each value of K:\n\nk_values = list(param_grid['n_neighbors'])\nvalidation_accuracies = grid_search.cv_results_['mean_test_score']\nvalidation_accuracies\n\narray([0.97857143, 0.97142857, 0.97142857, 0.97142857, 0.97857143,\n       0.97142857, 0.97142857, 0.97142857, 0.97857143, 0.97142857,\n       0.97142857, 0.97142857, 0.97142857, 0.97142857, 0.97142857,\n       0.97142857, 0.97857143, 0.97857143, 0.97857143, 0.97142857,\n       0.97142857, 0.97142857, 0.97857143, 0.97857143, 0.97857143,\n       0.97142857, 0.97142857, 0.97142857, 0.97142857, 0.97142857])"
+    "text": "Now, we actually run the grid search.\n\n# Run the search.\ngrid_search.fit(Xs_train, Y_train)\n\n\nWe see the K-fold CV estimates of accuracy for each value of K:\n\nk_values = list(param_grid['n_neighbors'])\nvalidation_accuracies = grid_search.cv_results_['mean_test_score']\nvalidation_accuracies\n\narray([0.95714286, 0.95      , 0.95714286, 0.92857143, 0.95      ,\n       0.95      , 0.95      , 0.92857143, 0.92857143, 0.92857143,\n       0.93571429, 0.93571429, 0.93571429, 0.93571429, 0.94285714,\n       0.92857143, 0.93571429, 0.92857143, 0.92857143, 0.92857143,\n       0.93571429, 0.93571429, 0.93571429, 0.93571429, 0.95      ,\n       0.94285714, 0.96428571, 0.95714286, 0.95714286, 0.95714286])"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#example",
@@ -4473,21 +4473,21 @@
     "href": "Classification/Introduction_and_KNN.slides.html#classifications",
     "title": "Introduction to Classification",
     "section": "Classifications",
-    "text": "Classifications\n\n\nY_pred_knn\n\narray([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1,\n       1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,\n       0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1])\n\n\n0 for the reference class and 1 for the target class."
+    "text": "Classifications\n\n\nY_pred_knn\n\narray([0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1,\n       0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0,\n       0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1])\n\n\n0 for the reference class and 1 for the target class."
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#in-python",
     "href": "Classification/Introduction_and_KNN.slides.html#in-python",
     "title": "Introduction to Classification",
     "section": "In Python",
-    "text": "In Python\n\nWe calculate the confusion matrix using the homonymous function scikit-learn.\n\n# Compute confusion matrix.\ncm = confusion_matrix(Y_test, Y_pred_knn)\n\n# Show confusion matrix.\nprint(cm)\n\n[[28  2]\n [ 3 27]]"
+    "text": "In Python\n\nWe calculate the confusion matrix using the homonymous function scikit-learn.\n\n# Compute confusion matrix.\ncm = confusion_matrix(Y_test, Y_pred_knn)\n\n# Show confusion matrix.\nprint(cm)\n\n[[30  0]\n [ 0 30]]"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#accuracy",
     "href": "Classification/Introduction_and_KNN.slides.html#accuracy",
     "title": "Introduction to Classification",
     "section": "Accuracy",
-    "text": "Accuracy\nA simple metric for summarizing the information in the confusion matrix is accuracy. It is the proportion of correct classifications for both classes, out of the total classifications performed.\nIn Python, we calculate accuracy using the scikit-learn accuracy_score() function.\n\naccuracy = accuracy_score(Y_test, Y_pred_knn)\nprint( round(accuracy, 2) )\n\n0.92\n\n\nThe higher the accuracy, the better the performance of the classifier."
+    "text": "Accuracy\nA simple metric for summarizing the information in the confusion matrix is accuracy. It is the proportion of correct classifications for both classes, out of the total classifications performed.\nIn Python, we calculate accuracy using the scikit-learn accuracy_score() function.\n\naccuracy = accuracy_score(Y_test, Y_pred_knn)\nprint( round(accuracy, 2) )\n\n1.0\n\n\nThe higher the accuracy, the better the performance of the classifier."
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#finding-the-best-value-of-k-1",
@@ -4515,28 +4515,28 @@
     "href": "Classification/Introduction_and_KNN.slides.html#training-data",
     "title": "Introduction to Classification",
     "section": "Training Data",
-    "text": "Training Data\n\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head()\n\n\n\n\n\n\n\n\nTop\nBottom\nStatus_counterfeit\n\n\n\n\n111\n11.5\n10.6\n1\n\n\n41\n9.9\n8.8\n0\n\n\n188\n11.9\n9.6\n1\n\n\n166\n10.1\n10.0\n1\n\n\n122\n10.6\n11.6\n1"
+    "text": "Training Data\n\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head()\n\n\n\n\n\n\n\n\nTop\nBottom\nStatus_counterfeit\n\n\n\n\n120\n12.1\n10.1\n1\n\n\n10\n11.7\n7.9\n0\n\n\n103\n10.9\n9.9\n1\n\n\n93\n10.7\n7.4\n0\n\n\n41\n9.9\n8.8\n0"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#test-data",
     "href": "Classification/Introduction_and_KNN.slides.html#test-data",
     "title": "Introduction to Classification",
     "section": "“Test” Data",
-    "text": "“Test” Data\n\n\ntest_dataset = pd.concat([X_test, Y_test], axis = 1)\ntest_dataset.head()\n\n\n\n\n\n\n\n\nTop\nBottom\nStatus_counterfeit\n\n\n\n\n24\n10.8\n7.4\n0\n\n\n74\n10.6\n7.2\n0\n\n\n181\n11.4\n8.0\n1\n\n\n92\n9.9\n8.2\n0\n\n\n191\n11.0\n8.8\n1"
+    "text": "“Test” Data\n\n\ntest_dataset = pd.concat([X_test, Y_test], axis = 1)\ntest_dataset.head()\n\n\n\n\n\n\n\n\nTop\nBottom\nStatus_counterfeit\n\n\n\n\n24\n10.8\n7.4\n0\n\n\n108\n11.9\n10.0\n1\n\n\n107\n11.5\n9.8\n1\n\n\n141\n11.0\n10.2\n1\n\n\n115\n11.2\n8.2\n1"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#best-value-of-k",
     "href": "Classification/Introduction_and_KNN.slides.html#best-value-of-k",
     "title": "Introduction to Classification",
     "section": "Best value of K",
-    "text": "Best value of K\n\nWe can easily determine the best value of K using the function .best_params_['n_neighbors'].\n\n# Find the best value of K\nbest_k = grid_search.best_params_['n_neighbors']\nbest_k\n\n1"
+    "text": "Best value of K\n\nWe can easily determine the best value of K using the function .best_params_['n_neighbors'].\n\n# Find the best value of K\nbest_k = grid_search.best_params_['n_neighbors']\nbest_k\n\n27"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#train-the-final-knn",
     "href": "Classification/Introduction_and_KNN.slides.html#train-the-final-knn",
     "title": "Introduction to Classification",
     "section": "Train the final KNN",
-    "text": "Train the final KNN\n\nFinally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_test)\ntest_accuracy = accuracy_score(Y_test, Y_pred_KNNfinal)\nprint(test_accuracy)\n\n0.9666666666666667"
+    "text": "Train the final KNN\n\nFinally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_test)\ntest_accuracy = accuracy_score(Y_test, Y_pred_KNNfinal)\nprint(test_accuracy)\n\n0.9833333333333333"
   },
   {
     "objectID": "PreProcessing/PreProcessing.html",
