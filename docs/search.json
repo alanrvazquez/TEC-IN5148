@@ -4178,8 +4178,8 @@
     "objectID": "Classification/Introduction_and_KNN.slides.html#bayes-classifier",
     "href": "Classification/Introduction_and_KNN.slides.html#bayes-classifier",
     "title": "Introduction to Classification",
-    "section": "Bayes classifier",
-    "text": "Bayes classifier\n\nIt turns out that, if we know the true structure of \\(P(Y = 1 | \\boldsymbol{X} = \\boldsymbol{x})\\), we can build a good classification function called the Bayes classifier:\n\\[C(\\boldsymbol{X}) =\n    \\begin{cases}\n      1, & \\text{if}\\ P(Y = 1 | \\boldsymbol{X} = \\boldsymbol{x}) &gt; 0.5 \\\\\n      0, & \\text{if}\\ P(Y = 1 | \\boldsymbol{X} = \\boldsymbol{x}) \\leq 0.5\n    \\end{cases}.\\]\nThis function classifies to the most probable class using the conditional distribution \\(P(Y | \\boldsymbol{X} = \\boldsymbol{x})\\)."
+    "section": "Bayes Classifier",
+    "text": "Bayes Classifier\n\nIt turns out that, if we know the true structure of \\(P(Y = 1 | \\boldsymbol{X} = \\boldsymbol{x})\\), we can build a good classification function called the Bayes classifier:\n\\[C(\\boldsymbol{X}) =\n    \\begin{cases}\n      1, & \\text{if}\\ P(Y = 1 | \\boldsymbol{X} = \\boldsymbol{x}) &gt; 0.5 \\\\\n      0, & \\text{if}\\ P(Y = 1 | \\boldsymbol{X} = \\boldsymbol{x}) \\leq 0.5\n    \\end{cases}.\\]\nThis function classifies to the most probable class using the conditional distribution \\(P(Y | \\boldsymbol{X} = \\boldsymbol{x})\\)."
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#section-3",
@@ -4263,14 +4263,14 @@
     "href": "Classification/Introduction_and_KNN.slides.html#section-5",
     "title": "Introduction to Classification",
     "section": "",
-    "text": "The predict_proba() function generates the probabilities used by the algorithm to assign the classes.\n\npredicted_probability = knn.predict_proba(Xs_test)\npredicted_probability\n\narray([[1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.33333333, 0.66666667],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ]])"
+    "text": "Essentially, we calculate \\(\\hat{p}_1(\\boldsymbol{x})\\) and \\(\\hat{p}_0(\\boldsymbol{x})\\) as follows:\n\nSelect the K nearest neighbors to the observation \\(\\boldsymbol{x}\\).\n\\(\\hat{p}_1(\\boldsymbol{x})\\) is the proportion of K nearest neighbors that belong to class 1. \\(\\hat{p}_0(\\boldsymbol{x})\\) is the proportion of K nearest neighbors that belong to class 0."
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#section-6",
     "href": "Classification/Introduction_and_KNN.slides.html#section-6",
     "title": "Introduction to Classification",
     "section": "",
-    "text": "We can display the confusion matrix using the ConfusionMatrixDisplay() function.\n\nConfusionMatrixDisplay(cm).plot()"
+    "text": "predicted_probability \n\narray([[0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.66666667, 0.33333333],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.66666667, 0.33333333],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.66666667, 0.33333333],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.33333333, 0.66666667],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.33333333, 0.66666667],\n       [0.        , 1.        ],\n       [1.        , 0.        ],\n       [0.        , 1.        ],\n       [0.66666667, 0.33333333],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [1.        , 0.        ],\n       [0.33333333, 0.66666667],\n       [0.        , 1.        ]])"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#work-on-your-training-dataset",
@@ -4361,7 +4361,7 @@
     "href": "Classification/Introduction_and_KNN.slides.html#section-7",
     "title": "Introduction to Classification",
     "section": "",
-    "text": "Now, we actually run the grid search.\n\n# Run the search.\ngrid_search.fit(Xs_train, Y_train)\n\n\nWe see the K-fold CV estimates of accuracy for each value of K:\n\nk_values = list(param_grid['n_neighbors'])\nvalidation_accuracies = grid_search.cv_results_['mean_test_score']\nvalidation_accuracies\n\narray([0.95714286, 0.95      , 0.95714286, 0.92857143, 0.95      ,\n       0.95      , 0.95      , 0.92857143, 0.92857143, 0.92857143,\n       0.93571429, 0.93571429, 0.93571429, 0.93571429, 0.94285714,\n       0.92857143, 0.93571429, 0.92857143, 0.92857143, 0.92857143,\n       0.93571429, 0.93571429, 0.93571429, 0.93571429, 0.95      ,\n       0.94285714, 0.96428571, 0.95714286, 0.95714286, 0.95714286])"
+    "text": "We can display the confusion matrix using the ConfusionMatrixDisplay() function.\n\nConfusionMatrixDisplay(cm).plot()"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#example",
@@ -4424,14 +4424,14 @@
     "href": "Classification/Introduction_and_KNN.slides.html#visualize",
     "title": "Introduction to Classification",
     "section": "Visualize",
-    "text": "Visualize\nWe can then visualize the accuracy for different values of \\(K\\) using the following graph and code.\n\n\nCode\n# 2. Create the plot\nplt.figure(figsize=(6.3, 4.3))\nplt.plot(k_values, validation_accuracies, marker=\"o\", linestyle=\"-\", color='b')\nplt.xlabel(\"Number of Neighbors (k)\")\nplt.ylabel(\"Validation Accuracy\")\nplt.title(\"Choosing the Best k for KNN\")\nplt.grid(True, linestyle='--', alpha=0.6)\nplt.show()"
+    "text": "Visualize\nWe can then visualize the accuracy for different values of \\(K\\) using the following graph and code.\n\n\nCode\nplt.figure(figsize=(6.3, 4.3))\nplt.plot(k_values, validation_accuracies, marker=\"o\", linestyle=\"-\", color='b')\nplt.xlabel(\"Number of Neighbors (k)\")\nplt.ylabel(\"Validation Accuracy\")\nplt.title(\"Choosing the Best k for KNN\")\nplt.grid(True, linestyle='--', alpha=0.6)\nplt.show()"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#section-8",
     "href": "Classification/Introduction_and_KNN.slides.html#section-8",
     "title": "Introduction to Classification",
     "section": "",
-    "text": "The predictive performance of KNN deteriorates as the number of predictors increases.\nThis is because the expected distance to the nearest neighbor increases dramatically with the number of predictors, unless the size of the dataset increases exponentially with this number.\nThis is known as the curse of dimensionality.\n\n\n\n\nhttps://aiaspirant.com/curse-of-dimensionality/"
+    "text": "Now, we actually run the grid search.\n\n# Run the search.\ngrid_search.fit(Xs_train, Y_train)\n\n\nWe see the K-fold CV estimates of accuracy for each value of K:\n\nk_values = list(param_grid['n_neighbors'])\nvalidation_accuracies = grid_search.cv_results_['mean_test_score']\nvalidation_accuracies\n\narray([0.97142857, 0.95      , 0.96428571, 0.95714286, 0.96428571,\n       0.96428571, 0.96428571, 0.96428571, 0.96428571, 0.96428571,\n       0.96428571, 0.95714286, 0.96428571, 0.96428571, 0.96428571,\n       0.96428571, 0.96428571, 0.96428571, 0.96428571, 0.96428571,\n       0.96428571, 0.96428571, 0.96428571, 0.96428571, 0.96428571,\n       0.95714286, 0.96428571, 0.96428571, 0.96428571, 0.96428571])"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#discussion",
@@ -4459,7 +4459,7 @@
     "href": "Classification/Introduction_and_KNN.slides.html#lets-generate-training-and-test-data",
     "title": "Introduction to Classification",
     "section": "Let’s generate training and test data",
-    "text": "Let’s generate training and test data\nWe split the current dataset into a training and a test dataset using train_test_split() from scikit-learn.\n\nThe function has three main inputs:\n\nA pandas dataframe with the predictor columns only.\nA pandas dataframe with the response column only.\nThe parameter test_size which sets the portion of the dataset that will go to the test set."
+    "text": "Let’s generate training and test data\n\nWe split the current dataset into a training and a test dataset using train_test_split() from scikit-learn.\n\nThe function has three main inputs:\n\nA pandas dataframe with the predictor columns only.\nA pandas dataframe with the response column only.\nThe parameter test_size which sets the portion of the dataset that will go to the test set."
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#making-classifications",
@@ -4480,14 +4480,14 @@
     "href": "Classification/Introduction_and_KNN.slides.html#in-python",
     "title": "Introduction to Classification",
     "section": "In Python",
-    "text": "In Python\n\nWe calculate the confusion matrix using the homonymous function scikit-learn.\n\n# Compute confusion matrix.\ncm = confusion_matrix(Y_test, Y_pred_knn)\n\n# Show confusion matrix.\nprint(cm)\n\n[[30  0]\n [ 0 30]]"
+    "text": "In Python\n\nThe .predict() function generates actual classes to which each observation was assigned.\n\nY_pred_knn = knn.predict(Xs_test)\nY_pred_knn\n\narray([1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0,\n       0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0,\n       1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1])\n\n\n0 for the reference class and 1 for the target class."
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#accuracy",
     "href": "Classification/Introduction_and_KNN.slides.html#accuracy",
     "title": "Introduction to Classification",
     "section": "Accuracy",
-    "text": "Accuracy\nA simple metric for summarizing the information in the confusion matrix is accuracy. It is the proportion of correct classifications for both classes, out of the total classifications performed.\nIn Python, we calculate accuracy using the scikit-learn accuracy_score() function.\n\naccuracy = accuracy_score(Y_test, Y_pred_knn)\nprint( round(accuracy, 2) )\n\n1.0\n\n\nThe higher the accuracy, the better the performance of the classifier."
+    "text": "Accuracy\nA simple metric for summarizing the information in the confusion matrix is accuracy. It is the proportion of correct classifications for both classes, out of the total classifications performed.\nIn Python, we calculate accuracy using the scikit-learn accuracy_score() function.\n\naccuracy = accuracy_score(Y_test, Y_pred_knn)\nprint( round(accuracy, 2) )\n\n0.97\n\n\nThe higher the accuracy, the better the performance of the classifier."
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#finding-the-best-value-of-k-1",
@@ -4515,28 +4515,28 @@
     "href": "Classification/Introduction_and_KNN.slides.html#training-data",
     "title": "Introduction to Classification",
     "section": "Training Data",
-    "text": "Training Data\n\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head()\n\n\n\n\n\n\n\n\nTop\nBottom\nStatus_counterfeit\n\n\n\n\n120\n12.1\n10.1\n1\n\n\n10\n11.7\n7.9\n0\n\n\n103\n10.9\n9.9\n1\n\n\n93\n10.7\n7.4\n0\n\n\n41\n9.9\n8.8\n0"
+    "text": "Training Data\n\n\ntraining_dataset = pd.concat([X_train, Y_train], axis = 1)\ntraining_dataset.head()\n\n\n\n\n\n\n\n\nTop\nBottom\nStatus_counterfeit\n\n\n\n\n61\n10.5\n7.5\n0\n\n\n146\n10.7\n11.4\n1\n\n\n108\n11.9\n10.0\n1\n\n\n36\n9.7\n8.4\n0\n\n\n14\n10.8\n7.7\n0"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#test-data",
     "href": "Classification/Introduction_and_KNN.slides.html#test-data",
     "title": "Introduction to Classification",
     "section": "“Test” Data",
-    "text": "“Test” Data\n\n\ntest_dataset = pd.concat([X_test, Y_test], axis = 1)\ntest_dataset.head()\n\n\n\n\n\n\n\n\nTop\nBottom\nStatus_counterfeit\n\n\n\n\n24\n10.8\n7.4\n0\n\n\n108\n11.9\n10.0\n1\n\n\n107\n11.5\n9.8\n1\n\n\n141\n11.0\n10.2\n1\n\n\n115\n11.2\n8.2\n1"
+    "text": "“Test” Data\n\n\ntest_dataset = pd.concat([X_test, Y_test], axis = 1)\ntest_dataset.head()\n\n\n\n\n\n\n\n\nTop\nBottom\nStatus_counterfeit\n\n\n\n\n189\n9.1\n12.7\n1\n\n\n67\n9.5\n9.1\n0\n\n\n136\n11.1\n10.7\n1\n\n\n152\n11.0\n10.4\n1\n\n\n35\n9.7\n9.4\n0"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#best-value-of-k",
     "href": "Classification/Introduction_and_KNN.slides.html#best-value-of-k",
     "title": "Introduction to Classification",
     "section": "Best value of K",
-    "text": "Best value of K\n\nWe can easily determine the best value of K using the function .best_params_['n_neighbors'].\n\n# Find the best value of K\nbest_k = grid_search.best_params_['n_neighbors']\nbest_k\n\n27"
+    "text": "Best value of K\n\nWe can easily determine the best value of K using the function .best_params_['n_neighbors'].\n\n# Find the best value of K\nbest_k = grid_search.best_params_['n_neighbors']\nbest_k\n\n1"
   },
   {
     "objectID": "Classification/Introduction_and_KNN.slides.html#train-the-final-knn",
     "href": "Classification/Introduction_and_KNN.slides.html#train-the-final-knn",
     "title": "Introduction to Classification",
     "section": "Train the final KNN",
-    "text": "Train the final KNN\n\nFinally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_test)\ntest_accuracy = accuracy_score(Y_test, Y_pred_KNNfinal)\nprint(test_accuracy)\n\n0.9833333333333333"
+    "text": "Train the final KNN\n\nFinally, we select the best number of nearest neighbors contained in the best_k object.\n\nKNN_final = KNeighborsClassifier(n_neighbors = best_k)\nKNN_final.fit(Xs_train, Y_train)\n\n\nThe accuracy of the best KNN is\n\nY_pred_KNNfinal = KNN_final.predict(Xs_test)\ntest_accuracy = accuracy_score(Y_test, Y_pred_KNNfinal)\nprint(test_accuracy)\n\n0.9333333333333333"
   },
   {
     "objectID": "PreProcessing/PreProcessing.html",
@@ -5048,5 +5048,40 @@
     "title": "Train, Test, and Validation Datasets",
     "section": "Return to main page",
     "text": "Return to main page"
+  },
+  {
+    "objectID": "Classification/Introduction_and_KNN.slides.html#example-2-identifying-counterfeit-banknotes",
+    "href": "Classification/Introduction_and_KNN.slides.html#example-2-identifying-counterfeit-banknotes",
+    "title": "Introduction to Classification",
+    "section": "Example 2: Identifying Counterfeit Banknotes",
+    "text": "Example 2: Identifying Counterfeit Banknotes"
+  },
+  {
+    "objectID": "Classification/Introduction_and_KNN.slides.html#estimated-conditional-probabilities",
+    "href": "Classification/Introduction_and_KNN.slides.html#estimated-conditional-probabilities",
+    "title": "Introduction to Classification",
+    "section": "Estimated conditional probabilities",
+    "text": "Estimated conditional probabilities\n\nAfter training a KNN, we can calculate the estimated conditional probability \\(\\hat{P}(Y = 1 | \\boldsymbol{X} = \\boldsymbol{x})\\).\n\nTo this end, let\n\n\\(\\hat{p}_1(\\boldsymbol{x}) = \\hat{P}(Y = 1 | \\boldsymbol{X} = \\boldsymbol{x})\\)\n\\(\\hat{p}_0(\\boldsymbol{x}) = 1 - \\hat{p}_1(\\boldsymbol{x})\\)\n\nbe the estimated probabilities that \\(\\boldsymbol{x}\\) belongs to class 1 or 0."
+  },
+  {
+    "objectID": "Classification/Introduction_and_KNN.slides.html#predicted-probabilities-in-python",
+    "href": "Classification/Introduction_and_KNN.slides.html#predicted-probabilities-in-python",
+    "title": "Introduction to Classification",
+    "section": "Predicted probabilities in Python",
+    "text": "Predicted probabilities in Python\n\nUsing our trained KNN, we classify observations in the test dataset using only the predictor values from this set. To do this, we must first standardize the predictors in the test dataset.\n\nXs_test = scaler.fit_transform(X_test)\n\n\nThe .predict_proba() function generates the probabilities used by the algorithm to assign the classes.\n\npredicted_probability = knn.predict_proba(Xs_test)"
+  },
+  {
+    "objectID": "Classification/Introduction_and_KNN.slides.html#estimated-bayes-classifier",
+    "href": "Classification/Introduction_and_KNN.slides.html#estimated-bayes-classifier",
+    "title": "Introduction to Classification",
+    "section": "Estimated Bayes Classifier",
+    "text": "Estimated Bayes Classifier\n\nOnce we have estimated the conditional probability using KNN, we plug it into the Bayes classifier to have our approximated function:\n\\[\\hat{C}(\\boldsymbol{x}) =\n    \\begin{cases}\n      1, & \\text{if}\\ \\hat{p}_1(\\boldsymbol{x}) &gt; 0.5 \\\\\n      0, & \\text{if}\\ \\hat{p}_1(\\boldsymbol{x}) \\leq 0.5\n    \\end{cases},\\]\nwhere \\(\\hat{p}_1(\\boldsymbol{x})\\) depends on the K nearest neighbors to \\(\\boldsymbol{x}\\)."
+  },
+  {
+    "objectID": "Classification/Introduction_and_KNN.slides.html#in-python-1",
+    "href": "Classification/Introduction_and_KNN.slides.html#in-python-1",
+    "title": "Introduction to Classification",
+    "section": "In Python",
+    "text": "In Python\n\nWe calculate the confusion matrix using the homonymous function scikit-learn.\n\n# Compute confusion matrix.\ncm = confusion_matrix(Y_test, Y_pred_knn)\n\n# Show confusion matrix.\nprint(cm)\n\n[[29  1]\n [ 1 29]]"
   }
 ]

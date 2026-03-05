@@ -162,7 +162,7 @@ The conditional probability that $Y$ takes the value of 0 is
 
 $$P(Y = 0 | \boldsymbol{X} = \boldsymbol{x}) = 1 - P(Y = 1 | \boldsymbol{X} = \boldsymbol{x}).$$
 
-## Bayes classifier
+## Bayes Classifier
 
 </br>
 
@@ -235,7 +235,7 @@ Use it to **evaluate** $\hat{C}(\boldsymbol{X})$.
 :::::
 
 
-## Example 1: Identifying Counterfeit Banknotes
+## Example 2: Identifying Counterfeit Banknotes
 
 </br>
 
@@ -256,6 +256,8 @@ bank_data.head()
 ```
 
 ## Let's generate training and test data
+
+</br>
 
 We split the current dataset into a training and a *test* dataset using `train_test_split()` from **scikit-learn**.
 
@@ -663,7 +665,33 @@ knn = KNeighborsClassifier(n_neighbors=3)
 knn.fit(Xs_train, Y_train)
 ```
 
-## Making Classifications
+## Estimated conditional probabilities
+
+</br>
+
+After training a KNN, we can calculate the estimated conditional probability $\hat{P}(Y = 1 | \boldsymbol{X} = \boldsymbol{x})$.
+
+</br>
+
+To this end, let
+
+-   $\hat{p}_1(\boldsymbol{x}) = \hat{P}(Y = 1 | \boldsymbol{X} = \boldsymbol{x})$
+-   $\hat{p}_0(\boldsymbol{x}) = 1 - \hat{p}_1(\boldsymbol{x})$
+
+be the estimated probabilities that $\boldsymbol{x}$ belongs to class 1 or 0.
+
+## 
+
+</br></br>
+
+Essentially, we calculate $\hat{p}_1(\boldsymbol{x})$ and $\hat{p}_0(\boldsymbol{x})$ as follows:
+
+1.  Select the *K* nearest neighbors to the observation $\boldsymbol{x}$.
+2.  $\hat{p}_1(\boldsymbol{x})$ is the proportion of *K* nearest neighbors that belong to class 1. $\hat{p}_0(\boldsymbol{x})$ is the proportion of *K* nearest neighbors that belong to class 0.
+
+## Predicted probabilities in Python
+
+</br>
 
 Using our trained KNN, we classify observations in the test dataset using only the predictor values from this set. To do this, we must first standardize the predictors in the test dataset.
 
@@ -675,37 +703,56 @@ Xs_test = scaler.fit_transform(X_test)
 
 </br>
 
-The `.predict()` function generates actual classes to which each observation was assigned.
-
-```{python}
-#| echo: true
-
-Y_pred_knn = knn.predict(Xs_test)
-```
-
-## Classifications
-
-</br></br></br>
-
-```{python}
-#| echo: true
-
-Y_pred_knn
-```
-
-**0** for the reference class and **1** for the target class.
-
-## 
-
-The `predict_proba()` function generates the probabilities used by the algorithm to assign the classes.
+The `.predict_proba()` function generates the probabilities used by the algorithm to assign the classes.
 
 ```{python}
 #| echo: true
 #| output: true
 
 predicted_probability = knn.predict_proba(Xs_test)
-predicted_probability
 ```
+
+##
+
+</br></br>
+
+```{python}
+#| echo: true
+#| output: true
+
+predicted_probability 
+```
+
+
+## Estimated Bayes Classifier
+
+</br>
+
+Once we have estimated the conditional probability using KNN, we plug it into the Bayes classifier to have our approximated function:
+
+$$\hat{C}(\boldsymbol{x}) =
+    \begin{cases}
+      1, & \text{if}\ \hat{p}_1(\boldsymbol{x}) > 0.5 \\
+      0, & \text{if}\ \hat{p}_1(\boldsymbol{x}) \leq 0.5
+    \end{cases},$$
+
+where $\hat{p}_1(\boldsymbol{x})$ depends on the *K* nearest neighbors to $\boldsymbol{x}$.
+
+## In Python
+
+</br></br>
+
+The `.predict()` function generates actual classes to which each observation was assigned.
+
+```{python}
+#| echo: true
+
+Y_pred_knn = knn.predict(Xs_test)
+Y_pred_knn
+```
+
+**0** for the reference class and **1** for the target class.
+
 
 # Confusion Matrix and Accuracy
 
@@ -826,7 +873,6 @@ We can then visualize the accuracy for different values of $K$ using the followi
 #| fig-align: center
 #| code-fold: true
 
-# 2. Create the plot
 plt.figure(figsize=(6.3, 4.3))
 plt.plot(k_values, validation_accuracies, marker="o", linestyle="-", color='b')
 plt.xlabel("Number of Neighbors (k)")
@@ -846,6 +892,7 @@ We can easily determine the best value of *K* using the function `.best_params_[
 #| echo: true
 #| output: true
 #| 
+
 # Find the best value of K
 best_k = grid_search.best_params_['n_neighbors']
 best_k
@@ -904,4 +951,4 @@ KNN is intuitive and simple and can produce decent predictions. However, KNN has
 <https://aiaspirant.com/curse-of-dimensionality/>
 :::
 
-# [Return to main page](https://alanrvazquez.github.io/TEC-5148/)
+# [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)
