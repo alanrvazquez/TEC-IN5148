@@ -23,9 +23,8 @@ jupyter: python3
 </br>
 
 1.  Introduction
-2.  Training, Validation, and Test Data
-3.  Classification Trees
-4.  Classification Algorithm Metrics
+2.  Classification Trees
+3.  Class-Specific Metrics
 
 # Introduction
 
@@ -51,123 +50,6 @@ from sklearn.metrics import accuracy_score, recall_score, precision_score
 
 Here, we use specific functions from the **pandas**, **matplotlib**, **seaborn** and **sklearn** libraries in Python.
 
-## scikit-learn library
-
--   **scikit-learn** is a robust and popular library for machine learning in Python
--   It provides simple, efficient tools for data mining and data analysis
--   It is built on top of libraries such as **NumPy**, **SciPy**, and **Matplotlib**
--   <https://scikit-learn.org/stable/>
-
-![](images/scikitlearn.png){fig-align="center"}
-
-## Main data science problems
-
-</br>
-
-[**Regression Problems**]{style="color:green;"}. The response is numerical. For example, a person's income, the value of a house, or a patient's blood pressure.
-
-[**Classification Problems**]{style="color:blue;"}. The response is categorical and involves *K* different categories. For example, the brand of a product purchased (A, B, C) or whether a person defaults on a debt (yes or no).
-
-The predictors can be *numerical* or *categorical*.
-
-## Main data science problems
-
-</br>
-
-[**Regression Problems**. The response is numerical. For example, a person's income, the value of a house, or a patient's blood pressure.]{style="color:gray;"}
-
-[**Classification Problems**]{style="color:blue;"}. The response is categorical and involves *K* different categories. For example, the brand of a product purchased (A, B, C) or whether a person defaults on a debt (yes or no).
-
-The predictors can be *numerical* or *categorical*.
-
-## Terminology
-
-</br></br>
-
-Recall that
-
--   $X$ represents a predictor or explanatory variable.
--   $\boldsymbol{X} = (X_1, X_2, \ldots, X_p)$ represents a collection of $p$ predictors.
-
-## 
-
-</br>
-
-[Response]{style="text-decoration: underline;"}:
-
-::: incremental
--   $Y$ is a [**categorical variable**]{style="color:darkgreen;"} that takes [**2 categories**]{style="color:darkgreen;"} or [**classes**]{style="color:darkgreen;"}.
-
--   For example, $Y$ can take [0]{style="color:darkgreen;"} or [1]{style="color:darkgreen;"}, [A]{style="color:darkgreen;"} or [B]{style="color:darkgreen;"}, [no]{style="color:darkgreen;"} or [yes]{style="color:darkgreen;"}, [spam]{style="color:darkgreen;"} or [no spam]{style="color:darkgreen;"}.
-
--   When classes are strings, they are usually encoded as 0 and 1.
-
-    -   The **target class** is the one for which $Y = 1$.
-    -   The **reference class** is the one for which $Y = 0$.
-:::
-
-## Classification algorithms
-
-</br></br>
-
-Classification algorithms use predictor values [*to predict the class*]{style="color:#4682B4;"} of the response (either target or reference).
-
-</br>
-
-That is, for an unseen record, they use predictor values to predict whether the record belongs to the target class or not.
-
-## The goal of classification algorithms
-
-</br>
-
-[**Goal**]{style="color:darkgreen;"}: Develop a function $C(\boldsymbol{X})$ for predicting $Y = \{0, 1\}$ from $\boldsymbol{X}$.
-
-</br>
-
-. . .
-
-To achieve this goal, most algorithms consider functions $C(\boldsymbol{X})$ that [**predict the probability**]{style="color:brown;"} that $Y$ takes the value of 1.
-
-</br>
-
-. . .
-
-A probability for each class can be very useful for gauging the model’s confidence about the predicted classification.
-
-## Example 1
-
-Consider a spam filter where $Y$ is the email type.
-
--   The target class is spam. In this case, $Y=1$.
--   The reference class is not spam. In this case, $Y=0$.
-
-. . .
-
-![](images/spam.png){fig-align="center" width="556" height="178"}
-
-. . .
-
-Both emails would be classified as spam. However, we would have greater confidence in our classification for the second email.
-
-## 
-
-</br>
-
-Technically, $C(\boldsymbol{X})$ works with the *conditional probability*:
-
-::: {style="font-size: 90%;"}
-$$P(Y = 1 | X_1 = x_1, X_2 = x_2, \ldots, X_p = x_p) = P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})$$
-:::
-
-In words, this is the probability that $Y$ takes a value of 1 [**given that**]{style="color:brown;"} the predictors $\boldsymbol{X}$ have taken the values $\boldsymbol{x} = (x_1, x_2, \ldots, x_p)$.
-
-</br>
-
-. . .
-
-The conditional probability that $Y$ takes the value of 0 is
-
-$$P(Y = 0 | \boldsymbol{X} = \boldsymbol{x}) = 1 - P(Y = 1 | \boldsymbol{X} = \boldsymbol{x}).$$
 
 ## Bayes classifier
 
@@ -196,9 +78,9 @@ This function classifies to the most probable class using the conditional distri
 To overcome this issue, we several methods:
 
 ::: incremental
--   [**Logistic Regression**]{style="color:brown;"}: Impose an structure on $P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})$. This was covered in IN1002B.
+-   [***K*****-Nearest Neighbours**]{style="color:darkgreen;"}: Estimate $P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})$ directly. Already covered.
 -   [**Classification Trees**]{style="color:darkblue;"}: Estimate $P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})$ directly. What we will cover today.
--   [**Ensemble methods**]{style="color:orange;"} and [***K*****-Nearest Neighbours**]{style="color:darkgreen;"}: Estimate $P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})$ directly. (If time permits).
+-    [**Ensemble methods**]{style="color:orange;"}: Estimate $P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})$ directly. Later.
 :::
 
 ## 
@@ -218,69 +100,8 @@ where
 -   $\hat{P}(Y = 1 | \boldsymbol{X} = \boldsymbol{x})$ is an estimate of $P(Y = 1 | \boldsymbol{X} = \boldsymbol{x})$.
 -   $\hat{C}(\boldsymbol{X})$ is an estimate of the true Bayes Classifier $C(\boldsymbol{X})$
 
-## Let's play with classification algorithms
 
-</br></br>
-
-1.  <https://quickdraw.withgoogle.com/>
-
-2.  <https://tenso.rs/demos/rock-paper-scissors/>
-
-3.  <https://teachablemachine.withgoogle.com/>
-
-# Training, Validation, and Test Data
-
-## Two datasets
-
-</br></br>
-
-The application of data science algorithms needs two data sets:
-
-::: incremental
--   [**Training data**]{style="color:blue;"} is data that we use to train or construct the approximation $\hat{C}(\boldsymbol{X})$.
-
--   [**Test data**]{style="color:green;"} is data that we use to evaluate the classification performance of $\hat{C}(\boldsymbol{X})$ only.
-:::
-
-## 
-
-::::: columns
-::: {.column width="30%"}
-![](images/training.png){width="256"}
-:::
-
-::: {.column width="70%"}
-</br>
-
-A random sample of $n$ observations.
-
-Use it to **construct** $\hat{C}(\boldsymbol{X})$.
-:::
-:::::
-
-::::: columns
-::: {.column width="30%"}
-![](images/test.png){width="262"}
-:::
-
-::: {.column width="70%"}
-Another random sample of $n_t$ observations, which is independent of the training data.
-
-Use it to **evaluate** $\hat{C}(\boldsymbol{X})$.
-:::
-:::::
-
-## Validation dataset
-
-In many practical situations, a test dataset is not available. To overcome this issue, we use a [**validation dataset**]{style="color:orange;"}.
-
-![](images/validation.png){fig-align="center" width="645"}
-
-. . .
-
-**Idea**: Apply model to your [**validation dataset**]{style="color:orange;"} to mimic what will happen when you apply it to test dataset.
-
-## Example 2: Identifying Counterfeit Banknotes
+## Example 1: Identifying Counterfeit Banknotes
 
 </br>
 
@@ -300,19 +121,7 @@ bank_data['Status'] = pd.Categorical(bank_data['Status'])
 bank_data.head()
 ```
 
-## How do we generate validation data?
-
-We split the current dataset into a training and a validation dataset. To this end, we use the function `train_test_split()` from **scikit-learn**.
-
-</br>
-
-The function has three main inputs:
-
--   A pandas dataframe with the predictor columns only.
--   A pandas dataframe with the response column only.
--   The parameter `test_size` which sets the portion of the dataset that will go to the validation set.
-
-## Create the predictor matrix
+## Create the objects
 
 We use the function `.filter()` from **pandas** to select two predictors: Top and Bottom.
 
@@ -322,25 +131,12 @@ We use the function `.filter()` from **pandas** to select two predictors: Top an
 
 # Set full matrix of predictors.
 X_full = bank_data.filter(['Top', 'Bottom'])
-X_full.head(4)
-```
-
-## Create the response column
-
-We do the same to extract the column `Status` from the data frame. We store the result in `Y_full`.
-
-```{python}
-#| echo: true
-#| output: true
 
 # Set full matrix of responses.
 Y_full = bank_data['Status']
-Y_full.head(4)
 ```
 
-## Set the target category
-
-To set the target category in the response we use the `get_dummies()` function.
+We also set the target category.
 
 ```{python}
 #| echo: true
@@ -352,17 +148,16 @@ Y_dummies = pd.get_dummies(Y_full, dtype = 'int')
 # Select target variable.
 Y_target_full = Y_dummies['counterfeit']
 
-# Show target variable.
-Y_target_full.head() 
 ```
 
 ## Let's partition the dataset
+
+</br></br>
 
 ```{python}
 #| echo: true
 #| output: true
 
-# Split the dataset into training and validation.
 X_train, X_valid, Y_train, Y_valid = train_test_split(X_full, Y_target_full, 
                                                       test_size = 0.3, 
                                                       stratify = Y_target_full,
@@ -371,46 +166,17 @@ X_train, X_valid, Y_train, Y_valid = train_test_split(X_full, Y_target_full,
 
 -   Thanks to the `stratify` parameter, the function makes a clever partition of the data using the *empirical* distribution of the response.
 
--   Technically, it splits the data so that the distribution of the response under the training and validation sets is similar.
-
 -   Usually, the proportion of the dataset that goes to the validation set is 20% or 30%.
 
-## 
-
-The predictors and response in the training dataset are in the objects `X_train` and `Y_train`, respectively. We compile these objects into a single dataset using the function `.concat()` from **pandas**. The argument `axis = 1` tells `.concat()` to concatenate the datasets by their rows.
-
 ```{python}
-#| echo: true
-#| output: true
+#| echo: false
+#| output: false
 
 training_dataset = pd.concat([X_train, Y_train], axis = 1)
-training_dataset.head(4)
-```
-
-## 
-
-Equivalently, the predictors and response in the validation dataset are in the objects `X_valid` and `Y_valid`, respectively.
-
-```{python}
-#| echo: true
-#| output: true
-
 validation_dataset = pd.concat([X_valid, Y_valid], axis = 1)
-validation_dataset.head()
+
 ```
 
-## Work on your training dataset
-
-</br>
-
-After we have partitioned the data, we **work on the** [**training data**]{style="color:blue;"} to develop our predictive pipeline.
-
-The pipeline has two main steps:
-
-1.  Data preprocessing.
-2.  Algorithm development.
-
-Note that all preprocessing techniques will also be applied to the [**validation**]{style="color:orange;"} and [**test**]{style="color:green;"} datasets to prepare it for your algorithm!
 
 # Classification Trees
 
@@ -1562,50 +1328,6 @@ disp.ax_.set_title("Decision Boundary of Classification Tree")
 plt.show()
 ```
 
-## Decision boundary logistic regression
-
-</br>
-
-```{python}
-#| echo: false
-#| output: true
-#| fig-align: center
-
-from sklearn.linear_model import LogisticRegression
-
-# Prepare features in the same order: Top (x-axis), Bottom (y-axis)
-X = X_train[['Top', 'Bottom']]
-
-# Train logistic regression
-log_reg = LogisticRegression()
-log_reg.fit(X, Y_train)
-
-# Create decision boundary plot
-disp = DecisionBoundaryDisplay.from_estimator(
-    log_reg,
-    X,
-    response_method="predict",
-    xlabel="Top",
-    ylabel="Bottom",
-    grid_resolution=200,
-    cmap=plt.cm.Paired,
-    alpha=0.5
-)
-
-# Overlay actual training data points
-disp.ax_.scatter(
-    X['Top'],
-    X['Bottom'],
-    c=Y_train,
-    cmap=plt.cm.Paired,
-    edgecolor='k'
-)
-
-disp.ax_.set_title("Decision Boundary of Logistic Regression")
-plt.show()
-
-```
-
 ## Implementation details
 
 -   Categorical predictors with unordered levels $\{A, B, C\}$. We order the levels in a specific way (works for binary and regression problems).
@@ -1722,32 +1444,16 @@ predicted_probability
 
 ## In Python
 
-</br>
-
-We calculate the confusion matrix using the homonymous function **scikit-learn**.
-
 ```{python}
 #| echo: true
 #| output: true
+#| code-fold: true
+#| fig-align: center
 
 # Compute confusion matrix.
 cm = confusion_matrix(Y_valid, predicted_class)
 
 # Show confusion matrix.
-print(cm)
-```
-
-## 
-
-</br>
-
-We can display the confusion matrix using the `ConfusionMatrixDisplay()` function.
-
-```{python}
-#| echo: true
-#| output: true
-#| fig-align: center
-
 CMplot = ConfusionMatrixDisplay(cm, display_labels = ["genuine", "counterfeit"])
 CMplot.plot()
 ```
@@ -2021,6 +1727,8 @@ accuracy = accuracy_score(Y_valid, single_tree_Y_pred)
 print( round(accuracy, 2) )
 ```
 
+# Class-Specific Metrics
+
 ## Comments on accuracy
 
 </br>
@@ -2063,7 +1771,7 @@ print( round(accuracy, 2) )
 
 -   A healthy patient who is misclassified with the disease will only incur a few extra dollars to pay for the next test, only to discover that the patient does not have the disease.
 
-## Classification-specific metrics
+## Class-specific metrics
 
 </br></br>
 
