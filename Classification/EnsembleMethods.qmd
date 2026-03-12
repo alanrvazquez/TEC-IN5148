@@ -115,9 +115,9 @@ Given a training dataset, [**bagging**]{style="color:purple;"} averages the pred
 
 </br></br>
 
-Let $\mathbf{x} = (x_1, x_2, \ldots, x_p)$ be a vector of new predictor values. For classification problems with 2 classes:
+Let $\boldsymbol{x} = (x_1, x_2, \ldots, x_p)$ be a vector of new predictor values. For classification problems with 2 classes:
 
-1.  Each classification tree outputs the probability for class 1 and 2 depending on the region $\mathbf{x}$ falls in.
+1.  Each classification tree outputs the probability for class 1 and 2 depending on the region $\boldsymbol{x}$ falls in.
 
 2.  For the *b*-th tree, we denote the probabilities as $\hat{p}^{b}_0(\boldsymbol{x})$ and $\hat{p}^{b}_1(\boldsymbol{x})$ for class 0 and 1, respectively.
 
@@ -147,7 +147,7 @@ $$p_{bag, 1} = \frac{1}{B}\sum_{b=1}^{B} I(\hat{T}_{b}(\boldsymbol{x}) = 1).$$
 
 </br></br></br>
 
-6.  Classify according to a majority vote between $p_{bag, 0}$ and $p_{bag, 1}$.
+6.  Classify $\boldsymbol{x}$ to the class with the highest probability (between $p_{bag, 0}$ and $p_{bag, 1}$).
 
 ## Implementation
 
@@ -164,6 +164,8 @@ $$p_{bag, 1} = \frac{1}{B}\sum_{b=1}^{B} I(\hat{T}_{b}(\boldsymbol{x}) = 1).$$
 </br>
 
 The data “AdultReduced.xlsx” comes from the UCI Machine Learning Repository and is derived from US census records. In this data, the goal is to predict whether a person's income was high (defined in 1994 as more than \$50,000) or low.
+
+</br>
 
 Predictors include education level, job type (e.g., never worked and local government), capital gains/losses, hours worked per week, country of origin, etc. The data contains 7,508 records.
 
@@ -199,7 +201,7 @@ X_full = Adult_data.filter(['age', 'sex', 'race', 'education.num',
 
 ## Pre-processing for categorical predictors
 
-</br></br>
+</br>
 
 Unfortunately, bagging does not work with categorical predictors. We must transform them into dummy variables using the code below.
 
@@ -225,13 +227,8 @@ Let's set the **target class** and the **reference class** using the `get_dummie
 #| echo: true
 #| output: true
 
-# Select answer
 Y = Adult_data.filter(['income'])
-
-# Create dummy variables.
 Y_dummies = pd.get_dummies(Y, dtype = 'int')
-
-# Show.
 Y_dummies.head(4)
 ```
 
@@ -262,7 +259,8 @@ To evaluate a model's performance on unobserved data, we split the current datas
 #| output: false
 
 # Split into training and validation
-X_train, X_valid, Y_train, Y_valid = train_test_split(X_full, Y_target, 
+X_train, X_valid, Y_train, Y_valid = train_test_split(X_full, Y_target,
+                                                      stratify = Y_target,
                                                       test_size = 0.2)
 ```
 
@@ -290,9 +288,11 @@ Baggingalgorithm.fit(X_train, Y_train)
 
 `random_state` allows us to obtain the same bagging algorithm in different runs of the algorithm.
 
-## Predictions
+## Predictions from bagging
 
-Predict the classes using bagging.
+</br></br></br>
+
+Predict the classes using bagging on the validation dataset.
 
 ```{python}
 #| echo: true
@@ -310,10 +310,7 @@ predicted_class
 #| output: true
 #| fig-align: center
 
-# Compute confusion matrix.
 cm = confusion_matrix(Y_valid, predicted_class)
-
-# Visualize the matrix.
 ConfusionMatrixDisplay(cm).plot()
 ```
 
@@ -337,18 +334,18 @@ print( round(accuracy, 2) )
 
 ## A single deep tree
 
+</br></br>
+
 To compare the bagging, let's use a single deep tree.
 
 ```{python}
 #| echo: true
 #| output: false
-#| code-fold: true
+#| code-fold: false
 
-# We tell Python that we want a classification tree
-clf_simple = DecisionTreeClassifier(ccp_alpha=0.0,
+clf_simple = DecisionTreeClassifier(min_samples_leaf = 5, ccp_alpha=0.0, 
                                     random_state=507134)
 
-# We train the classification tree using the training data.
 clf_simple.fit(X_train, Y_train)
 ```
 
@@ -373,7 +370,7 @@ print( round(accuracy, 2) )
 
 ## Limitations
 
-</br></br>
+</br>
 
 -   *Loss of interpretability*: the final bagged classifier is [not a tree]{style="color:darkred;"}, and so we forfeit the clear interpretative ability of a classification tree.
 
@@ -454,7 +451,8 @@ In Python, we define a RandomForest algorithm for classification using the `Rand
 #| output: false
 
 # Set the bagging algorithm.
-RFalgorithm = RandomForestClassifier(n_estimators = 500,
+RFalgorithm = RandomForestClassifier(n_estimators = 500, 
+                                     max_features = 'sqrt',
                                      random_state = 59227)
 
 # Train the bagging algorithm.

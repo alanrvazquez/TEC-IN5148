@@ -2289,7 +2289,7 @@
     "href": "Classification/EnsembleMethods.slides.html#predictions",
     "title": "Ensemble Methods",
     "section": "Predictions",
-    "text": "Predictions\n\nLet \\(\\mathbf{x} = (x_1, x_2, \\ldots, x_p)\\) be a vector of new predictor values. For classification problems with 2 classes:\n\nEach classification tree outputs the probability for class 1 and 2 depending on the region \\(\\mathbf{x}\\) falls in.\nFor the b-th tree, we denote the probabilities as \\(\\hat{p}^{b}_0(\\boldsymbol{x})\\) and \\(\\hat{p}^{b}_1(\\boldsymbol{x})\\) for class 0 and 1, respectively."
+    "text": "Predictions\n\nLet \\(\\boldsymbol{x} = (x_1, x_2, \\ldots, x_p)\\) be a vector of new predictor values. For classification problems with 2 classes:\n\nEach classification tree outputs the probability for class 1 and 2 depending on the region \\(\\boldsymbol{x}\\) falls in.\nFor the b-th tree, we denote the probabilities as \\(\\hat{p}^{b}_0(\\boldsymbol{x})\\) and \\(\\hat{p}^{b}_1(\\boldsymbol{x})\\) for class 0 and 1, respectively."
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#section",
@@ -2310,7 +2310,7 @@
     "href": "Classification/EnsembleMethods.slides.html#section-2",
     "title": "Ensemble Methods",
     "section": "",
-    "text": "Classify according to a majority vote between \\(p_{bag, 0}\\) and \\(p_{bag, 1}\\)."
+    "text": "Classify \\(\\boldsymbol{x}\\) to the class with the highest probability (between \\(p_{bag, 0}\\) and \\(p_{bag, 1}\\))."
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#implementation",
@@ -2324,7 +2324,7 @@
     "href": "Classification/EnsembleMethods.slides.html#example-1",
     "title": "Ensemble Methods",
     "section": "Example 1",
-    "text": "Example 1\n\nThe data “AdultReduced.xlsx” comes from the UCI Machine Learning Repository and is derived from US census records. In this data, the goal is to predict whether a person’s income was high (defined in 1994 as more than $50,000) or low.\nPredictors include education level, job type (e.g., never worked and local government), capital gains/losses, hours worked per week, country of origin, etc. The data contains 7,508 records."
+    "text": "Example 1\n\nThe data “AdultReduced.xlsx” comes from the UCI Machine Learning Repository and is derived from US census records. In this data, the goal is to predict whether a person’s income was high (defined in 1994 as more than $50,000) or low.\n\nPredictors include education level, job type (e.g., never worked and local government), capital gains/losses, hours worked per week, country of origin, etc. The data contains 7,508 records."
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#read-the-dataset",
@@ -2352,7 +2352,7 @@
     "href": "Classification/EnsembleMethods.slides.html#set-the-target-class",
     "title": "Ensemble Methods",
     "section": "Set the target class",
-    "text": "Set the target class\nLet’s set the target class and the reference class using the get_dummies() function.\n\n# Select answer\nY = Adult_data.filter(['income'])\n\n# Create dummy variables.\nY_dummies = pd.get_dummies(Y, dtype = 'int')\n\n# Show.\nY_dummies.head(4)\n\n\n\n\n\n\n\n\nincome_large\nincome_small\n\n\n\n\n0\n0\n1\n\n\n1\n0\n1\n\n\n2\n0\n1\n\n\n3\n0\n1"
+    "text": "Set the target class\nLet’s set the target class and the reference class using the get_dummies() function.\n\nY = Adult_data.filter(['income'])\nY_dummies = pd.get_dummies(Y, dtype = 'int')\nY_dummies.head(4)\n\n\n\n\n\n\n\n\nincome_large\nincome_small\n\n\n\n\n0\n0\n1\n\n\n1\n0\n1\n\n\n2\n0\n1\n\n\n3\n0\n1"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#section-3",
@@ -2366,7 +2366,7 @@
     "href": "Classification/EnsembleMethods.slides.html#training-and-validation-datasets",
     "title": "Ensemble Methods",
     "section": "Training and validation datasets",
-    "text": "Training and validation datasets\n\nTo evaluate a model’s performance on unobserved data, we split the current dataset into training and validation datasets. To do this, we use train_test_split() from scikit-learn.\n\n# Split into training and validation\nX_train, X_valid, Y_train, Y_valid = train_test_split(X_full, Y_target, \n                                                      test_size = 0.2)\n\nWe use 80% of the dataset for training and the rest for validation."
+    "text": "Training and validation datasets\n\nTo evaluate a model’s performance on unobserved data, we split the current dataset into training and validation datasets. To do this, we use train_test_split() from scikit-learn.\n\n# Split into training and validation\nX_train, X_valid, Y_train, Y_valid = train_test_split(X_full, Y_target,\n                                                      stratify = Y_target,\n                                                      test_size = 0.2)\n\nWe use 80% of the dataset for training and the rest for validation."
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#bagging-in-python",
@@ -2380,28 +2380,28 @@
     "href": "Classification/EnsembleMethods.slides.html#predictions-1",
     "title": "Ensemble Methods",
     "section": "Predictions",
-    "text": "Predictions\nPredict the classes using bagging.\n\npredicted_class = Baggingalgorithm.predict(X_valid)\n\npredicted_class\n\narray([0, 0, 1, ..., 0, 0, 0])"
+    "text": "Predictions\nPredict the classes using bagging.\n\npredicted_class = Baggingalgorithm.predict(X_valid)\n\npredicted_class\n\narray([0, 0, 0, ..., 0, 0, 1])"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#confusion-matrix",
     "href": "Classification/EnsembleMethods.slides.html#confusion-matrix",
     "title": "Ensemble Methods",
     "section": "Confusion matrix",
-    "text": "Confusion matrix\n\n# Compute confusion matrix.\ncm = confusion_matrix(Y_valid, predicted_class)\n\n# Visualize the matrix.\nConfusionMatrixDisplay(cm).plot()"
+    "text": "Confusion matrix\n\ncm = confusion_matrix(Y_valid, predicted_class)\nConfusionMatrixDisplay(cm).plot()"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#accuracy",
     "href": "Classification/EnsembleMethods.slides.html#accuracy",
     "title": "Ensemble Methods",
     "section": "Accuracy",
-    "text": "Accuracy\n\nThe accuracy of the bagging classifier is 78%.\n\n# Compute accuracy.\naccuracy = accuracy_score(Y_valid, predicted_class)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.76"
+    "text": "Accuracy\n\nThe accuracy of the bagging classifier is 78%.\n\n# Compute accuracy.\naccuracy = accuracy_score(Y_valid, predicted_class)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.77"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#a-single-deep-tree",
     "href": "Classification/EnsembleMethods.slides.html#a-single-deep-tree",
     "title": "Ensemble Methods",
     "section": "A single deep tree",
-    "text": "A single deep tree\nTo compare the bagging, let’s use a single deep tree.\n\n\nCode\n# We tell Python that we want a classification tree\nclf_simple = DecisionTreeClassifier(ccp_alpha=0.0,\n                                    random_state=507134)\n\n# We train the classification tree using the training data.\nclf_simple.fit(X_train, Y_train)\n\n\nLet’s compute the accuracy of the pruned tree.\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.75"
+    "text": "A single deep tree\n\nTo compare the bagging, let’s use a single deep tree.\n\nclf_simple = DecisionTreeClassifier(min_samples_leaf = 5, ccp_alpha=0.0, \n                                    random_state=507134)\n\nclf_simple.fit(X_train, Y_train)\n\nLet’s compute the accuracy of the pruned tree.\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.78"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#advantages",
@@ -2464,7 +2464,7 @@
     "href": "Classification/EnsembleMethods.slides.html#random-forest-in-python",
     "title": "Ensemble Methods",
     "section": "Random Forest in Python",
-    "text": "Random Forest in Python\n\nIn Python, we define a RandomForest algorithm for classification using the RandomForestClassifier function from scikit-learn. The n_estimators argument is the number of decision trees to generate in the RandomForest, and random_state allows you to reprudce the results.\n\n# Set the bagging algorithm.\nRFalgorithm = RandomForestClassifier(n_estimators = 500,\n                                     random_state = 59227)\n\n# Train the bagging algorithm.\nRFalgorithm.fit(X_train, Y_train)"
+    "text": "Random Forest in Python\n\nIn Python, we define a RandomForest algorithm for classification using the RandomForestClassifier function from scikit-learn. The n_estimators argument is the number of decision trees to generate in the RandomForest, and random_state allows you to reprudce the results.\n\n# Set the bagging algorithm.\nRFalgorithm = RandomForestClassifier(n_estimators = 500, \n                                     max_features = 'sqrt',\n                                     random_state = 59227)\n\n# Train the bagging algorithm.\nRFalgorithm.fit(X_train, Y_train)"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#confusion-matrix-1",
@@ -2492,7 +2492,7 @@
     "href": "Classification/Classification.slides.html#load-the-libraries",
     "title": "Classification Trees",
     "section": "Load the libraries",
-    "text": "Load the libraries\n\nBefore we start, let’s import the data science libraries into Python.\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.tree import DecisionTreeClassifier, plot_tree\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay \nfrom sklearn.metrics import accuracy_score, recall_score, precision_score\n\nHere, we use specific functions from the pandas, matplotlib, seaborn and sklearn libraries in Python."
+    "text": "Load the libraries\n\nBefore we start, let’s import the data science libraries into Python.\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.model_selection import train_test_split, GridSearchCV\nfrom sklearn.tree import DecisionTreeClassifier, plot_tree\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay \nfrom sklearn.metrics import accuracy_score, recall_score, precision_score\n\nHere, we use specific functions from the pandas, matplotlib, seaborn and sklearn libraries in Python."
   },
   {
     "objectID": "Classification/Classification.slides.html#bayes-classifier",
@@ -2604,7 +2604,7 @@
     "href": "Classification/Classification.slides.html#in-python",
     "title": "Classification Trees",
     "section": "In Python",
-    "text": "In Python\nIn Python, we use the DecisionTreeClassifier() and fit() functions from scikit-learn to train a classification tree.\n\n# We tell Python we want a classification tree\nclf = DecisionTreeClassifier(min_samples_leaf= 5, ccp_alpha=0, \n                              random_state=507134)\n\n# We train the classification tree using the training data.\nclf.fit(X_train, Y_train)\n\nThe parameter min_samples_leaf controls the minimum number of observations in a terminal node, and the cc_alpha controls the tree complexity (to be described later). The parameter random_state allows you to reproduce the same tree in different runs of the Python code."
+    "text": "In Python\nIn Python, we use the DecisionTreeClassifier() and fit() functions from scikit-learn to train a classification tree.\n\n# We tell Python we want a classification tree\nclf = DecisionTreeClassifier(min_samples_leaf = 5, ccp_alpha=0, \n                              random_state=507134)\n\n# We train the classification tree using the training data.\nclf.fit(X_train, Y_train)\n\nThe parameter min_samples_leaf controls the minimum number of observations in a terminal node, and the cc_alpha controls the tree complexity (to be described later). The parameter random_state allows you to reproduce the same tree in different runs of the Python code."
   },
   {
     "objectID": "Classification/Classification.slides.html#plotting-the-tree",
@@ -2723,49 +2723,49 @@
     "href": "Classification/Classification.slides.html#apply-penalty-for-large-trees",
     "title": "Classification Trees",
     "section": "Apply penalty for large trees",
-    "text": "Apply penalty for large trees\nNow, let’s illustrate the pruning technique to find a small decision tree that performs well. To do this, we will train several decision trees using different values of \\(\\alpha\\), which weighs the contribution of the tree branches.\n\nIn Python, this is achieved using the cost_complexity_pruning_path() function with the following syntax.\n\npath = clf.cost_complexity_pruning_path(X_train, Y_train)\nccp_alphas = path.ccp_alphas"
+    "text": "Apply penalty for large trees\nNow, let’s illustrate the pruning technique to find a small decision tree that performs well. To do this, we will train several decision trees using different values of \\(\\alpha\\), which weighs the contribution of the tree branches.\nIn Python, this is achieved using the cost_complexity_pruning_path() function with the following syntax.\n\npath = clf.cost_complexity_pruning_path(X_train, Y_train)\nccp_alphas = path.ccp_alphas\n\nThe ccp_alphas object contains the different values of the \\(\\alpha\\) parameter used."
   },
   {
     "objectID": "Classification/Classification.slides.html#section-29",
     "href": "Classification/Classification.slides.html#section-29",
     "title": "Classification Trees",
     "section": "",
-    "text": "The ccp_alphas object contains the different values of \\(\\alpha\\) used. To train a decision tree using different \\(\\alpha\\) values, we use the following code that iterates over the values contained in ccp_alphas.\n\nclfs = []\nfor ccp_alpha in ccp_alphas:\n    clf_alpha = DecisionTreeClassifier(min_samples_leaf= 5, \n                                       ccp_alpha=ccp_alpha, \n                                       random_state=507134)\n    clf_alpha.fit(X_train, Y_train)\n    clfs.append(clf_alpha)"
+    "text": "Now, we extract the results from this process.\n\nbest_alpha = grid_search.best_params_['ccp_alpha']\ncv_scores = grid_search.cv_results_['mean_test_score']\n\nprint(f\"Best Alpha: {best_alpha}\")\n\nBest Alpha: 0.0\n\n\n\nThe best_alpha is the optimal value of the cost complexity parameter (\\(\\alpha\\)). The cv_scores shows the estimates of accuracy given by the 5-fold cross-validation.\n\ncv_scores\n\narray([0.91428571, 0.91428571, 0.91428571, 0.89285714, 0.7       ])"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-30",
     "href": "Classification/Classification.slides.html#section-30",
     "title": "Classification Trees",
     "section": "",
-    "text": "Now, for each of those trees contained in clfs, we evaluate the performance in terms of accuracy for the training and validation data.\n\ntrain_scores = [clf.score(X_train, Y_train) for clf in clfs]\nvalidation_scores = [clf.score(X_valid, Y_valid) for clf in clfs]\n\n\nThe .score() function computes the accuracy of a classification tree."
+    "text": "We visualize the results using the following plot.\n\n\nCode\nfig, ax = plt.subplots()\nax.set_xlabel(\"alpha\")\nax.set_ylabel(\"Accuracy\")\nax.set_title(\"Accuracy vs alpha\")\nax.plot(ccp_alphas, cv_scores, marker=\"o\", label=\"K-fold CV\", drawstyle=\"steps-post\")\nax.legend()\nplt.show()"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-31",
     "href": "Classification/Classification.slides.html#section-31",
     "title": "Classification Trees",
     "section": "",
-    "text": "We visualize the results using the following plot.\n\n\nCode\nfig, ax = plt.subplots()\nax.set_xlabel(\"alpha\")\nax.set_ylabel(\"Accuracy\")\nax.set_title(\"Accuracy vs alpha for training and validation data\")\nax.plot(ccp_alphas, train_scores, marker=\"o\", label=\"train\", drawstyle=\"steps-post\")\nax.plot(ccp_alphas, validation_scores, marker=\"o\", label=\"validation\", drawstyle=\"steps-post\")\nax.legend()\nplt.show()"
+    "text": "Once this is done, we can visualize the small tree using the plot_tree() function.\n\n\nCode\nplt.figure(figsize=(6, 6))\nplot_tree(clf_simple, feature_names = X_train.columns,\n    class_names=[\"genuine\", \"counterfeit\"], filled=True, rounded=True)\nplt.show()"
   },
   {
     "objectID": "Classification/Classification.slides.html#choosing-the-best-tree",
     "href": "Classification/Classification.slides.html#choosing-the-best-tree",
     "title": "Classification Trees",
     "section": "Choosing the best tree",
-    "text": "Choosing the best tree\n\nWe can see that the best \\(\\alpha\\) value for the validation dataset is 0.\nTo train our new reduced tree, we use the DecisionTreeClassifier() function again with the ccp_alpha parameter set to the best \\(\\alpha\\) value. The object containing this new tree is clf_simple.\n\n# We tell Python that we want a classification tree\nclf_simple = DecisionTreeClassifier(ccp_alpha = 0, min_samples_leaf = 5)\n\n# We train the classification tree using the training data.\nclf_simple.fit(X_train, Y_train)"
+    "text": "Choosing the best tree\n\nWe can see that the best \\(\\alpha\\) value for the validation dataset is 0.\nTo train our new reduced tree, we use the DecisionTreeClassifier() function again with the ccp_alpha parameter set to the best \\(\\alpha\\) value. The object containing this new tree is clf_simple.\n\n# We tell Python that we want a classification tree\nclf_simple = DecisionTreeClassifier(ccp_alpha = best_alpha, \n                                    min_samples_leaf = 5)\n\n# We train the classification tree using the training data.\nclf_simple.fit(X_train, Y_train)"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-32",
     "href": "Classification/Classification.slides.html#section-32",
     "title": "Classification Trees",
     "section": "",
-    "text": "Once this is done, we can visualize the small tree using the plot_tree() function.\n\nplt.figure(figsize=(6, 6))\nplot_tree(clf_simple, feature_names = X_train.columns,\n    class_names=[\"genuine\", \"counterfeit\"], filled=True, rounded=True)\nplt.show()"
+    "text": "The accuracy of the pruned tree is:\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.97"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-33",
     "href": "Classification/Classification.slides.html#section-33",
     "title": "Classification Trees",
     "section": "",
-    "text": "The accuracy of the pruned tree is:\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.97"
+    "text": "In other words, we want to avoid making wrong decisions about customers who will churn.\nWrong decisions about loyal customers aren’t as relevant.\nBecause if we classify a loyal customer as one who will churn, the customer will get a good deal. They’ll probably pay less but stay anyway."
   },
   {
     "objectID": "Classification/Classification.slides.html#comments-on-accuracy",
@@ -2786,7 +2786,7 @@
     "href": "Classification/Classification.slides.html#section-34",
     "title": "Classification Trees",
     "section": "",
-    "text": "In other words, we want to avoid making wrong decisions about customers who will churn.\nWrong decisions about loyal customers aren’t as relevant.\nBecause if we classify a loyal customer as one who will churn, the customer will get a good deal. They’ll probably pay less but stay anyway."
+    "text": "Sensitivity or recall = OO/(OO + OR) “How many records of the target class did we predict correctly?”"
   },
   {
     "objectID": "Classification/Classification.slides.html#another-example",
@@ -2807,28 +2807,28 @@
     "href": "Classification/Classification.slides.html#section-35",
     "title": "Classification Trees",
     "section": "",
-    "text": "Sensitivity or recall = OO/(OO + OR) “How many records of the target class did we predict correctly?”"
+    "text": "Precision = OO/(OO + RO) How many of the records we predicted as target class were classified correctly?"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-36",
     "href": "Classification/Classification.slides.html#section-36",
     "title": "Classification Trees",
     "section": "",
-    "text": "Precision = OO/(OO + RO) How many of the records we predicted as target class were classified correctly?"
+    "text": "In Python, we compute sensitivity and precision using the following commands:\n\nrecall = recall_score(Y_valid, predicted_class)\nprint( round(recall, 2) )\n\n0.97\n\n\n\n\nprecision = precision_score(Y_valid, predicted_class)\nprint( round(precision, 2) )\n\n0.97"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-37",
     "href": "Classification/Classification.slides.html#section-37",
     "title": "Classification Trees",
     "section": "",
-    "text": "In Python, we compute sensitivity and precision using the following commands:\n\nrecall = recall_score(Y_valid, predicted_class)\nprint( round(recall, 2) )\n\n0.97\n\n\n\n\nprecision = precision_score(Y_valid, predicted_class)\nprint( round(precision, 2) )\n\n0.97"
+    "text": "Type I error = RO/(RO + RR) “How many of the reference records did we incorrectly predict as targets?”"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-38",
     "href": "Classification/Classification.slides.html#section-38",
     "title": "Classification Trees",
     "section": "",
-    "text": "Type I error = RO/(RO + RR) “How many of the reference records did we incorrectly predict as targets?”"
+    "text": "Unfortunately, there is no simple command to calculate the type-I error in sklearn. To overcome this issue, we must calculate it manually.\n\n# Confusion matrix to compute Type-I error\ntn, fp, fn, tp = confusion_matrix(Y_valid, predicted_class).ravel()\n\n# Type-I error rate = False Positive Rate = FP / (FP + TN)\ntype_I_error = fp / (fp + tn)\nprint( round(type_I_error, 2) )\n\n0.03"
   },
   {
     "objectID": "Classification/Classification.slides.html#section-39",
@@ -4404,5 +4404,19 @@
     "title": "Train, Test, and Validation Datasets",
     "section": "Work on your training dataset",
     "text": "Work on your training dataset\nAfter we have partitioned the data, we work on the training data to develop our predictive pipeline.\nThe pipeline has two main steps:\n\nData preprocessing.\nModel development.\n\nWe will now discuss preprocessing techniques applied to the predictor columns in the training dataset.\nNote that all preprocessing techniques will also be applied to the validation dataset and test dataset to prepare it for your model!"
+  },
+  {
+    "objectID": "Classification/Classification.slides.html#cross-validation",
+    "href": "Classification/Classification.slides.html#cross-validation",
+    "title": "Classification Trees",
+    "section": "Cross-Validation",
+    "text": "Cross-Validation\nTo compare the performance of the classification tree for the different values of \\(\\alpha\\), we use 5-fold cross validation as follows.\n\n# 1. Define the grid of parameters\nparam_grid = {'ccp_alpha': ccp_alphas}\n\n# 2. Set the classification trees using 5-fold CV.\ngrid_search = GridSearchCV(\n    DecisionTreeClassifier(min_samples_leaf = 5, random_state = 507134),\n    param_grid,\n    cv = 5,\n    scoring = 'accuracy'\n)\n\n# 3. Train the classification algorithms\ngrid_search.fit(X_train, Y_train)"
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#predictions-from-bagging",
+    "href": "Classification/EnsembleMethods.slides.html#predictions-from-bagging",
+    "title": "Ensemble Methods",
+    "section": "Predictions from bagging",
+    "text": "Predictions from bagging\n\nPredict the classes using bagging on the validation dataset.\n\npredicted_class = Baggingalgorithm.predict(X_valid)\n\npredicted_class\n\narray([0, 0, 0, ..., 0, 0, 0])"
   }
 ]

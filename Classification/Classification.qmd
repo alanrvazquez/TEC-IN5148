@@ -41,7 +41,7 @@ Before we start, let's import the data science libraries into Python.
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.tree import DecisionTreeClassifier, plot_tree
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay 
@@ -1128,7 +1128,7 @@ In Python, we use the `DecisionTreeClassifier()` and `fit()` functions from **sc
 #| output: false
 
 # We tell Python we want a classification tree
-clf = DecisionTreeClassifier(min_samples_leaf= 5, ccp_alpha=0, 
+clf = DecisionTreeClassifier(min_samples_leaf = 5, ccp_alpha=0, 
                               random_state=507134)
 
 # We train the classification tree using the training data.
@@ -1609,8 +1609,6 @@ where $\alpha$ is a tuning parameter that **places greater weight on the number 
 
 Now, let's illustrate the pruning technique to find a small decision tree that performs well. To do this, we will train several decision trees using different values of $\alpha$, which weighs the contribution of the tree branches.
 
-</br>
-
 In Python, this is achieved using the `cost_complexity_pruning_path()` function with the following syntax.
 
 ```{python}
@@ -1621,42 +1619,57 @@ path = clf.cost_complexity_pruning_path(X_train, Y_train)
 ccp_alphas = path.ccp_alphas
 ```
 
-## 
+The `ccp_alphas` object contains the different values of the $\alpha$ parameter used.
 
-</br>
+## Cross-Validation
 
-The `ccp_alphas` object contains the different values of $\alpha$ used. To train a decision tree using different $\alpha$ values, we use the following code that iterates over the values contained in `ccp_alphas`.
+To compare the performance of the classification tree for the different values of $\alpha$, we use [5-fold cross validation]{style="color:darkgreen;"} as follows. 
 
 ```{python}
 #| echo: true
 #| output: false
 
-clfs = []
-for ccp_alpha in ccp_alphas:
-    clf_alpha = DecisionTreeClassifier(min_samples_leaf= 5, 
-                                       ccp_alpha=ccp_alpha, 
-                                       random_state=507134)
-    clf_alpha.fit(X_train, Y_train)
-    clfs.append(clf_alpha)
+# 1. Define the grid of parameters
+param_grid = {'ccp_alpha': ccp_alphas}
+
+# 2. Set the classification trees using 5-fold CV.
+grid_search = GridSearchCV(
+    DecisionTreeClassifier(min_samples_leaf = 5, random_state = 507134),
+    param_grid,
+    cv = 5,
+    scoring = 'accuracy'
+)
+
+# 3. Train the classification algorithms
+grid_search.fit(X_train, Y_train)
 ```
 
 ## 
 
 </br>
 
-Now, for each of those trees contained in `clfs`, we evaluate the performance in terms of accuracy for the training and validation data.
+Now, we extract the results from this process.
 
 ```{python}
 #| echo: true
-#| output: false
+#| output: true
 
-train_scores = [clf.score(X_train, Y_train) for clf in clfs]
-validation_scores = [clf.score(X_valid, Y_valid) for clf in clfs]
+best_alpha = grid_search.best_params_['ccp_alpha']
+cv_scores = grid_search.cv_results_['mean_test_score']
+
+print(f"Best Alpha: {best_alpha}")
 ```
 
 </br>
 
-The `.score()` function computes the accuracy of a classification tree.
+The `best_alpha` is the optimal value of the cost complexity parameter ($\alpha$). The `cv_scores` shows the estimates of accuracy given by the 5-fold cross-validation. 
+
+```{python}
+#| echo: true
+#| output: true
+
+cv_scores
+```
 
 ## 
 
@@ -1671,9 +1684,8 @@ We visualize the results using the following plot.
 fig, ax = plt.subplots()
 ax.set_xlabel("alpha")
 ax.set_ylabel("Accuracy")
-ax.set_title("Accuracy vs alpha for training and validation data")
-ax.plot(ccp_alphas, train_scores, marker="o", label="train", drawstyle="steps-post")
-ax.plot(ccp_alphas, validation_scores, marker="o", label="validation", drawstyle="steps-post")
+ax.set_title("Accuracy vs alpha")
+ax.plot(ccp_alphas, cv_scores, marker="o", label="K-fold CV", drawstyle="steps-post")
 ax.legend()
 plt.show()
 ```
@@ -1691,7 +1703,8 @@ To train our new reduced tree, we use the `DecisionTreeClassifier()` function ag
 #| output: false
 
 # We tell Python that we want a classification tree
-clf_simple = DecisionTreeClassifier(ccp_alpha = 0, min_samples_leaf = 5)
+clf_simple = DecisionTreeClassifier(ccp_alpha = best_alpha, 
+                                    min_samples_leaf = 5)
 
 # We train the classification tree using the training data.
 clf_simple.fit(X_train, Y_train)
@@ -1705,6 +1718,7 @@ Once this is done, we can visualize the small tree using the `plot_tree()` funct
 #| echo: true
 #| output: true
 #| fig-align: center
+#| code-fold: true
 
 plt.figure(figsize=(6, 6))
 plot_tree(clf_simple, feature_names = X_train.columns,
