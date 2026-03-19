@@ -3400,9 +3400,9 @@
   {
     "objectID": "Classification/NeuralNetworks.slides.html#section",
     "href": "Classification/NeuralNetworks.slides.html#section",
-    "title": "K-nearest neighbors",
+    "title": "Introduction to Neural Networks",
     "section": "",
-    "text": "KNN uses the Euclidean distance between points. So it ignores units.\n\nExample: two predictors: height in cm and arm span in feet. Compare two people: (152.4, 1.52) and (182.88, 1.85).\nThese people are separated by 30.48 units of distance in the first variable, but only by 0.33 units in the second.\nTherefore, the first predictor plays a much more important role in classification and can bias the results to the point where the second variable becomes useless.\n\n\nTherefore, as a first step, we must transform the predictors so that they have the same units!"
+    "text": "Modern NNs use the Rectified Linear Unit (ReLU) activation function:\n\\[g(z) = \\begin{cases} 0 \\text{  if } z &lt; 0 \\\\\nz \\text{  if } z \\geq 0 \\end{cases}\\]\n\nThe function’s output is between 0 and \\(\\infty\\).\nThe ReLU function allows for a more computationally efficient training of a NN than the sigmoid function."
   },
   {
     "objectID": "Classification/NeuralNetworks.slides.html#example",
@@ -3477,9 +3477,9 @@
   {
     "objectID": "Classification/NeuralNetworks.slides.html#discussion",
     "href": "Classification/NeuralNetworks.slides.html#discussion",
-    "title": "K-nearest neighbors",
+    "title": "Introduction to Neural Networks",
     "section": "Discussion",
-    "text": "Discussion\n\nKNN is intuitive and simple and can produce decent predictions. However, KNN has some disadvantages:\n\nWhen the training dataset is very large, KNN is computationally expensive. This is because, to predict an observation, we need to calculate the distance between that observation and all the others in the dataset. (“Lazy learner”).\nIn this case, a decision tree is more advantageous because it is easy to build, store, and make predictions with."
+    "text": "Discussion\n\n\nThe user must specify the network architecture: the number of hidden units (\\(K\\)) to use.\nThe more hidden units, the longer the training time and the more complex the the NN.\nIn theory, a NN with one layer and many units will work for any prediction or classification problem. In other words, a NN is a universal approximator."
   },
   {
     "objectID": "Classification/NeuralNetworks.slides.html#section-2",
@@ -4495,5 +4495,110 @@
     "title": "Train, Test, and Validation Datasets",
     "section": "Work on your training dataset",
     "text": "Work on your training dataset\nAfter we have partitioned the data, we work on the training data to develop our predictive pipeline.\nThe pipeline has two main steps:\n\nData preprocessing.\nModel development.\n\nWe will now discuss preprocessing techniques applied to the predictor columns in the training dataset.\nNote that all preprocessing techniques will also be applied to the validation dataset and test dataset to prepare it for your model!"
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#agenda",
+    "href": "Classification/NeuralNetworks.slides.html#agenda",
+    "title": "Introduction to Neural Networks",
+    "section": "Agenda",
+    "text": "Agenda\n\n\nBasics and Terminology\nApplication\nWhen to use a Neural Network"
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#historical-background",
+    "href": "Classification/NeuralNetworks.slides.html#historical-background",
+    "title": "Introduction to Neural Networks",
+    "section": "Historical Background",
+    "text": "Historical Background\n\n\nThe idea of having “an electronic brain” dates back to the 1940s.\nNeural networks rose to fame in the late 1980s, but they did not take off due to the lack of computing power and the discovery of mathematically tractable machine algorithms such as Support Vector Machines.\nIn the 2010s, NN resurged thanks to the computational speed ups given by newly developed GPUs. They also changed their names to deep learning.\nMany innovations follow such as massively parallel computing with GPUs, modern architechtures such as CNNs and RNNS, modern optimization algorithms to train NN, and so on."
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#nowadays",
+    "href": "Classification/NeuralNetworks.slides.html#nowadays",
+    "title": "Introduction to Neural Networks",
+    "section": "Nowadays…",
+    "text": "Nowadays…\n\nNN have become prominent in many scientific fields.\nTheir most succesful applications include image classification, video classification, etc. Some of them are fun:\n\nhttps://quickdraw.withgoogle.com/\nhttps://tenso.rs/demos/rock-paper-scissors/"
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#neutal-network-nn",
+    "href": "Classification/NeuralNetworks.slides.html#neutal-network-nn",
+    "title": "Introduction to Neural Networks",
+    "section": "Neutal Network (NN)",
+    "text": "Neutal Network (NN)\n\nEssentially, a neural network is a nonlinear function \\(f(\\boldsymbol{X})\\) to predict the response \\(Y\\) using a vector of p inputs, \\(\\boldsymbol{X} = (X_1, X_2, ..., X_p)\\).\nThe function \\(f(\\boldsymbol{X})\\) can be represented as a “network” with several interconnected nodes.\nThe nodes andnetwork structure might make us think of how the neurons in the brain are connected and communicate to each other. However, this is not true since we still do not know how the brain actualy works!"
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#terminology",
+    "href": "Classification/NeuralNetworks.slides.html#terminology",
+    "title": "Introduction to Neural Networks",
+    "section": "Terminology",
+    "text": "Terminology\n\nThe structure of the NN is called its architecture, which depicts all the components and steps taken to reach the prediction.\nThe nodes in the network are called units.\nThe units are divided into groups called layers."
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#perceptron",
+    "href": "Classification/NeuralNetworks.slides.html#perceptron",
+    "title": "Introduction to Neural Networks",
+    "section": "Perceptron",
+    "text": "Perceptron\nThe simplest type of neural network is the perceptron."
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#activation-function",
+    "href": "Classification/NeuralNetworks.slides.html#activation-function",
+    "title": "Introduction to Neural Networks",
+    "section": "Activation Function",
+    "text": "Activation Function\n\nAn activation function turns several input values into a single number.\n\nNN were originally developed for classification tasks.\nTherefore, they use the Logistic or Sigmoid function:\n\\[g(z) = \\frac{1}{1 + e^{-z}}.\\]\nThe function’s output is between 0 and 1, which can be interpreted as the probability for the target class."
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#single-layer-nn",
+    "href": "Classification/NeuralNetworks.slides.html#single-layer-nn",
+    "title": "Introduction to Neural Networks",
+    "section": "Single Layer NN…",
+    "text": "Single Layer NN…\nhas two layers and multiple hidden units."
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#output-function",
+    "href": "Classification/NeuralNetworks.slides.html#output-function",
+    "title": "Introduction to Neural Networks",
+    "section": "Output Function",
+    "text": "Output Function\n\nThe output function takes the values of the hidden units as inputs to output the final prediction of the response\n\nThe function \\(f\\) depends on the type of problem:\n\nRegression: \\(f(\\beta_{0} + \\sum_{k=1}^{2} \\beta_{k} A_k) = \\beta_{0} + \\sum_{k=1}^{2} \\beta_{k} A_k\\)\nClassification: \\(f(\\beta_{0} + \\sum_{k=1}^{2} \\beta_{k} A_k) = \\frac{1}{1 + e^{-(\\beta_{0} + \\sum_{k=1}^{2} \\beta_{k} A_k)}}\\)."
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#multilayer-neural-networks",
+    "href": "Classification/NeuralNetworks.slides.html#multilayer-neural-networks",
+    "title": "Introduction to Neural Networks",
+    "section": "Multilayer Neural Networks",
+    "text": "Multilayer Neural Networks\n\nMultilayer NN have multiple hidden layers.\nAll neurons in one layer are fully connected to those in the next layer. This is referred to as a fully connected multilayer NN.\nThree layers is typical, but more are possible too (a deeper multilayer NN)."
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#some-comments",
+    "href": "Classification/NeuralNetworks.slides.html#some-comments",
+    "title": "Introduction to Neural Networks",
+    "section": "Some Comments",
+    "text": "Some Comments\n\n\nMultilayer NN are cheaper to train compared to a single layer NN with many hidden units.\nThis is because their training leverages modern in GPUs and parallel computing.\nIdeally, the multilayer NN is not too wide and should not be too deep."
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#the-required-libraries",
+    "href": "Classification/NeuralNetworks.slides.html#the-required-libraries",
+    "title": "Introduction to Neural Networks",
+    "section": "The required libraries",
+    "text": "The required libraries\n\nBefore we start, let’s import the data science libraries into Python.\n\n# Importing necessary libraries\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay \nfrom sklearn.metrics import accuracy_score\n\nHere, we use specific functions from the pandas, matplotlib, seaborn and sklearn libraries in Python."
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#general-remarks",
+    "href": "Classification/NeuralNetworks.slides.html#general-remarks",
+    "title": "Introduction to Neural Networks",
+    "section": "General Remarks",
+    "text": "General Remarks\n\n\nThe “deep” in deep learning is not a reference to any kind of deeper understanding achieved by the approach.\nInstead, it stands for the idea of successive layers of representations.\nModern deep learning often involves tens or even hundres of sucessive layers."
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#when-should-i-use-a-nn",
+    "href": "Classification/NeuralNetworks.slides.html#when-should-i-use-a-nn",
+    "title": "Introduction to Neural Networks",
+    "section": "When should I use a NN?",
+    "text": "When should I use a NN?"
+  },
+  {
+    "objectID": "Classification/NeuralNetworks.slides.html#nn-vs-other-algorithms",
+    "href": "Classification/NeuralNetworks.slides.html#nn-vs-other-algorithms",
+    "title": "Introduction to Neural Networks",
+    "section": "NN VS Other Algorithms",
+    "text": "NN VS Other Algorithms"
   }
 ]

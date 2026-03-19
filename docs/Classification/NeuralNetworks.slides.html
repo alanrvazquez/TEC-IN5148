@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-html/tabby.min.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.25">
 
   <meta name="author" content="Alan R. Vazquez">
-  <title>IN5148 Statistics and Data Science with Applications in Engineering – K-nearest neighbors</title>
+  <title>IN5148 Statistics and Data Science with Applications in Engineering – Introduction to Neural Networks</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -188,16 +188,13 @@
       margin-right: 0; 
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
-  
-  <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 </head>
 <body class="quarto-light">
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title"><em>K</em>-nearest neighbors</h1>
+  <h1 class="title">Introduction to Neural Networks</h1>
   <p class="subtitle">IN2004B: Generation of Value with Data Analytics</p>
 
 <div class="quarto-title-authors">
@@ -212,11 +209,144 @@ Alan R. Vazquez
 </div>
 
 </section>
-<section id="load-the-libraries" class="slide level2">
-<h2>Load the libraries</h2>
+<section id="agenda" class="slide level2">
+<h2>Agenda</h2>
+<p><br><br></p>
+<ol type="1">
+<li><p>Basics and Terminology</p></li>
+<li><p>Application</p></li>
+<li><p>When to use a Neural Network</p></li>
+</ol>
+</section>
+<section>
+<section id="basics-and-terminology" class="title-slide slide level1 center">
+<h1>Basics and Terminology</h1>
+
+</section>
+<section id="historical-background" class="slide level2">
+<h2><span style="color:gold;">Historical Background</span></h2>
+<div style="font-size: 90%;">
+<ul>
+<li><p>The idea of having “an electronic brain” dates back to the 1940s.</p></li>
+<li><p>Neural networks rose to fame in the late 1980s, but they did not take off due to the lack of computing power and the discovery of mathematically tractable machine algorithms such as <em>Support Vector Machines</em>.</p></li>
+<li><p>In the 2010s, NN resurged thanks to the computational speed ups given by newly developed GPUs. They also changed their names to <strong>deep learning</strong>.</p></li>
+<li><p>Many innovations follow such as massively parallel computing with GPUs, modern architechtures such as CNNs and RNNS, modern optimization algorithms to train NN, and so on.</p></li>
+</ul>
+</div>
+</section>
+<section id="nowadays" class="slide level2">
+<h2>Nowadays…</h2>
+<p><br><br></p>
+<p>NN have become prominent in many scientific fields.</p>
+<p>Their most succesful applications include image classification, video classification, etc. Some of them are fun:</p>
+<ul>
+<li><p><a href="https://quickdraw.withgoogle.com/" class="uri">https://quickdraw.withgoogle.com/</a></p></li>
+<li><p><a href="https://tenso.rs/demos/rock-paper-scissors/" class="uri">https://tenso.rs/demos/rock-paper-scissors/</a></p></li>
+</ul>
+</section>
+<section id="neutal-network-nn" class="slide level2">
+<h2>Neutal Network (NN)</h2>
+<p><br></p>
+<p>Essentially, a neural network is a <span style="color:#D03D56;"><strong>nonlinear function</strong></span> <span class="math inline">\(f(\boldsymbol{X})\)</span> to predict the response <span class="math inline">\(Y\)</span> using a vector of p inputs, <span class="math inline">\(\boldsymbol{X} = (X_1, X_2, ..., X_p)\)</span>.</p>
+<p>The function <span class="math inline">\(f(\boldsymbol{X})\)</span> can be represented as a “network” with several interconnected nodes.</p>
+<p>The nodes andnetwork structure might make us think of how the neurons in the brain are connected and communicate to each other. However, this is not true since we still do not know how the brain actualy works!</p>
+</section>
+<section id="terminology" class="slide level2">
+<h2>Terminology</h2>
+<p><br><br></p>
+<p>The structure of the NN is called its architecture, which depicts all the components and steps taken to reach the prediction.</p>
+<p>The nodes in the network are called <strong>units</strong>.</p>
+<p>The units are divided into groups called <strong>layers</strong>.</p>
+</section>
+<section id="perceptron" class="slide level2">
+<h2>Perceptron</h2>
+<p>The simplest type of neural network is the perceptron.</p>
+
+<img data-src="images/Perceptron.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="activation-function" class="slide level2">
+<h2>Activation Function</h2>
+<blockquote>
+<p>An <em>activation function</em> turns several input values into a single number.</p>
+</blockquote>
+<p>NN were originally developed for classification tasks.</p>
+<p>Therefore, they use the <span style="color:#155084;">Logistic</span> or <span style="color:#155084;">Sigmoid</span> function:</p>
+<p><span class="math display">\[g(z) = \frac{1}{1 + e^{-z}}.\]</span></p>
+<p>The function’s output is between 0 and 1, which can be interpreted as the probability for the target class.</p>
+</section>
+<section id="single-layer-nn" class="slide level2">
+<h2>Single Layer NN…</h2>
+<p>has two layers and multiple hidden units.</p>
+
+<img data-src="images/SingleLayer.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="section" class="slide level2">
+<h2></h2>
+<p><br></p>
+<p>Modern NNs use the <span style="color:#A9A9A9;">Rectified Linear Unit (ReLU)</span> activation function:</p>
+<p><span class="math display">\[g(z) = \begin{cases} 0 \text{  if } z &lt; 0 \\
+z \text{  if } z \geq 0 \end{cases}\]</span></p>
+<ul>
+<li><p>The function’s output is between 0 and <span class="math inline">\(\infty\)</span>.</p></li>
+<li><p>The ReLU function allows for a more computationally efficient training of a NN than the sigmoid function.</p></li>
+</ul>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+
+<img data-src="images/clipboard-588323290.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="output-function" class="slide level2">
+<h2>Output Function</h2>
+<p><br><br></p>
+<p>The output function takes the values of the hidden units as inputs to output the final prediction of the response</p>
+<p><br></p>
+<p>The function <span class="math inline">\(f\)</span> depends on the type of problem:</p>
+<ul>
+<li><p><span style="color:darkblue;">Regression</span>: <span class="math inline">\(f(\beta_{0} + \sum_{k=1}^{2} \beta_{k} A_k) = \beta_{0} + \sum_{k=1}^{2} \beta_{k} A_k\)</span></p></li>
+<li><p><span style="color:#darkgreen;">Classification</span>: <span class="math inline">\(f(\beta_{0} + \sum_{k=1}^{2} \beta_{k} A_k) = \frac{1}{1 + e^{-(\beta_{0} + \sum_{k=1}^{2} \beta_{k} A_k)}}\)</span>.</p></li>
+</ul>
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+
+<img data-src="images/AnotherexampleNN.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="discussion" class="slide level2">
+<h2>Discussion</h2>
+<p><br><br></p>
+<ul>
+<li><p>The user must specify the network architecture: the number of hidden units (<span class="math inline">\(K\)</span>) to use.</p></li>
+<li><p>The more hidden units, the longer the training time and the more complex the the NN.</p></li>
+<li><p>In theory, a NN with one layer and many units will work for any prediction or classification problem. In other words, a NN is a <span style="color:purple;"><strong><em>universal approximator</em></strong></span>.</p></li>
+</ul>
+</section>
+<section id="multilayer-neural-networks" class="slide level2">
+<h2>Multilayer Neural Networks</h2>
+<p><br><br></p>
+<p>Multilayer NN have multiple hidden layers.</p>
+<p>All neurons in one layer are fully connected to those in the next layer. This is referred to as a fully <em>connected</em> multilayer NN.</p>
+<p>Three layers is typical, but more are possible too (a <em>deeper</em> multilayer NN).</p>
+</section>
+<section id="section-3" class="slide level2">
+<h2></h2>
+
+<img data-src="images/Multilayer.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="some-comments" class="slide level2">
+<h2>Some Comments</h2>
+<p><br><br></p>
+<ul>
+<li class="fragment"><p>Multilayer NN are cheaper to train compared to a single layer NN with many hidden units.</p></li>
+<li class="fragment"><p>This is because their training leverages modern in GPUs and parallel computing.</p></li>
+<li class="fragment"><p>Ideally, the multilayer NN is not too wide and should not be too deep.</p></li>
+</ul>
+</section></section>
+<section>
+<section id="application" class="title-slide slide level1 center">
+<h1>Application</h1>
+
+</section>
+<section id="the-required-libraries" class="slide level2">
+<h2>The required libraries</h2>
 <p><br></p>
 <p>Before we start, let’s import the data science libraries into Python.</p>
-<div id="1037cdea" class="cell" data-execution_count="1">
+<div id="7c1c7e11" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="co"># Importing necessary libraries</span></span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -228,394 +358,31 @@ Alan R. Vazquez
 <span id="cb1-9"><a></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Here, we use specific functions from the <strong>pandas</strong>, <strong>matplotlib</strong>, <strong>seaborn</strong> and <strong>sklearn</strong> libraries in Python.</p>
+</section></section>
+<section>
+<section id="when-to-use-a-neural-network" class="title-slide slide level1 center">
+<h1>When to use a Neural Network</h1>
+
 </section>
-<section id="k-nearest-neighbors-knn" class="slide level2">
-<h2><em>K</em>-nearest neighbors (KNN)</h2>
-<p>KNN a supervised learning algorithm that uses proximity to make classifications or predictions about the clustering of a single data point.</p>
-<ul>
-<li><strong>Basic idea</strong>: Predict a new observation using the <em>K</em> closest observations in the training dataset.</li>
-</ul>
-<p>To predict the response for a new observation, KNN uses the <em>K</em> nearest neighbors (observations) in <span style="color:brown;"><strong><em>terms of the predictors!</em></strong></span></p>
-<p>The predicted response for the new observation is the most common response among the <em>K</em> nearest neighbors.</p>
-</section>
-<section id="the-algorithm-has-3-steps" class="slide level2">
-<h2>The algorithm has 3 steps:</h2>
+<section id="general-remarks" class="slide level2">
+<h2>General Remarks</h2>
 <p><br><br></p>
-<ol type="1">
-<li class="fragment"><p>Choose the number of nearest neighbors (<em>K</em>).</p></li>
-<li class="fragment"><p>For a new observation, find the <em>K</em> closest observations in the training data (ignoring the response).</p></li>
-<li class="fragment"><p>For the new observation, the algorithm predicts the value of the most common response among the <em>K</em> nearest observations.</p></li>
-</ol>
-</section>
-<section id="nearest-neighbour" class="slide level2">
-<h2>Nearest neighbour</h2>
-<p>Suppose we have two groups: red and green group. The number line shows the value of a predictor for our training data.</p>
-
-<img data-src="images/KNNsequence1.png" class="quarto-figure quarto-figure-center r-stretch"><p><span style="color:white;">A new observation arrives, and we don’t know which group it belongs to. If we had chosen <span class="math inline">\(K=3\)</span>, then the three nearest neighbors would vote on which group the new observation belongs to.</span></p>
-</section>
-<section id="nearest-neighbour-1" class="slide level2">
-<h2>Nearest neighbour</h2>
-<p>Suppose we have two groups: red and green group. The number line shows the value of a predictor for our training data.</p>
-
-<img data-src="images/KNNsequence2.png" class="quarto-figure quarto-figure-center r-stretch"><p>A new observation arrives, and we don’t know which group it belongs to. <span style="color:white;">If we had chosen <span class="math inline">\(K=3\)</span>, then the three nearest neighbors would vote on which group the new observation belongs to.</span></p>
-</section>
-<section id="nearest-neighbour-2" class="slide level2">
-<h2>Nearest neighbour</h2>
-<p>Suppose we have two groups: red and green group. The number line shows the value of a predictor for our training data.</p>
-
-<img data-src="images/KNNsequence3.png" class="quarto-figure quarto-figure-center r-stretch"><p>A new observation arrives, and we don’t know which group it belongs to. If we had chosen <span class="math inline">\(K=3\)</span>, then the three nearest neighbors would vote on which group the new observation belongs to.</p>
-</section>
-<section id="nearest-neighbour-3" class="slide level2">
-<h2>Nearest neighbour</h2>
-<p>Suppose we have two groups: red and green group. The number line shows the value of a predictor for our training data.</p>
-
-<img data-src="images/KNNsequence4.png" class="quarto-figure quarto-figure-center r-stretch"><p>A new observation arrives, and we don’t know which group it belongs to. If we had chosen <span class="math inline">\(K=3\)</span>, then the three nearest neighbors would vote on which group the new observation belongs to.</p>
-</section>
-<section id="banknote-data" class="slide level2">
-<h2>Banknote data</h2>
-<div class="columns">
-<div class="column" style="width:70%;">
-<div id="f294c14d" class="cell" data-execution_count="2">
-<div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="NeuralNetworks_files/figure-revealjs/cell-3-output-1.png" class="quarto-figure quarto-figure-center" width="589" height="589"></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:30%;">
-
-</div></div>
-<p>Using <span class="math inline">\(K = 3\)</span>, that’s 2 votes for “genuine” and 2 for “fake.” So we classify it as “genius.”</p>
-</section>
-<section id="banknote-data-1" class="slide level2">
-<h2>Banknote data</h2>
-<div class="columns">
-<div class="column" style="width:70%;">
-<div id="96368a8c" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="NeuralNetworks_files/figure-revealjs/cell-4-output-1.png" class="quarto-figure quarto-figure-center" width="589" height="589"></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:30%;">
-
-</div></div>
-<p>Using <span class="math inline">\(K = 3\)</span>, that’s 2 votes for “genuine” and 2 for “fake.” So we classify it as “genius.”</p>
-</section>
-<section id="banknote-data-2" class="slide level2">
-<h2>Banknote data</h2>
-<div class="columns">
-<div class="column" style="width:70%;">
-<div id="38eb66c5" class="cell" data-execution_count="4">
-<div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="NeuralNetworks_files/figure-revealjs/cell-5-output-1.png" class="quarto-figure quarto-figure-center" width="589" height="589"></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:30%;">
-<p><br></p>
-<p>Using <span class="math inline">\(K = 3\)</span>, that’s 3 votes for “counterfeit” and 0 for “genuine.” So we classify it as “counterfeit.”</p>
-</div></div>
-</section>
-<section id="banknote-data-3" class="slide level2">
-<h2>Banknote data</h2>
-<div class="columns">
-<div class="column" style="width:70%;">
-<div id="32e34c82" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="NeuralNetworks_files/figure-revealjs/cell-6-output-1.png" class="quarto-figure quarto-figure-center" width="589" height="589"></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:30%;">
-<p><br></p>
-<p>Using <span class="math inline">\(K = 3\)</span>, that’s 3 votes for “counterfeit” and 0 for “genuine.” So we classify it as “counterfeit.”</p>
-<p><span style="color:darkblue;">Closeness is based on Euclidean distance.</span></p>
-</div></div>
-</section>
-<section id="implementation-details" class="slide level2">
-<h2>Implementation Details</h2>
-<p><br><br><br></p>
-<p><strong>Ties</strong></p>
 <ul>
-<li><p>If there are more than <em>K</em> nearest neighbors, include them all.</p></li>
-<li><p>If there is a tie in the vote, set a rule to break the tie. For example, randomly select the class.</p></li>
+<li><p>The “deep” in deep learning is not a reference to any kind of deeper understanding achieved by the approach.</p></li>
+<li><p>Instead, it stands for the idea of successive layers of representations.</p></li>
+<li><p>Modern deep learning often involves tens or even hundres of sucessive layers.</p></li>
 </ul>
 </section>
-<section id="section" class="slide level2">
-<h2></h2>
-<p><span style="color:darkblue;">KNN uses the Euclidean distance between points</span>. So it ignores units.</p>
-<ul>
-<li><p>Example: two predictors: height in cm and arm span in feet. Compare two people: (152.4, 1.52) and (182.88, 1.85).</p></li>
-<li><p>These people are separated by 30.48 units of distance in the first variable, but only by 0.33 units in the second.</p></li>
-<li><p>Therefore, the first predictor plays a much more important role in classification and can bias the results to the point where the second variable becomes useless.</p></li>
-</ul>
-<div class="fragment">
-<p><span style="color:darkred;"><strong>Therefore, as a first step, we must transform the predictors so that they have the same units!</strong></span></p>
-</div>
-</section>
-<section id="example" class="slide level2">
-<h2>Example</h2>
-<p>The data is located in the file “banknotes.xlsx”.</p>
-<div id="770e0ccf" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>bank_data <span class="op">=</span> pd.read_excel(<span class="st">"banknotes.xlsx"</span>)</span>
-<span id="cb2-2"><a></a><span class="co"># Set response variable as categorical.</span></span>
-<span id="cb2-3"><a></a>bank_data[<span class="st">'Status'</span>] <span class="op">=</span> pd.Categorical(bank_data[<span class="st">'Status'</span>])</span>
-<span id="cb2-4"><a></a>bank_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<section id="when-should-i-use-a-nn" class="slide level2">
+<h2>When should I use a NN?</h2>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+<img data-src="images/clipboard-827947533.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="nn-vs-other-algorithms" class="slide level2">
+<h2>NN VS Other Algorithms</h2>
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Status</th>
-<th data-quarto-table-cell-role="th">Left</th>
-<th data-quarto-table-cell-role="th">Right</th>
-<th data-quarto-table-cell-role="th">Bottom</th>
-<th data-quarto-table-cell-role="th">Top</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>genuine</td>
-<td>131.0</td>
-<td>131.1</td>
-<td>9.0</td>
-<td>9.7</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
-<td>genuine</td>
-<td>129.7</td>
-<td>129.7</td>
-<td>8.1</td>
-<td>9.5</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
-<td>genuine</td>
-<td>129.7</td>
-<td>129.7</td>
-<td>8.7</td>
-<td>9.6</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
-<td>genuine</td>
-<td>129.7</td>
-<td>129.6</td>
-<td>7.5</td>
-<td>10.4</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
-<td>genuine</td>
-<td>129.6</td>
-<td>129.7</td>
-<td>10.4</td>
-<td>7.7</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-</section>
-<section id="create-the-predictor-matrix-and-response-column" class="slide level2">
-<h2>Create the predictor matrix and response column</h2>
-<p>Let’s create the predictor matrix or response column</p>
-<div id="96f5448e" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="co"># Set full matrix of predictors.</span></span>
-<span id="cb3-2"><a></a>X_full <span class="op">=</span> bank_data.drop(columns <span class="op">=</span> [<span class="st">'Status'</span>]) </span>
-<span id="cb3-3"><a></a></span>
-<span id="cb3-4"><a></a><span class="co"># Vector with responses</span></span>
-<span id="cb3-5"><a></a>Y_full <span class="op">=</span> bank_data.<span class="bu">filter</span>([<span class="st">'Status'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>To set the target category in the response we use the <code>get_dummies()</code> function.</p>
-<div id="82693957" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># Create dummy variables.</span></span>
-<span id="cb4-2"><a></a>Y_dummies <span class="op">=</span> pd.get_dummies(Y_full, dtype <span class="op">=</span> <span class="st">'int'</span>)</span>
-<span id="cb4-3"><a></a></span>
-<span id="cb4-4"><a></a><span class="co"># Select target variable.</span></span>
-<span id="cb4-5"><a></a>Y_target_full <span class="op">=</span> Y_dummies[<span class="st">'Status_counterfeit'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="lets-partition-the-dataset" class="slide level2">
-<h2>Let’s partition the dataset</h2>
-<p><br></p>
-<p>We use 70% for training and the rest for validation.</p>
-<div id="1ebe10cd" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="co"># Split the dataset into training and validation.</span></span>
-<span id="cb5-2"><a></a>X_train, X_valid, Y_train, Y_valid <span class="op">=</span> train_test_split(X_full, Y_target_full, </span>
-<span id="cb5-3"><a></a>                                                      test_size <span class="op">=</span> <span class="fl">0.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="standardization-in-python" class="slide level2">
-<h2>Standardization in Python</h2>
-<p><br></p>
-<p>To standardize <strong>numeric</strong> predictors, we use the <code>StandardScaler()</code> function. We also apply the function to variables using the <code>fit_transform()</code> function.</p>
-<p><br></p>
-<div id="9455127e" class="cell" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>scaler <span class="op">=</span> StandardScaler()</span>
-<span id="cb6-2"><a></a>Xs_train <span class="op">=</span> scaler.fit_transform(X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="knn-in-python" class="slide level2">
-<h2>KNN in Python</h2>
-<p><br></p>
-<p>In Python, we can use the <code>KNeighborsClassifier()</code> and <code>fit()</code> from <strong>scikit-learn</strong> to train a KNN.</p>
-<p>In the <code>KNeighborsClassifier</code> function, we can define the number of nearest neighbors using the <code>n_neighbors</code> parameter.</p>
-<div id="ecb8cdbd" class="cell" data-execution_count="11">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="co"># For example, let's use KNN with three neighbours</span></span>
-<span id="cb7-2"><a></a>knn <span class="op">=</span> KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb7-3"><a></a></span>
-<span id="cb7-4"><a></a><span class="co"># Now, we train the algorithm.</span></span>
-<span id="cb7-5"><a></a>knn.fit(Xs_train, Y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="evaluation" class="slide level2">
-<h2>Evaluation</h2>
-<p><br></p>
-<p>To evaluate KNN, we make predictions on the validation data (not used to train the KNN). To do this, we must first perform standardization operations on the predictors in the validation dataset.</p>
-<div id="854014a8" class="cell" data-execution_count="12">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>Xs_valid <span class="op">=</span> scaler.fit_transform(X_valid)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p><br></p>
-<p>Next, we make predictions.</p>
-<div id="0848939c" class="cell" data-execution_count="13">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>Y_pred_knn <span class="op">=</span> knn.predict(Xs_valid)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="confusion-matrix" class="slide level2">
-<h2>Confusion matrix</h2>
-<div id="b6463fc0" class="cell" data-execution_count="14">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a><span class="co"># Calcular matriz de confusión.</span></span>
-<span id="cb10-2"><a></a>cm <span class="op">=</span> confusion_matrix(Y_valid, Y_pred_knn)</span>
-<span id="cb10-3"><a></a></span>
-<span id="cb10-4"><a></a><span class="co"># Mostrar matriz de confusión.</span></span>
-<span id="cb10-5"><a></a>ConfusionMatrixDisplay(cm).plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="NeuralNetworks_files/figure-revealjs/cell-15-output-1.png" class="quarto-figure quarto-figure-center" width="514" height="435"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="finding-the-best-value-of-k" class="slide level2">
-<h2>Finding the best value of <em>K</em></h2>
-<p>We can determine the best value of <em>K</em> for the KNN algorithm. To this end, we evaluate the performance of the KNN for different values of <span class="math inline">\(K\)</span> in terms of accuracy on the validation dataset.</p>
-<div id="bcd8193a" class="cell" data-execution_count="15">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>best_k <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb11-2"><a></a>best_accuracy <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb11-3"><a></a>k_values <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">50</span>)  <span class="co"># Test k values from 1 to 50</span></span>
-<span id="cb11-4"><a></a>validation_accuracies <span class="op">=</span> []</span>
-<span id="cb11-5"><a></a></span>
-<span id="cb11-6"><a></a><span class="cf">for</span> k <span class="kw">in</span> k_values:</span>
-<span id="cb11-7"><a></a>    model <span class="op">=</span> KNeighborsClassifier(n_neighbors<span class="op">=</span>k)</span>
-<span id="cb11-8"><a></a>    model.fit(Xs_train, Y_train)</span>
-<span id="cb11-9"><a></a>    val_accuracy <span class="op">=</span> accuracy_score(Y_valid, model.predict(Xs_valid))</span>
-<span id="cb11-10"><a></a>    validation_accuracies.append(val_accuracy)</span>
-<span id="cb11-11"><a></a></span>
-<span id="cb11-12"><a></a>    <span class="cf">if</span> val_accuracy <span class="op">&gt;</span> best_accuracy:</span>
-<span id="cb11-13"><a></a>        best_accuracy <span class="op">=</span> val_accuracy</span>
-<span id="cb11-14"><a></a>        best_k <span class="op">=</span> k</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="visualize" class="slide level2">
-<h2>Visualize</h2>
-<p>We can then visualize the accuracy for different values of <span class="math inline">\(K\)</span> using the following graph and code.</p>
-<div id="3120100d" class="cell" data-execution_count="16">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="fl">6.3</span>, <span class="fl">4.3</span>))</span>
-<span id="cb12-2"><a></a>plt.plot(k_values, validation_accuracies, marker<span class="op">=</span><span class="st">"o"</span>, linestyle<span class="op">=</span><span class="st">"-"</span>)</span>
-<span id="cb12-3"><a></a>plt.xlabel(<span class="st">"Number of Neighbors (k)"</span>)</span>
-<span id="cb12-4"><a></a>plt.ylabel(<span class="st">"Validation Accuracy"</span>)</span>
-<span id="cb12-5"><a></a>plt.title(<span class="st">"Choosing the Best k for KNN"</span>)</span>
-<span id="cb12-6"><a></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="NeuralNetworks_files/figure-revealjs/cell-17-output-1.png" class="quarto-figure quarto-figure-center" width="549" height="403"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="section-1" class="slide level2">
-<h2></h2>
-<p><br></p>
-<p>Finally, we select the best number of nearest neighbors contained in the <code>best_k</code> object.</p>
-<div id="cf91e41e" class="cell" data-execution_count="17">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>KNN_final <span class="op">=</span> KNeighborsClassifier(n_neighbors <span class="op">=</span> best_k)</span>
-<span id="cb13-2"><a></a>KNN_final.fit(Xs_train, Y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p><br></p>
-<p>The accuracy of the best KNN is</p>
-<div id="b35ee80b" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>Y_pred_KNNfinal <span class="op">=</span> KNN_final.predict(Xs_valid)</span>
-<span id="cb14-2"><a></a>valid_accuracy <span class="op">=</span> accuracy_score(Y_valid, Y_pred_KNNfinal)</span>
-<span id="cb14-3"><a></a><span class="bu">print</span>(valid_accuracy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>0.9666666666666667</code></pre>
-</div>
-</div>
-</section>
-<section id="discussion" class="slide level2">
-<h2>Discussion</h2>
-<p><br></p>
-<p>KNN is intuitive and simple and can produce decent predictions. However, KNN has some disadvantages:</p>
-<ul>
-<li><p>When the training dataset is very large, KNN is computationally expensive. This is because, to predict an observation, we need to calculate the distance between that observation and all the others in the dataset. (“<em>Lazy learner</em>”).</p></li>
-<li><p>In this case, a decision tree is more advantageous because it is easy to build, store, and make predictions with.</p></li>
-</ul>
-</section>
-<section id="section-2" class="slide level2">
-<h2></h2>
-<div style="font-size: 90%;">
-<ul>
-<li><p>The predictive performance of KNN deteriorates as the number of predictors increases.</p></li>
-<li><p>This is because the expected distance to the nearest neighbor increases dramatically with the number of predictors, unless the size of the dataset increases exponentially with this number.</p></li>
-<li><p>This is known as the <strong><em>curse of dimensionality</em></strong>.</p></li>
-</ul>
-</div>
-
-<img data-src="images/clipboard-72810347.png" class="quarto-figure quarto-figure-center r-stretch"><div style="font-size: 50%;">
-<p><a href="https://aiaspirant.com/curse-of-dimensionality/" class="uri">https://aiaspirant.com/curse-of-dimensionality/</a></p>
-</div>
-</section>
+<img data-src="images/table_discussionNN.png" class="quarto-figure quarto-figure-center r-stretch"></section></section>
 <section id="return-to-main-page" class="title-slide slide level1 center">
-<h1><a href="https://alanrvazquez.github.io/TEC-5148/">Return to main page</a></h1>
+<h1><a href="https://alanrvazquez.github.io/TEC-IN5148/">Return to main page</a></h1>
 
 
 </section>

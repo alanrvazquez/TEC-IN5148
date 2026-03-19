@@ -18,7 +18,159 @@ editor: visual
 jupyter: python3
 ---
 
-## Load the libraries
+## Agenda
+
+</br></br>
+
+1.  Basics and Terminology
+
+2.  Application
+
+3.  When to use a Neural Network
+
+# Basics and Terminology
+
+## [Historical Background]{style="color:gold;"}
+
+::: {style="font-size: 90%;"}
+-   The idea of having “an electronic brain” dates back to the 1940s.
+
+-   Neural networks rose to fame in the late 1980s, but they did not take off due to the lack of computing power and the discovery of mathematically tractable machine algorithms such as *Support Vector Machines*.
+
+-   In the 2010s, NN resurged thanks to the computational speed ups given by newly developed GPUs. They also changed their names to **deep learning**.
+
+-   Many innovations follow such as massively parallel computing with GPUs, modern architechtures such as CNNs and RNNS, modern optimization algorithms to train NN, and so on.
+:::
+
+## Nowadays...
+
+</br></br>
+
+NN have become prominent in many scientific fields.
+
+Their most succesful applications include image classification, video classification, etc. Some of them are fun:
+
+-   <https://quickdraw.withgoogle.com/>
+
+-   <https://tenso.rs/demos/rock-paper-scissors/>
+
+## Neutal Network (NN)
+
+</br>
+
+Essentially, a neural network is a [**nonlinear function**]{style="color:#D03D56;"} $f(\boldsymbol{X})$ to predict the response $Y$ using a vector of p inputs, $\boldsymbol{X} = (X_1, X_2, ..., X_p)$.
+
+The function $f(\boldsymbol{X})$ can be represented as a “network” with several interconnected nodes.
+
+The nodes andnetwork structure might make us think of how the neurons in the brain are connected and communicate to each other. However, this is not true since we still do not know how the brain actualy works!
+
+## Terminology
+
+</br></br>
+
+The structure of the NN is called its architecture, which depicts all the components and steps taken to reach the prediction.
+
+The nodes in the network are called **units**.
+
+The units are divided into groups called **layers**.
+
+## Perceptron
+
+The simplest type of neural network is the perceptron.
+
+![](images/Perceptron.png){fig-align="center"}
+
+## Activation Function
+
+> An *activation function* turns several input values into a single number.
+
+NN were originally developed for classification tasks.
+
+Therefore, they use the [Logistic]{style="color:#155084;"} or [Sigmoid]{style="color:#155084;"} function:
+
+$$g(z) = \frac{1}{1 + e^{-z}}.$$
+
+The function’s output is between 0 and 1, which can be interpreted as the probability for the target class.
+
+## Single Layer NN...
+
+has two layers and multiple hidden units.
+
+![](images/SingleLayer.png){fig-align="center"}
+
+## 
+
+</br>
+
+Modern NNs use the [Rectified Linear Unit (ReLU)]{style="color:#A9A9A9;"} activation function:
+
+$$g(z) = \begin{cases} 0 \text{  if } z < 0 \\
+z \text{  if } z \geq 0 \end{cases}$$
+
+- The function’s output is between 0 and $\infty$.
+
+- The ReLU function allows for a more computationally efficient training of a NN than the sigmoid function.
+
+## 
+
+![](images/clipboard-588323290.png){fig-align="center"}
+
+## Output Function
+
+</br></br>
+
+The output function takes the values of the hidden units as inputs to output the final prediction of the response
+
+</br>
+
+The function $f$ depends on the type of problem:
+
+-   [Regression]{style="color:darkblue;"}: $f(\beta_{0} + \sum_{k=1}^{2} \beta_{k} A_k) = \beta_{0} + \sum_{k=1}^{2} \beta_{k} A_k$
+
+-   [Classification]{style="color:#darkgreen;"}: $f(\beta_{0} + \sum_{k=1}^{2} \beta_{k} A_k) = \frac{1}{1 + e^{-(\beta_{0} + \sum_{k=1}^{2} \beta_{k} A_k)}}$.
+
+##
+
+![](images/AnotherexampleNN.png){fig-align="center"}
+
+## Discussion
+
+</br></br>
+
+- The user must specify the network architecture: the number of hidden units ($K$) to use.
+
+- The more hidden units, the longer the training time and the more complex the the NN.
+
+- In theory, a NN with one layer and many units will work for any prediction or classification problem. In other words, a NN is a [***universal approximator***]{style="color:purple;"}.
+
+## Multilayer Neural Networks
+
+</br></br>
+
+Multilayer NN have multiple hidden layers.
+
+All neurons in one layer are fully connected to those in the next layer. This is referred to as a fully *connected* multilayer NN.
+
+Three layers is typical, but more are possible too (a *deeper* multilayer NN).
+
+##
+
+![](images/Multilayer.png){fig-align="center"}
+
+## Some Comments
+
+</br></br>
+
+::: incremental
+-   Multilayer NN are cheaper to train compared to a single layer NN with many hidden units.
+
+-   This is because their training leverages modern in GPUs and parallel computing.
+
+-   Ideally, the multilayer NN is not too wide and should not be too deep.
+:::
+# Application
+
+## The required libraries
 
 </br>
 
@@ -41,7 +193,25 @@ from sklearn.metrics import accuracy_score
 
 Here, we use specific functions from the **pandas**, **matplotlib**, **seaborn** and **sklearn** libraries in Python.
 
-##
+# When to use a Neural Network
+
+## General Remarks
+
+</br></br>
+
+-   The “deep” in deep learning is not a reference to any kind of deeper understanding achieved by the approach.
+
+-   Instead, it stands for the idea of successive layers of representations.
+
+-   Modern deep learning often involves tens or even hundres of sucessive layers.
+
+## When should I use a NN?
+
+![](images/clipboard-827947533.png){fig-align="center"}
+
+## NN VS Other Algorithms
+
+![](images/table_discussionNN.png){fig-align="center"}
 
 
 # [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)
