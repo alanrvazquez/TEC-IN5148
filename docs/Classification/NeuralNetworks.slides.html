@@ -367,7 +367,7 @@ z \text{  if } z \geq 0 \end{cases}\]</span></p>
 <h2>The libraries</h2>
 <p><br><br></p>
 <p>Let’s import <strong>tensorflow</strong> and our standard Python libraries.</p>
-<div id="f52cdc8b" class="cell" data-execution_count="2">
+<div id="7e1cb3b7" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
@@ -393,11 +393,11 @@ z \text{  if } z \geq 0 \end{cases}\]</span></p>
 <section id="the-mnist-dataset" class="slide level2">
 <h2>The MNIST dataset</h2>
 <p>It is a datasets in <strong>tensorflow</strong>. It even has its partition into training and test dataset, and into a predictor matrix and a response vector.</p>
-<div id="d5a9c352" class="cell" data-execution_count="3">
+<div id="c6694d10" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>(x_train, y_train), (x_test, y_test) <span class="op">=</span> tf.keras.datasets.mnist.load_data()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s inspect the shapes of the datasets.</p>
-<div id="908228b2" class="cell" data-execution_count="4">
+<div id="da4bf5d4" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="bu">print</span>(<span class="ss">f"Shape of x_train: </span><span class="sc">{</span>x_train<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb3-2"><a></a><span class="bu">print</span>(<span class="ss">f"Shape of y_train: </span><span class="sc">{</span>y_train<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb3-3"><a></a><span class="bu">print</span>(<span class="ss">f"Shape of x_test: </span><span class="sc">{</span>x_test<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -412,7 +412,7 @@ Shape of y_test: (10000,)</code></pre>
 </section>
 <section id="example-images" class="slide level2">
 <h2>Example images</h2>
-<div id="05f4af2e" class="cell" data-execution_count="5">
+<div id="e05cb64b" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
@@ -447,7 +447,7 @@ Shape of y_test: (10000,)</code></pre>
 <p>Neural networks work with inputs (or predictors) that take values between 0 and 1. For the images in the MNIST dataset, we can normalize the pixels of an image by dividing them by the largest pixel (255).</p>
 <p><br></p>
 <p>In Python, it will be something like this:</p>
-<div id="22a3a9c2" class="cell" data-execution_count="6">
+<div id="a8e64ce6" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>x_train_normalized <span class="op">=</span> x_train.astype(<span class="st">'float32'</span>) <span class="op">/</span> <span class="fl">255.0</span></span>
 <span id="cb6-2"><a></a>x_test_normalized <span class="op">=</span> x_test.astype(<span class="st">'float32'</span>) <span class="op">/</span> <span class="fl">255.0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -458,7 +458,7 @@ Shape of y_test: (10000,)</code></pre>
 <p>The input images of the MNIST dataset are matrices. However, the neural networks take vectors as input, which is why we need to <em>flatten</em> each matrix of pixels into a single vector.</p>
 <p><br></p>
 <p>We achieve this using the code below. Note that we apply it to the predictors from both the training and test dataset.</p>
-<div id="6d53d27c" class="cell" data-execution_count="7">
+<div id="58c50cf8" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>image_size <span class="op">=</span> x_train.shape[<span class="dv">1</span>] <span class="op">*</span> x_train.shape[<span class="dv">2</span>] <span class="co"># 28 * 28 = 784</span></span>
 <span id="cb7-2"><a></a>x_train_flattened <span class="op">=</span> x_train_normalized.reshape(<span class="op">-</span><span class="dv">1</span>, image_size)</span>
 <span id="cb7-3"><a></a>x_test_flattened <span class="op">=</span> x_test_normalized.reshape(<span class="op">-</span><span class="dv">1</span>, image_size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -468,7 +468,7 @@ Shape of y_test: (10000,)</code></pre>
 <h2></h2>
 <p><br><br></p>
 <p>Let’s see the new dimensions of the input.</p>
-<div id="2714401f" class="cell" data-execution_count="8">
+<div id="9a938fe3" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a><span class="bu">print</span>(<span class="ss">f"Shape of x_train_flattened after flattening: </span><span class="sc">{</span>x_train_flattened<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb8-2"><a></a><span class="bu">print</span>(<span class="ss">f"Shape of x_test_flattened after flattening: </span><span class="sc">{</span>x_test_flattened<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -482,11 +482,11 @@ Shape of x_test_flattened after flattening: (10000, 784)</code></pre>
 <section id="pre-processing-the-response" class="slide level2">
 <h2>Pre-processing the response</h2>
 <p>We must also turn the response into a categorical response with its corresponding dummy variable encoding. First, we specify that there are 10 categories.</p>
-<div id="b21cbffa" class="cell" data-execution_count="9">
+<div id="aa4df23b" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>num_classes <span class="op">=</span> <span class="dv">10</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, we turn the responses into dummy variables in the training and test datasets.</p>
-<div id="cf08a5e2" class="cell" data-execution_count="10">
+<div id="df7e911d" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>y_train_one_hot <span class="op">=</span> tf.keras.utils.to_categorical(y_train, num_classes)</span>
 <span id="cb11-2"><a></a>y_test_one_hot <span class="op">=</span> tf.keras.utils.to_categorical(y_test, num_classes)</span>
 <span id="cb11-3"><a></a></span>
@@ -515,7 +515,7 @@ Shape of y_test_one_hot after one-hot encoding: (10000, 10)</code></pre>
 </section>
 <section id="in-tensorflow" class="slide level2">
 <h2>In tensorflow</h2>
-<div id="f0b24234" class="cell" data-execution_count="11">
+<div id="08f7bfbb" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>model <span class="op">=</span> Sequential()</span>
 <span id="cb13-2"><a></a>model.add(Dense(<span class="dv">256</span>, activation<span class="op">=</span><span class="st">'relu'</span>, input_shape<span class="op">=</span>(image_size,)))</span>
 <span id="cb13-3"><a></a>model.add(Dense(<span class="dv">128</span>, activation<span class="op">=</span><span class="st">'relu'</span>))</span>
@@ -524,18 +524,18 @@ Shape of y_test_one_hot after one-hot encoding: (10000, 10)</code></pre>
 <span id="cb13-6"><a></a>              metrics <span class="op">=</span> [<span class="st">'accuracy'</span>])</span>
 <span id="cb13-7"><a></a>model.summary()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Model: "sequential_5"</span>
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Model: "sequential"</span>
 </pre>
 </div>
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
 ┃<span style="font-weight: bold"> Layer (type)                    </span>┃<span style="font-weight: bold"> Output Shape           </span>┃<span style="font-weight: bold">       Param # </span>┃
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
-│ dense_15 (<span style="color: #0087ff; text-decoration-color: #0087ff">Dense</span>)                │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">256</span>)            │       <span style="color: #00af00; text-decoration-color: #00af00">200,960</span> │
+│ dense (<span style="color: #0087ff; text-decoration-color: #0087ff">Dense</span>)                   │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">256</span>)            │       <span style="color: #00af00; text-decoration-color: #00af00">200,960</span> │
 ├─────────────────────────────────┼────────────────────────┼───────────────┤
-│ dense_16 (<span style="color: #0087ff; text-decoration-color: #0087ff">Dense</span>)                │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">128</span>)            │        <span style="color: #00af00; text-decoration-color: #00af00">32,896</span> │
+│ dense_1 (<span style="color: #0087ff; text-decoration-color: #0087ff">Dense</span>)                 │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">128</span>)            │        <span style="color: #00af00; text-decoration-color: #00af00">32,896</span> │
 ├─────────────────────────────────┼────────────────────────┼───────────────┤
-│ dense_17 (<span style="color: #0087ff; text-decoration-color: #0087ff">Dense</span>)                │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">10</span>)             │         <span style="color: #00af00; text-decoration-color: #00af00">1,290</span> │
+│ dense_2 (<span style="color: #0087ff; text-decoration-color: #0087ff">Dense</span>)                 │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">10</span>)             │         <span style="color: #00af00; text-decoration-color: #00af00">1,290</span> │
 └─────────────────────────────────┴────────────────────────┴───────────────┘
 </pre>
 </div>
@@ -558,7 +558,7 @@ Shape of y_test_one_hot after one-hot encoding: (10000, 10)</code></pre>
 <p>To train a neural network, we must set the number of <code>epochs</code>, which are the number of times the trainiing algorithm passes through the entire dataset.</p>
 <p>The number of epochs can be seen as the iterations of the training algorithm. We expect that, the larger the number of epochs, the better the performance of the algorithm. However, larger numbers increases the computing time needed to train the network.</p>
 <p>Let’s use 10 epochs as an example.</p>
-<div id="6c9eb688" class="cell" data-execution_count="12">
+<div id="f8e980bf" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>epochs <span class="op">=</span> <span class="dv">10</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
@@ -568,14 +568,14 @@ Shape of y_test_one_hot after one-hot encoding: (10000, 10)</code></pre>
 <p>Another important parameter is the <code>batch_size</code>. Essentially, this parameter controls the number of images that are processed during training. In other words, 64 samples are processed at a time in each iteration during training.</p>
 <p><br></p>
 <p>It is recommended that this number is a power of two, such as 8, 16, 64, and 128. Here, we fix it to 64.</p>
-<div id="f2526bdd" class="cell" data-execution_count="13">
+<div id="cee90c44" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>batch_size <span class="op">=</span> <span class="dv">64</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="training" class="slide level2">
 <h2>Training</h2>
 <p>Now, we are ready to train the neural network.</p>
-<div id="a7d2c14d" class="cell" data-execution_count="14">
+<div id="ff92c61d" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>history <span class="op">=</span> model.fit(</span>
 <span id="cb16-2"><a></a>    x_train_flattened, y_train_one_hot,</span>
 <span id="cb16-3"><a></a>    epochs<span class="op">=</span>epochs,</span>
@@ -587,412 +587,426 @@ Shape of y_test_one_hot after one-hot encoding: (10000, 10)</code></pre>
 <pre>Epoch 1/10
 
 
-<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">4:48</span> 308ms/step - accuracy: 0.0781 - loss: 2.4036
+<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">6:36</span> 423ms/step - accuracy: 0.1406 - loss: 2.4178
 
-<span class="ansi-bold"> 46/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.5516 - loss: 1.5185    
+<span class="ansi-bold"> 51/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.5835 - loss: 1.4166    
 
-<span class="ansi-bold"> 93/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.6615 - loss: 1.1616
-
-<span class="ansi-bold">144/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.7187 - loss: 0.9663
-
-<span class="ansi-bold">196/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.7536 - loss: 0.8452
-
-<span class="ansi-bold">248/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.7774 - loss: 0.7632
-
-<span class="ansi-bold">301/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.7953 - loss: 0.7017
-
-<span class="ansi-bold">354/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 998us/step - accuracy: 0.8092 - loss: 0.6537
+<span class="ansi-bold">103/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 995us/step - accuracy: 0.6877 - loss: 1.0756
 
-<span class="ansi-bold">406/938</span> <span class="ansi-green-fg">━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 993us/step - accuracy: 0.8202 - loss: 0.6157
+<span class="ansi-bold">157/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 975us/step - accuracy: 0.7391 - loss: 0.9021
 
-<span class="ansi-bold">459/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 989us/step - accuracy: 0.8296 - loss: 0.5834
+<span class="ansi-bold">209/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 972us/step - accuracy: 0.7694 - loss: 0.7983
 
-<span class="ansi-bold">512/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 985us/step - accuracy: 0.8376 - loss: 0.5559
+<span class="ansi-bold">262/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 968us/step - accuracy: 0.7907 - loss: 0.7246
 
-<span class="ansi-bold">565/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 982us/step - accuracy: 0.8444 - loss: 0.5324
+<span class="ansi-bold">315/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 965us/step - accuracy: 0.8066 - loss: 0.6694
 
-<span class="ansi-bold">618/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 979us/step - accuracy: 0.8503 - loss: 0.5119
+<span class="ansi-bold">367/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 965us/step - accuracy: 0.8190 - loss: 0.6267
 
-<span class="ansi-bold">671/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 977us/step - accuracy: 0.8556 - loss: 0.4937
+<span class="ansi-bold">420/938</span> <span class="ansi-green-fg">━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 963us/step - accuracy: 0.8293 - loss: 0.5911
 
-<span class="ansi-bold">724/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 976us/step - accuracy: 0.8603 - loss: 0.4774
+<span class="ansi-bold">472/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 963us/step - accuracy: 0.8377 - loss: 0.5617
 
-<span class="ansi-bold">778/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━</span> <span class="ansi-bold">0s</span> 974us/step - accuracy: 0.8647 - loss: 0.4625
+<span class="ansi-bold">523/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 967us/step - accuracy: 0.8448 - loss: 0.5371
 
-<span class="ansi-bold">832/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 971us/step - accuracy: 0.8686 - loss: 0.4489
+<span class="ansi-bold">576/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 966us/step - accuracy: 0.8512 - loss: 0.5149
 
-<span class="ansi-bold">885/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 969us/step - accuracy: 0.8721 - loss: 0.4367
+<span class="ansi-bold">629/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 964us/step - accuracy: 0.8568 - loss: 0.4953
 
-<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.8754 - loss: 0.4253 - val_accuracy: 0.9666 - val_loss: 0.1115
+<span class="ansi-bold">682/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 963us/step - accuracy: 0.8617 - loss: 0.4781
+
+<span class="ansi-bold">736/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 962us/step - accuracy: 0.8663 - loss: 0.4624
+
+<span class="ansi-bold">783/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━</span> <span class="ansi-bold">0s</span> 969us/step - accuracy: 0.8699 - loss: 0.4499
+
+<span class="ansi-bold">827/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 979us/step - accuracy: 0.8730 - loss: 0.4391
+
+<span class="ansi-bold">876/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 983us/step - accuracy: 0.8762 - loss: 0.4279
+
+<span class="ansi-bold">924/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 986us/step - accuracy: 0.8791 - loss: 0.4178
+
+<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">2s</span> 1ms/step - accuracy: 0.8799 - loss: 0.4148 - val_accuracy: 0.9634 - val_loss: 0.1209
 
 Epoch 2/10
 
 
-<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">5s</span> 6ms/step - accuracy: 0.9375 - loss: 0.2241
+<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">6s</span> 7ms/step - accuracy: 0.9844 - loss: 0.0579
 
-<span class="ansi-bold"> 47/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9647 - loss: 0.1211
+<span class="ansi-bold"> 50/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9717 - loss: 0.0919
 
-<span class="ansi-bold">101/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9671 - loss: 0.1124
+<span class="ansi-bold"> 98/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9739 - loss: 0.0895
 
-<span class="ansi-bold">155/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 982us/step - accuracy: 0.9681 - loss: 0.1086
+<span class="ansi-bold">149/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9738 - loss: 0.0901
+
+<span class="ansi-bold">202/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9735 - loss: 0.0910
+
+<span class="ansi-bold">255/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 994us/step - accuracy: 0.9732 - loss: 0.0914
 
-<span class="ansi-bold">209/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 972us/step - accuracy: 0.9689 - loss: 0.1058
+<span class="ansi-bold">305/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 996us/step - accuracy: 0.9730 - loss: 0.0917
 
-<span class="ansi-bold">263/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 964us/step - accuracy: 0.9694 - loss: 0.1036
-
-<span class="ansi-bold">317/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 958us/step - accuracy: 0.9696 - loss: 0.1024
-
-<span class="ansi-bold">370/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 956us/step - accuracy: 0.9699 - loss: 0.1012
-
-<span class="ansi-bold">424/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 954us/step - accuracy: 0.9701 - loss: 0.1003
-
-<span class="ansi-bold">478/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 952us/step - accuracy: 0.9702 - loss: 0.0996
-
-<span class="ansi-bold">532/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 950us/step - accuracy: 0.9703 - loss: 0.0989
-
-<span class="ansi-bold">586/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 949us/step - accuracy: 0.9705 - loss: 0.0984
-
-<span class="ansi-bold">640/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 948us/step - accuracy: 0.9706 - loss: 0.0979
-
-<span class="ansi-bold">694/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 947us/step - accuracy: 0.9707 - loss: 0.0975
-
-<span class="ansi-bold">748/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9707 - loss: 0.0971
-
-<span class="ansi-bold">801/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9708 - loss: 0.0968
-
-<span class="ansi-bold">854/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 947us/step - accuracy: 0.9709 - loss: 0.0965
-
-<span class="ansi-bold">908/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9710 - loss: 0.0962
-
-<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9710 - loss: 0.0960 - val_accuracy: 0.9707 - val_loss: 0.0924
+<span class="ansi-bold">353/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9729 - loss: 0.0917  
+
+<span class="ansi-bold">399/938</span> <span class="ansi-green-fg">━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9729 - loss: 0.0916
+
+<span class="ansi-bold">446/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9728 - loss: 0.0917
+
+<span class="ansi-bold">492/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9728 - loss: 0.0917
+
+<span class="ansi-bold">540/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9727 - loss: 0.0917
+
+<span class="ansi-bold">588/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9727 - loss: 0.0917
+
+<span class="ansi-bold">638/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9727 - loss: 0.0916
+
+<span class="ansi-bold">689/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9727 - loss: 0.0915
+
+<span class="ansi-bold">740/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9727 - loss: 0.0914
+
+<span class="ansi-bold">792/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9727 - loss: 0.0913
+
+<span class="ansi-bold">843/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9727 - loss: 0.0912
+
+<span class="ansi-bold">892/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9727 - loss: 0.0911
+
+<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9727 - loss: 0.0910 - val_accuracy: 0.9740 - val_loss: 0.0792
 
 Epoch 3/10
 
 
-<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">5s</span> 6ms/step - accuracy: 1.0000 - loss: 0.0240
+<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">6s</span> 7ms/step - accuracy: 1.0000 - loss: 0.0205
 
-<span class="ansi-bold"> 53/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 972us/step - accuracy: 0.9816 - loss: 0.0554
+<span class="ansi-bold"> 51/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9876 - loss: 0.0438
+
+<span class="ansi-bold">102/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9867 - loss: 0.0459
+
+<span class="ansi-bold">152/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9858 - loss: 0.0482
+
+<span class="ansi-bold">203/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1000us/step - accuracy: 0.9853 - loss: 0.0493
+
+<span class="ansi-bold">255/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 995us/step - accuracy: 0.9849 - loss: 0.0503 
 
-<span class="ansi-bold">106/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 966us/step - accuracy: 0.9810 - loss: 0.0586
+<span class="ansi-bold">306/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 993us/step - accuracy: 0.9845 - loss: 0.0513
 
-<span class="ansi-bold">159/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 959us/step - accuracy: 0.9808 - loss: 0.0599
+<span class="ansi-bold">357/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 992us/step - accuracy: 0.9842 - loss: 0.0521
 
-<span class="ansi-bold">212/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 956us/step - accuracy: 0.9810 - loss: 0.0600
+<span class="ansi-bold">405/938</span> <span class="ansi-green-fg">━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 999us/step - accuracy: 0.9840 - loss: 0.0527
 
-<span class="ansi-bold">266/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 952us/step - accuracy: 0.9810 - loss: 0.0603
+<span class="ansi-bold">455/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 999us/step - accuracy: 0.9838 - loss: 0.0532
 
-<span class="ansi-bold">319/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 950us/step - accuracy: 0.9810 - loss: 0.0603
+<span class="ansi-bold">504/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9837 - loss: 0.0535  
+
+<span class="ansi-bold">553/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9836 - loss: 0.0539
+
+<span class="ansi-bold">604/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9834 - loss: 0.0542
+
+<span class="ansi-bold">655/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9833 - loss: 0.0545
+
+<span class="ansi-bold">705/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9832 - loss: 0.0547
+
+<span class="ansi-bold">757/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9831 - loss: 0.0550
+
+<span class="ansi-bold">810/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 999us/step - accuracy: 0.9830 - loss: 0.0552
 
-<span class="ansi-bold">372/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 952us/step - accuracy: 0.9811 - loss: 0.0603
+<span class="ansi-bold">860/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 999us/step - accuracy: 0.9829 - loss: 0.0554
 
-<span class="ansi-bold">425/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 951us/step - accuracy: 0.9811 - loss: 0.0601
-
-<span class="ansi-bold">479/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 949us/step - accuracy: 0.9812 - loss: 0.0599
-
-<span class="ansi-bold">533/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 948us/step - accuracy: 0.9813 - loss: 0.0598
-
-<span class="ansi-bold">587/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 947us/step - accuracy: 0.9813 - loss: 0.0597
-
-<span class="ansi-bold">641/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9813 - loss: 0.0597
-
-<span class="ansi-bold">695/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 945us/step - accuracy: 0.9813 - loss: 0.0596
-
-<span class="ansi-bold">749/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9813 - loss: 0.0596
-
-<span class="ansi-bold">803/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9813 - loss: 0.0596
-
-<span class="ansi-bold">857/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9813 - loss: 0.0597
-
-<span class="ansi-bold">911/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 943us/step - accuracy: 0.9813 - loss: 0.0598
-
-<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9812 - loss: 0.0598 - val_accuracy: 0.9776 - val_loss: 0.0719
+<span class="ansi-bold">909/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9829 - loss: 0.0556  
+
+<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9828 - loss: 0.0557 - val_accuracy: 0.9754 - val_loss: 0.0778
 
 Epoch 4/10
 
 
-<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">5s</span> 6ms/step - accuracy: 0.9688 - loss: 0.0956
+<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">6s</span> 7ms/step - accuracy: 0.9844 - loss: 0.0687
 
-<span class="ansi-bold"> 52/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 990us/step - accuracy: 0.9905 - loss: 0.0350
-
-<span class="ansi-bold">103/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 989us/step - accuracy: 0.9905 - loss: 0.0339
-
-<span class="ansi-bold">155/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 980us/step - accuracy: 0.9901 - loss: 0.0340
-
-<span class="ansi-bold">208/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 975us/step - accuracy: 0.9898 - loss: 0.0349
-
-<span class="ansi-bold">261/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 970us/step - accuracy: 0.9895 - loss: 0.0356
-
-<span class="ansi-bold">315/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 965us/step - accuracy: 0.9893 - loss: 0.0361
-
-<span class="ansi-bold">368/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 964us/step - accuracy: 0.9891 - loss: 0.0367
-
-<span class="ansi-bold">422/938</span> <span class="ansi-green-fg">━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 960us/step - accuracy: 0.9889 - loss: 0.0373
-
-<span class="ansi-bold">475/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 959us/step - accuracy: 0.9887 - loss: 0.0377
-
-<span class="ansi-bold">529/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 957us/step - accuracy: 0.9886 - loss: 0.0380
-
-<span class="ansi-bold">582/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 956us/step - accuracy: 0.9884 - loss: 0.0385
-
-<span class="ansi-bold">636/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 954us/step - accuracy: 0.9883 - loss: 0.0390
-
-<span class="ansi-bold">690/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 952us/step - accuracy: 0.9881 - loss: 0.0394
-
-<span class="ansi-bold">744/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 951us/step - accuracy: 0.9879 - loss: 0.0398
-
-<span class="ansi-bold">798/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 950us/step - accuracy: 0.9878 - loss: 0.0400
-
-<span class="ansi-bold">852/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 949us/step - accuracy: 0.9877 - loss: 0.0402
-
-<span class="ansi-bold">906/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 949us/step - accuracy: 0.9877 - loss: 0.0404
-
-<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9876 - loss: 0.0405 - val_accuracy: 0.9726 - val_loss: 0.0928
+<span class="ansi-bold"> 49/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9872 - loss: 0.0426
+
+<span class="ansi-bold"> 98/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9875 - loss: 0.0416
+
+<span class="ansi-bold">149/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9878 - loss: 0.0406
+
+<span class="ansi-bold">198/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9879 - loss: 0.0400
+
+<span class="ansi-bold">249/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9879 - loss: 0.0396
+
+<span class="ansi-bold">301/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9879 - loss: 0.0393
+
+<span class="ansi-bold">351/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9879 - loss: 0.0391
+
+<span class="ansi-bold">399/938</span> <span class="ansi-green-fg">━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9879 - loss: 0.0390
+
+<span class="ansi-bold">449/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9879 - loss: 0.0390
+
+<span class="ansi-bold">500/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9879 - loss: 0.0389
+
+<span class="ansi-bold">549/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9878 - loss: 0.0389
+
+<span class="ansi-bold">600/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9878 - loss: 0.0390
+
+<span class="ansi-bold">650/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9878 - loss: 0.0391
+
+<span class="ansi-bold">700/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9877 - loss: 0.0392
+
+<span class="ansi-bold">749/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9877 - loss: 0.0392
+
+<span class="ansi-bold">799/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9877 - loss: 0.0393
+
+<span class="ansi-bold">850/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9877 - loss: 0.0395
+
+<span class="ansi-bold">901/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9876 - loss: 0.0396
+
+<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9876 - loss: 0.0397 - val_accuracy: 0.9763 - val_loss: 0.0726
 
 Epoch 5/10
 
 
-<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">5s</span> 6ms/step - accuracy: 1.0000 - loss: 0.0054
+<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">5s</span> 6ms/step - accuracy: 1.0000 - loss: 0.0050
 
-<span class="ansi-bold"> 54/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 960us/step - accuracy: 0.9905 - loss: 0.0292
+<span class="ansi-bold"> 52/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 986us/step - accuracy: 0.9902 - loss: 0.0308
 
-<span class="ansi-bold">108/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 950us/step - accuracy: 0.9914 - loss: 0.0289
+<span class="ansi-bold">102/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 994us/step - accuracy: 0.9901 - loss: 0.0306
 
-<span class="ansi-bold">161/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 949us/step - accuracy: 0.9913 - loss: 0.0288
+<span class="ansi-bold">151/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9905 - loss: 0.0296  
+
+<span class="ansi-bold">202/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9907 - loss: 0.0289
+
+<span class="ansi-bold">253/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 998us/step - accuracy: 0.9906 - loss: 0.0288
 
-<span class="ansi-bold">215/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9913 - loss: 0.0286
+<span class="ansi-bold">302/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9905 - loss: 0.0290  
+
+<span class="ansi-bold">353/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 999us/step - accuracy: 0.9904 - loss: 0.0290
 
-<span class="ansi-bold">268/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9913 - loss: 0.0285
+<span class="ansi-bold">403/938</span> <span class="ansi-green-fg">━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1000us/step - accuracy: 0.9903 - loss: 0.0290
+
+<span class="ansi-bold">454/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 998us/step - accuracy: 0.9903 - loss: 0.0290 
 
-<span class="ansi-bold">322/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9913 - loss: 0.0284
+<span class="ansi-bold">506/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 996us/step - accuracy: 0.9902 - loss: 0.0291
 
-<span class="ansi-bold">375/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9913 - loss: 0.0283
+<span class="ansi-bold">558/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 994us/step - accuracy: 0.9902 - loss: 0.0293
 
-<span class="ansi-bold">428/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 947us/step - accuracy: 0.9913 - loss: 0.0282
+<span class="ansi-bold">611/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 990us/step - accuracy: 0.9901 - loss: 0.0295
 
-<span class="ansi-bold">481/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 947us/step - accuracy: 0.9913 - loss: 0.0283
+<span class="ansi-bold">664/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 987us/step - accuracy: 0.9901 - loss: 0.0297
 
-<span class="ansi-bold">534/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 948us/step - accuracy: 0.9913 - loss: 0.0284
+<span class="ansi-bold">718/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 983us/step - accuracy: 0.9900 - loss: 0.0298
 
-<span class="ansi-bold">587/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 948us/step - accuracy: 0.9912 - loss: 0.0285
+<span class="ansi-bold">772/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━</span> <span class="ansi-bold">0s</span> 979us/step - accuracy: 0.9900 - loss: 0.0300
 
-<span class="ansi-bold">640/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 949us/step - accuracy: 0.9912 - loss: 0.0288
+<span class="ansi-bold">826/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 977us/step - accuracy: 0.9899 - loss: 0.0302
 
-<span class="ansi-bold">694/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 948us/step - accuracy: 0.9911 - loss: 0.0290
+<span class="ansi-bold">880/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 975us/step - accuracy: 0.9899 - loss: 0.0304
 
-<span class="ansi-bold">748/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 947us/step - accuracy: 0.9910 - loss: 0.0293
+<span class="ansi-bold">934/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 972us/step - accuracy: 0.9899 - loss: 0.0306
 
-<span class="ansi-bold">802/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 947us/step - accuracy: 0.9910 - loss: 0.0295
-
-<span class="ansi-bold">856/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9909 - loss: 0.0297
-
-<span class="ansi-bold">909/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9909 - loss: 0.0298
-
-<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9908 - loss: 0.0299 - val_accuracy: 0.9793 - val_loss: 0.0726
+<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9899 - loss: 0.0306 - val_accuracy: 0.9755 - val_loss: 0.0818
 
 Epoch 6/10
 
 
-<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">5s</span> 6ms/step - accuracy: 1.0000 - loss: 0.0028
+<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">6s</span> 7ms/step - accuracy: 1.0000 - loss: 0.0058
 
-<span class="ansi-bold"> 54/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 953us/step - accuracy: 0.9934 - loss: 0.0216
+<span class="ansi-bold"> 50/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9918 - loss: 0.0223
+
+<span class="ansi-bold">100/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9909 - loss: 0.0251
+
+<span class="ansi-bold">150/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9909 - loss: 0.0254
+
+<span class="ansi-bold">200/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9911 - loss: 0.0251
+
+<span class="ansi-bold">250/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9913 - loss: 0.0246
+
+<span class="ansi-bold">301/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9915 - loss: 0.0242
+
+<span class="ansi-bold">351/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9916 - loss: 0.0239
+
+<span class="ansi-bold">402/938</span> <span class="ansi-green-fg">━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9918 - loss: 0.0236
+
+<span class="ansi-bold">453/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9919 - loss: 0.0233
+
+<span class="ansi-bold">503/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9920 - loss: 0.0232
+
+<span class="ansi-bold">554/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9920 - loss: 0.0232
+
+<span class="ansi-bold">604/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9920 - loss: 0.0231
+
+<span class="ansi-bold">656/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9920 - loss: 0.0231
+
+<span class="ansi-bold">708/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 1000us/step - accuracy: 0.9920 - loss: 0.0231
+
+<span class="ansi-bold">762/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━</span> <span class="ansi-bold">0s</span> 995us/step - accuracy: 0.9920 - loss: 0.0232 
 
-<span class="ansi-bold">107/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 950us/step - accuracy: 0.9936 - loss: 0.0214
+<span class="ansi-bold">815/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 992us/step - accuracy: 0.9920 - loss: 0.0232
 
-<span class="ansi-bold">161/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9932 - loss: 0.0218
+<span class="ansi-bold">868/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 990us/step - accuracy: 0.9920 - loss: 0.0233
 
-<span class="ansi-bold">215/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9931 - loss: 0.0220
+<span class="ansi-bold">922/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 987us/step - accuracy: 0.9919 - loss: 0.0234
 
-<span class="ansi-bold">269/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 943us/step - accuracy: 0.9931 - loss: 0.0220
-
-<span class="ansi-bold">323/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 942us/step - accuracy: 0.9931 - loss: 0.0219
-
-<span class="ansi-bold">377/938</span> <span class="ansi-green-fg">━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 941us/step - accuracy: 0.9931 - loss: 0.0218
-
-<span class="ansi-bold">431/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9930 - loss: 0.0220
-
-<span class="ansi-bold">485/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9929 - loss: 0.0221
-
-<span class="ansi-bold">538/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9929 - loss: 0.0223
-
-<span class="ansi-bold">592/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9928 - loss: 0.0225
-
-<span class="ansi-bold">646/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9927 - loss: 0.0226
-
-<span class="ansi-bold">700/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9926 - loss: 0.0228
-
-<span class="ansi-bold">754/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9926 - loss: 0.0230
-
-<span class="ansi-bold">808/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9925 - loss: 0.0232
-
-<span class="ansi-bold">861/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9924 - loss: 0.0233
-
-<span class="ansi-bold">914/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9924 - loss: 0.0235
-
-<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9923 - loss: 0.0236 - val_accuracy: 0.9788 - val_loss: 0.0762
+<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9919 - loss: 0.0234 - val_accuracy: 0.9770 - val_loss: 0.0824
 
 Epoch 7/10
 
 
-<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">5s</span> 6ms/step - accuracy: 0.9531 - loss: 0.1063
+<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">6s</span> 6ms/step - accuracy: 1.0000 - loss: 0.0068
 
-<span class="ansi-bold"> 54/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 955us/step - accuracy: 0.9904 - loss: 0.0263
+<span class="ansi-bold"> 54/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 960us/step - accuracy: 0.9939 - loss: 0.0231
 
-<span class="ansi-bold">108/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9919 - loss: 0.0222
+<span class="ansi-bold">108/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 948us/step - accuracy: 0.9938 - loss: 0.0223
 
-<span class="ansi-bold">161/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 949us/step - accuracy: 0.9925 - loss: 0.0208
+<span class="ansi-bold">162/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9938 - loss: 0.0213
 
-<span class="ansi-bold">214/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 947us/step - accuracy: 0.9928 - loss: 0.0204
+<span class="ansi-bold">216/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9938 - loss: 0.0205
 
-<span class="ansi-bold">267/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 947us/step - accuracy: 0.9929 - loss: 0.0201
+<span class="ansi-bold">262/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 967us/step - accuracy: 0.9939 - loss: 0.0199
 
-<span class="ansi-bold">320/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 947us/step - accuracy: 0.9931 - loss: 0.0197
+<span class="ansi-bold">311/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 975us/step - accuracy: 0.9940 - loss: 0.0195
 
-<span class="ansi-bold">374/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 945us/step - accuracy: 0.9933 - loss: 0.0195
+<span class="ansi-bold">360/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 982us/step - accuracy: 0.9941 - loss: 0.0191
 
-<span class="ansi-bold">427/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 945us/step - accuracy: 0.9934 - loss: 0.0193
+<span class="ansi-bold">411/938</span> <span class="ansi-green-fg">━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 984us/step - accuracy: 0.9941 - loss: 0.0188
 
-<span class="ansi-bold">480/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9934 - loss: 0.0192
+<span class="ansi-bold">463/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 983us/step - accuracy: 0.9941 - loss: 0.0187
 
-<span class="ansi-bold">534/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 945us/step - accuracy: 0.9935 - loss: 0.0192
+<span class="ansi-bold">515/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 981us/step - accuracy: 0.9940 - loss: 0.0188
 
-<span class="ansi-bold">588/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9935 - loss: 0.0191
+<span class="ansi-bold">567/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 979us/step - accuracy: 0.9940 - loss: 0.0189
 
-<span class="ansi-bold">641/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9935 - loss: 0.0192
+<span class="ansi-bold">620/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 977us/step - accuracy: 0.9939 - loss: 0.0189
 
-<span class="ansi-bold">694/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 945us/step - accuracy: 0.9935 - loss: 0.0193
+<span class="ansi-bold">673/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 975us/step - accuracy: 0.9939 - loss: 0.0190
 
-<span class="ansi-bold">748/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9935 - loss: 0.0194
+<span class="ansi-bold">725/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 975us/step - accuracy: 0.9938 - loss: 0.0191
 
-<span class="ansi-bold">802/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9934 - loss: 0.0195
+<span class="ansi-bold">777/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━</span> <span class="ansi-bold">0s</span> 975us/step - accuracy: 0.9938 - loss: 0.0193
 
-<span class="ansi-bold">856/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 943us/step - accuracy: 0.9934 - loss: 0.0197
+<span class="ansi-bold">829/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 975us/step - accuracy: 0.9937 - loss: 0.0194
 
-<span class="ansi-bold">910/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 942us/step - accuracy: 0.9933 - loss: 0.0198
+<span class="ansi-bold">876/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 981us/step - accuracy: 0.9937 - loss: 0.0195
 
-<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9933 - loss: 0.0199 - val_accuracy: 0.9801 - val_loss: 0.0674
+<span class="ansi-bold">927/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 981us/step - accuracy: 0.9936 - loss: 0.0196
+
+<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9936 - loss: 0.0196 - val_accuracy: 0.9781 - val_loss: 0.0798
 
 Epoch 8/10
 
 
-<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">6s</span> 6ms/step - accuracy: 1.0000 - loss: 0.0052
+<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">6s</span> 7ms/step - accuracy: 1.0000 - loss: 0.0051
 
-<span class="ansi-bold"> 54/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 958us/step - accuracy: 0.9941 - loss: 0.0210
+<span class="ansi-bold"> 52/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 981us/step - accuracy: 0.9949 - loss: 0.0148
 
-<span class="ansi-bold">108/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 949us/step - accuracy: 0.9933 - loss: 0.0225
+<span class="ansi-bold">104/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 972us/step - accuracy: 0.9951 - loss: 0.0146
 
-<span class="ansi-bold">162/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 942us/step - accuracy: 0.9934 - loss: 0.0218
+<span class="ansi-bold">154/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 983us/step - accuracy: 0.9949 - loss: 0.0155
 
-<span class="ansi-bold">216/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9936 - loss: 0.0211
+<span class="ansi-bold">206/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 978us/step - accuracy: 0.9948 - loss: 0.0157
 
-<span class="ansi-bold">270/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 938us/step - accuracy: 0.9939 - loss: 0.0202
+<span class="ansi-bold">259/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 972us/step - accuracy: 0.9947 - loss: 0.0160
 
-<span class="ansi-bold">324/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 938us/step - accuracy: 0.9941 - loss: 0.0195
+<span class="ansi-bold">312/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 967us/step - accuracy: 0.9946 - loss: 0.0163
 
-<span class="ansi-bold">377/938</span> <span class="ansi-green-fg">━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9942 - loss: 0.0191
+<span class="ansi-bold">365/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 965us/step - accuracy: 0.9946 - loss: 0.0165
 
-<span class="ansi-bold">431/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9942 - loss: 0.0189
+<span class="ansi-bold">418/938</span> <span class="ansi-green-fg">━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 963us/step - accuracy: 0.9946 - loss: 0.0165
 
-<span class="ansi-bold">484/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9942 - loss: 0.0188
+<span class="ansi-bold">471/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 962us/step - accuracy: 0.9946 - loss: 0.0165
 
-<span class="ansi-bold">538/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9943 - loss: 0.0186
+<span class="ansi-bold">522/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 966us/step - accuracy: 0.9946 - loss: 0.0164
 
-<span class="ansi-bold">592/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9943 - loss: 0.0184
+<span class="ansi-bold">572/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 969us/step - accuracy: 0.9947 - loss: 0.0164
 
-<span class="ansi-bold">646/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9944 - loss: 0.0183
+<span class="ansi-bold">622/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 973us/step - accuracy: 0.9947 - loss: 0.0164
 
-<span class="ansi-bold">701/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 938us/step - accuracy: 0.9944 - loss: 0.0182
+<span class="ansi-bold">673/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 974us/step - accuracy: 0.9947 - loss: 0.0164
 
-<span class="ansi-bold">755/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━</span> <span class="ansi-bold">0s</span> 938us/step - accuracy: 0.9944 - loss: 0.0181
+<span class="ansi-bold">725/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 974us/step - accuracy: 0.9946 - loss: 0.0164
 
-<span class="ansi-bold">808/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9944 - loss: 0.0181
+<span class="ansi-bold">778/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━</span> <span class="ansi-bold">0s</span> 973us/step - accuracy: 0.9946 - loss: 0.0165
 
-<span class="ansi-bold">862/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9944 - loss: 0.0180
+<span class="ansi-bold">831/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 971us/step - accuracy: 0.9946 - loss: 0.0166
 
-<span class="ansi-bold">916/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9944 - loss: 0.0179
+<span class="ansi-bold">885/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 970us/step - accuracy: 0.9946 - loss: 0.0167
 
-<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9944 - loss: 0.0179 - val_accuracy: 0.9780 - val_loss: 0.0880
+<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9945 - loss: 0.0168 - val_accuracy: 0.9805 - val_loss: 0.0710
 
 Epoch 9/10
 
 
-<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">5s</span> 6ms/step - accuracy: 0.9688 - loss: 0.0988
+<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">6s</span> 7ms/step - accuracy: 0.9844 - loss: 0.0301
 
-<span class="ansi-bold"> 54/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 957us/step - accuracy: 0.9929 - loss: 0.0180
+<span class="ansi-bold"> 50/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9950 - loss: 0.0138
+
+<span class="ansi-bold"> 99/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9952 - loss: 0.0128
+
+<span class="ansi-bold">150/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9957 - loss: 0.0119
+
+<span class="ansi-bold">202/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 1ms/step - accuracy: 0.9959 - loss: 0.0115
+
+<span class="ansi-bold">254/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 996us/step - accuracy: 0.9958 - loss: 0.0117
 
-<span class="ansi-bold">107/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 952us/step - accuracy: 0.9938 - loss: 0.0162
+<span class="ansi-bold">308/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 986us/step - accuracy: 0.9957 - loss: 0.0120
 
-<span class="ansi-bold">161/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9940 - loss: 0.0161
+<span class="ansi-bold">362/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 979us/step - accuracy: 0.9956 - loss: 0.0121
 
-<span class="ansi-bold">214/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9941 - loss: 0.0160
+<span class="ansi-bold">416/938</span> <span class="ansi-green-fg">━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 973us/step - accuracy: 0.9956 - loss: 0.0121
 
-<span class="ansi-bold">267/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9942 - loss: 0.0159
+<span class="ansi-bold">470/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 969us/step - accuracy: 0.9956 - loss: 0.0122
 
-<span class="ansi-bold">321/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 943us/step - accuracy: 0.9943 - loss: 0.0159
+<span class="ansi-bold">523/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 967us/step - accuracy: 0.9956 - loss: 0.0123
 
-<span class="ansi-bold">374/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9944 - loss: 0.0160
+<span class="ansi-bold">574/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 970us/step - accuracy: 0.9956 - loss: 0.0124
 
-<span class="ansi-bold">428/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 943us/step - accuracy: 0.9944 - loss: 0.0161
+<span class="ansi-bold">625/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 972us/step - accuracy: 0.9955 - loss: 0.0124
 
-<span class="ansi-bold">482/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 942us/step - accuracy: 0.9945 - loss: 0.0162
+<span class="ansi-bold">676/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 973us/step - accuracy: 0.9955 - loss: 0.0126
 
-<span class="ansi-bold">536/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9945 - loss: 0.0163
+<span class="ansi-bold">729/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 971us/step - accuracy: 0.9954 - loss: 0.0128
 
-<span class="ansi-bold">590/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9945 - loss: 0.0164
+<span class="ansi-bold">783/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━</span> <span class="ansi-bold">0s</span> 969us/step - accuracy: 0.9954 - loss: 0.0130
 
-<span class="ansi-bold">644/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9945 - loss: 0.0165
+<span class="ansi-bold">837/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 967us/step - accuracy: 0.9953 - loss: 0.0132
 
-<span class="ansi-bold">698/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9945 - loss: 0.0166
+<span class="ansi-bold">890/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 966us/step - accuracy: 0.9952 - loss: 0.0134
 
-<span class="ansi-bold">752/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9945 - loss: 0.0166
-
-<span class="ansi-bold">806/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9945 - loss: 0.0166
-
-<span class="ansi-bold">860/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9945 - loss: 0.0167
-
-<span class="ansi-bold">914/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9945 - loss: 0.0167
-
-<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9945 - loss: 0.0167 - val_accuracy: 0.9814 - val_loss: 0.0855
+<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9952 - loss: 0.0136 - val_accuracy: 0.9803 - val_loss: 0.0765
 
 Epoch 10/10
 
 
-<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">5s</span> 6ms/step - accuracy: 1.0000 - loss: 0.0042
-
-<span class="ansi-bold"> 53/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 971us/step - accuracy: 0.9963 - loss: 0.0090
+<span class="ansi-bold">  1/938</span> <span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">5s</span> 6ms/step - accuracy: 1.0000 - loss: 9.5125e-04
+
+<span class="ansi-bold"> 53/938</span> <span class="ansi-green-fg">━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 974us/step - accuracy: 0.9968 - loss: 0.0097  
 
-<span class="ansi-bold">106/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 959us/step - accuracy: 0.9962 - loss: 0.0098
+<span class="ansi-bold">106/938</span> <span class="ansi-green-fg">━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 959us/step - accuracy: 0.9967 - loss: 0.0100
 
-<span class="ansi-bold">159/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 955us/step - accuracy: 0.9963 - loss: 0.0098
+<span class="ansi-bold">159/938</span> <span class="ansi-green-fg">━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 954us/step - accuracy: 0.9967 - loss: 0.0103
 
-<span class="ansi-bold">212/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 954us/step - accuracy: 0.9963 - loss: 0.0101
+<span class="ansi-bold">213/938</span> <span class="ansi-green-fg">━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 950us/step - accuracy: 0.9963 - loss: 0.0109
 
-<span class="ansi-bold">265/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 953us/step - accuracy: 0.9963 - loss: 0.0106
+<span class="ansi-bold">267/938</span> <span class="ansi-green-fg">━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 947us/step - accuracy: 0.9961 - loss: 0.0114
 
-<span class="ansi-bold">318/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 952us/step - accuracy: 0.9961 - loss: 0.0112
+<span class="ansi-bold">321/938</span> <span class="ansi-green-fg">━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 945us/step - accuracy: 0.9959 - loss: 0.0118
 
-<span class="ansi-bold">371/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 951us/step - accuracy: 0.9960 - loss: 0.0118
+<span class="ansi-bold">375/938</span> <span class="ansi-green-fg">━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9958 - loss: 0.0120
 
-<span class="ansi-bold">425/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 950us/step - accuracy: 0.9958 - loss: 0.0122
+<span class="ansi-bold">429/938</span> <span class="ansi-green-fg">━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 942us/step - accuracy: 0.9958 - loss: 0.0122
 
-<span class="ansi-bold">479/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 948us/step - accuracy: 0.9958 - loss: 0.0125
+<span class="ansi-bold">482/938</span> <span class="ansi-green-fg">━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━━</span> <span class="ansi-bold">0s</span> 943us/step - accuracy: 0.9957 - loss: 0.0124
 
-<span class="ansi-bold">533/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 946us/step - accuracy: 0.9957 - loss: 0.0126
+<span class="ansi-bold">536/938</span> <span class="ansi-green-fg">━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━━</span> <span class="ansi-bold">0s</span> 942us/step - accuracy: 0.9956 - loss: 0.0126
 
-<span class="ansi-bold">588/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9957 - loss: 0.0128
+<span class="ansi-bold">590/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━━</span> <span class="ansi-bold">0s</span> 941us/step - accuracy: 0.9956 - loss: 0.0127
 
-<span class="ansi-bold">642/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 944us/step - accuracy: 0.9956 - loss: 0.0129
+<span class="ansi-bold">644/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━━</span> <span class="ansi-bold">0s</span> 941us/step - accuracy: 0.9956 - loss: 0.0128
 
-<span class="ansi-bold">696/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 943us/step - accuracy: 0.9955 - loss: 0.0131
+<span class="ansi-bold">699/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9955 - loss: 0.0129
 
-<span class="ansi-bold">750/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━━</span> <span class="ansi-bold">0s</span> 943us/step - accuracy: 0.9955 - loss: 0.0133
+<span class="ansi-bold">753/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9955 - loss: 0.0130
 
-<span class="ansi-bold">804/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 942us/step - accuracy: 0.9954 - loss: 0.0135
+<span class="ansi-bold">807/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━━</span> <span class="ansi-bold">0s</span> 940us/step - accuracy: 0.9955 - loss: 0.0131
 
-<span class="ansi-bold">858/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 942us/step - accuracy: 0.9953 - loss: 0.0137
+<span class="ansi-bold">861/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9955 - loss: 0.0132
 
-<span class="ansi-bold">912/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 942us/step - accuracy: 0.9953 - loss: 0.0138
+<span class="ansi-bold">915/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━</span><span class="ansi-white-fg">━</span> <span class="ansi-bold">0s</span> 939us/step - accuracy: 0.9954 - loss: 0.0133
 
-<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9953 - loss: 0.0139 - val_accuracy: 0.9794 - val_loss: 0.0901
+<span class="ansi-bold">938/938</span> <span class="ansi-green-fg">━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-bold">1s</span> 1ms/step - accuracy: 0.9954 - loss: 0.0133 - val_accuracy: 0.9808 - val_loss: 0.0732
 </pre>
 </div>
 </div>
@@ -1002,7 +1016,7 @@ Epoch 10/10
 <h2>Evaluate Algorithm Performance</h2>
 <p>We evaluate the classification performance of the neural network using test data. To this end, we apply the neural network classifier using the function <code>.evaluate</code>.</p>
 <p>Remember, the input must be the flattened or vectorized images in <code>x_test_flattened</code> and the dummy coded responses in <code>y_test_one_hot</code></p>
-<div id="1be8804a" class="cell" data-execution_count="15">
+<div id="e343a38c" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a>test_loss, test_accuracy <span class="op">=</span> model.evaluate(x_test_flattened, y_test_one_hot)</span>
 <span id="cb17-2"><a></a></span>
 <span id="cb17-3"><a></a><span class="co"># Show the accuracy on the training dataset.</span></span>
@@ -1013,10 +1027,10 @@ Epoch 10/10
 <h2>Accuracy</h2>
 <p><br><br><br></p>
 <p>In the multi-class problem, accuracy is still the proportion of correct decisions made.</p>
-<div id="16040902" class="cell" data-execution_count="16">
+<div id="025a4abf" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a><span class="bu">print</span>(<span class="ss">f"Test Accuracy: </span><span class="sc">{</span>test_accuracy<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Test Accuracy: 0.9794</code></pre>
+<pre><code>Test Accuracy: 0.9808</code></pre>
 </div>
 </div>
 </section>
@@ -1024,7 +1038,7 @@ Epoch 10/10
 <h2>Individual Classifications</h2>
 <p><br><br></p>
 <p>As with any classifier seen before, the neural network calculates the probability that an image belongs to each class (0-9). We can have a look at the proabilities using the function <code>.predict()</code>.</p>
-<div id="4587fda3" class="cell" data-execution_count="17">
+<div id="c565c7da" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a>y_pred_probabilities <span class="op">=</span> model.predict(x_test_flattened)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
@@ -1032,17 +1046,17 @@ Epoch 10/10
 <h2></h2>
 <p><br><br><br></p>
 <p>Following the <strong>Bayes classifier</strong>, we classify each observation in the test dataset to the most probable class. This can be done using the command below, where <code>np.argmax()</code> is a function from <strong>numpy</strong> that takes the argument with the maximum value.</p>
-<div id="45362eb2" class="cell" data-execution_count="18">
+<div id="5d5ba6cd" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>y_pred_labels <span class="op">=</span> np.argmax(y_pred_probabilities, axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb21-2"><a></a>y_pred_labels</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="103">
+<div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>array([7, 2, 1, ..., 4, 5, 6])</code></pre>
 </div>
 </div>
 </section>
 <section id="confusion-matrix" class="slide level2">
 <h2>Confusion Matrix</h2>
-<div id="d6207d4e" class="cell" data-execution_count="19">
+<div id="2af83488" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a>y_true_labels <span class="op">=</span> np.argmax(y_test_one_hot, axis<span class="op">=</span><span class="dv">1</span>)</span>
