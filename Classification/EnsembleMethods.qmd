@@ -25,6 +25,7 @@ jupyter: python3
 1.  Introduction to Ensemble Methods
 2.  Bagging
 3.  Random Forests
+4.  Boosting
 
 # Ensamble Methods
 
@@ -496,5 +497,141 @@ accuracy = accuracy_score(Y_valid, RF_predicted)
 # Show accuracy.
 print( round(accuracy, 2) )
 ```
+
+# Boosting
+
+## Boosting
+
+</br>
+
+-   In boosting, we also grow multiple decision trees. But instead of growing trees randomly, each new tree depends on the previous one.
+
+-   Boosting is easier to understand in the context of regression, rather than classification.
+
+-   [*Idea*]{.underline}: Explore [**cooperation**]{style="color:green;"} between decision trees, rather than [diversity]{style="color:#2E5A88;"} as in Bagging and Random Forest.
+
+## Boosting for regression
+
+::: incremental
+-   Boosting creates a sequence of trees, each one building upon the previous.
+
+-   Earlier trees are small, and the next tree is created with the **residuals** of the previous tree.
+
+-   In other words, at each step, we try to explain the information that we didn't explain in previous steps.
+
+-   Gradually, the sequence "learns" to predict.
+
+-   Something a little odd: earlier trees are deliberately "held back" to keep them from explaining too much. This creates "slow learning".
+:::
+
+## 
+
+![](images/clipboard-1569467446.png){fig-align="center"}
+
+<https://pythongeeks.org/gradient-boosting-algorithm-in-machine-learning/>
+
+## [Gradient Boosting Algorithm]{style="color:darkgreen;"}
+
+Initially, the boosted tree is $\hat{f}(\boldsymbol{x}) = 0$ and the residuals of this tree are $r_i = y_i - f(\boldsymbol{x}_i)$ for all $i$ in the training data.
+
+At each step $b$ in the process ($b = 1, \ldots, B$), we
+
+::: {style="font-size: 90%;"}
+1.  **Build** a regression tree $\hat{T}_b$ with $d$ splits to the training data $(\boldsymbol{X}, \boldsymbol{r})$. This tree has $d+1$ terminal nodes.
+2.  **Update** the boosted tree $\hat{f}$ by adding in a [***shrunken***]{style="color:orange;"} version of the new tree: $\hat{f}(\boldsymbol{x}) \leftarrow \hat{f}(\boldsymbol{x}) + \lambda \hat{T}_b(\boldsymbol{x})$.
+3.  **Update** the residuals using shrunken tree, $r_i \leftarrow r_i - \lambda \hat{T}_b(x_i)$.
+:::
+
+## 
+
+</br></br></br>
+
+The final boosted tree is:
+
+$$\hat{f}(\boldsymbol{x}) = \sum_{b=1}^{B} \lambda \hat{T}_b (\boldsymbol{x}).$$
+
+## Why does this work?
+
+-   By using a small tree, we are deliberately leaving information out of the first round of the model. So what gets fit is the “easy” stuff.
+
+-   The residuals have all of the information that we haven’t yet explained. We continue iterating on the residuals, fitting them with small trees, so that we slowly explain the bits of the variation that are harder to explain.
+
+-   This process is called “learning”: at each iteration, we get a better fit.
+
+## 
+
+</br></br></br>
+
+-   By multiplying by $\lambda < 1$, we “slow down” the learning (by making it harder to fit all of the variation), and there is research that says that slower learning is better.
+
+## Tuning Parameters
+
+</br>
+
+-   The [number of trees]{style="color:orange;"} *B*. Unlike bagging and random forest, boosting can overfit if B is too large. We use K-fold cross-validation to select B.
+
+-   The [shrinkage parameter]{style="color:orange;"} $\lambda$, a small positive number. Typical values are 0.01 or 0.001. Very small $\lambda$ can require using a very large value of B to achieve good performance.
+
+-   The [number of splits]{style="color:orange;"} $d$ in each tree. Common choices are 1, 4 or 5. Often $d=1$, in which case each tree is a stump.
+
+## Issues with Boosting
+
+</br></br>
+
+-   *Loss of interpretability*: the final boosted model is a [weighted sum of trees]{style="color:darkred;"}, which we cannot interpret easily.
+
+-   *Computational complexity*: since it uses slow learners, it can be time consuming. However, we are growing small trees, each step can be done relatively quickly in some cases (e.g. AdaBoost).
+
+## Adaptive Boosting (AdaBoost)
+
+</br>
+
+AdaBoost trains an ensemble of weak learners (classification trees) over a number of iterations.
+
+At first, every observation has the same weight, so AdaBoost trains a normal classifier.
+
+Next, observations that were misclassified by the ensemble model so far are given a heavier weight. Another classifier is then trained to classify the weighted observations.
+
+This new classifier is also given a weight depending on its accuracy and incorporated into the ensemble model.
+
+## 
+
+</br>
+
+![](images/clipboard-3805820570.png){fig-align="center"}
+
+<https://towardsdatascience.com/understanding-adaboost-for-decision-tree-ff8f07d2851>
+
+## 
+
+![](images/clipboard-2190355818.png){fig-align="center"}
+
+## [Bagging]{style="color:#2E5A88;"} VS Boosting
+
+</br>
+
+Bagging **decreases variance**, not necessarily bias
+
+-   Suitable to combine high variance low bias models (complex models).
+
+-   Example algorithm: random forest.
+
+-   Reducing the overfit of ensembles of complex models (strength of diversity).
+
+-   Hence: deep decision trees.
+
+## Bagging VS [Boosting]{style="color:darkgreen;"}
+
+</br>
+
+Boosting **decreases bias**, not necessarily variance
+
+-   Suitable to combine low variance high bias models (simple models).
+
+-   Example algorithms: AdaBoost, gradient boosting machines (GBM) for [***regression and classification***]{style="color:gold;"}.
+
+-   Reducing the error of ensembles of simple models (strength of cooperation).
+
+-   Hence: logistic regression, non-deep, "weak" decision trees.
 
 # [Return to main page](https://alanrvazquez.github.io/TEC-IN5148/)

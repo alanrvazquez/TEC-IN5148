@@ -2240,7 +2240,7 @@
     "href": "Classification/EnsembleMethods.slides.html#agenda",
     "title": "Ensemble Methods",
     "section": "Agenda",
-    "text": "Agenda\n\n\nIntroduction to Ensemble Methods\nBagging\nRandom Forests"
+    "text": "Agenda\n\n\nIntroduction to Ensemble Methods\nBagging\nRandom Forests\nBoosting"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#load-the-libraries",
@@ -2380,7 +2380,7 @@
     "href": "Classification/EnsembleMethods.slides.html#predictions-from-bagging",
     "title": "Ensemble Methods",
     "section": "Predictions from bagging",
-    "text": "Predictions from bagging\n\nPredict the classes using bagging on the validation dataset.\n\npredicted_class = Baggingalgorithm.predict(X_valid)\n\npredicted_class\n\narray([0, 0, 0, ..., 1, 0, 0])"
+    "text": "Predictions from bagging\n\nPredict the classes using bagging on the validation dataset.\n\npredicted_class = Baggingalgorithm.predict(X_valid)\n\npredicted_class\n\narray([0, 0, 0, ..., 0, 0, 0])"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#confusion-matrix",
@@ -2394,7 +2394,7 @@
     "href": "Classification/EnsembleMethods.slides.html#accuracy",
     "title": "Ensemble Methods",
     "section": "Accuracy",
-    "text": "Accuracy\n\nThe accuracy of the bagging classifier is 78%.\n\n# Compute accuracy.\naccuracy = accuracy_score(Y_valid, predicted_class)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.77"
+    "text": "Accuracy\n\nThe accuracy of the bagging classifier is 78%.\n\n# Compute accuracy.\naccuracy = accuracy_score(Y_valid, predicted_class)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.76"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#a-single-deep-tree",
@@ -4404,5 +4404,96 @@
     "title": "Train, Test, and Validation Datasets",
     "section": "Work on your training dataset",
     "text": "Work on your training dataset\nAfter we have partitioned the data, we work on the training data to develop our predictive pipeline.\nThe pipeline has two main steps:\n\nData preprocessing.\nModel development.\n\nWe will now discuss preprocessing techniques applied to the predictor columns in the training dataset.\nNote that all preprocessing techniques will also be applied to the validation dataset and test dataset to prepare it for your model!"
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#boosting-1",
+    "href": "Classification/EnsembleMethods.slides.html#boosting-1",
+    "title": "Ensemble Methods",
+    "section": "Boosting",
+    "text": "Boosting\n\n\nIn boosting, we also grow multiple decision trees. But instead of growing trees randomly, each new tree depends on the previous one.\nBoosting is easier to understand in the context of regression, rather than classification.\nIdea: Explore cooperation between decision trees, rather than diversity as in Bagging and Random Forest."
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#boosting-for-regression",
+    "href": "Classification/EnsembleMethods.slides.html#boosting-for-regression",
+    "title": "Ensemble Methods",
+    "section": "Boosting for regression",
+    "text": "Boosting for regression\n\nBoosting creates a sequence of trees, each one building upon the previous.\nEarlier trees are small, and the next tree is created with the residuals of the previous tree.\nIn other words, at each step, we try to explain the information that we didn’t explain in previous steps.\nGradually, the sequence “learns” to predict.\nSomething a little odd: earlier trees are deliberately “held back” to keep them from explaining too much. This creates “slow learning”."
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#section-5",
+    "href": "Classification/EnsembleMethods.slides.html#section-5",
+    "title": "Ensemble Methods",
+    "section": "",
+    "text": "https://pythongeeks.org/gradient-boosting-algorithm-in-machine-learning/"
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#gradient-boosting-algorithm",
+    "href": "Classification/EnsembleMethods.slides.html#gradient-boosting-algorithm",
+    "title": "Ensemble Methods",
+    "section": "Gradient Boosting Algorithm",
+    "text": "Gradient Boosting Algorithm\nInitially, the boosted tree is \\(\\hat{f}(\\boldsymbol{x}) = 0\\) and the residuals of this tree are \\(r_i = y_i - f(\\boldsymbol{x}_i)\\) for all \\(i\\) in the training data.\nAt each step \\(b\\) in the process (\\(b = 1, \\ldots, B\\)), we\n\n\nBuild a regression tree \\(\\hat{T}_b\\) with \\(d\\) splits to the training data \\((\\boldsymbol{X}, \\boldsymbol{r})\\). This tree has \\(d+1\\) terminal nodes.\nUpdate the boosted tree \\(\\hat{f}\\) by adding in a shrunken version of the new tree: \\(\\hat{f}(\\boldsymbol{x}) \\leftarrow \\hat{f}(\\boldsymbol{x}) + \\lambda \\hat{T}_b(\\boldsymbol{x})\\).\nUpdate the residuals using shrunken tree, \\(r_i \\leftarrow r_i - \\lambda \\hat{T}_b(x_i)\\)."
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#why-does-this-work",
+    "href": "Classification/EnsembleMethods.slides.html#why-does-this-work",
+    "title": "Ensemble Methods",
+    "section": "Why does this work?",
+    "text": "Why does this work?\n\nBy using a small tree, we are deliberately leaving information out of the first round of the model. So what gets fit is the “easy” stuff.\nThe residuals have all of the information that we haven’t yet explained. We continue iterating on the residuals, fitting them with small trees, so that we slowly explain the bits of the variation that are harder to explain.\nThis process is called “learning”: at each iteration, we get a better fit."
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#tuning-parameters",
+    "href": "Classification/EnsembleMethods.slides.html#tuning-parameters",
+    "title": "Ensemble Methods",
+    "section": "Tuning Parameters",
+    "text": "Tuning Parameters\n\n\nThe number of trees B. Unlike bagging and random forest, boosting can overfit if B is too large. We use K-fold cross-validation to select B.\nThe shrinkage parameter \\(\\lambda\\), a small positive number. Typical values are 0.01 or 0.001. Very small \\(\\lambda\\) can require using a very large value of B to achieve good performance.\nThe number of splits \\(d\\) in each tree. Common choices are 1, 4 or 5. Often \\(d=1\\), in which case each tree is a stump."
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#issues-with-boosting",
+    "href": "Classification/EnsembleMethods.slides.html#issues-with-boosting",
+    "title": "Ensemble Methods",
+    "section": "Issues with Boosting",
+    "text": "Issues with Boosting\n\n\nLoss of interpretability: the final boosted model is a weighted sum of trees, which we cannot interpret easily.\nComputational complexity: since it uses slow learners, it can be time consuming. However, we are growing small trees, each step can be done relatively quickly in some cases (e.g. AdaBoost)."
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#adaptive-boosting-adaboost",
+    "href": "Classification/EnsembleMethods.slides.html#adaptive-boosting-adaboost",
+    "title": "Ensemble Methods",
+    "section": "Adaptive Boosting (AdaBoost)",
+    "text": "Adaptive Boosting (AdaBoost)\n\nAdaBoost trains an ensemble of weak learners (classification trees) over a number of iterations.\nAt first, every observation has the same weight, so AdaBoost trains a normal classifier.\nNext, observations that were misclassified by the ensemble model so far are given a heavier weight. Another classifier is then trained to classify the weighted observations.\nThis new classifier is also given a weight depending on its accuracy and incorporated into the ensemble model."
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#section-6",
+    "href": "Classification/EnsembleMethods.slides.html#section-6",
+    "title": "Ensemble Methods",
+    "section": "",
+    "text": "The final boosted tree is:\n\\[\\hat{f}(\\boldsymbol{x}) = \\sum_{b=1}^{B} \\lambda \\hat{T}_b (\\boldsymbol{x}).\\]"
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#bagging-vs-boosting",
+    "href": "Classification/EnsembleMethods.slides.html#bagging-vs-boosting",
+    "title": "Ensemble Methods",
+    "section": "Bagging VS Boosting",
+    "text": "Bagging VS Boosting\n\nBagging decreases variance, not necessarily bias\n\nSuitable to combine high variance low bias models (complex models).\nExample algorithm: random forest.\nReducing the overfit of ensembles of complex models (strength of diversity).\nHence: deep decision trees."
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#bagging-vs-boosting-1",
+    "href": "Classification/EnsembleMethods.slides.html#bagging-vs-boosting-1",
+    "title": "Ensemble Methods",
+    "section": "Bagging VS Boosting",
+    "text": "Bagging VS Boosting\n\nBoosting decreases bias, not necessarily variance\n\nSuitable to combine low variance high bias models (simple models).\nExample algorithms: AdaBoost, gradient boosting machines (GBM) for regression and classification.\nReducing the error of ensembles of simple models (strength of cooperation).\nHence: logistic regression, non-deep, “weak” decision trees."
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#section-7",
+    "href": "Classification/EnsembleMethods.slides.html#section-7",
+    "title": "Ensemble Methods",
+    "section": "",
+    "text": "By multiplying by \\(\\lambda &lt; 1\\), we “slow down” the learning (by making it harder to fit all of the variation), and there is research that says that slower learning is better."
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#section-8",
+    "href": "Classification/EnsembleMethods.slides.html#section-8",
+    "title": "Ensemble Methods",
+    "section": "",
+    "text": "https://towardsdatascience.com/understanding-adaboost-for-decision-tree-ff8f07d2851"
   }
 ]
