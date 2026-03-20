@@ -54,25 +54,23 @@ Their most succesful applications include image classification, video classifica
 
 -   <https://tenso.rs/demos/rock-paper-scissors/>
 
-## Neutal Network (NN)
-
-</br>
+## Neural Network (NN)
 
 Essentially, a neural network is a [**nonlinear function**]{style="color:#D03D56;"} $f(\boldsymbol{X})$ to predict the response $Y$ using a vector of p inputs, $\boldsymbol{X} = (X_1, X_2, ..., X_p)$.
 
-The function $f(\boldsymbol{X})$ can be represented as a “network” with several interconnected nodes.
+> The function $f(\boldsymbol{X})$ can be represented as a “network” with several interconnected nodes.
 
-The nodes andnetwork structure might make us think of how the neurons in the brain are connected and communicate to each other. However, this is not true since we still do not know how the brain actualy works!
+The nodes and network structure might make us think of how the neurons in the brain are connected and communicate to each other. However, this is not true since we still do not know how the brain actually works!
 
 ## Terminology
 
 </br></br>
 
-The structure of the NN is called its architecture, which depicts all the components and steps taken to reach the prediction.
+- The structure of the NN is called its **architecture**, which depicts all the components and steps taken to reach the prediction.
 
-The nodes in the network are called **units**.
+- The nodes in the network are called **units**.
 
-The units are divided into groups called **layers**.
+- The units are divided into groups called **layers**.
 
 ## Perceptron
 
@@ -100,9 +98,9 @@ has two layers and multiple hidden units.
 
 ## 
 
-</br>
+</br></br>
 
-Modern NNs use the [Rectified Linear Unit (ReLU)]{style="color:#A9A9A9;"} activation function:
+Modern NNs use the [Rectified Linear Unit (ReLU)]{style="color:#A9A9A9;"} as an activation function:
 
 $$g(z) = \begin{cases} 0 \text{  if } z < 0 \\
 z \text{  if } z \geq 0 \end{cases}$$
@@ -145,11 +143,15 @@ The function $f$ depends on the type of problem:
 
 ## Multilayer Neural Networks
 
-</br></br>
+</br>
 
 Multilayer NN have multiple hidden layers.
 
+</br>
+
 All neurons in one layer are fully connected to those in the next layer. This is referred to as a fully *connected* multilayer NN.
+
+</br>
 
 Three layers is typical, but more are possible too (a *deeper* multilayer NN).
 
@@ -429,6 +431,8 @@ history = model.fit(
 ```
 
 ## Evaluate Algorithm Performance
+
+</br>
 
 We evaluate the classification performance of the neural network using test data. To this end, we apply the neural network classifier using the function `.evaluate`. 
 
