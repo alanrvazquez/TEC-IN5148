@@ -226,7 +226,7 @@ Alan R. Vazquez
 <h2>Load the libraries</h2>
 <p><br></p>
 <p>Before we start, let’s import the data science libraries into Python.</p>
-<div id="d9963d3c" class="cell" data-execution_count="1">
+<div id="b721e388" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="co"># Importing necessary libraries</span></span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -390,7 +390,7 @@ Alan R. Vazquez
 <section id="dataset" class="slide level2">
 <h2>Dataset</h2>
 <p>The data is located in the file “banknotes.xlsx”.</p>
-<div id="3f3d5881" class="cell" data-execution_count="2">
+<div id="53e1e0a4" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>bank_data <span class="op">=</span> pd.read_excel(<span class="st">"banknotes.xlsx"</span>)</span>
 <span id="cb2-2"><a></a><span class="co"># Set response variable as categorical.</span></span>
 <span id="cb2-3"><a></a>bank_data[<span class="st">'Status'</span>] <span class="op">=</span> pd.Categorical(bank_data[<span class="st">'Status'</span>])</span>
@@ -485,7 +485,7 @@ Alan R. Vazquez
 <section id="create-the-predictor-matrix" class="slide level2">
 <h2>Create the predictor matrix</h2>
 <p>We use the function <code>.filter()</code> from pandas to select two predictors: Top and Bottom.</p>
-<div id="2e40b171" class="cell" data-execution_count="3">
+<div id="93ac5f85" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="co"># Set full matrix of predictors.</span></span>
 <span id="cb3-2"><a></a>X_full <span class="op">=</span> bank_data.<span class="bu">filter</span>([<span class="st">'Top'</span>, <span class="st">'Bottom'</span>])</span>
 <span id="cb3-3"><a></a>X_full.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -544,7 +544,7 @@ Alan R. Vazquez
 <section id="create-the-response-column" class="slide level2">
 <h2>Create the response column</h2>
 <p>We use the function <code>.filter()</code> from <strong>pandas</strong> to extract the column <code>Status</code> from the data frame. We store the result in <code>Y_full</code>.</p>
-<div id="b1424d17" class="cell" data-execution_count="4">
+<div id="81753819" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># Set full matrix of responses.</span></span>
 <span id="cb4-2"><a></a>Y_full <span class="op">=</span> bank_data.<span class="bu">filter</span>([<span class="st">'Status'</span>])</span>
 <span id="cb4-3"><a></a>Y_full.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -598,7 +598,7 @@ Alan R. Vazquez
 <section id="set-the-target-category" class="slide level2">
 <h2>Set the target category</h2>
 <p>To set the target category in the response we use the <code>get_dummies()</code> function.</p>
-<div id="0cb1d44e" class="cell" data-execution_count="5">
+<div id="b1368665" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="co"># Create dummy variables.</span></span>
 <span id="cb5-2"><a></a>Y_dummies <span class="op">=</span> pd.get_dummies(Y_full, dtype <span class="op">=</span> <span class="st">'int'</span>)</span>
 <span id="cb5-3"><a></a></span>
@@ -620,7 +620,7 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <section id="lets-partition-the-dataset" class="slide level2">
 <h2>Let’s partition the dataset</h2>
 <p><br></p>
-<div id="84e645e4" class="cell" data-execution_count="6">
+<div id="be91a5f6" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>X_train, X_test, Y_train, Y_test <span class="op">=</span> train_test_split(X_full, Y_target_full,</span>
 <span id="cb7-2"><a></a>                                                      stratify <span class="op">=</span> Y_target_full,</span>
 <span id="cb7-3"><a></a>                                                      test_size <span class="op">=</span> <span class="fl">0.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -634,7 +634,7 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <section id="training-data" class="slide level2">
 <h2>Training Data</h2>
 <p><br></p>
-<div id="550fb35d" class="cell" data-execution_count="7">
+<div id="ce1089eb" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>training_dataset <span class="op">=</span> pd.concat([X_train, Y_train], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb8-2"><a></a>training_dataset.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -664,33 +664,33 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">81</th>
-<td>10.3</td>
+<th data-quarto-table-cell-role="th">88</th>
+<td>11.2</td>
+<td>7.4</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">61</th>
+<td>10.5</td>
 <td>7.5</td>
 <td>0</td>
 </tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">87</th>
-<td>10.2</td>
-<td>8.4</td>
-<td>0</td>
-</tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">26</th>
-<td>9.8</td>
-<td>8.9</td>
+<th data-quarto-table-cell-role="th">82</th>
+<td>9.7</td>
+<td>9.0</td>
 <td>0</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">109</th>
-<td>11.2</td>
-<td>10.4</td>
+<th data-quarto-table-cell-role="th">120</th>
+<td>12.1</td>
+<td>10.1</td>
 <td>1</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">197</th>
-<td>11.1</td>
-<td>10.6</td>
+<th data-quarto-table-cell-role="th">125</th>
+<td>11.4</td>
+<td>10.2</td>
 <td>1</td>
 </tr>
 </tbody>
@@ -703,7 +703,7 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <section id="test-data" class="slide level2">
 <h2>“Test” Data</h2>
 <p><br></p>
-<div id="b979d95f" class="cell" data-execution_count="8">
+<div id="b15c06e8" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>test_dataset <span class="op">=</span> pd.concat([X_test, Y_test], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb9-2"><a></a>test_dataset.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
@@ -733,33 +733,33 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">6</th>
+<th data-quarto-table-cell-role="th">188</th>
+<td>11.9</td>
 <td>9.6</td>
-<td>7.9</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">16</th>
-<td>9.8</td>
-<td>8.2</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">122</th>
-<td>10.6</td>
-<td>11.6</td>
 <td>1</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">28</th>
-<td>10.5</td>
+<th data-quarto-table-cell-role="th">81</th>
+<td>10.3</td>
+<td>7.5</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">99</th>
+<td>10.0</td>
+<td>7.8</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">77</th>
+<td>10.6</td>
 <td>7.4</td>
 <td>0</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">42</th>
-<td>9.0</td>
-<td>9.3</td>
+<th data-quarto-table-cell-role="th">31</th>
+<td>9.1</td>
+<td>8.6</td>
 <td>0</td>
 </tr>
 </tbody>
@@ -820,7 +820,7 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <h2>Banknote data</h2>
 <div class="columns">
 <div class="column" style="width:70%;">
-<div id="1f21469f" class="cell" data-execution_count="9">
+<div id="20756398" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -838,7 +838,7 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <h2>Banknote data</h2>
 <div class="columns">
 <div class="column" style="width:70%;">
-<div id="2d091cf8" class="cell" data-execution_count="10">
+<div id="fd3bfde8" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -856,7 +856,7 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <h2>Banknote data</h2>
 <div class="columns">
 <div class="column" style="width:70%;">
-<div id="e06b59fd" class="cell" data-execution_count="11">
+<div id="db754c6c" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -874,7 +874,7 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <h2>Banknote data</h2>
 <div class="columns">
 <div class="column" style="width:70%;">
-<div id="a5a1e6ca" class="cell" data-execution_count="12">
+<div id="8366457f" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -907,7 +907,7 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <p><br></p>
 <p>To standardize <strong>numeric</strong> predictors, we use the <code>StandardScaler()</code> function. We also apply the function to variables using the <code>fit_transform()</code> function.</p>
 <p><br></p>
-<div id="1bdf435f" class="cell" data-execution_count="13">
+<div id="ceee950f" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>scaler <span class="op">=</span> StandardScaler()</span>
 <span id="cb10-2"><a></a>Xs_train <span class="op">=</span> scaler.fit_transform(X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -917,7 +917,7 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <p><br></p>
 <p>In Python, we can use the <code>KNeighborsClassifier()</code> and <code>.fit()</code> from <strong>scikit-learn</strong> to train a KNN.</p>
 <p>In the <code>KNeighborsClassifier</code> function, we can define the number of nearest neighbors using the <code>n_neighbors</code> parameter.</p>
-<div id="2803fd53" class="cell" data-execution_count="14">
+<div id="937375c4" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a><span class="co"># For example, let's use KNN with three neighbours</span></span>
 <span id="cb11-2"><a></a>knn <span class="op">=</span> KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb11-3"><a></a></span>
@@ -950,79 +950,79 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <h2>Predicted probabilities in Python</h2>
 <p><br></p>
 <p>Using our trained KNN, we classify observations in the test dataset using only the predictor values from this set. To do this, we must first standardize the predictors in the test dataset.</p>
-<div id="7f21745a" class="cell" data-execution_count="15">
+<div id="88a4c56e" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>Xs_test <span class="op">=</span> scaler.fit_transform(X_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <p>The <code>.predict_proba()</code> function generates the probabilities used by the algorithm to assign the classes.</p>
-<div id="27e7b66e" class="cell" data-execution_count="16">
+<div id="0e9ef0e2" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>predicted_probability <span class="op">=</span> knn.predict_proba(Xs_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="section-6" class="slide level2">
 <h2></h2>
 <p><br><br></p>
-<div id="0255fe13" class="cell" data-execution_count="17">
+<div id="f69e14c2" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>predicted_probability </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
-<pre><code>array([[1.        , 0.        ],
-       [1.        , 0.        ],
-       [0.        , 1.        ],
+<pre><code>array([[0.        , 1.        ],
        [1.        , 0.        ],
        [1.        , 0.        ],
-       [0.        , 1.        ],
        [1.        , 0.        ],
        [1.        , 0.        ],
        [0.        , 1.        ],
+       [1.        , 0.        ],
+       [1.        , 0.        ],
+       [0.        , 1.        ],
+       [0.        , 1.        ],
+       [1.        , 0.        ],
+       [1.        , 0.        ],
        [0.        , 1.        ],
        [0.        , 1.        ],
        [0.        , 1.        ],
+       [1.        , 0.        ],
+       [1.        , 0.        ],
        [0.        , 1.        ],
+       [1.        , 0.        ],
+       [0.        , 1.        ],
+       [0.        , 1.        ],
+       [1.        , 0.        ],
+       [0.        , 1.        ],
+       [0.        , 1.        ],
+       [0.66666667, 0.33333333],
+       [0.        , 1.        ],
+       [1.        , 0.        ],
        [0.33333333, 0.66666667],
        [0.        , 1.        ],
        [1.        , 0.        ],
        [1.        , 0.        ],
        [1.        , 0.        ],
-       [1.        , 0.        ],
-       [1.        , 0.        ],
-       [1.        , 0.        ],
-       [0.        , 1.        ],
-       [1.        , 0.        ],
-       [1.        , 0.        ],
+       [0.33333333, 0.66666667],
        [0.        , 1.        ],
        [0.        , 1.        ],
-       [1.        , 0.        ],
-       [0.        , 1.        ],
-       [0.        , 1.        ],
-       [0.        , 1.        ],
-       [0.        , 1.        ],
-       [0.        , 1.        ],
-       [0.        , 1.        ],
-       [0.        , 1.        ],
-       [0.        , 1.        ],
-       [0.        , 1.        ],
-       [0.        , 1.        ],
-       [0.        , 1.        ],
-       [1.        , 0.        ],
-       [0.        , 1.        ],
-       [1.        , 0.        ],
-       [0.        , 1.        ],
-       [1.        , 0.        ],
-       [1.        , 0.        ],
-       [0.        , 1.        ],
-       [1.        , 0.        ],
        [0.        , 1.        ],
        [0.33333333, 0.66666667],
        [1.        , 0.        ],
        [1.        , 0.        ],
        [0.66666667, 0.33333333],
-       [1.        , 0.        ],
-       [1.        , 0.        ],
-       [1.        , 0.        ],
-       [1.        , 0.        ],
-       [0.33333333, 0.66666667],
+       [0.        , 1.        ],
+       [0.        , 1.        ],
        [1.        , 0.        ],
        [0.        , 1.        ],
+       [1.        , 0.        ],
+       [1.        , 0.        ],
+       [1.        , 0.        ],
+       [0.        , 1.        ],
+       [0.        , 1.        ],
+       [0.        , 1.        ],
+       [1.        , 0.        ],
+       [0.        , 1.        ],
+       [1.        , 0.        ],
+       [1.        , 0.        ],
+       [0.        , 1.        ],
+       [0.        , 1.        ],
+       [1.        , 0.        ],
+       [1.        , 0.        ],
        [1.        , 0.        ],
        [1.        , 0.        ]])</code></pre>
 </div>
@@ -1043,13 +1043,13 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <h2>In Python</h2>
 <p><br><br></p>
 <p>The <code>.predict()</code> function generates actual classes to which each observation was assigned.</p>
-<div id="cf24632c" class="cell" data-execution_count="18">
+<div id="ce668818" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>Y_pred_knn <span class="op">=</span> knn.predict(Xs_test)</span>
 <span id="cb16-2"><a></a>Y_pred_knn</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
-<pre><code>array([0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1,
-       0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0,
-       1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0])</code></pre>
+<pre><code>array([1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0,
+       1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1,
+       0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0])</code></pre>
 </div>
 </div>
 <p><strong>0</strong> for the reference class and <strong>1</strong> for the target class.</p>
@@ -1072,14 +1072,14 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <h2>In Python</h2>
 <p><br></p>
 <p>We calculate the confusion matrix using the homonymous function <strong>scikit-learn</strong>.</p>
-<div id="0d81308a" class="cell" data-execution_count="19">
+<div id="278af20b" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a><span class="co"># Compute confusion matrix.</span></span>
 <span id="cb18-2"><a></a>cm <span class="op">=</span> confusion_matrix(Y_test, Y_pred_knn)</span>
 <span id="cb18-3"><a></a></span>
 <span id="cb18-4"><a></a><span class="co"># Show confusion matrix.</span></span>
 <span id="cb18-5"><a></a><span class="bu">print</span>(cm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[29  1]
+<pre><code>[[30  0]
  [ 1 29]]</code></pre>
 </div>
 </div>
@@ -1088,12 +1088,12 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <h2></h2>
 <p><br></p>
 <p>We can display the confusion matrix using the <code>ConfusionMatrixDisplay()</code> function.</p>
-<div id="f01121fa" class="cell" data-execution_count="20">
+<div id="c06bac5e" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a>ConfusionMatrixDisplay(cm).plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="Introduction_and_KNN_files/figure-revealjs/cell-21-output-1.png" class="quarto-figure quarto-figure-center" width="514" height="435"></p>
+<p><img data-src="Introduction_and_KNN_files/figure-revealjs/cell-21-output-1.png" class="quarto-figure quarto-figure-center" width="514" height="441"></p>
 </figure>
 </div>
 </div>
@@ -1103,11 +1103,11 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <h2>Accuracy</h2>
 <p>A simple metric for summarizing the information in the confusion matrix is <strong>accuracy</strong>. It is the proportion of correct classifications for both classes, out of the total classifications performed.</p>
 <p>In Python, we calculate accuracy using the <strong>scikit-learn</strong> <code>accuracy_score()</code> function.</p>
-<div id="05f305fc" class="cell" data-execution_count="21">
+<div id="b585e286" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>accuracy <span class="op">=</span> accuracy_score(Y_test, Y_pred_knn)</span>
 <span id="cb21-2"><a></a><span class="bu">print</span>( <span class="bu">round</span>(accuracy, <span class="dv">2</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.97</code></pre>
+<pre><code>0.98</code></pre>
 </div>
 </div>
 <p>The higher the accuracy, the better the performance of the classifier.</p>
@@ -1121,7 +1121,7 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <h2>Finding the best value of <em>K</em></h2>
 <p>We can determine the best value of <em>K</em> for the KNN algorithm using <span style="color:orange;"><span class="math inline">\(K\)</span>-fold cross-validation (CVV)</span>. To this end, we need to set up a grid search to try out different values of <span class="math inline">\(K\)</span> and measure its performance in terms of the <span class="math inline">\(K\)</span>-fold CV estimate of accuracy.</p>
 <p>We specify the grid search as follows:</p>
-<div id="ca0e71f0" class="cell" data-execution_count="22">
+<div id="0d13b5bf" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a><span class="co"># Set the parameter to be changed and the range of values.</span></span>
 <span id="cb23-2"><a></a>param_grid <span class="op">=</span> {<span class="st">'n_neighbors'</span>: <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">31</span>)}</span>
 <span id="cb23-3"><a></a></span>
@@ -1137,30 +1137,30 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <h2></h2>
 <p><br></p>
 <p>Now, we actually run the grid search.</p>
-<div id="de4a73d3" class="cell" data-execution_count="23">
+<div id="75ed76fc" class="cell" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a><span class="co"># Run the search.</span></span>
 <span id="cb24-2"><a></a>grid_search.fit(Xs_train, Y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <p>We see the K-fold CV estimates of accuracy for each value of <em>K</em>:</p>
-<div id="de348a18" class="cell" data-execution_count="24">
+<div id="146469e6" class="cell" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a></a>k_values <span class="op">=</span> <span class="bu">list</span>(param_grid[<span class="st">'n_neighbors'</span>])</span>
 <span id="cb25-2"><a></a>validation_accuracies <span class="op">=</span> grid_search.cv_results_[<span class="st">'mean_test_score'</span>]</span>
 <span id="cb25-3"><a></a>validation_accuracies</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
-<pre><code>array([0.97857143, 0.95      , 0.95714286, 0.95      , 0.95714286,
-       0.95714286, 0.95714286, 0.95714286, 0.95714286, 0.96428571,
-       0.96428571, 0.96428571, 0.96428571, 0.95714286, 0.96428571,
-       0.95714286, 0.95714286, 0.95714286, 0.96428571, 0.96428571,
-       0.96428571, 0.96428571, 0.96428571, 0.96428571, 0.96428571,
-       0.96428571, 0.96428571, 0.96428571, 0.96428571, 0.96428571])</code></pre>
+<pre><code>array([0.95714286, 0.93571429, 0.95      , 0.94285714, 0.95      ,
+       0.95      , 0.95      , 0.95      , 0.95      , 0.95      ,
+       0.95      , 0.95      , 0.95      , 0.95714286, 0.95      ,
+       0.95      , 0.95      , 0.95714286, 0.95714286, 0.96428571,
+       0.95714286, 0.95714286, 0.95714286, 0.95714286, 0.95714286,
+       0.96428571, 0.95714286, 0.96428571, 0.96428571, 0.96428571])</code></pre>
 </div>
 </div>
 </section>
 <section id="visualize" class="slide level2">
 <h2>Visualize</h2>
 <p>We can then visualize the accuracy for different values of <span class="math inline">\(K\)</span> using the following graph and code.</p>
-<div id="5cf69894" class="cell" data-execution_count="25">
+<div id="59cb6e5a" class="cell" data-execution_count="25">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="fl">6.3</span>, <span class="fl">4.3</span>))</span>
@@ -1184,12 +1184,12 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <h2>Best value of <em>K</em></h2>
 <p><br><br><br></p>
 <p>We can easily determine the best value of <em>K</em> using the function <code>.best_params_['n_neighbors']</code>.</p>
-<div id="99266f9b" class="cell" data-execution_count="26">
+<div id="04b20366" class="cell" data-execution_count="26">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a></a><span class="co"># Find the best value of K</span></span>
 <span id="cb28-2"><a></a>best_k <span class="op">=</span> grid_search.best_params_[<span class="st">'n_neighbors'</span>]</span>
 <span id="cb28-3"><a></a>best_k</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="26">
-<pre><code>1</code></pre>
+<pre><code>20</code></pre>
 </div>
 </div>
 </section>
@@ -1197,18 +1197,18 @@ Name: Status_counterfeit, dtype: int64</code></pre>
 <h2>Train the final KNN</h2>
 <p><br></p>
 <p>Finally, we select the best number of nearest neighbors contained in the <code>best_k</code> object.</p>
-<div id="629520f7" class="cell" data-execution_count="27">
+<div id="ded18ae0" class="cell" data-execution_count="27">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a></a>KNN_final <span class="op">=</span> KNeighborsClassifier(n_neighbors <span class="op">=</span> best_k)</span>
 <span id="cb30-2"><a></a>KNN_final.fit(Xs_train, Y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <p>The accuracy of the best KNN is</p>
-<div id="7b8ff9a9" class="cell" data-execution_count="28">
+<div id="8301215f" class="cell" data-execution_count="28">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a></a>Y_pred_KNNfinal <span class="op">=</span> KNN_final.predict(Xs_test)</span>
 <span id="cb31-2"><a></a>test_accuracy <span class="op">=</span> accuracy_score(Y_test, Y_pred_KNNfinal)</span>
 <span id="cb31-3"><a></a><span class="bu">print</span>(test_accuracy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.95</code></pre>
+<pre><code>0.9666666666666667</code></pre>
 </div>
 </div>
 </section>
