@@ -230,7 +230,7 @@ Alan R. Vazquez
 <section id="load-the-libraries" class="slide level2">
 <h2>Load the libraries</h2>
 <p>Before we start, let’s import the data science libraries into Python.</p>
-<div id="a94a630a" class="cell" data-execution_count="1">
+<div id="87308f43" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="co"># Importing necessary libraries</span></span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -238,10 +238,11 @@ Alan R. Vazquez
 <span id="cb1-5"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb1-6"><a></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier, plot_tree</span>
 <span id="cb1-7"><a></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> BaggingClassifier, RandomForestClassifier</span>
-<span id="cb1-8"><a></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
-<span id="cb1-9"><a></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
-<span id="cb1-10"><a></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, ConfusionMatrixDisplay </span>
-<span id="cb1-11"><a></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score, recall_score, precision_score</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-8"><a></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> GradientBoostingClassifier</span>
+<span id="cb1-9"><a></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
+<span id="cb1-10"><a></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb1-11"><a></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, ConfusionMatrixDisplay </span>
+<span id="cb1-12"><a></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score, recall_score, precision_score</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Here, we use specific functions from the <strong>pandas</strong>, <strong>matplotlib</strong>, <strong>seaborn</strong> and <strong>sklearn</strong> libraries in Python.</p>
 </section>
@@ -361,13 +362,13 @@ Alan R. Vazquez
 </section>
 <section id="read-the-dataset" class="slide level2">
 <h2>Read the dataset</h2>
-<div id="ffb93ef0" class="cell" data-execution_count="2">
+<div id="5d351bcd" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="co"># Load the data</span></span>
 <span id="cb2-2"><a></a>Adult_data <span class="op">=</span> pd.read_excel(<span class="st">'AdultReduced.xlsx'</span>)</span>
 <span id="cb2-3"><a></a></span>
 <span id="cb2-4"><a></a><span class="co"># Preview the data.</span></span>
 <span id="cb2-5"><a></a>Adult_data.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="59">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -475,7 +476,7 @@ Alan R. Vazquez
 <li>education.num: number of years of education.</li>
 <li>hours.per.week: Number of work hours per week.</li>
 </ul>
-<div id="801c6eb2" class="cell" data-execution_count="3">
+<div id="d0c2b0e4" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="co"># Choose the predictors.</span></span>
 <span id="cb3-2"><a></a>X_full <span class="op">=</span> Adult_data.<span class="bu">filter</span>([<span class="st">'age'</span>, <span class="st">'sex'</span>, <span class="st">'race'</span>, <span class="st">'education.num'</span>, </span>
 <span id="cb3-3"><a></a>                            <span class="st">'hours.per.week'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -485,7 +486,7 @@ Alan R. Vazquez
 <h2>Pre-processing for categorical predictors</h2>
 <p><br></p>
 <p>Unfortunately, bagging does not work with categorical predictors. We must transform them into dummy variables using the code below.</p>
-<div id="073490b5" class="cell" data-execution_count="4">
+<div id="1ef23662" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a><span class="co"># Turn categorical predictors into dummy variables.</span></span>
 <span id="cb4-2"><a></a>X_dummies <span class="op">=</span> pd.get_dummies(X_full[[<span class="st">'sex'</span>, <span class="st">'race'</span>]])</span>
 <span id="cb4-3"><a></a></span>
@@ -499,11 +500,11 @@ Alan R. Vazquez
 <section id="set-the-target-class" class="slide level2">
 <h2>Set the target class</h2>
 <p>Let’s set the <strong>target class</strong> and the <strong>reference class</strong> using the <code>get_dummies()</code> function.</p>
-<div id="b9c3ea4d" class="cell" data-execution_count="5">
+<div id="8f3df567" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>Y <span class="op">=</span> Adult_data.<span class="bu">filter</span>([<span class="st">'income'</span>])</span>
 <span id="cb5-2"><a></a>Y_dummies <span class="op">=</span> pd.get_dummies(Y, dtype <span class="op">=</span> <span class="st">'int'</span>)</span>
 <span id="cb5-3"><a></a>Y_dummies.head(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="62">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -559,12 +560,12 @@ Alan R. Vazquez
 <h2></h2>
 <p><br><br></p>
 <p>Here we’ll use the <strong>large</strong> target class. So, let’s use the corresponding column as our response variable.</p>
-<div id="f597a7ce" class="cell" data-execution_count="6">
+<div id="b007fa2d" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="co"># Choose target category.</span></span>
 <span id="cb6-2"><a></a>Y_target <span class="op">=</span> Y_dummies[<span class="st">'income_large'</span>]</span>
 <span id="cb6-3"><a></a></span>
 <span id="cb6-4"><a></a>Y_target.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="63">
 <pre><code>0    0
 1    0
 2    0
@@ -578,7 +579,7 @@ Name: income_large, dtype: int64</code></pre>
 <h2>Training and validation datasets</h2>
 <p><br></p>
 <p>To evaluate a model’s performance on unobserved data, we split the current dataset into training and validation datasets. To do this, we use <code>train_test_split()</code> from <strong>scikit-learn</strong>.</p>
-<div id="19b7ba04" class="cell" data-execution_count="7">
+<div id="14d9253e" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a><span class="co"># Split into training and validation</span></span>
 <span id="cb8-2"><a></a>X_train, X_valid, Y_train, Y_valid <span class="op">=</span> train_test_split(X_full, Y_target,</span>
 <span id="cb8-3"><a></a>                                                      stratify <span class="op">=</span> Y_target,</span>
@@ -591,7 +592,7 @@ Name: income_large, dtype: int64</code></pre>
 <p><br></p>
 <p>We define a bagging algorithm for classification using the <code>BaggingClassifier</code> function from <strong>scikit-learn</strong>.</p>
 <p>The <code>n_estimators</code> argument is the number of decision trees to generate in bagging. Ideally, it should be high, around 500.</p>
-<div id="77d7913d" class="cell" data-execution_count="8">
+<div id="67a5f78a" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a><span class="co"># Set the bagging algorithm.</span></span>
 <span id="cb9-2"><a></a>Baggingalgorithm <span class="op">=</span> BaggingClassifier(n_estimators <span class="op">=</span> <span class="dv">500</span>, </span>
 <span id="cb9-3"><a></a>                                     random_state <span class="op">=</span> <span class="dv">59227</span>)</span>
@@ -605,24 +606,24 @@ Name: income_large, dtype: int64</code></pre>
 <h2>Predictions from bagging</h2>
 <p><br><br><br></p>
 <p>Predict the classes using bagging on the validation dataset.</p>
-<div id="f9941f4a" class="cell" data-execution_count="9">
+<div id="3f1c9074" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>predicted_class <span class="op">=</span> Baggingalgorithm.predict(X_valid)</span>
 <span id="cb10-2"><a></a></span>
 <span id="cb10-3"><a></a>predicted_class</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
-<pre><code>array([0, 0, 1, ..., 0, 0, 0])</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="66">
+<pre><code>array([0, 0, 0, ..., 0, 0, 0])</code></pre>
 </div>
 </div>
 </section>
 <section id="confusion-matrix" class="slide level2">
 <h2>Confusion matrix</h2>
-<div id="69201ad5" class="cell" data-execution_count="10">
+<div id="bb817c82" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>cm <span class="op">=</span> confusion_matrix(Y_valid, predicted_class)</span>
 <span id="cb12-2"><a></a>ConfusionMatrixDisplay(cm).plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="EnsembleMethods_files/figure-revealjs/cell-11-output-1.png" class="quarto-figure quarto-figure-center" width="524" height="432"></p>
+<p><img data-src="EnsembleMethods_files/figure-revealjs/cell-11-output-1.png" class="quarto-figure quarto-figure-center" width="524" height="429"></p>
 </figure>
 </div>
 </div>
@@ -632,7 +633,7 @@ Name: income_large, dtype: int64</code></pre>
 <h2>Accuracy</h2>
 <p><br><br></p>
 <p>The accuracy of the bagging classifier is 78%.</p>
-<div id="c97e8049" class="cell" data-execution_count="11">
+<div id="d0f355e4" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a><span class="co"># Compute accuracy.</span></span>
 <span id="cb13-2"><a></a>accuracy <span class="op">=</span> accuracy_score(Y_valid, predicted_class)</span>
 <span id="cb13-3"><a></a></span>
@@ -647,19 +648,19 @@ Name: income_large, dtype: int64</code></pre>
 <h2>A single deep tree</h2>
 <p><br><br></p>
 <p>To compare the bagging, let’s use a single deep tree.</p>
-<div id="386b1603" class="cell" data-execution_count="12">
+<div id="4b686ee6" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>clf_simple <span class="op">=</span> DecisionTreeClassifier(min_samples_leaf <span class="op">=</span> <span class="dv">5</span>, ccp_alpha<span class="op">=</span><span class="fl">0.0</span>, </span>
 <span id="cb15-2"><a></a>                                    random_state<span class="op">=</span><span class="dv">507134</span>)</span>
 <span id="cb15-3"><a></a></span>
 <span id="cb15-4"><a></a>clf_simple.fit(X_train, Y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s compute the accuracy of the pruned tree.</p>
-<div id="514685d2" class="cell" data-execution_count="13">
+<div id="5fcd11cd" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>single_tree_Y_pred <span class="op">=</span> clf_simple.predict(X_valid)</span>
 <span id="cb16-2"><a></a>accuracy <span class="op">=</span> accuracy_score(Y_valid, single_tree_Y_pred)</span>
 <span id="cb16-3"><a></a><span class="bu">print</span>( <span class="bu">round</span>(accuracy, <span class="dv">2</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.78</code></pre>
+<pre><code>0.79</code></pre>
 </div>
 </div>
 </section>
@@ -747,7 +748,7 @@ Name: income_large, dtype: int64</code></pre>
 <h2>Random Forest in Python</h2>
 <p><br></p>
 <p>In Python, we define a RandomForest algorithm for classification using the <code>RandomForestClassifier</code> function from <strong>scikit-learn</strong>. The <code>n_estimators</code> argument is the number of decision trees to generate in the RandomForest, and <code>random_state</code> allows you to reprudce the results.</p>
-<div id="47622c3a" class="cell" data-execution_count="14">
+<div id="637bdeeb" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a><span class="co"># Set the bagging algorithm.</span></span>
 <span id="cb18-2"><a></a>RFalgorithm <span class="op">=</span> RandomForestClassifier(n_estimators <span class="op">=</span> <span class="dv">500</span>, </span>
 <span id="cb18-3"><a></a>                                     max_features <span class="op">=</span> <span class="st">'sqrt'</span>,</span>
@@ -760,7 +761,7 @@ Name: income_large, dtype: int64</code></pre>
 <section id="confusion-matrix-1" class="slide level2">
 <h2>Confusion matrix</h2>
 <p>Evaluate the performance of random forest.</p>
-<div id="ca63391a" class="cell" data-execution_count="15">
+<div id="c5cb071a" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a><span class="co"># Predict class.</span></span>
@@ -775,7 +776,7 @@ Name: income_large, dtype: int64</code></pre>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="EnsembleMethods_files/figure-revealjs/cell-16-output-1.png" class="quarto-figure quarto-figure-center" width="524" height="429"></p>
+<p><img data-src="EnsembleMethods_files/figure-revealjs/cell-16-output-1.png" class="quarto-figure quarto-figure-center" width="524" height="433"></p>
 </figure>
 </div>
 </div>
@@ -785,7 +786,7 @@ Name: income_large, dtype: int64</code></pre>
 <h2>Accuracy</h2>
 <p><br><br></p>
 <p>The accuracy of the random forest classifier is 79%.</p>
-<div id="375ceec7" class="cell" data-execution_count="16">
+<div id="59dae4e5" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a><span class="co"># Compute accuracy.</span></span>
 <span id="cb20-2"><a></a>accuracy <span class="op">=</span> accuracy_score(Y_valid, RF_predicted)</span>
 <span id="cb20-3"><a></a></span>
@@ -888,6 +889,59 @@ Name: income_large, dtype: int64</code></pre>
 <p><br></p>
 
 <img data-src="images/clipboard-3805820570.png" class="quarto-figure quarto-figure-center r-stretch"><p><a href="https://towardsdatascience.com/understanding-adaboost-for-decision-tree-ff8f07d2851" class="uri">https://towardsdatascience.com/understanding-adaboost-for-decision-tree-ff8f07d2851</a></p>
+</section>
+<section id="boosting-in-python" class="slide level2">
+<h2>Boosting in Python</h2>
+<div style="font-size: 90%;">
+<p>In Python, we define a boosting algorithm for classification using the <code>GradientBoostingClassifier</code> function from <strong>scikit-learn</strong>. The <code>n_estimators</code> argument specifies the number of boosting stages (i.e., the number of trees built sequentially), the <code>learning_rate</code> controls how much each tree contributes to the final model, and <code>max_depth</code> limits the depth of each individual decision tree.</p>
+</div>
+<div id="2e43fdd5" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a></a><span class="co"># Set the boosting algorithm.</span></span>
+<span id="cb22-2"><a></a>GBalgorithm <span class="op">=</span> GradientBoostingClassifier(learning_rate <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span id="cb22-3"><a></a>                                    n_estimators <span class="op">=</span> <span class="dv">1000</span>,</span>
+<span id="cb22-4"><a></a>                                    max_depth <span class="op">=</span> <span class="dv">3</span>,</span>
+<span id="cb22-5"><a></a>                                    random_state <span class="op">=</span> <span class="dv">59227</span>)</span>
+<span id="cb22-6"><a></a><span class="co"># Train the boosting algorithm.</span></span>
+<span id="cb22-7"><a></a>GBalgorithm.fit(X_train, Y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="confusion-matrix-2" class="slide level2">
+<h2>Confusion matrix</h2>
+<p>Evaluate the performance of a gradient boosting algorithm.</p>
+<div id="d01c127b" class="cell" data-execution_count="18">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a><span class="co"># Predict class.</span></span>
+<span id="cb23-2"><a></a>GB_predicted <span class="op">=</span> GBalgorithm.predict(X_valid)</span>
+<span id="cb23-3"><a></a></span>
+<span id="cb23-4"><a></a><span class="co"># Compute confusion matrix.</span></span>
+<span id="cb23-5"><a></a>cm <span class="op">=</span> confusion_matrix(Y_valid, GB_predicted)</span>
+<span id="cb23-6"><a></a></span>
+<span id="cb23-7"><a></a><span class="co"># Visualize the matrix.</span></span>
+<span id="cb23-8"><a></a>ConfusionMatrixDisplay(cm).plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="EnsembleMethods_files/figure-revealjs/cell-19-output-1.png" class="quarto-figure quarto-figure-center" width="524" height="429"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="accuracy-2" class="slide level2">
+<h2>Accuracy</h2>
+<p><br><br></p>
+<p>The accuracy of the gradient boosting classifier is 79%.</p>
+<div id="2d525df9" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a>accuracy <span class="op">=</span> accuracy_score(Y_valid, GB_predicted)</span>
+<span id="cb24-2"><a></a></span>
+<span id="cb24-3"><a></a><span class="co"># Show accuracy.</span></span>
+<span id="cb24-4"><a></a><span class="bu">print</span>( <span class="bu">round</span>(accuracy, <span class="dv">2</span>) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.8</code></pre>
+</div>
+</div>
 </section>
 <section id="section-9" class="slide level2">
 <h2></h2>

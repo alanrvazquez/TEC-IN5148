@@ -44,6 +44,7 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier, plot_tree
 from sklearn.ensemble import BaggingClassifier, RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay 
@@ -601,6 +602,63 @@ This new classifier is also given a weight depending on its accuracy and incorpo
 ![](images/clipboard-3805820570.png){fig-align="center"}
 
 <https://towardsdatascience.com/understanding-adaboost-for-decision-tree-ff8f07d2851>
+
+## Boosting in Python
+
+::: {style="font-size: 90%;"}
+In Python, we define a boosting algorithm for classification using the `GradientBoostingClassifier` function from **scikit-learn**. The `n_estimators` argument specifies the number of boosting stages (i.e., the number of trees built sequentially), the `learning_rate` controls how much each tree contributes to the final model, and `max_depth` limits the depth of each individual decision tree. 
+:::
+
+```{python}
+#| echo: true
+#| output: false
+
+# Set the boosting algorithm.
+GBalgorithm = GradientBoostingClassifier(learning_rate = 0.1,
+                                    n_estimators = 1000,
+                                    max_depth = 3,
+                                    random_state = 59227)
+# Train the boosting algorithm.
+GBalgorithm.fit(X_train, Y_train)
+```
+
+## Confusion matrix
+
+Evaluate the performance of a gradient boosting algorithm.
+
+```{python}
+#| echo: true
+#| output: true
+#| code-fold: true
+#| fig-align: center
+
+# Predict class.
+GB_predicted = GBalgorithm.predict(X_valid)
+
+# Compute confusion matrix.
+cm = confusion_matrix(Y_valid, GB_predicted)
+
+# Visualize the matrix.
+ConfusionMatrixDisplay(cm).plot()
+```
+
+## Accuracy
+
+</br></br>
+
+The accuracy of the gradient boosting classifier is 79%.
+
+```{python}
+#| echo: true
+#| output: true
+#| fig-align: center
+
+accuracy = accuracy_score(Y_valid, GB_predicted)
+
+# Show accuracy.
+print( round(accuracy, 2) )
+```
+
 
 ## 
 

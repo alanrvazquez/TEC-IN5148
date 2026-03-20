@@ -2247,7 +2247,7 @@
     "href": "Classification/EnsembleMethods.slides.html#load-the-libraries",
     "title": "Ensemble Methods",
     "section": "Load the libraries",
-    "text": "Load the libraries\nBefore we start, let’s import the data science libraries into Python.\n\n# Importing necessary libraries\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.tree import DecisionTreeClassifier, plot_tree\nfrom sklearn.ensemble import BaggingClassifier, RandomForestClassifier\nfrom sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay \nfrom sklearn.metrics import accuracy_score, recall_score, precision_score\n\nHere, we use specific functions from the pandas, matplotlib, seaborn and sklearn libraries in Python."
+    "text": "Load the libraries\nBefore we start, let’s import the data science libraries into Python.\n\n# Importing necessary libraries\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.tree import DecisionTreeClassifier, plot_tree\nfrom sklearn.ensemble import BaggingClassifier, RandomForestClassifier\nfrom sklearn.ensemble import GradientBoostingClassifier\nfrom sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay \nfrom sklearn.metrics import accuracy_score, recall_score, precision_score\n\nHere, we use specific functions from the pandas, matplotlib, seaborn and sklearn libraries in Python."
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#decision-trees",
@@ -2380,7 +2380,7 @@
     "href": "Classification/EnsembleMethods.slides.html#predictions-from-bagging",
     "title": "Ensemble Methods",
     "section": "Predictions from bagging",
-    "text": "Predictions from bagging\n\nPredict the classes using bagging on the validation dataset.\n\npredicted_class = Baggingalgorithm.predict(X_valid)\n\npredicted_class\n\narray([0, 0, 1, ..., 0, 0, 0])"
+    "text": "Predictions from bagging\n\nPredict the classes using bagging on the validation dataset.\n\npredicted_class = Baggingalgorithm.predict(X_valid)\n\npredicted_class\n\narray([0, 0, 0, ..., 0, 0, 0])"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#confusion-matrix",
@@ -2401,7 +2401,7 @@
     "href": "Classification/EnsembleMethods.slides.html#a-single-deep-tree",
     "title": "Ensemble Methods",
     "section": "A single deep tree",
-    "text": "A single deep tree\n\nTo compare the bagging, let’s use a single deep tree.\n\nclf_simple = DecisionTreeClassifier(min_samples_leaf = 5, ccp_alpha=0.0, \n                                    random_state=507134)\n\nclf_simple.fit(X_train, Y_train)\n\nLet’s compute the accuracy of the pruned tree.\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.78"
+    "text": "A single deep tree\n\nTo compare the bagging, let’s use a single deep tree.\n\nclf_simple = DecisionTreeClassifier(min_samples_leaf = 5, ccp_alpha=0.0, \n                                    random_state=507134)\n\nclf_simple.fit(X_train, Y_train)\n\nLet’s compute the accuracy of the pruned tree.\n\nsingle_tree_Y_pred = clf_simple.predict(X_valid)\naccuracy = accuracy_score(Y_valid, single_tree_Y_pred)\nprint( round(accuracy, 2) )\n\n0.79"
   },
   {
     "objectID": "Classification/EnsembleMethods.slides.html#advantages",
@@ -4572,5 +4572,26 @@
     "title": "Train, Test, and Validation Datasets",
     "section": "Work on your training dataset",
     "text": "Work on your training dataset\nAfter we have partitioned the data, we work on the training data to develop our predictive pipeline.\nThe pipeline has two main steps:\n\nData preprocessing.\nModel development.\n\nWe will now discuss preprocessing techniques applied to the predictor columns in the training dataset.\nNote that all preprocessing techniques will also be applied to the validation dataset and test dataset to prepare it for your model!"
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#boosting-in-python",
+    "href": "Classification/EnsembleMethods.slides.html#boosting-in-python",
+    "title": "Ensemble Methods",
+    "section": "Boosting in Python",
+    "text": "Boosting in Python\n\nIn Python, we define a boosting algorithm for classification using the GradientBoostingClassifier function from scikit-learn. The n_estimators argument specifies the number of boosting stages (i.e., the number of trees built sequentially), the learning_rate controls how much each tree contributes to the final model, and max_depth limits the depth of each individual decision tree.\n\n\n# Set the boosting algorithm.\nGBalgorithm = GradientBoostingClassifier(learning_rate = 0.1,\n                                    n_estimators = 1000,\n                                    max_depth = 3,\n                                    random_state = 59227)\n# Train the boosting algorithm.\nGBalgorithm.fit(X_train, Y_train)"
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#confusion-matrix-2",
+    "href": "Classification/EnsembleMethods.slides.html#confusion-matrix-2",
+    "title": "Ensemble Methods",
+    "section": "Confusion matrix",
+    "text": "Confusion matrix\nEvaluate the performance of a gradient boosting algorithm.\n\n\nCode\n# Predict class.\nGB_predicted = GBalgorithm.predict(X_valid)\n\n# Compute confusion matrix.\ncm = confusion_matrix(Y_valid, GB_predicted)\n\n# Visualize the matrix.\nConfusionMatrixDisplay(cm).plot()"
+  },
+  {
+    "objectID": "Classification/EnsembleMethods.slides.html#accuracy-2",
+    "href": "Classification/EnsembleMethods.slides.html#accuracy-2",
+    "title": "Ensemble Methods",
+    "section": "Accuracy",
+    "text": "Accuracy\n\nThe accuracy of the gradient boosting classifier is 79%.\n\naccuracy = accuracy_score(Y_valid, GB_predicted)\n\n# Show accuracy.\nprint( round(accuracy, 2) )\n\n0.8"
   }
 ]
